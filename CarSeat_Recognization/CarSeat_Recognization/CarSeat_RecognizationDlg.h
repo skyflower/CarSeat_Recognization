@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxwin.h"
 
 
 // CCarSeat_RecognizationDlg 对话框
@@ -20,8 +21,8 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
-	HRESULT OnButtonOK(IHTMLElement *pElement);
-	HRESULT OnButtonCancel(IHTMLElement *pElement);
+	//HRESULT OnButtonOK(IHTMLElement *pElement);
+	//HRESULT OnButtonCancel(IHTMLElement *pElement);
 
 // 实现
 protected:
@@ -34,4 +35,13 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
+public:
+	CStatic m_ImagePattern;
+	CStatic m_ImageRec;
+	CStatic m_barCode;
+	// 显示统计结果，包括成功次数，失败次数，成功率
+	CStatic m_RegRatio;
+
+	size_t m_nSuccessCount;
+	size_t m_nFailCount;
 };

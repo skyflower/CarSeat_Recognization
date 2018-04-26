@@ -48,8 +48,7 @@ END_MESSAGE_MAP()
 // CCarSeat_RecognizationDlg 对话框
 
 BEGIN_DHTML_EVENT_MAP(CCarSeat_RecognizationDlg)
-	DHTML_EVENT_ONCLICK(_T("ButtonOK"), OnButtonOK)
-	DHTML_EVENT_ONCLICK(_T("ButtonCancel"), OnButtonCancel)
+	
 END_DHTML_EVENT_MAP()
 
 
@@ -57,11 +56,17 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	: CDHtmlDialog(IDD_CARSEAT_RECOGNIZATION_DIALOG, IDR_HTML_CARSEAT_RECOGNIZATION_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_nSuccessCount = 0;
+	m_nFailCount = 0;
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDHtmlDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_IMAGE_PATTERN, m_ImagePattern);
+	DDX_Control(pDX, IDC_IMAGE_REC, m_ImageRec);
+	DDX_Control(pDX, IDC_BARCODE, m_barCode);
+	DDX_Control(pDX, IDC_REG_RATIO, m_RegRatio);
 }
 
 BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
@@ -145,6 +150,18 @@ void CCarSeat_RecognizationDlg::OnPaint()
 	{
 		CDHtmlDialog::OnPaint();
 	}
+	m_barCode.SetWindowTextW(L"K215-黑色-菱形纹理");
+
+	double ratio = 1.0;
+	if (m_nFailCount + m_nSuccessCount != 0)
+	{
+		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
+	}
+	WCHAR result[200];
+	memset(result, 0, sizeof(WCHAR) * 200);
+	wprintf_s(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%%", m_nSuccessCount, m_nFailCount, ratio);
+
+	m_RegRatio.SetWindowTextW(result);
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
@@ -152,16 +169,4 @@ void CCarSeat_RecognizationDlg::OnPaint()
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
-}
-
-HRESULT CCarSeat_RecognizationDlg::OnButtonOK(IHTMLElement* /*pElement*/)
-{
-	OnOK();
-	return S_OK;
-}
-
-HRESULT CCarSeat_RecognizationDlg::OnButtonCancel(IHTMLElement* /*pElement*/)
-{
-	OnCancel();
-	return S_OK;
 }

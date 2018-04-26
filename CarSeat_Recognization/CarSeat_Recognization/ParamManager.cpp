@@ -15,54 +15,46 @@ CParamManager* CParamManager::GetInstance()
 	return m_pInstance;
 }
 
+int CParamManager::GetLocalIP()
+{
+	WORD wVersionRequested = MAKEWORD(2, 2);
+
+	WSADATA wsaData;
+	if (WSAStartup(wVersionRequested, &wsaData) != 0)
+	{
+		return 0;
+	}
+	char local[255] = { 0 };
+	gethostname(local, sizeof(local));
+	hostent* ph = gethostbyname(local);
+	if (ph == NULL)
+	{
+		return 0;
+	}
+	in_addr addr;
+	memcpy(&addr, ph->h_addr_list[0], sizeof(in_addr)); // 这里仅获取第一个ip  
+
+	std::string localIP;
+	localIP.assign(inet_ntoa(addr));
+
+	WSACleanup();
+
+	TRACE1("localIp = %s", localIP.c_str());
+	unsigned int one = 0;
+	unsigned int two = 0;
+	unsigned int three = 0;
+	unsigned int four = 0;
+	sscanf_s(localIP.c_str(), "%d.%d.%d.%d", one, two, three, four);
+	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three < 8) | four;
+
+	return tmpServerIp;
+}
+
 void CParamManager::Init()
 {
-	std::function<bool(char *, size_t, std::vector<std::wstring>*)> lambda = \
-		[&](char *pContent, size_t length, std::vector<std::wstring> *pData)->bool
-	{
-		if ((pContent == nullptr) || (length < 1))
-		{
-			return false;
-		}
-		
-		char *p = pContent;
-		char tmpStr[100];
-		while (p < pContent + length)
-		{
-			char* begin = strchr(p, '"');
-			if (begin == NULL)
-			{
-				break;
-			}
-			char* end = strchr(begin + 1, '"');
-			if (end == NULL)
-			{
-				break;
-			}
-			p = end + 1;
-			if (end - begin - 1 != 0)
-			{
-				memset(tmpStr, 0, sizeof(tmpStr));
-				memcpy(tmpStr, begin + 1, end - begin - 1);
-				wchar_t *wchar = CharToWchar(tmpStr);
-				if (wchar == nullptr)
-				{
-					continue;
-				}
-				std::wstring wStr(wchar);
-				pData->push_back(wStr);
-				if (wchar != nullptr)
-				{
-					delete[]wchar;
-					wchar = nullptr;
-				}
-			}
-			
-		}
-		return true;
-	};
 	FILE *fp = nullptr;
 	fopen_s(&fp, "./config.txt", "r");
+	bool ret = true;
 	if (fp != nullptr)
 	{
 		fseek(fp, 0, SEEK_END);
@@ -71,30 +63,142 @@ void CParamManager::Init()
 		memset(content, 0, sizeof(char) * (length + 1));
 		fread_s(content, length, 1, length, fp);
 		char *p = strstr(content, "color");
-		if (p == NULL)
+		if (m_pColor == nullptr)
 		{
-			char *line = strchr(p, '=');
-			char *end = strchr(p, '\n');
-			if ((line != NULL) && (end != NULL))
-			{
-				if (m_pColor == nullptr)
-				{
-					m_pColor = new std::vector<std::wstring>;
-				}
-				if(lambda(line + 1, end - line - 1, m_pColor) == true)
-				{
-					for (auto &k : *m_pColor)
-					{
-						TRACE1("color = %s", k);
-					}
-				}
-			}
+			m_pColor = new std::vector<std::wstring>;
+		}
+		ret = parseVector(content, "color", m_pColor);
+		if (ret == false)
+		{
+			TRACE0("init color Failed");
+		}
+		if (m_pOutline == nullptr)
+		{
+			m_pOutline = new std::vector<std::wstring>;
+		}
+		ret = parseVector(content, "outline", m_pOutline);
+		if (ret == false)
+		{
+			TRACE0("out line init Failed");
+		}
+		if (m_pTexture == nullptr)
+		{
+			m_pTexture = new std::vector<std::wstring>;
+		}
+		ret = parseVector(content, "texture", m_pTexture);
+		if (ret == false)
+		{
+			TRACE0("texture init Failed");
 		}
 	}
 }
 
+bool CParamManager::parseVector(const char *content, const char * name, std::vector<std::wstring>* pVector)
+{
+	if ((content == nullptr) || (name == nullptr) || (pVector == nullptr))
+	{
+		return false;
+	}
+	char *p = const_cast<char*>(strstr(content, name));
+	if (p == NULL)
+	{
+		char *line = strchr(p, '=');
+		char *end = strchr(p, '\n');
+		if ((line != NULL) && (end != NULL))
+		{
+			if (m_pColor == nullptr)
+			{
+				m_pColor = new std::vector<std::wstring>;
+			}
+			if (parseLineSegment(line + 1, end - line - 1, m_pColor) == true)
+			{
+				for (auto &k : *m_pColor)
+				{
+					TRACE1("color = %s", k);
+				}
+			}
+		}
+	}
+	return false;
+}
 
-CParamManager::CParamManager():m_pColor(nullptr),
+bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::vector<std::wstring>* pData)
+{
+
+	if ((pContent == nullptr) || (length < 1) || (pData == nullptr))
+	{
+		return false;
+	}
+
+	char *p = const_cast<char*>(pContent);
+	char tmpStr[100];
+	while (p < pContent + length)
+	{
+		char* begin = strchr(p, '"');
+		if (begin == NULL)
+		{
+			break;
+		}
+		char* end = strchr(begin + 1, '"');
+		if (end == NULL)
+		{
+			break;
+		}
+		p = end + 1;
+		if (end - begin - 1 != 0)
+		{
+			memset(tmpStr, 0, sizeof(tmpStr));
+			memcpy(tmpStr, begin + 1, end - begin - 1);
+			wchar_t *wchar = CharToWchar(tmpStr);
+			if (wchar == nullptr)
+			{
+				continue;
+			}
+			std::wstring wStr(wchar);
+			pData->push_back(wStr);
+			if (wchar != nullptr)
+			{
+				delete[]wchar;
+				wchar = nullptr;
+			}
+		}
+	}
+	return true;
+}
+
+int CParamManager::parseServerIp(const char * content, const char * name)
+{
+	if ((content == nullptr) || (name == nullptr))
+	{
+		return 0;
+	}
+	char *p = const_cast<char*>(strstr(content, name));
+	if (p == nullptr)
+	{
+		return 0;
+	}
+	const char *quote = strchr(content, '=');
+	if (quote == nullptr)
+	{
+		return 0;
+	}
+	const char *endline = strchr(quote + 1, '\n');
+	char str[100];
+	memset(str, 0, sizeof(str));
+	memcpy(str, quote + 1, endline - quote - 1);
+	TRACE1("ServerIp = %s", str);
+	unsigned int one = 0;
+	unsigned int two = 0;
+	unsigned int three = 0;
+	unsigned int four = 0;
+	sscanf_s(str, "%d.%d.%d.%d", one, two, three, four);
+	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three < 8) | four;
+
+	return tmpServerIp;
+}
+
+
+CParamManager::CParamManager() :m_pColor(nullptr),
 m_pOutline(nullptr),
 m_pTexture(nullptr),
 m_nLocalIp(-1),
@@ -106,6 +210,24 @@ m_nServerIp(-1)
 
 CParamManager::~CParamManager()
 {
+	if (m_pColor != nullptr)
+	{
+		m_pColor->clear();
+		delete m_pColor;
+		m_pColor = nullptr;
+	}
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->clear();
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
+	if (m_pOutline != nullptr)
+	{
+		m_pOutline->clear();
+		delete m_pOutline;
+		m_pOutline = nullptr;
+	}
 }
 
 char* CParamManager::WcharToChar(wchar_t* wc)

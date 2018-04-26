@@ -1,7 +1,3 @@
-﻿  stdafx.cpp
-  ParamManager.cpp
-  CarSeat_RecognizationDlg.cpp
-  CarSeat_Recognization.cpp
-  正在生成代码...
+﻿  Log.cpp
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\Debug\CarSeat_Recognization.exe
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\Debug\CarSeat_Recognization.pdb (Partial PDB)

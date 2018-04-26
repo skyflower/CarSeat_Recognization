@@ -33,6 +33,9 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ParamManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -42,6 +45,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\CarSeat_Recognization.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="F:\AutocarSeat_Recognition\OriginalImage\Desktop\baseImage\process\ecru_leather_cloth.jpg">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

@@ -24,6 +24,8 @@ public:
 public:
 	virtual BOOL InitInstance();
 
+private:
+	static void pingServer(int serverIp);
 // й╣ож
 
 	DECLARE_MESSAGE_MAP()

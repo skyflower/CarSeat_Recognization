@@ -11,3 +11,14 @@ CarSeat_Recognization/CarSeat_Recognization.VC.VC.opendb
 *.pdb
 *.pch
 
+*.db
+*.db
+*.opendb
+*.ipch
+*.pdb
+*.pdb
+*.idb
+*.obj
+*.pch
+*.tlog
+*.log

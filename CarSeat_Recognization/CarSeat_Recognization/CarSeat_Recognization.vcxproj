@@ -187,6 +187,7 @@
   <ItemGroup>
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
+    <ClInclude Include="ParamManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -194,6 +195,7 @@
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
+    <ClCompile Include="ParamManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -211,9 +213,15 @@
     <ResourceCompile Include="CarSeat_Recognization.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="F:\AutocarSeat_Recognition\OriginalImage\Desktop\baseImage\process\ecru_leather_cloth.jpg" />
     <Image Include="res\CarSeat_Recognization.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="CarSeat_Recognization.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -188,6 +188,7 @@
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="NetwrokTask.h" />
     <ClInclude Include="ParamManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="NetwrokTask.cpp" />
     <ClCompile Include="ParamManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

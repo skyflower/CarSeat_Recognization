@@ -9,6 +9,8 @@
 #endif
 
 #include "resource.h"		// Ö÷·ûºÅ
+#include "ParamManager.h"
+#include "Log.h"
 
 
 // CCarSeat_RecognizationApp: 
@@ -27,6 +29,9 @@ public:
 private:
 	static void pingServer(int serverIp);
 // ÊµÏÖ
+	CLog *m_pLog;
+	CParamManager *m_pParamManager;
+
 
 	DECLARE_MESSAGE_MAP()
 };

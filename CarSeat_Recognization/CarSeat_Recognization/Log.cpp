@@ -122,7 +122,7 @@ void CLog::init()
 	m_nCurValid = 0;
 	m_bFlag = false;
 
-	m_pLog.open("log.txt", std::ios::trunc | std::ios::in | std::ios::out);
+	m_pLog.open("trace_log.txt", std::ios::trunc | std::ios::in | std::ios::out);
 }
 
 void CLog::SetFlag(bool flag)

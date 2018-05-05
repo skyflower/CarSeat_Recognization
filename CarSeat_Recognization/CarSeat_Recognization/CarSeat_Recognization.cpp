@@ -24,7 +24,8 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp()
 {
 	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
-
+	m_pParamManager = nullptr;
+	m_pLog = nullptr;
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }
@@ -56,6 +57,8 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
 		return FALSE;
 	}
+	m_pParamManager = CParamManager::GetInstance();
+	m_pLog = CLog::GetInstance();
 
 
 	AfxEnableControlContainer();
@@ -107,10 +110,21 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
+	if (m_pParamManager != nullptr)
+	{
+		delete m_pParamManager;
+		m_pParamManager = nullptr;
+	}
+	if (m_pLog != nullptr)
+	{
+		delete m_pLog;
+		m_pLog = nullptr;
+	}
 	return FALSE;
 }
 
 void CCarSeat_RecognizationApp::pingServer(int serverIp)
 {
+
 }
 

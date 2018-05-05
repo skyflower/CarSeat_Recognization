@@ -10,6 +10,8 @@ public:
 
 	static CParamManager* GetInstance();
 
+	int GetLocalIP();
+
 private:
 
 	static CParamManager *m_pInstance;
@@ -20,6 +22,7 @@ private:
 
 	int parseServerIp(const char *content, const char *name);
 
+	
 
 	char* WcharToChar(wchar_t* wc);
 	wchar_t* CharToWchar(char* c);

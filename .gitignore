@@ -28,3 +28,14 @@ CarSeat_Recognization/CarSeat_Recognization.VC.VC.opendb
 *.pdb
 *.pdb
 *.idb
+*.pdb
+*.tlog
+*.pch
+*.idb
+*.obj
+*.pdb
+*.pdb
+*.exe
+*.ilk
+*.opendb
+*.db

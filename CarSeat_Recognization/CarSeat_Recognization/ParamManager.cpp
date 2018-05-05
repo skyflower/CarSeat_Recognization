@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ParamManager.h"
 #include <fstream>
+#include "Log.h"
 #include <functional>
 
 
@@ -24,30 +25,60 @@ int CParamManager::GetLocalIP()
 	{
 		return 0;
 	}
-	char local[255] = { 0 };
-	gethostname(local, sizeof(local));
-	hostent* ph = gethostbyname(local);
-	if (ph == NULL)
-	{
-		return 0;
-	}
-	in_addr addr;
-	memcpy(&addr, ph->h_addr_list[0], sizeof(in_addr)); // 这里仅获取第一个ip  
+	
+	char               buf[100];
+	int                ret = 0;
+	struct addrinfo    hints;
+	struct addrinfo    *res = nullptr, *curr = nullptr;
+	struct sockaddr_in *sa = nullptr;
 
-	std::string localIP;
-	localIP.assign(inet_ntoa(addr));
+
+	memset(&hints, 0, sizeof(addrinfo));
+	hints.ai_flags = AI_CANONNAME;
+	hints.ai_family = AF_INET;
+	if (gethostname(buf, sizeof(buf)) < 0) 
+	{
+		WriteError("get local name Failed");
+		return -1;
+	}
+	if ((ret = getaddrinfo(buf, NULL, &hints, &res)) != 0) 
+	{
+		WriteError("getaddrinfo: %s\n", gai_strerror(ret));
+		return -1;
+	}
+	curr = res;
+	//struct sockaddr_in* pSockaddr = (sockaddr_in*)res->ai_addr;
+	//char *pIP = inet_ntoa(pSockaddr->sin_addr);
+	//TRACE1("local ip = %s\n", pIP);
+	sa->sin_addr.S_un.S_un_b.s_b1;
+	unsigned int nIp = 0;
+	while (curr)
+	{
+		sa = (struct sockaddr_in *)curr->ai_addr;
+		//TRACE2("name: %s\nip:%d\n\n", curr->ai_canonname,
+		inet_ntop(AF_INET, &sa->sin_addr.S_un.S_addr, buf, sizeof(buf));
+		TRACE1("IP = 0x%X\n", sa->sin_addr.S_un.S_addr);
+		curr = curr->ai_next;
+		if (sa->sin_addr.S_un.S_addr != 0)
+		{
+			if ((sa->sin_addr.S_un.S_un_b.s_b1 == 0xFF) || \
+				(sa->sin_addr.S_un.S_un_b.s_b2 == 0xFF) || \
+				(sa->sin_addr.S_un.S_un_b.s_b3 == 0xFF) || \
+				(sa->sin_addr.S_un.S_un_b.s_b4 == 0xFF))
+			{
+				continue;
+			}
+			nIp = (sa->sin_addr.S_un.S_un_b.s_b1 << 24) | \
+				(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
+				(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
+				(sa->sin_addr.S_un.S_un_b.s_b4);
+			break;
+		}
+	}
 
 	WSACleanup();
 
-	TRACE1("localIp = %s", localIP.c_str());
-	unsigned int one = 0;
-	unsigned int two = 0;
-	unsigned int three = 0;
-	unsigned int four = 0;
-	sscanf_s(localIP.c_str(), "%d.%d.%d.%d", one, two, three, four);
-	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three < 8) | four;
-
-	return tmpServerIp;
+	return nIp;
 }
 
 void CParamManager::Init()
@@ -61,8 +92,9 @@ void CParamManager::Init()
 		size_t length = ftell(fp);
 		char *content = new char[length + 1];
 		memset(content, 0, sizeof(char) * (length + 1));
+		fseek(fp, 0, SEEK_SET);
 		fread_s(content, length, 1, length, fp);
-		char *p = strstr(content, "color");
+		//char *p = strstr(content, "color");
 		if (m_pColor == nullptr)
 		{
 			m_pColor = new std::vector<std::wstring>;
@@ -70,7 +102,7 @@ void CParamManager::Init()
 		ret = parseVector(content, "color", m_pColor);
 		if (ret == false)
 		{
-			TRACE0("init color Failed");
+			TRACE0("init color Failed\n");
 		}
 		if (m_pOutline == nullptr)
 		{
@@ -79,7 +111,7 @@ void CParamManager::Init()
 		ret = parseVector(content, "outline", m_pOutline);
 		if (ret == false)
 		{
-			TRACE0("out line init Failed");
+			TRACE0("out line init Failed\n");
 		}
 		if (m_pTexture == nullptr)
 		{
@@ -88,9 +120,26 @@ void CParamManager::Init()
 		ret = parseVector(content, "texture", m_pTexture);
 		if (ret == false)
 		{
-			TRACE0("texture init Failed");
+			TRACE0("texture init Failed\n");
+		}
+		unsigned int tmpLocal = parseServerIp(content, "serverip");
+		if (tmpLocal == 0)
+		{
+			TRACE0("get ServerIp Failed\n");
+		}
+		m_nServerIp = tmpLocal;
+		if (content != nullptr)
+		{
+			delete[]content;
+			content = nullptr;
 		}
 	}
+	unsigned int tmpLocal = GetLocalIP();
+	if (tmpLocal != 0)
+	{
+		m_nLocalIp = tmpLocal;
+	}
+
 }
 
 bool CParamManager::parseVector(const char *content, const char * name, std::vector<std::wstring>* pVector)
@@ -100,7 +149,7 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 		return false;
 	}
 	char *p = const_cast<char*>(strstr(content, name));
-	if (p == NULL)
+	if (p != NULL)
 	{
 		char *line = strchr(p, '=');
 		char *end = strchr(p, '\n');
@@ -110,11 +159,17 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 			{
 				m_pColor = new std::vector<std::wstring>;
 			}
+			/*int i = 0;
+			unsigned char *tmpPointer = (unsigned char*)(line);
+			for (i = 0; line + i < end; ++i)
+			{
+				TRACE1("%u\n", tmpPointer[i]);
+			}*/
 			if (parseLineSegment(line + 1, end - line - 1, m_pColor) == true)
 			{
 				for (auto &k : *m_pColor)
 				{
-					TRACE1("color = %s", k);
+					TRACE1("color = %s\n", k);
 				}
 			}
 		}
@@ -124,7 +179,6 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 
 bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::vector<std::wstring>* pData)
 {
-
 	if ((pContent == nullptr) || (length < 1) || (pData == nullptr))
 	{
 		return false;
@@ -132,15 +186,16 @@ bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::
 
 	char *p = const_cast<char*>(pContent);
 	char tmpStr[100];
+	char c = '\"';
 	while (p < pContent + length)
 	{
-		char* begin = strchr(p, '"');
-		if (begin == NULL)
+		char* begin = strchr(p, c);
+		if ((begin == NULL) || (begin >= pContent + length))
 		{
 			break;
 		}
-		char* end = strchr(begin + 1, '"');
-		if (end == NULL)
+		char* end = strchr(begin + 1, c);
+		if ((end == NULL) || (end >= pContent + length))
 		{
 			break;
 		}
@@ -148,7 +203,7 @@ bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::
 		if (end - begin - 1 != 0)
 		{
 			memset(tmpStr, 0, sizeof(tmpStr));
-			memcpy(tmpStr, begin + 1, end - begin - 1);
+			memcpy(tmpStr, begin + 1, sizeof(char)*(end - begin - 1));
 			wchar_t *wchar = CharToWchar(tmpStr);
 			if (wchar == nullptr)
 			{
@@ -191,8 +246,8 @@ int CParamManager::parseServerIp(const char * content, const char * name)
 	unsigned int two = 0;
 	unsigned int three = 0;
 	unsigned int four = 0;
-	sscanf_s(str, "%d.%d.%d.%d", one, two, three, four);
-	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three < 8) | four;
+	sscanf_s(str, "%d.%d.%d.%d", &one, &two, &three, &four);
+	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three << 8) | four;
 
 	return tmpServerIp;
 }

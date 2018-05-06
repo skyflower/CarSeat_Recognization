@@ -9,8 +9,8 @@
 #endif
 
 #include "resource.h"		// Ö÷·ûºÅ
-#include "ParamManager.h"
-#include "Log.h"
+#include "./common/ParamManager.h"
+#include "./common/Log.h"
 
 
 // CCarSeat_RecognizationApp: 

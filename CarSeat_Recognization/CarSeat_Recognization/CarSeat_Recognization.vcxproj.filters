@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{d56988c4-d9a8-4835-903b-1fa125f6511f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{3d908d8d-a692-4f24-9cb1-afe879cae5da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xml">
+      <UniqueIdentifier>{80c41aae-fac4-49ee-a97e-63eeb2cbdbbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,14 +42,23 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ParamManager.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="common\Log.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="common\ParamManager.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="NetwrokTask.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="common\utils.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="network\NetworkTask.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="xml\tinystr.h">
+      <Filter>xml</Filter>
+    </ClInclude>
+    <ClInclude Include="xml\tinyxml.h">
+      <Filter>xml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,14 +71,29 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ParamManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="common\Log.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="common\ParamManager.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="NetwrokTask.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="common\utils.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="network\NetworkTask.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinystr.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinyxml.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinyxmlerror.cpp">
+      <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinyxmlparser.cpp">
+      <Filter>xml</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

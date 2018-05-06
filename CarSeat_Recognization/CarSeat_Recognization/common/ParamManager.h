@@ -11,6 +11,13 @@ public:
 	static CParamManager* GetInstance();
 
 	int GetLocalIP();
+	int GetServerIP();
+	int GetServerPort();
+	int GetTestServerPort();
+	int GetTestClientPort();
+
+	std::wstring GetLocalName() { return m_strLocalName; }
+
 
 private:
 
@@ -21,17 +28,16 @@ private:
 	bool parseLineSegment(const char *name, size_t, std::vector<std::wstring> *pVec);
 
 	int parseServerIp(const char *content, const char *name);
-
-	
-
-	char* WcharToChar(wchar_t* wc);
-	wchar_t* CharToWchar(char* c);
-	std::wstring StrToWStr(const std::string str);
-	std::string WStrToStr(const std::wstring wstr);
-
+	bool getValueByName(const char *content, const char*name, char*value);
 
 	size_t m_nServerIp;
+	int m_nServerPort;
 	size_t m_nLocalIp;
+
+	int m_nTestServerPort;
+	int m_nTestClientPort;
+
+	std::wstring m_strLocalName;
 	std::vector<std::wstring> *m_pColor;
 	std::vector<std::wstring> *m_pOutline;
 	std::vector<std::wstring> *m_pTexture;

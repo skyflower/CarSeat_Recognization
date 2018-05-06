@@ -1,11 +1,46 @@
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "ParamManager.h"
 #include <fstream>
 #include "Log.h"
+#include "utils.h"
 #include <functional>
+#include "../network/NetworkTask.h"
 
 
 CParamManager *CParamManager::m_pInstance = nullptr;
+
+CParamManager::CParamManager() :m_pColor(nullptr),
+m_pOutline(nullptr),
+m_pTexture(nullptr),
+m_nLocalIp(-1),
+m_nServerIp(-1)
+{
+	Init();
+}
+
+
+CParamManager::~CParamManager()
+{
+	if (m_pColor != nullptr)
+	{
+		m_pColor->clear();
+		delete m_pColor;
+		m_pColor = nullptr;
+	}
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->clear();
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
+	if (m_pOutline != nullptr)
+	{
+		m_pOutline->clear();
+		delete m_pOutline;
+		m_pOutline = nullptr;
+	}
+}
+
 
 CParamManager* CParamManager::GetInstance()
 {
@@ -25,7 +60,7 @@ int CParamManager::GetLocalIP()
 	{
 		return 0;
 	}
-	
+
 	char               buf[100];
 	int                ret = 0;
 	struct addrinfo    hints;
@@ -36,49 +71,68 @@ int CParamManager::GetLocalIP()
 	memset(&hints, 0, sizeof(addrinfo));
 	hints.ai_flags = AI_CANONNAME;
 	hints.ai_family = AF_INET;
-	if (gethostname(buf, sizeof(buf)) < 0) 
+	if (gethostname(buf, sizeof(buf)) < 0)
 	{
 		WriteError("get local name Failed");
 		return -1;
 	}
-	if ((ret = getaddrinfo(buf, NULL, &hints, &res)) != 0) 
+
+	{
+		std::string tmpLocalName(buf);
+		m_strLocalName = utils::StrToWStr(tmpLocalName);
+	}
+	
+	if ((ret = getaddrinfo(buf, NULL, &hints, &res)) != 0)
 	{
 		WriteError("getaddrinfo: %s\n", gai_strerror(ret));
 		return -1;
 	}
+	
 	curr = res;
-	//struct sockaddr_in* pSockaddr = (sockaddr_in*)res->ai_addr;
-	//char *pIP = inet_ntoa(pSockaddr->sin_addr);
-	//TRACE1("local ip = %s\n", pIP);
-	sa->sin_addr.S_un.S_un_b.s_b1;
+	//sa->sin_addr.S_un.S_un_b.s_b1;
+	
 	unsigned int nIp = 0;
 	while (curr)
 	{
 		sa = (struct sockaddr_in *)curr->ai_addr;
-		//TRACE2("name: %s\nip:%d\n\n", curr->ai_canonname,
+		memset(buf, 0, sizeof(buf));
 		inet_ntop(AF_INET, &sa->sin_addr.S_un.S_addr, buf, sizeof(buf));
 		TRACE1("IP = 0x%X\n", sa->sin_addr.S_un.S_addr);
-		curr = curr->ai_next;
-		if (sa->sin_addr.S_un.S_addr != 0)
+		int tmpIp = (sa->sin_addr.S_un.S_un_b.s_b1 << 24) | \
+			(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
+			(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
+			(sa->sin_addr.S_un.S_un_b.s_b4);
+		if (true == CNetworkTask::IsReachable(tmpIp, m_nServerIp))
 		{
-			if ((sa->sin_addr.S_un.S_un_b.s_b1 == 0xFF) || \
-				(sa->sin_addr.S_un.S_un_b.s_b2 == 0xFF) || \
-				(sa->sin_addr.S_un.S_un_b.s_b3 == 0xFF) || \
-				(sa->sin_addr.S_un.S_un_b.s_b4 == 0xFF))
-			{
-				continue;
-			}
-			nIp = (sa->sin_addr.S_un.S_un_b.s_b1 << 24) | \
-				(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
-				(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
-				(sa->sin_addr.S_un.S_un_b.s_b4);
+			nIp = tmpIp;
 			break;
 		}
+		curr = curr->ai_next;
 	}
 
 	WSACleanup();
 
 	return nIp;
+}
+
+int CParamManager::GetServerIP()
+{
+	return m_nServerIp;
+}
+
+int CParamManager::GetServerPort()
+{
+	return m_nServerPort;
+}
+
+int CParamManager::GetTestServerPort()
+{
+	return m_nTestServerPort;
+}
+
+int CParamManager::GetTestClientPort()
+{
+	return m_nTestClientPort;
 }
 
 void CParamManager::Init()
@@ -128,6 +182,25 @@ void CParamManager::Init()
 			TRACE0("get ServerIp Failed\n");
 		}
 		m_nServerIp = tmpLocal;
+
+		char tmpStr[20] = { 0 };
+		if (getValueByName(content, "serverport", tmpStr) == true)
+		{
+			m_nServerPort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+		if (getValueByName(content, "testClientPort", tmpStr) == true)
+		{
+			m_nTestClientPort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (getValueByName(content, "testServerPort", tmpStr) == true)
+		{
+			m_nTestServerPort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
 		if (content != nullptr)
 		{
 			delete[]content;
@@ -139,7 +212,6 @@ void CParamManager::Init()
 	{
 		m_nLocalIp = tmpLocal;
 	}
-
 }
 
 bool CParamManager::parseVector(const char *content, const char * name, std::vector<std::wstring>* pVector)
@@ -159,12 +231,6 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 			{
 				m_pColor = new std::vector<std::wstring>;
 			}
-			/*int i = 0;
-			unsigned char *tmpPointer = (unsigned char*)(line);
-			for (i = 0; line + i < end; ++i)
-			{
-				TRACE1("%u\n", tmpPointer[i]);
-			}*/
 			if (parseLineSegment(line + 1, end - line - 1, m_pColor) == true)
 			{
 				for (auto &k : *m_pColor)
@@ -204,7 +270,7 @@ bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::
 		{
 			memset(tmpStr, 0, sizeof(tmpStr));
 			memcpy(tmpStr, begin + 1, sizeof(char)*(end - begin - 1));
-			wchar_t *wchar = CharToWchar(tmpStr);
+			wchar_t *wchar = utils::CharToWchar(tmpStr);
 			if (wchar == nullptr)
 			{
 				continue;
@@ -252,77 +318,31 @@ int CParamManager::parseServerIp(const char * content, const char * name)
 	return tmpServerIp;
 }
 
-
-CParamManager::CParamManager() :m_pColor(nullptr),
-m_pOutline(nullptr),
-m_pTexture(nullptr),
-m_nLocalIp(-1),
-m_nServerIp(-1)
+bool CParamManager::getValueByName(const char *content, const char * name, char * value)
 {
-	Init();
-}
-
-
-CParamManager::~CParamManager()
-{
-	if (m_pColor != nullptr)
+	if ((name == nullptr) || (value == nullptr) || (content == nullptr))
 	{
-		m_pColor->clear();
-		delete m_pColor;
-		m_pColor = nullptr;
+		return false;
 	}
-	if (m_pTexture != nullptr)
+
+	char *p = strstr(const_cast<char*>(content), name);
+	if (p == NULL)
 	{
-		m_pTexture->clear();
-		delete m_pTexture;
-		m_pTexture = nullptr;
+		return false;
 	}
-	if (m_pOutline != nullptr)
+	char *lineEnd = strstr(p, "\n");
+	if (lineEnd == NULL)
 	{
-		m_pOutline->clear();
-		delete m_pOutline;
-		m_pOutline = nullptr;
+		return false;
 	}
+	char *begin = strstr(p + 1, "=");
+	if ((begin == NULL) || (begin >= lineEnd))
+	{
+		return false;
+	}
+	memcpy_s(value, MAX_CHAR_LENGTH, begin + 1, lineEnd - begin - 1);
+
+	return true;
 }
 
-char* CParamManager::WcharToChar(wchar_t* wc)
-{
 
-	int len = WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), NULL, 0, NULL, NULL);
-	char *m_char = new char[len + 1];
-	memset(m_char, 0, sizeof(char) * (len + 1));
-
-	WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), m_char, len, NULL, NULL);
-	m_char[len] = '\0';
-	return m_char;
-}
-wchar_t* CParamManager::CharToWchar(char* c)
-{
-
-	int len = MultiByteToWideChar(CP_ACP, 0, c, strlen(c), NULL, 0);
-	wchar_t *m_wchar = new wchar_t[len + 1];
-	memset(m_wchar, 0, sizeof(wchar_t) * (len + 1));
-
-	MultiByteToWideChar(CP_ACP, 0, c, strlen(c), m_wchar, len);
-	m_wchar[len] = '\0';
-	return m_wchar;
-}
-std::wstring CParamManager::StrToWStr(const std::string str)
-{
-	//wchar_t* CharToWchar(char* c);
-	wchar_t *pWChar = CharToWchar(const_cast<char*>(str.c_str()));
-	std::wstring tmpStr(pWChar);
-	delete[]pWChar;
-	pWChar = nullptr;
-	return tmpStr;
-}
-std::string CParamManager::WStrToStr(const std::wstring wstr)
-{
-	char *pChar = WcharToChar(const_cast<wchar_t*>(wstr.c_str()));
-
-	std::string tmpStr(pChar);
-	delete[]pChar;
-	pChar = nullptr;
-
-	return tmpStr;
-}

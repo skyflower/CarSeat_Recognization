@@ -6,7 +6,10 @@
 #include "CarSeat_Recognization.h"
 #include "CarSeat_RecognizationDlg.h"
 #include "afxdialogex.h"
-
+// add start by xiexinpeng
+#include <string>
+#include "OPC.h"
+// add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -107,6 +110,29 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
+    // 连接kepserver add start by xiexinpeng	
+    // kepserver 连接类
+    COPC Opc;
+	COleVariant* WriteItem;
+	// 需要填具体PLC标志位
+	string s = "PLC_flag";
+	CString cstr1;
+	CString Cstr="OPCServer.WinCC";
+	wchar_t* opcServer;
+	opcServer=new wchar_t[20];
+	opcServer=Cstr.AllocSysString();
+	
+	Opc.AddServerName(opcServer);
+	
+	if( TRUE == Opc.ConnectServer() )
+	{
+		Opc.bOPCConnect=true;
+		cstr1.Format("%s",s.c_str());
+		WriteItem[0]=COleVariant(cstr1);
+		Opc.InitialOPC(opcServer , 1 , WriteItem);
+		Opc.PreWrite();	
+	}
+	// add end by xiexinpeng
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

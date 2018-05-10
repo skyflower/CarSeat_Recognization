@@ -59,7 +59,18 @@ Resource.h
 CarSeat_Recognization.manifest
 	Windows XP 使用应用程序清单文件来描述特定版本的并行程序集的应用程序依赖项。加载程序使用这些信息来从程序集缓存中加载相应的程序集，并保护其不被应用程序访问。应用程序清单可能会包含在内，以作为与应用程序可执行文件安装在同一文件夹中的外部 .manifest 文件进行重新分发，它还可能以资源的形式包含在可执行文件中。
 /////////////////////////////////////////////////////////////////////////////
-
+OPC相关文件
+    用于kepserver通信
+	说明:往报警系统写数据，只需调用WriteData(long len, long startnum, VARIANT *WriteData)函数即可，格式如下:
+	1、先实例化一个OPC类
+	#include “OPC.h”
+	OPC *pOCP
+	2、调用接口
+	COleVariant writedata[2]; //需要用 COleVariant类型定义数组
+	plc_flag = 1
+	writedata[0]=(COleVariant)plc_flag;
+	pOCP->WriteData(2,startnum,writedata);
+/////////////////////////////////////////////////////////////////////////////
 其他注释:
 
 应用程序向导使用“TODO:”来指示应添加或自定义的源代码部分。

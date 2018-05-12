@@ -1,4 +1,4 @@
-
+﻿
 // CarSeat_RecognizationDlg.cpp : ʵ���ļ�
 //
 
@@ -13,7 +13,7 @@
 #include "windows.h"
 #include <atlstr.h>
 #include "OPC.h"
-using namespace std;
+//using namespace std;
 // add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,12 +27,12 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// �Ի�������
+	// �Ի�������
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ֧��
 
 // ʵ��
@@ -56,7 +56,7 @@ END_MESSAGE_MAP()
 // CCarSeat_RecognizationDlg �Ի���
 
 BEGIN_DHTML_EVENT_MAP(CCarSeat_RecognizationDlg)
-	
+
 END_DHTML_EVENT_MAP()
 
 
@@ -115,28 +115,38 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	// TODO: �ڴ���Ӷ���ĳ�ʼ������
 
-    // ����kepserver add start by xiexinpeng	
-    // kepserver ������
-    COPC Opc;
+	// ����kepserver add start by xiexinpeng	
+	// kepserver ������
+	COPC Opc;
 	COleVariant* WriteItem = NULL;
 	// ��Ҫ�����PLC��־λ
-	string flag = "PLC_flag";
-	string server="OPCServer.WinCC";
-	wchar_t* opcServer;
+	std::string flag = "PLC_flag";
+	std::string server = "OPCServer.WinCC";
+	wchar_t* opcServer = nullptr;
 	int size = MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, NULL, 0);
-	opcServer=new wchar_t[size];
-	MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, opcServer, size);	
+	opcServer = new wchar_t[size];
+	MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, opcServer, size);
 	Opc.AddServerName(opcServer);
-	
-	//if( TRUE == Opc.ConnectServer() )
+
+	if( TRUE == Opc.ConnectServer() )
 	{
-		Opc.bOPCConnect=true;
+		Opc.bOPCConnect = true;
 		int size = MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, NULL, 0);
 		wchar_t* opcflag = new wchar_t[size];
 		MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, opcflag, size);
 		WriteItem[0] = SysAllocString(opcflag);
-		Opc.InitialOPC(opcServer , 1 , WriteItem);
-		Opc.PreWrite();	
+		Opc.InitialOPC(opcServer, 1, WriteItem);
+		Opc.PreWrite();
+		if (opcServer != nullptr)
+		{
+			delete[] opcServer;
+			opcServer = nullptr;
+		}
+		if (opcflag != nullptr)
+		{
+			delete[] opcflag;
+			opcflag = nullptr;
+		}
 	}
 	// add end by xiexinpeng
 	return TRUE;  // ���ǽ��������õ��ؼ������򷵻� TRUE

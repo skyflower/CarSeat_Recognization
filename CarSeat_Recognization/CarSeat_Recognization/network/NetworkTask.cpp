@@ -190,7 +190,6 @@ void CNetworkTask::run()
 					break;
 				}
 			}
-			
 		}
 		///////////////////////////
 		//  add code

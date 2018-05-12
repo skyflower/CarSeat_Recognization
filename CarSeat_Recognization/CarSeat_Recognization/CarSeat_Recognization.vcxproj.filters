@@ -60,6 +60,15 @@
     <ClInclude Include="xml\tinyxml.h">
       <Filter>xml</Filter>
     </ClInclude>
+    <ClInclude Include="OPC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opccomn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opcda.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -94,6 +103,15 @@
     </ClCompile>
     <ClCompile Include="xml\tinyxmlparser.cpp">
       <Filter>xml</Filter>
+    </ClCompile>
+    <ClCompile Include="OPC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opccomn_i.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opcda_i.c">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

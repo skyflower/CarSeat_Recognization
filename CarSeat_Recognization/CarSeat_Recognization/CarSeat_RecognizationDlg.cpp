@@ -1,5 +1,5 @@
 
-// CarSeat_RecognizationDlg.cpp : ÊµÏÖÎÄ¼þ
+// CarSeat_RecognizationDlg.cpp : Êµï¿½ï¿½ï¿½Ä¼ï¿½
 //
 
 #include "stdafx.h"
@@ -8,33 +8,29 @@
 #include "afxdialogex.h"
 // add start by xiexinpeng
 #include <string>
-#include "stdlib.h"
-#include "windows.h"
-#include <atlstr.h>
 #include "OPC.h"
-using namespace std;
 // add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// ÓÃÓÚÓ¦ÓÃ³ÌÐò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ò¡°¹ï¿½ï¿½Ú¡ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ CAboutDlg ï¿½Ô»ï¿½ï¿½ï¿½
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// ¶Ô»°¿òÊý¾Ý
+// ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§ï¿½ï¿½
 
-// ÊµÏÖ
+// Êµï¿½ï¿½
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -52,7 +48,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationDlg ¶Ô»°¿ò
+// CCarSeat_RecognizationDlg ï¿½Ô»ï¿½ï¿½ï¿½
 
 BEGIN_DHTML_EVENT_MAP(CCarSeat_RecognizationDlg)
 	
@@ -81,15 +77,15 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationDlg ÏûÏ¢´¦Àí³ÌÐò
+// CCarSeat_RecognizationDlg ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 {
 	CDHtmlDialog::OnInitDialog();
 
-	// ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖÐ¡£
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ÏµÍ³ï¿½Ëµï¿½ï¿½Ð¡ï¿½
 
-	// IDM_ABOUTBOX ±ØÐëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
+	// IDM_ABOUTBOX ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½î·¶Î§ï¿½Ú¡ï¿½
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -107,38 +103,37 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		}
 	}
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£  µ±Ó¦ÓÃ³ÌÐòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ÐÐ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃÐ¡Í¼±ê
+	// ï¿½ï¿½ï¿½Ã´Ë¶Ô»ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ê¡£  ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ç¶Ô»ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½Ô¶ï¿½
+	//  Ö´ï¿½Ð´Ë²ï¿½ï¿½ï¿½
+	SetIcon(m_hIcon, TRUE);			// ï¿½ï¿½ï¿½Ã´ï¿½Í¼ï¿½ï¿½
+	SetIcon(m_hIcon, FALSE);		// ï¿½ï¿½ï¿½ï¿½Ð¡Í¼ï¿½ï¿½
 
-	// TODO: ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+	// TODO: ï¿½Ú´ï¿½ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    // Á¬½Ókepserver add start by xiexinpeng	
-    // kepserver Á¬½ÓÀà
+    // ï¿½ï¿½ï¿½ï¿½kepserver add start by xiexinpeng	
+    // kepserver ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     COPC Opc;
-	COleVariant* WriteItem = NULL;
-	// ÐèÒªÌî¾ßÌåPLC±êÖ¾Î»
-	string flag = "PLC_flag";
-	string server="OPCServer.WinCC";
-	wchar_t* opcServer;
-	int size = MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, NULL, 0);
-	opcServer=new wchar_t[size];
-	MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, opcServer, size);	
+	COleVariant* WriteItem = nullptr;
+	// ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½PLCï¿½ï¿½Ö¾Î»
+	std::string s = "PLC_flag";
+	CString cstr1;
+	CString Cstr = L"OPCServer.WinCC";
+	wchar_t* opcServer = nullptr;
+	opcServer = new wchar_t[20];
+	opcServer = Cstr.AllocSysString();
+	
 	Opc.AddServerName(opcServer);
 	
 	if( TRUE == Opc.ConnectServer() )
 	{
 		Opc.bOPCConnect=true;
-		int size = MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, NULL, 0);
-		wchar_t* opcflag = new wchar_t[size];
-		MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, opcflag, size);
-		WriteItem[0] = SysAllocString(opcflag);
+		cstr1.Format(L"%s",s.c_str());
+		WriteItem[0]=COleVariant(cstr1);
 		Opc.InitialOPC(opcServer , 1 , WriteItem);
 		Opc.PreWrite();	
 	}
 	// add end by xiexinpeng
-	return TRUE;  // ³ý·Ç½«½¹µãÉèÖÃµ½¿Ø¼þ£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½ TRUE
 }
 
 void CCarSeat_RecognizationDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -154,19 +149,19 @@ void CCarSeat_RecognizationDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îÐ¡»¯°´Å¥£¬ÔòÐèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£  ¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ÐÍµÄ MFC Ó¦ÓÃ³ÌÐò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// ï¿½ï¿½ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½
+//  ï¿½ï¿½ï¿½ï¿½ï¿½Æ¸ï¿½Í¼ï¿½ê¡£  ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Äµï¿½/ï¿½ï¿½Í¼Ä£ï¿½Íµï¿½ MFC Ó¦ï¿½Ã³ï¿½ï¿½ï¿½
+//  ï¿½â½«ï¿½É¿ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½É¡ï¿½
 
 void CCarSeat_RecognizationDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ï¿½ï¿½ï¿½Ú»ï¿½ï¿½Æµï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØÐÎÖÐ¾ÓÖÐ
+		// Ê¹Í¼ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½ï¿½
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -174,14 +169,14 @@ void CCarSeat_RecognizationDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
 	{
 		CDHtmlDialog::OnPaint();
 	}
-	m_barCode.SetWindowTextW(L"K215-ºÚÉ«-ÁâÐÎÎÆÀí");
+	m_barCode.SetWindowTextW(L"K215-ï¿½ï¿½É«-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
 	double ratio = 1.0;
 	if (m_nFailCount + m_nSuccessCount != 0)
@@ -195,8 +190,8 @@ void CCarSeat_RecognizationDlg::OnPaint()
 	m_RegRatio.SetWindowTextW(result);
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îÐ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊýÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ï¶ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ÏµÍ³ï¿½ï¿½ï¿½Ã´Ëºï¿½ï¿½ï¿½È¡ï¿½Ã¹ï¿½ï¿½
+//ï¿½ï¿½Ê¾ï¿½ï¿½
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);

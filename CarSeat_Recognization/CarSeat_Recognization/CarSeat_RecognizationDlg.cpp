@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 // add start by xiexinpeng
 #include <string>
-#include "OPC.h"
+//#include "OPC.h"
 // add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -112,25 +112,25 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
     // 连接kepserver add start by xiexinpeng	
     // kepserver 连接类
-    COPC Opc;
-	COleVariant* WriteItem;
+    //COPC Opc;
+	COleVariant* WriteItem = nullptr;
 	// 需要填具体PLC标志位
-	string s = "PLC_flag";
+	std::string s = "PLC_flag";
 	CString cstr1;
-	CString Cstr="OPCServer.WinCC";
-	wchar_t* opcServer;
-	opcServer=new wchar_t[20];
-	opcServer=Cstr.AllocSysString();
+	CString Cstr = L"OPCServer.WinCC";
+	wchar_t* opcServer = nullptr;
+	opcServer = new wchar_t[20];
+	opcServer = Cstr.AllocSysString();
 	
-	Opc.AddServerName(opcServer);
+	//Opc.AddServerName(opcServer);
 	
-	if( TRUE == Opc.ConnectServer() )
+	//if( TRUE == Opc.ConnectServer() )
 	{
-		Opc.bOPCConnect=true;
-		cstr1.Format("%s",s.c_str());
-		WriteItem[0]=COleVariant(cstr1);
-		Opc.InitialOPC(opcServer , 1 , WriteItem);
-		Opc.PreWrite();	
+		//Opc.bOPCConnect=true;
+		//cstr1.Format(L"%s",s.c_str());
+		//WriteItem[0] = COleVariant(cstr1);
+		//Opc.InitialOPC(opcServer , 1 , WriteItem->lVal);
+		//Opc.PreWrite();	
 	}
 	// add end by xiexinpeng
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE

@@ -4,18 +4,56 @@
 #include <Windows.h>
 #include <winsock.h>
 #include "../common/ParamManager.h"
+#include <mutex>
+#include <thread>
+
 
 class CNetworkTask
 {
 public:
+	enum class MessageType
+	{
+		NETWORK,
+		THREAD
+	};
+	struct message
+	{
+		unsigned int serverIp;
+		unsigned int serverPort;
+		unsigned int mLine;
+		char data[2000];
+	};
 	CNetworkTask();
 	~CNetworkTask();
 	static bool IsReachable(unsigned int clientIp, unsigned int serverIp);
 	bool heartBlood(unsigned int serverIp, unsigned int port);
-	void operator()();
+
+
+	void SendMessageTo(message* msg);
+	bool GetThreadStatus();
+	void SetThreadStatus(bool status);
+
+	void run();
+	static CNetworkTask* GetInstance();
 
 private:
-	CParamManager *m_pParamManager;
+	enum msg
+	{
+		MAX_MSG_SIZE = 20
+	};
+
+	bool __sendToServer();
 	
+
+	std::mutex m_MutexMsg;
+	message *m_pMsgQueue;
+	size_t m_nMsgSize;
+	int m_nIn;
+	int m_nOut;
+
+	static CNetworkTask *m_pInstance;
+	bool m_bThreadStatus;
+
+	CParamManager *m_pParamManager;
 };
 

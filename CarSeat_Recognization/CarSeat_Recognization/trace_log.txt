@@ -1,5 +1,14 @@
-Info	[CNetworkTask::IsReachable,26]icmp echo clientIp = 0xC0A8FF01, serverIp = 0xC0A80106
-Error	[CNetworkTask::IsReachable,32]icmpSendEcho failed clientIp = 0xC0A8FF01, ServerIp = 0xC0A80106
-Info	[CNetworkTask::IsReachable,26]icmp echo clientIp = 0xC0A83901, serverIp = 0xC0A80106
-Error	[CNetworkTask::IsReachable,32]icmpSendEcho failed clientIp = 0xC0A83901, ServerIp = 0xC0A80106
-Info	[CNetworkTask::IsReachable,26]icmp echo clientIp = 0xC0A80103, serverIp = 0xC0A80106
+Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A8FF01, serverIp = 0xC0A80105
+Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A8FF01, ServerIp = 0xC0A80105
+Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A83901, serverIp = 0xC0A80105
+Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A83901, ServerIp = 0xC0A80105
+Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A80103, serverIp = 0xC0A80105
+Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A80103, ServerIp = 0xC0A80105
+Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A8FF01, serverIp = 0xC0A80105
+Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A8FF01, ServerIp = 0xC0A80105
+Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A83901, serverIp = 0xC0A80105
+Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A83901, ServerIp = 0xC0A80105
+Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A80103, serverIp = 0xC0A80105
+Error	[CNetworkTask::heartBlood,120]connect failed, err = 10060
+Error	[CNetworkTask::heartBlood,120]connect failed, err = 10060
+Error	[CNetworkTask::heartBlood,120]connect failed, err = 10060

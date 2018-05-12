@@ -8,7 +8,11 @@
 #include "afxdialogex.h"
 // add start by xiexinpeng
 #include <string>
+#include "stdlib.h"
+#include "windows.h"
+#include <atlstr.h>
 #include "OPC.h"
+using namespace std;
 // add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -113,22 +117,23 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
     // 连接kepserver add start by xiexinpeng	
     // kepserver 连接类
     COPC Opc;
-	COleVariant* WriteItem;
+	COleVariant* WriteItem = NULL;
 	// 需要填具体PLC标志位
-	string s = "PLC_flag";
-	CString cstr1;
-	CString Cstr="OPCServer.WinCC";
+	string flag = "PLC_flag";
+	string server="OPCServer.WinCC";
 	wchar_t* opcServer;
-	opcServer=new wchar_t[20];
-	opcServer=Cstr.AllocSysString();
-	
+	int size = MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, NULL, 0);
+	opcServer=new wchar_t[size];
+	MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, opcServer, size);	
 	Opc.AddServerName(opcServer);
 	
 	if( TRUE == Opc.ConnectServer() )
 	{
 		Opc.bOPCConnect=true;
-		cstr1.Format("%s",s.c_str());
-		WriteItem[0]=COleVariant(cstr1);
+		int size = MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, NULL, 0);
+		wchar_t* opcflag = new wchar_t[size];
+		MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, opcflag, size);
+		WriteItem[0] = SysAllocString(opcflag);
 		Opc.InitialOPC(opcServer , 1 , WriteItem);
 		Opc.PreWrite();	
 	}

@@ -15,7 +15,7 @@
 #endif
 
 
-// ����Ӧ�ó��򡰹��ڡ��˵���� CAboutDlg �Ի���
+// ����Ӧ�ó��򡰹��ڡ��˵����?CAboutDlg �Ի���
 
 class CAboutDlg : public CDialogEx
 {
@@ -77,14 +77,12 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationDlg ��Ϣ�������
-
+// CCarSeat_RecognizationDlg ��Ϣ�������?
 BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 {
 	CDHtmlDialog::OnInitDialog();
 
-	// ��������...���˵�����ӵ�ϵͳ�˵��С�
-
+	// ��������...���˵�����ӵ�ϵͳ�˵��С�?
 	// IDM_ABOUTBOX ������ϵͳ���Χ�ڡ�
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
@@ -103,8 +101,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		}
 	}
 
-	// ���ô˶Ի����ͼ�ꡣ  ��Ӧ�ó��������ڲ��ǶԻ���ʱ����ܽ��Զ�
-	//  ִ�д˲���
+	// ���ô˶Ի����ͼ��? ��Ӧ�ó��������ڲ��ǶԻ���ʱ����ܽ��Զ�?	//  ִ�д˲���
 	SetIcon(m_hIcon, TRUE);			// ���ô�ͼ��
 	SetIcon(m_hIcon, FALSE);		// ����Сͼ��
 
@@ -190,8 +187,7 @@ void CCarSeat_RecognizationDlg::OnPaint()
 	m_RegRatio.SetWindowTextW(result);
 }
 
-//���û��϶���С������ʱϵͳ���ô˺���ȡ�ù��
-//��ʾ��
+//���û��϶���С������ʱϵͳ���ô˺���ȡ�ù��?//��ʾ��
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);

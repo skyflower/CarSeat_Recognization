@@ -104,7 +104,7 @@ bool COPC::WriteData(long len, long startnum,VARIANT *WriteData)
 	for(int i = 0; i < len; i++)
 		*(TagList+i) = startnum+i;
 	
-	for( i = 0; i < len; i++)
+	for(int i = 0; i < len; i++)
 	{
 		hTagServer[i] = hWriteServer[TagList[i]];
 	}

@@ -1,4 +1,3 @@
-﻿
 // CarSeat_RecognizationDlg.cpp : ʵ���ļ�
 //
 
@@ -8,31 +7,26 @@
 #include "afxdialogex.h"
 // add start by xiexinpeng
 #include <string>
-//#include "OPC.h"
-#include "stdlib.h"
-#include "windows.h"
-#include <atlstr.h>
 #include "OPC.h"
-//using namespace std;
 // add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// ����Ӧ�ó��򡰹��ڡ��˵���� CAboutDlg �Ի���
+// ����Ӧ�ó��򡰹��ڡ��˵����?CAboutDlg �Ի���
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-	// �Ի�������
+// �Ի�������
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-protected:
+	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ֧��
 
 // ʵ��
@@ -82,14 +76,12 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationDlg ��Ϣ�������
-
+// CCarSeat_RecognizationDlg ��Ϣ�������?
 BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 {
 	CDHtmlDialog::OnInitDialog();
 
-	// ��������...���˵�����ӵ�ϵͳ�˵��С�
-
+	// ��������...���˵�����ӵ�ϵͳ�˵��С�?
 	// IDM_ABOUTBOX ������ϵͳ���Χ�ڡ�
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
@@ -108,45 +100,33 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		}
 	}
 
-	// ���ô˶Ի����ͼ�ꡣ  ��Ӧ�ó��������ڲ��ǶԻ���ʱ����ܽ��Զ�
-	//  ִ�д˲���
+	// ���ô˶Ի����ͼ��? ��Ӧ�ó��������ڲ��ǶԻ���ʱ����ܽ��Զ�?	//  ִ�д˲���
 	SetIcon(m_hIcon, TRUE);			// ���ô�ͼ��
 	SetIcon(m_hIcon, FALSE);		// ����Сͼ��
 
 	// TODO: �ڴ���Ӷ���ĳ�ʼ������
 
-	// ����kepserver add start by xiexinpeng	
-	// kepserver ������
-	COPC Opc;
-	COleVariant* WriteItem = NULL;
+    // ����kepserver add start by xiexinpeng	
+    // kepserver ������
+    COPC Opc;
+	COleVariant* WriteItem = nullptr;
 	// ��Ҫ�����PLC��־λ
-	std::string flag = "PLC_flag";
-	std::string server = "OPCServer.WinCC";
+	std::string s = "PLC_flag";
+	CString cstr1;
+	CString Cstr = L"OPCServer.WinCC";
 	wchar_t* opcServer = nullptr;
-	int size = MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, NULL, 0);
-	opcServer = new wchar_t[size];
-	MultiByteToWideChar(CP_OEMCP, 0, server.c_str(), strlen(server.c_str()) + 1, opcServer, size);
+	opcServer = new wchar_t[20];
+	opcServer = Cstr.AllocSysString();
+	
 	Opc.AddServerName(opcServer);
 
 	if( TRUE == Opc.ConnectServer() )
 	{
-		Opc.bOPCConnect = true;
-		int size = MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, NULL, 0);
-		wchar_t* opcflag = new wchar_t[size];
-		MultiByteToWideChar(CP_OEMCP, 0, flag.c_str(), strlen(flag.c_str()) + 1, opcflag, size);
-		WriteItem[0] = SysAllocString(opcflag);
-		Opc.InitialOPC(opcServer, 1, WriteItem);
-		Opc.PreWrite();
-		if (opcServer != nullptr)
-		{
-			delete[] opcServer;
-			opcServer = nullptr;
-		}
-		if (opcflag != nullptr)
-		{
-			delete[] opcflag;
-			opcflag = nullptr;
-		}
+		Opc.bOPCConnect=true;
+		cstr1.Format(L"%s",s.c_str());
+		WriteItem[0]=COleVariant(cstr1);
+		Opc.InitialOPC(opcServer , 1 , WriteItem);
+		Opc.PreWrite();	
 	}
 	// add end by xiexinpeng
 	return TRUE;  // ���ǽ��������õ��ؼ������򷵻� TRUE
@@ -206,8 +186,7 @@ void CCarSeat_RecognizationDlg::OnPaint()
 	m_RegRatio.SetWindowTextW(result);
 }
 
-//���û��϶���С������ʱϵͳ���ô˺���ȡ�ù��
-//��ʾ��
+//���û��϶���С������ʱϵͳ���ô˺���ȡ�ù��?//��ʾ��
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);

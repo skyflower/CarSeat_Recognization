@@ -6,6 +6,7 @@
 #include "CarSeat_Recognization.h"
 #include "CarSeat_RecognizationDlg.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -26,6 +27,7 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp()
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 	m_pParamManager = nullptr;
 	m_pLog = nullptr;
+	m_pNetworkTask = nullptr;
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }
@@ -59,6 +61,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	}
 	m_pParamManager = CParamManager::GetInstance();
 	m_pLog = CLog::GetInstance();
+	m_pNetworkTask = CNetworkTask::GetInstance();
+	if (m_pNetworkTask != nullptr)
+	{
+		m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
+	}
 
 
 	AfxEnableControlContainer();
@@ -114,6 +121,21 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	{
 		delete m_pParamManager;
 		m_pParamManager = nullptr;
+	}
+	
+	if (m_NetworkThread.joinable())
+	{
+		CNetworkTask::message msg;
+		m_pNetworkTask->SetThreadStatus(false);
+		msg.serverIp = -1;
+		msg.serverPort = -1;
+		m_pNetworkTask->SendMessageTo(&msg);
+		m_NetworkThread.join();
+	}
+	if (m_pNetworkTask != nullptr)
+	{
+		delete m_pNetworkTask;
+		m_pNetworkTask = nullptr;
 	}
 	if (m_pLog != nullptr)
 	{

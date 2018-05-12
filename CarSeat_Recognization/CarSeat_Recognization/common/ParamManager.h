@@ -10,7 +10,8 @@ public:
 
 	static CParamManager* GetInstance();
 
-	int GetLocalIP();
+	unsigned int GetLocalIP();
+
 	int GetServerIP();
 	int GetServerPort();
 	int GetTestServerPort();
@@ -29,6 +30,8 @@ private:
 
 	int parseServerIp(const char *content, const char *name);
 	bool getValueByName(const char *content, const char*name, char*value);
+
+	unsigned int __auxLocalIP();
 
 	size_t m_nServerIp;
 	int m_nServerPort;

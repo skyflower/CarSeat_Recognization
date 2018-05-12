@@ -13,7 +13,10 @@ CParamManager::CParamManager() :m_pColor(nullptr),
 m_pOutline(nullptr),
 m_pTexture(nullptr),
 m_nLocalIp(-1),
-m_nServerIp(-1)
+m_nServerIp(-1),
+m_nServerPort(-1),
+m_nTestClientPort(-1),
+m_nTestServerPort(-1)
 {
 	Init();
 }
@@ -51,7 +54,22 @@ CParamManager* CParamManager::GetInstance()
 	return m_pInstance;
 }
 
-int CParamManager::GetLocalIP()
+unsigned int CParamManager::GetLocalIP()
+{
+	if ((m_nLocalIp == 0) || (m_nLocalIp == -1))
+	{
+		unsigned int tmp = __auxLocalIP();
+		if ((tmp == 0) || (tmp == -1))
+		{
+			return 0;
+		}
+		m_nLocalIp = tmp;
+		return m_nLocalIp;
+	}
+	return m_nLocalIp;
+}
+
+unsigned int CParamManager::__auxLocalIP()
 {
 	WORD wVersionRequested = MAKEWORD(2, 2);
 
@@ -74,7 +92,7 @@ int CParamManager::GetLocalIP()
 	if (gethostname(buf, sizeof(buf)) < 0)
 	{
 		WriteError("get local name Failed");
-		return -1;
+		return 0;
 	}
 
 	{
@@ -85,7 +103,7 @@ int CParamManager::GetLocalIP()
 	if ((ret = getaddrinfo(buf, NULL, &hints, &res)) != 0)
 	{
 		WriteError("getaddrinfo: %s\n", gai_strerror(ret));
-		return -1;
+		return 0;
 	}
 	
 	curr = res;
@@ -207,8 +225,8 @@ void CParamManager::Init()
 			content = nullptr;
 		}
 	}
-	unsigned int tmpLocal = GetLocalIP();
-	if (tmpLocal != 0)
+	unsigned int tmpLocal = __auxLocalIP();
+	if ((tmpLocal != 0) && (tmpLocal != -1))
 	{
 		m_nLocalIp = tmpLocal;
 	}

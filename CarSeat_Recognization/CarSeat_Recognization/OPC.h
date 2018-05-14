@@ -18,7 +18,7 @@ public:
 	virtual ~COPC();
     
 	void AddServerName(WCHAR* SeverName);
-	void InitialOPC(WCHAR* SeverName,long RNum,long WNum,COleVariant* RTagName,COleVariant* WTagName);
+	void InitialOPC(WCHAR* SeverName,long WNum,COleVariant* WTagName);
 	bool ConnectServer();
 	void PreWrite();
 	bool WriteData(long len, long startnum, VARIANT *WriteData);

@@ -11,6 +11,9 @@
 #include "resource.h"		// Ö÷·ûºÅ
 #include "./common/ParamManager.h"
 #include "./common/Log.h"
+#include "./network/NetworkTask.h"
+#include <thread>
+#include <chrono>
 
 
 // CCarSeat_RecognizationApp: 
@@ -31,6 +34,9 @@ private:
 // ÊµÏÖ
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;
+	CNetworkTask *m_pNetworkTask;
+	std::thread m_NetworkThread;
+	
 
 
 	DECLARE_MESSAGE_MAP()

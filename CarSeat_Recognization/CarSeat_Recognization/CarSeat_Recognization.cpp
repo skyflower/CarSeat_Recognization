@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "CarSeat_Recognization.h"
 #include "CarSeat_RecognizationDlg.h"
+#include <locale>
 
 
 #ifdef _DEBUG
@@ -28,6 +29,7 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp()
 	m_pParamManager = nullptr;
 	m_pLog = nullptr;
 	m_pNetworkTask = nullptr;
+	_tsetlocale(LC_ALL, _T("chs"));
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }

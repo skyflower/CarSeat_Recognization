@@ -68,8 +68,8 @@ bool COPC::ConnectServer()
 
 void COPC::PreWrite()
 {
-	OPCITEMRESULT *pItemResult;
-	HRESULT *pErrors;
+	OPCITEMRESULT *pItemResult = nullptr;
+	HRESULT *pErrors = nullptr;
 	HRESULT hr;
 	OPCITEMDEF *ItemArray = new OPCITEMDEF[WriteNum];
 	
@@ -88,8 +88,10 @@ void COPC::PreWrite()
 	
 	hr = m_ItemMgt->AddItems(WriteNum, ItemArray, (OPCITEMRESULT**)&pItemResult,
 		                       (HRESULT **)&pErrors);
-	for(int i = 0; i < WriteNum; i++)
+	for (int i = 0; i < WriteNum; i++)
+	{
 		hWriteServer[i] = pItemResult[i].hServer;
+	}
 
 	delete []ItemArray;
 	CoTaskMemFree( pItemResult );
@@ -98,17 +100,15 @@ void COPC::PreWrite()
 
 bool COPC::WriteData(long len, long startnum,VARIANT *WriteData)
 {
-	HRESULT *pErrors;	
+	HRESULT *pErrors = nullptr;	
 	OPCHANDLE *hTagServer = new OPCHANDLE[WriteNum];
 	long *TagList = new long[len];
-	for(int i = 0; i < len; i++)
-		*(TagList+i) = startnum+i;
+	for (int i = 0; i < len; i++)
+	{
+		*(TagList + i) = startnum + i;
+	}
 	
-<<<<<<< HEAD
 	for(int i = 0; i < len; i++)
-=======
-	for( int i = 0; i < len; i++)
->>>>>>> 2525cf0605a01038734e94d4290b9143a78f050f
 	{
 		hTagServer[i] = hWriteServer[TagList[i]];
 	}

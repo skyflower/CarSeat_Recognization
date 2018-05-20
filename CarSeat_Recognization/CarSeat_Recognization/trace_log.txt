@@ -1,6 +1,7 @@
-Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A8FF01, serverIp = 0xC0A80105
-Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A8FF01, ServerIp = 0xC0A80105
-Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A83901, serverIp = 0xC0A80105
-Error	[CNetworkTask::IsReachable,42]icmpSendEcho failed clientIp = 0xC0A83901, ServerIp = 0xC0A80105
-Info	[CNetworkTask::IsReachable,36]icmp echo clientIp = 0xC0A80103, serverIp = 0xC0A80105
-Error	[CNetworkTask::heartBlood,120]connect failed, err = 10061
+Error	[CParamManager::Init,216]ftp Parameter init Failed
+Error	[CNetworkTask::IsReachable,44]icmpSendEcho failed clientIp = 0xC0A8FF01, ServerIp = 0xC0A80107
+Error	[CNetworkTask::IsReachable,44]icmpSendEcho failed clientIp = 0xC0A83901, ServerIp = 0xC0A80107
+Error	[CNetworkTask::run,221]user = s, passwd = y,download File = c to serverIp = 3232235783 Failed
+Error	[CNetworkTask::run,221]user = s, passwd = y,download File = c to serverIp = 3232235783 Failed
+Error	[CNetworkTask::run,221]user = s, passwd = y,download File = c to serverIp = 3232235783 Failed
+Error	[CNetworkTask::run,221]user = s, passwd = y,download File = c to serverIp = 3232235783 Failed

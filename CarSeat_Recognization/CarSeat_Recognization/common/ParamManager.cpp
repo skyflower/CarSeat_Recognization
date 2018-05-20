@@ -9,9 +9,11 @@
 
 CParamManager *CParamManager::m_pInstance = nullptr;
 
-CParamManager::CParamManager() :m_pColor(nullptr),
+CParamManager::CParamManager() :
+m_pColor(nullptr),
 m_pOutline(nullptr),
 m_pTexture(nullptr),
+m_pFtp(nullptr),
 m_nLocalIp(-1),
 m_nServerIp(-1),
 m_nServerPort(-1),
@@ -41,6 +43,12 @@ CParamManager::~CParamManager()
 		m_pOutline->clear();
 		delete m_pOutline;
 		m_pOutline = nullptr;
+	}
+	if (m_pFtp != nullptr)
+	{
+		m_pFtp->clear();
+		delete m_pFtp;
+		m_pFtp = nullptr;
 	}
 }
 
@@ -107,7 +115,6 @@ unsigned int CParamManager::__auxLocalIP()
 	}
 	
 	curr = res;
-	//sa->sin_addr.S_un.S_un_b.s_b1;
 	
 	unsigned int nIp = 0;
 	while (curr)
@@ -153,10 +160,15 @@ int CParamManager::GetTestClientPort()
 	return m_nTestClientPort;
 }
 
+std::vector<std::wstring>* CParamManager::GetFtpParameter()
+{
+	return m_pFtp;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
-	fopen_s(&fp, "./config.txt", "r");
+	fopen_s(&fp, "./config.txt", "rb");
 	bool ret = true;
 	if (fp != nullptr)
 	{
@@ -193,6 +205,15 @@ void CParamManager::Init()
 		if (ret == false)
 		{
 			TRACE0("texture init Failed\n");
+		}
+		if (m_pFtp == nullptr)
+		{
+			m_pFtp = new std::vector<std::wstring>;
+		}
+		ret = parseVector(content, "ftp", m_pFtp);
+		if(ret == false)
+		{
+			WriteError("ftp Parameter init Failed");
 		}
 		unsigned int tmpLocal = parseServerIp(content, "serverip");
 		if (tmpLocal == 0)
@@ -245,15 +266,23 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 		char *end = strchr(p, '\n');
 		if ((line != NULL) && (end != NULL))
 		{
-			if (m_pColor == nullptr)
+			if (pVector == nullptr)
 			{
-				m_pColor = new std::vector<std::wstring>;
+				pVector = new std::vector<std::wstring>;
 			}
-			if (parseLineSegment(line + 1, end - line - 1, m_pColor) == true)
+#if _DEBUG
+
+			char tmpStr[100] = { 0 };
+			memcpy(tmpStr, line + 1, end - line - 1);
+			//setlocale(LC_ALL, "chs");
+			TRACE2("name = %s, tmpStr = %s\n", name, tmpStr);
+
+#endif
+			if (parseLineSegment(line + 1, end - line - 1, pVector) == true)
 			{
-				for (auto &k : *m_pColor)
+				for (auto &k : *pVector)
 				{
-					TRACE1("color = %s\n", k);
+					TRACE2("name = %s, value = %s\n", name, k);
 				}
 			}
 		}

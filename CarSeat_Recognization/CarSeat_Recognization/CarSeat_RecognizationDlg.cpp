@@ -112,10 +112,10 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	COleVariant* WriteItem = nullptr;
 	// ��Ҫ�����PLC��־λ
 	std::string s = "PLC_flag";
-	CString cstr1;
+	CString cstr1(L"");
 	CString Cstr = L"OPCServer.WinCC";
 	wchar_t* opcServer = nullptr;
-	opcServer = new wchar_t[20];
+	//opcServer = new wchar_t[20];
 	opcServer = Cstr.AllocSysString();
 	
 	Opc.AddServerName(opcServer);
@@ -124,7 +124,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	{
 		Opc.bOPCConnect=true;
 		cstr1.Format(L"%s",s.c_str());
-		WriteItem[0]=COleVariant(cstr1);
+		WriteItem[0] = COleVariant(cstr1);
 		Opc.InitialOPC(opcServer , 1 , WriteItem);
 		Opc.PreWrite();	
 	}

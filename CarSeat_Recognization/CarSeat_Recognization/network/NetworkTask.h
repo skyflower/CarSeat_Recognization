@@ -35,6 +35,8 @@ public:
 
 	void run();
 	static CNetworkTask* GetInstance();
+	bool ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
+	bool ftpDownload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
 
 private:
 	enum msg

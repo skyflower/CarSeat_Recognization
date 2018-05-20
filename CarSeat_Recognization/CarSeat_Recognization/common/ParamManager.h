@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 
+
 class CParamManager
 {
 public:
@@ -16,6 +17,8 @@ public:
 	int GetServerPort();
 	int GetTestServerPort();
 	int GetTestClientPort();
+
+	std::vector<std::wstring> *GetFtpParameter();
 
 	std::wstring GetLocalName() { return m_strLocalName; }
 
@@ -44,5 +47,6 @@ private:
 	std::vector<std::wstring> *m_pColor;
 	std::vector<std::wstring> *m_pOutline;
 	std::vector<std::wstring> *m_pTexture;
+	std::vector<std::wstring> *m_pFtp;
 };
 

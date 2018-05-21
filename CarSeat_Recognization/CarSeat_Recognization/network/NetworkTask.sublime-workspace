@@ -1,0 +1,201 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cl",
+				"class_name"
+			],
+			[
+				"P",
+				"PATH_TO_TEST_IMAGES_DIR"
+			],
+			[
+				"cla",
+				"class_name"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/yqw/YiTuClassify0409/训练结果集合/0516训练数据",
+		"/home/yqw/YiTuClassify0409/训练结果集合/0516tongjishuju",
+		"/home/yqw/文档/亿图训练数据/命令行原始数据.csv",
+		"/home/yqw/文档/亿图训练数据/20180503_trainning.csv",
+		"/home/yqw/YiTuClassify0409/yt_classify/label_image.py",
+		"/home/yqw/YiTuClassify0409/yt_classify/label_image3.py",
+		"/home/yqw/dataset/label_image.py",
+		"/home/yqw/桌面/统计数据0515.csv",
+		"/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_labels.txt",
+		"/home/yqw/YiTuClassify0409/yt_classify/test.py",
+		"/home/yqw/YiTuClassify0409/yt_classify/output_csv.csv",
+		"/home/yqw/YiTuClassify0409/yt_classify/retrain0426.py",
+		"/home/yqw/YiTuClassify0409/yt_classify/label_image1.py",
+		"/home/yqw/git/retrain.py",
+		"/home/yqw/YiTuClassify0409/label_image.py",
+		"/etc/hosts",
+		"/home/yqw/CarSeat_Recognization/CarSeat_Recognization/label_image.py",
+		"/home/yqw/.git/readme.txt",
+		"/home/yqw/Github/ChairClassifiyRecognition/实验结果合集/ChairClassifiyRec.csv",
+		"/home/yqw/文档/test/hello.cpp",
+		"/home/yqw/.git/description",
+		"/home/yqw/.git/config",
+		"/tmp/output_labels.txt",
+		"/home/yqw/Github/ChairClassifiyRecognition/标签分类.py",
+		"/home/yqw/文档/INFO:tensorflow:2018-05-03 15:14:31.594941: Step 1"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "NetworkTask.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

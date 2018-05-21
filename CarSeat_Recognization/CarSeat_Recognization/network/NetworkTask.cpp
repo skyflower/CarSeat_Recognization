@@ -196,10 +196,8 @@ void CNetworkTask::run()
 		///////////////////////////
 		//  add code
 
-		//const char *ftpName = "siyuanxu";
-		//const char *ftpPasswd = "yuan";
 
-#if _DEBUG
+#if (defined _DEBUG) && (defined FTP_TEST)
 		const wchar_t *filename = L"config.txt";
 		std::vector<std::wstring> *ftpParam = m_pParamManager->GetFtpParameter();
 
@@ -273,12 +271,6 @@ bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const w
 		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
 		(serverIp & 0xFF));
 
-	//用户名与密码  
-	//CString strUserName(name);
-	//CString strPwd(passwd);
-	//服务器的目录  
-	//CString strDir = L"/home/ftpImage/files"; //若要设置为服务器的根目录，则使用"\\"就可  这个目录是你ftp里面的文件夹目录  
-						   //创建了一个CFtpConnection对象，之后就可以通过这个对象进行上传文件，下载文件了  
 	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
 	if (pFtpConnection == NULL)
 	{
@@ -295,8 +287,6 @@ bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const w
 	else
 	{
 		//把本地文件上传到服务器上  
-		//CString strLocalFile(fileName);
-		//CString strRemoteFile(fileName);
 		pFtpConnection->PutFile(fileName, fileName);
 	}
 	//释放资源  
@@ -322,6 +312,15 @@ bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name,
 	CFtpConnection* pFtpConnection = NULL;
 	//建立连接
 	pInternetSession = new CInternetSession(AfxGetAppName());
+
+	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
+	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
+	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
+	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
+	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
+	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
+
+
 	//服务器的ip地址
 	//若要设置为服务器的根目录，则使用"\\"就可以了  
 	//创建了一个CFtpConnection对象，之后就可以通过这个对象进行上传文件，下载文件了  
@@ -330,11 +329,6 @@ bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name,
 		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
 		(serverIp & 0xFF));
 
-	//用户名与密码  
-	//CString strUserName(name);
-	//CString strPwd(passwd);
-
-	
 	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
 	//设置服务器的目录
 	bool bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
@@ -345,8 +339,6 @@ bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name,
 	}
 	else
 	{
-		//CString strLocalFile(fileName);
-		//CString strRemoteFile(fileName);
 		pFtpConnection->GetFile(fileName, fileName);
 	}
 	//释放源  

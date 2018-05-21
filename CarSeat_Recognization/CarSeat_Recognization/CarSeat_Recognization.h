@@ -30,7 +30,7 @@ public:
 	virtual BOOL InitInstance();
 
 private:
-	static void pingServer(int serverIp);
+
 // й╣ож
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;

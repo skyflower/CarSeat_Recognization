@@ -1,5 +1,5 @@
 
-serverip=192.168.1.7
+serverip=192.168.1.177
 serverport=8080
 testClientPort=10909
 testServerPort=10909

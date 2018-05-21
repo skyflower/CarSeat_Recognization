@@ -147,8 +147,4 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	return FALSE;
 }
 
-void CCarSeat_RecognizationApp::pingServer(int serverIp)
-{
-
-}
 

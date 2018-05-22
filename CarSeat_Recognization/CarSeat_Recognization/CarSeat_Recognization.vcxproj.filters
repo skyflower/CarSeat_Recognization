@@ -69,6 +69,9 @@
     <ClInclude Include="opcda.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="InputDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -111,6 +114,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="opcda_i.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

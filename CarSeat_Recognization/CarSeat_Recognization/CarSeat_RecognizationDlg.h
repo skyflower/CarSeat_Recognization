@@ -44,4 +44,5 @@ public:
 
 	size_t m_nSuccessCount;
 	size_t m_nFailCount;
+	afx_msg void OnUsrinput();
 };

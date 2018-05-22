@@ -5,6 +5,7 @@
 #include "CarSeat_Recognization.h"
 #include "CarSeat_RecognizationDlg.h"
 #include "afxdialogex.h"
+#include "InputDlg.h"
 // add start by xiexinpeng
 #include <string>
 #include "OPC.h"
@@ -73,6 +74,7 @@ void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_WM_SYSCOMMAND()
+	ON_COMMAND(ID_USRINPUT, &CCarSeat_RecognizationDlg::OnUsrinput)
 END_MESSAGE_MAP()
 
 
@@ -190,4 +192,21 @@ void CCarSeat_RecognizationDlg::OnPaint()
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CCarSeat_RecognizationDlg::OnUsrinput()
+{
+	// TODO: 在此添加命令处理程序代码
+	CInputDlg dlg;
+	INT_PTR msg = dlg.DoModal();
+	if (msg == IDOK)
+	{
+
+	}
+	else if(msg == IDCANCEL)
+	{
+
+	}
+
 }

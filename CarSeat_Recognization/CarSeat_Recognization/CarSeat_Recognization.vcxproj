@@ -194,6 +194,7 @@
     <ClInclude Include="common\Log.h" />
     <ClInclude Include="common\ParamManager.h" />
     <ClInclude Include="common\utils.h" />
+    <ClInclude Include="InputDlg.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="OPC.h" />
     <ClInclude Include="opccomn.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="common\Log.cpp" />
     <ClCompile Include="common\ParamManager.cpp" />
     <ClCompile Include="common\utils.cpp" />
+    <ClCompile Include="InputDlg.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="OPC.cpp" />
     <ClCompile Include="opccomn_i.c" />

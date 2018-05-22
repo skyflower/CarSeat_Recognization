@@ -19,6 +19,9 @@ public:
 	int GetTestClientPort();
 
 	std::vector<std::wstring> *GetFtpParameter();
+	std::vector<std::wstring> *GetOutlineParameter();
+	std::vector<std::wstring> *GetTextureParameter();
+	std::vector<std::wstring> *GetColorParameter();
 
 	std::wstring GetLocalName() { return m_strLocalName; }
 

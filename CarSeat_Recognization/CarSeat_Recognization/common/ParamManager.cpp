@@ -165,6 +165,21 @@ std::vector<std::wstring>* CParamManager::GetFtpParameter()
 	return m_pFtp;
 }
 
+std::vector<std::wstring>* CParamManager::GetOutlineParameter()
+{
+	return m_pOutline;
+}
+
+std::vector<std::wstring>* CParamManager::GetTextureParameter()
+{
+	return m_pTexture;
+}
+
+std::vector<std::wstring>* CParamManager::GetColorParameter()
+{
+	return m_pColor;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;

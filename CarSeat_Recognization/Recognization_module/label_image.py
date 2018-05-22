@@ -94,22 +94,22 @@ def dir_statics(dir_path):
 if __name__ == "__main__":
 
     # PATH_TO_TEST_IMAGES_DIR = 'F:\\tmp\\test_picture'
-    PATH_TO_TEST_IMAGES_DIR = r'/home/yqw/YiTuClassify0409/Picture/training20180428'
+    PATH_TO_TEST_IMAGES_DIR = r'/home/yqw/YiTuClassify0409/Picture/training20180501'
     class_names = os.listdir(PATH_TO_TEST_IMAGES_DIR)
     # IMAGES = os.listdir(PATH_TO_TEST_IMAGES_DIR)
     if len(class_names) == 0:
         tf.logging.warning('No files found')
     model_file = \
-        r'/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_graph.pb'
+        r'/home/yqw/YiTuClassify0409/训练结果集合/0515-94.9%-4500-training20180508-save/output_graph.pb'
 
     # 'F:\\Project\\Project\\YiTuClassify\\tmp\\output_graph.pb'
     graph = load_graph(model_file)
     # label_file = "F:\\Project\\Project\\YiTuClassify\\tmp\\output_labels.txt"
-    label_file = r"/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_labels.txt"
+    label_file = r"/home/yqw/YiTuClassify0409/训练结果集合/0515-94.9%-4500-training20180508-save/output_labels.txt"
     input_height = 299
     input_width = 299
-    input_mean = 0
-    input_std = 255
+    input_mean = 128
+    input_std = 128
     input_layer = "Mul"
     output_layer = "final_result"
     input_name = "import/" + input_layer
@@ -147,7 +147,7 @@ if __name__ == "__main__":
                 results = np.squeeze(results)
                 top_k = results.argsort()[-1:][::-1]
                 labels = load_labels(label_file)
-                list_map = []
+                #list_map = []
                 for i in top_k:
                     if labels[i] == class_name:
                         if os.path.exists(os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,class_name)):
@@ -164,12 +164,12 @@ if __name__ == "__main__":
                             # TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
                             shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,labels[i]))
 
-                    list_map.append(image)
-                    list_map.append(labels[i])
-                    list_map.append(results[i])
-                    list.append(list_map)
-    df = pd.DataFrame(list)
-    df.to_csv('output_csv.csv', index=False, header=False)
+                    #list_map.append(image)
+                    #list_map.append(labels[i])
+                    #list_map.append(results[i])
+                    #list.append(list_map)
+    #df = pd.DataFrame(list)
+    #df.to_csv('output_csv.csv', index=False, header=False)
     statics(PATH_TO_TEST_IMAGES_DIR)
 
 

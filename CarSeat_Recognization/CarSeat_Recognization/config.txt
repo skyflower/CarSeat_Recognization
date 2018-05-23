@@ -9,3 +9,4 @@ outline={"K216","K215","D2"}
 texture={"真皮","鹿皮","菱形纹理","线性纹理","打孔纹理"}
 kepServerName="WinCC"
 ftp={"siyuanxu", "yuan", "/home/ftpImage/files"}
+barcodeIp=192.168.2.253

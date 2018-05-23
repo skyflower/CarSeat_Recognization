@@ -1,7 +1,11 @@
-Error	[CParamManager::Init,231]ftp Parameter init Failed
-Error	[CNetworkTask::IsReachable,44]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
-Error	[CNetworkTask::IsReachable,44]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
-Error	[CNetworkTask::IsReachable,44]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
-Error	[CNetworkTask::IsReachable,44]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
-Error	[CNetworkTask::heartBlood,122]connect failed, err = 10060
-Error	[CNetworkTask::heartBlood,122]connect failed, err = 10060
+Error	[CParamManager::Init,240]ftp Parameter init Failed
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,43]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1

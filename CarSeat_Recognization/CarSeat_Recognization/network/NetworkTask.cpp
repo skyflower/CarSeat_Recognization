@@ -35,8 +35,7 @@ bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
 	HANDLE IcmpHandle = IcmpCreateFile();
 	char reply[200] = { 0 };
 	PIP_OPTION_INFORMATION info = NULL;
-	//WriteInfo("icmp echo clientIp = 0x%X, serverIp = 0x%X", clientIp, serverIp);
-	
+
 	if (0 == IcmpSendEcho2Ex(IcmpHandle, NULL, NULL, NULL, \
 		htonl(clientIp), htonl(serverIp), "icmp", strlen("icmp"), \
 		info, reply, sizeof(reply), 100))
@@ -103,12 +102,9 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 	}
 
 	sockaddr_in addr;
-	
-	//unsigned long ul = 1;
-	//ioctlsocket(socketFD, FIONBIO, &ul);
-	int nNetTimeout = 1000;
-	setsockopt(socketFD, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int));
+
 	//接收时限
+	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
 	addr.sin_family = AF_INET;
@@ -196,6 +192,10 @@ void CNetworkTask::run()
 		///////////////////////////
 		//  add code
 
+		unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
+
+		std::wstring tmpBarcode = getBarcodeByNet(barcodeIp);
+
 
 #if (defined _DEBUG) && (defined FTP_TEST)
 		const wchar_t *filename = L"config.txt";
@@ -227,7 +227,7 @@ void CNetworkTask::run()
 		//CLOCKS_PER_SEC
 
 		//////////////////////////////
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
 }
 
@@ -240,10 +240,68 @@ CNetworkTask * CNetworkTask::GetInstance()
 	return m_pInstance;
 }
 
-bool CNetworkTask::__sendToServer()
+bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *sendMsg, char *recvMsg)
 {
+	unsigned int localIp = m_pParamManager->GetLocalIP();
+	if ((localIp == 0) || (localIp == -1))
+	{
+		return false;
+	}
 
+	WSADATA wsaData;
+	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (err != 0)
+	{
+		err = WSAGetLastError();
+		WriteError("err = %u", err);
+		return false;
+	}
+	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (socketFD == -1)
+	{
+		TRACE("create socket failed\n");
+		WSACleanup();
+		return false;
+	}
+
+	sockaddr_in addr;
+
+	//接收时限
+	int nNetTimeout = 1000;
+	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.S_un.S_addr = htonl(serverIp);
+
+	if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
+	{
+		err = WSAGetLastError();
+		TRACE1("connect failed,err = %u\n", err);
+		WriteError("connect failed, err = %u", err);
+		WSACleanup();
+		closesocket(socketFD);
+		return false;
+	}
+
+	send(socketFD, sendMsg, strlen(sendMsg), 0);// MSG_DONTROUTE);
+	recv(socketFD, recvMsg, -1, 0);// MSG_PEEK);
+	//TRACE1("link test recv = %s\n", recvMsg);
+	closesocket(socketFD);
+	socketFD = -1;
+
+	WSACleanup();
+
+	return true;
 	return false;
+}
+
+std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip)
+{
+	// 添加获取条形码的代码
+	// 暂时为空
+
+	return std::wstring();
 }
 
 bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 

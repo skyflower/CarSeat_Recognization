@@ -44,7 +44,9 @@ private:
 		MAX_MSG_SIZE = 20
 	};
 
-	bool __sendToServer();
+	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, char *recvMsg);
+
+	std::wstring getBarcodeByNet(unsigned int ip);
 	
 
 	std::mutex m_MutexMsg;

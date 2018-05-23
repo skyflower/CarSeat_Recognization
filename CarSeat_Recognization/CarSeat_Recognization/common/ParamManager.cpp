@@ -18,7 +18,8 @@ m_nLocalIp(-1),
 m_nServerIp(-1),
 m_nServerPort(-1),
 m_nTestClientPort(-1),
-m_nTestServerPort(-1)
+m_nTestServerPort(-1),
+m_nBarcodeIp(-1)
 {
 	Init();
 }
@@ -79,6 +80,7 @@ unsigned int CParamManager::GetLocalIP()
 
 unsigned int CParamManager::__auxLocalIP()
 {
+	clock_t startTime = clock();
 	WORD wVersionRequested = MAKEWORD(2, 2);
 
 	WSADATA wsaData;
@@ -136,26 +138,28 @@ unsigned int CParamManager::__auxLocalIP()
 	}
 
 	WSACleanup();
+	clock_t endTime = clock();
+	TRACE1("get localIp cost Time = %u", endTime - startTime);
 
 	return nIp;
 }
 
-int CParamManager::GetServerIP()
+unsigned int CParamManager::GetServerIP()
 {
 	return m_nServerIp;
 }
 
-int CParamManager::GetServerPort()
+unsigned int CParamManager::GetServerPort()
 {
 	return m_nServerPort;
 }
 
-int CParamManager::GetTestServerPort()
+unsigned int CParamManager::GetTestServerPort()
 {
 	return m_nTestServerPort;
 }
 
-int CParamManager::GetTestClientPort()
+unsigned int CParamManager::GetTestClientPort()
 {
 	return m_nTestClientPort;
 }
@@ -180,6 +184,11 @@ std::vector<std::wstring>* CParamManager::GetColorParameter()
 	return m_pColor;
 }
 
+unsigned int CParamManager::GetBarcodeIp()
+{
+	return m_nBarcodeIp;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -193,7 +202,7 @@ void CParamManager::Init()
 		memset(content, 0, sizeof(char) * (length + 1));
 		fseek(fp, 0, SEEK_SET);
 		fread_s(content, length, 1, length, fp);
-		//char *p = strstr(content, "color");
+		
 		if (m_pColor == nullptr)
 		{
 			m_pColor = new std::vector<std::wstring>;
@@ -230,12 +239,20 @@ void CParamManager::Init()
 		{
 			WriteError("ftp Parameter init Failed");
 		}
-		unsigned int tmpLocal = parseServerIp(content, "serverip");
+		unsigned int tmpLocal = parseIp(content, "serverip");
 		if (tmpLocal == 0)
 		{
 			TRACE0("get ServerIp Failed\n");
 		}
 		m_nServerIp = tmpLocal;
+
+		tmpLocal = parseIp(content, "barcodeIp");
+		if (tmpLocal == 0)
+		{
+			TRACE0("get barcodeIp Failed\n");
+		}
+		m_nBarcodeIp = tmpLocal;
+
 
 		char tmpStr[20] = { 0 };
 		if (getValueByName(content, "serverport", tmpStr) == true)
@@ -349,7 +366,7 @@ bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::
 	return true;
 }
 
-int CParamManager::parseServerIp(const char * content, const char * name)
+int CParamManager::parseIp(const char * content, const char * name)
 {
 	if ((content == nullptr) || (name == nullptr))
 	{

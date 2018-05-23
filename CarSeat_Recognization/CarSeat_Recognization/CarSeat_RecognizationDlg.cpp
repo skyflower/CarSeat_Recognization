@@ -72,6 +72,7 @@ void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_REG_RATIO, m_RegRatio);
 }
 
+
 BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_WM_SYSCOMMAND()
 	ON_COMMAND(ID_USRINPUT, &CCarSeat_RecognizationDlg::OnUsrinput)
@@ -188,7 +189,6 @@ void CCarSeat_RecognizationDlg::OnPaint()
 	m_RegRatio.SetWindowTextW(result);
 }
 
-//���û��϶���С������ʱϵͳ���ô˺���ȡ�ù��?//��ʾ��
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);

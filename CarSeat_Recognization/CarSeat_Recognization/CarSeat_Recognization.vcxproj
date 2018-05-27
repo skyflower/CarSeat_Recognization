@@ -92,6 +92,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\SoftwareInstall\OpenCV_v3.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,8 +114,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions);OPENCV;OPENCV</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\SoftwareInstall\OpenCV_v3.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,8 +140,9 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);OPENCV;OPENCV</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\SoftwareInstall\OpenCV_v3.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,8 +168,9 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions);OPENCV;OPENCV</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\SoftwareInstall\OpenCV_v3.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -194,6 +198,12 @@
     <ClInclude Include="common\Log.h" />
     <ClInclude Include="common\ParamManager.h" />
     <ClInclude Include="common\utils.h" />
+    <ClInclude Include="image\BaseMatch.h" />
+    <ClInclude Include="image\Camera.h" />
+    <ClInclude Include="image\COrbFlann.h" />
+    <ClInclude Include="image\FileManager.h" />
+    <ClInclude Include="image\PatternManager.h" />
+    <ClInclude Include="image\TypeIDManager.h" />
     <ClInclude Include="InputDlg.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="OPC.h" />
@@ -211,6 +221,12 @@
     <ClCompile Include="common\Log.cpp" />
     <ClCompile Include="common\ParamManager.cpp" />
     <ClCompile Include="common\utils.cpp" />
+    <ClCompile Include="image\BaseMatch.cpp" />
+    <ClCompile Include="image\Camera.cpp" />
+    <ClCompile Include="image\COrbFlann.cpp" />
+    <ClCompile Include="image\FileManager.cpp" />
+    <ClCompile Include="image\PatternManager.cpp" />
+    <ClCompile Include="image\TypeIDManager.cpp" />
     <ClCompile Include="InputDlg.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="OPC.cpp" />

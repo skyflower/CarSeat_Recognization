@@ -7,6 +7,7 @@
 #include <Iphlpapi.h>
 #include <IcmpAPI.h>
 #include "../common/utils.h"
+#include "../xml/tinyxml.h"
 
 //#include <time.h>
 #include <afxinet.h>
@@ -84,52 +85,39 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 	snprintf(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
 		"success", tmpPCName.c_str(), timeStr);
 
-
-	WSADATA wsaData;
-	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (err != 0)
+	bool ret = false;
+	char recvBlood[200];
+	size_t recvMsgLen = sizeof(recvBlood);
+	// 发送心跳包数据
+	ret = __sendToServer(serverIp, port, bloodheart, strlen(bloodheart), recvBlood, recvMsgLen);
+	if ((ret == false) || (recvMsgLen == 0))
 	{
-		err = WSAGetLastError();
-		WriteError("err = %u", err);
 		return false;
 	}
-	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (socketFD == -1)
+	
+	// 解析服务器返回xml
+	TiXmlDocument lconfigXML;
+	//TiXmlParsingData data;
+	lconfigXML.Parse(recvBlood);
+	if (lconfigXML.Error())
 	{
-		TRACE("create socket failed\n");
-		WSACleanup();
+		TRACE0("xml Format is invalid\n");
+		WriteError("recvBlood = [%s]", recvBlood);
 		return false;
 	}
+	TiXmlElement *rootElement = lconfigXML.RootElement();
+	
 
-	sockaddr_in addr;
-
-	//接收时限
-	int nNetTimeout = 1000;
-	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
-
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(port);
-	addr.sin_addr.S_un.S_addr = htonl(serverIp);
-
-	if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
+	if ((rootElement = nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
 	{
-		err = WSAGetLastError();
-		TRACE1("connect failed,err = %u\n", err);
-		WriteError("connect failed, err = %u", err);
-		WSACleanup();
-		closesocket(socketFD);
+		WriteError("recvBlood get root element Failed, %s", recvBlood);
 		return false;
 	}
-
-	send(socketFD, bloodheart, strlen(bloodheart), 0);// MSG_DONTROUTE);
-	char tmpRecv[1024] = { 0 };
-	recv(socketFD, tmpRecv, sizeof(tmpRecv), 0);// MSG_PEEK);
-	TRACE1("link test recv = %s\n", tmpRecv);
-	closesocket(socketFD);
-	socketFD = -1;
-
-	WSACleanup();
-
+	if (strncmp(rootElement->Attribute("package"), "bloodheart", strlen("bloodheart") != 0))
+	{
+		WriteError("replay package error");
+		return false;
+	}
 	return true;
 }
 
@@ -171,7 +159,7 @@ void CNetworkTask::run()
 	while (m_bThreadStatus)
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::microseconds>(now - preBlood).count() >= 60 * 1000)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 60 * 1000)
 		{
 			heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 		}
@@ -193,8 +181,15 @@ void CNetworkTask::run()
 		//  add code
 
 		unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
+		unsigned int barcodePort = m_pParamManager->GetBarcodePort();
 
-		std::wstring tmpBarcode = getBarcodeByNet(barcodeIp);
+		std::wstring tmpBarcode = getBarcodeByNet(barcodeIp, barcodePort);
+
+		if (tmpBarcode.size() != 0)
+		{
+			std::wstring path = TakeImage(0);
+			
+		}
 
 
 #if (defined _DEBUG) && (defined FTP_TEST)
@@ -227,7 +222,11 @@ void CNetworkTask::run()
 		//CLOCKS_PER_SEC
 
 		//////////////////////////////
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		if (m_nMsgSize == 0)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		}
+		
 	}
 }
 
@@ -240,11 +239,13 @@ CNetworkTask * CNetworkTask::GetInstance()
 	return m_pInstance;
 }
 
-bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *sendMsg, char *recvMsg)
+bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
+	size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen)
 {
 	unsigned int localIp = m_pParamManager->GetLocalIP();
 	if ((localIp == 0) || (localIp == -1))
 	{
+		recvMsgLen = 0;
 		return false;
 	}
 
@@ -254,6 +255,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		err = WSAGetLastError();
 		WriteError("err = %u", err);
+		recvMsgLen = 0;
 		return false;
 	}
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -261,6 +263,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		TRACE("create socket failed\n");
 		WSACleanup();
+		recvMsgLen = 0;
 		return false;
 	}
 
@@ -279,29 +282,54 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		err = WSAGetLastError();
 		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, err = %u", err);
-		WSACleanup();
 		closesocket(socketFD);
+		WSACleanup();
+		recvMsgLen = 0;
 		return false;
 	}
 
-	send(socketFD, sendMsg, strlen(sendMsg), 0);// MSG_DONTROUTE);
-	recv(socketFD, recvMsg, -1, 0);// MSG_PEEK);
-	//TRACE1("link test recv = %s\n", recvMsg);
+	size_t tmpLen = send(socketFD, sendMsg, sendMsgLen, 0);// MSG_DONTROUTE);
+	if (tmpLen == SOCKET_ERROR)
+	{
+		WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
+		closesocket(socketFD);
+		WSACleanup();
+		recvMsgLen = 0;
+		return false;
+	}
+	tmpLen = recv(socketFD, recvMsg, recvMsgLen, 0);
+	if (SOCKET_ERROR == tmpLen)
+	{
+		WriteError("recv Failed, Err: %u", GetLastError());
+		closesocket(socketFD);
+		WSACleanup();
+		recvMsgLen = 0;
+		return false;
+	}
+	recvMsgLen = tmpLen;
 	closesocket(socketFD);
 	socketFD = -1;
 
 	WSACleanup();
 
 	return true;
-	return false;
 }
 
-std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip)
+std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
 {
 	// 添加获取条形码的代码
 	// 暂时为空
-
+	
 	return std::wstring();
+}
+
+//  
+
+std::wstring CNetworkTask::TakeImage(std::wstring lineID)
+{
+	std::wstring CameraID = m_pParamManager->FindCameraByLineID(lineID);
+	std::wstring path = m_Camera.takePhoto(CameraID);
+	return path;
 }
 
 bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 
@@ -336,8 +364,8 @@ bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const w
 		return false;
 	}
 	//设置服务器的目录  
-	bool bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
-	if (bRetVal == false)
+	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
+	if (bRetVal == FALSE)
 	{
 		AfxMessageBox(L"目录设置失败");
 		return false;
@@ -389,8 +417,8 @@ bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name,
 
 	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
 	//设置服务器的目录
-	bool bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
-	if (bRetVal == false)
+	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
+	if (bRetVal == FALSE)
 	{
 		AfxMessageBox(L"目录设置失败");
 		return false;

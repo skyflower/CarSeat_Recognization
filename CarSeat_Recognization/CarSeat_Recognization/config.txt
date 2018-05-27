@@ -1,6 +1,9 @@
 
+## 服务器通信的ip地址和端口号
 serverip=192.168.1.177
 serverport=8080
+
+
 testClientPort=10909
 testServerPort=10909
 
@@ -8,5 +11,13 @@ color={"红","黄","蓝","绿","青","橙","紫"}
 outline={"K216","K215","D2"}
 texture={"真皮","鹿皮","菱形纹理","线性纹理","打孔纹理"}
 kepServerName="WinCC"
-ftp={"siyuanxu", "yuan", "/home/ftpImage/files"}
+
+## ftp登录需要的用户名和账号，以及存储图像的路径
+ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
+
+## 获取条形码的ip地址和端口号
 barcodeIp=192.168.2.253
+barcodePort=18795
+
+##产线对应的相机名称
+lineCamera={"L1":"001", "L2":"002", "L3":"003"}

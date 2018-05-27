@@ -22,6 +22,9 @@
     <Filter Include="xml">
       <UniqueIdentifier>{80c41aae-fac4-49ee-a97e-63eeb2cbdbbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="image">
+      <UniqueIdentifier>{f72a318f-8c95-431d-b945-a89c0784cd58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -72,6 +75,24 @@
     <ClInclude Include="InputDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="image\Camera.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="image\BaseMatch.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="image\COrbFlann.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="image\FileManager.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="image\PatternManager.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="image\TypeIDManager.h">
+      <Filter>image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -118,6 +139,24 @@
     </ClCompile>
     <ClCompile Include="InputDlg.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="image\Camera.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="image\BaseMatch.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="image\COrbFlann.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="image\FileManager.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="image\PatternManager.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="image\TypeIDManager.cpp">
+      <Filter>image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

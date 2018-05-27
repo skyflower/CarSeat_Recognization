@@ -14,12 +14,14 @@ m_pColor(nullptr),
 m_pOutline(nullptr),
 m_pTexture(nullptr),
 m_pFtp(nullptr),
+m_pLineCamera(nullptr),
 m_nLocalIp(-1),
 m_nServerIp(-1),
 m_nServerPort(-1),
 m_nTestClientPort(-1),
 m_nTestServerPort(-1),
-m_nBarcodeIp(-1)
+m_nBarcodeIp(-1),
+m_nBarcodePort(-1)
 {
 	Init();
 }
@@ -184,9 +186,30 @@ std::vector<std::wstring>* CParamManager::GetColorParameter()
 	return m_pColor;
 }
 
+std::wstring CParamManager::FindCameraByLineID(std::wstring lineID)
+{
+	if (m_pLineCamera != nullptr)
+	{
+		std::unordered_map < std::wstring, std::wstring>::const_iterator iter = \
+			m_pLineCamera->find(lineID);
+		if (iter == m_pLineCamera->end())
+		{
+			return std::wstring();
+		}
+		return iter->second;
+	}
+	return std::wstring();
+}
+
 unsigned int CParamManager::GetBarcodeIp()
 {
 	return m_nBarcodeIp;
+}
+
+unsigned int CParamManager::GetBarcodePort()
+{
+
+	return m_nBarcodePort;
 }
 
 void CParamManager::Init()
@@ -234,11 +257,21 @@ void CParamManager::Init()
 		{
 			m_pFtp = new std::vector<std::wstring>;
 		}
-		ret = parseVector(content, "ftp", m_pFtp);
+		ret = parseVector(content, "ftpLogin", m_pFtp);
 		if(ret == false)
 		{
 			WriteError("ftp Parameter init Failed");
 		}
+		if (m_pLineCamera == nullptr)
+		{
+			m_pLineCamera = new std::unordered_map<std::wstring, std::wstring>;
+		}
+		ret = parseMap(content, "lineCamera", m_pLineCamera);
+		if (ret == false)
+		{
+			WriteError("line Camera init Failed");
+		}
+
 		unsigned int tmpLocal = parseIp(content, "serverip");
 		if (tmpLocal == 0)
 		{
@@ -252,6 +285,13 @@ void CParamManager::Init()
 			TRACE0("get barcodeIp Failed\n");
 		}
 		m_nBarcodeIp = tmpLocal;
+
+		tmpLocal = parseIp(content, "barcodePort");
+		if (tmpLocal == 0)
+		{
+			TRACE0("get barcodeIp Failed\n");
+		}
+		m_nBarcodePort = tmpLocal;
 
 
 		char tmpStr[20] = { 0 };
@@ -298,10 +338,7 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 		char *end = strchr(p, '\n');
 		if ((line != NULL) && (end != NULL))
 		{
-			if (pVector == nullptr)
-			{
-				pVector = new std::vector<std::wstring>;
-			}
+
 #if _DEBUG
 
 			char tmpStr[100] = { 0 };
@@ -312,14 +349,18 @@ bool CParamManager::parseVector(const char *content, const char * name, std::vec
 #endif
 			if (parseLineSegment(line + 1, end - line - 1, pVector) == true)
 			{
+#if _DEBUG
 				for (auto &k : *pVector)
 				{
 					TRACE2("name = %s, value = %s\n", name, k);
 				}
+#endif // _DEBUG
+
+				
 			}
 		}
 	}
-	return false;
+	return true;
 }
 
 bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::vector<std::wstring>* pData)
@@ -395,6 +436,67 @@ int CParamManager::parseIp(const char * content, const char * name)
 	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three << 8) | four;
 
 	return tmpServerIp;
+}
+
+int CParamManager::parseMap(const char * content, const char * name, std::unordered_map<std::wstring, std::wstring>* pMap)
+{
+	if ((content == nullptr) || (name == nullptr) || (pMap == nullptr))
+	{
+		return 0;
+	}
+	const char *p = strstr(content, name);
+	if (p == nullptr)
+	{
+		return 0;
+	}
+	const char *endLine = strchr(p, '\n');
+	if (endLine == nullptr)
+	{
+		return 0;
+	}
+	char tmpStr[20] = { 0 };
+	while (p < endLine)
+	{
+		const char *first = strchr(p, '\"');
+		if ((first > endLine) || (first == nullptr))
+		{
+			return pMap->size();
+		}
+		const char *second = strchr(first + 1, '\"');
+		if ((second > endLine) || (second == nullptr))
+		{
+			return pMap->size();
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+		memcpy(tmpStr, first, second - first);
+		std::string keyChar(tmpStr);
+		std::wstring keyWChar = utils::StrToWStr(keyChar);
+
+		p = second + 1;
+
+		first = strchr(p, '\"');
+		if ((first > endLine) || (first == nullptr))
+		{
+			return pMap->size();
+		}
+		second = strchr(first + 1, '\"');
+		if ((second > endLine) || (second == nullptr))
+		{
+			return pMap->size();
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+		memcpy(tmpStr, first, second - first);
+		std::string valueChar(tmpStr);
+		std::wstring valueWChar = utils::StrToWStr(valueChar);
+
+		pMap->insert(std::make_pair(keyWChar, valueWChar));
+
+		p = second + 1;
+
+	}
+
+
+	return pMap->size();
 }
 
 bool CParamManager::getValueByName(const char *content, const char * name, char * value)

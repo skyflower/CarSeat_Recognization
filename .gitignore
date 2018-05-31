@@ -39,3 +39,5 @@ CarSeat_Recognization/CarSeat_Recognization.VC.VC.opendb
 *.ilk
 *.opendb
 *.db
+*.html
+*.exp

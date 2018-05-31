@@ -1,3 +1,4 @@
+#encoding=utf-8
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -8,9 +9,44 @@ import argparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import time
 
+
+
+bInitFlag = False
+input_height = 299
+input_width = 299
+input_mean = 0
+input_std = 255
+input_layer = "Mul"
+output_layer = "final_result"
+input_name = "import/" + input_layer
+output_name = "import/" + output_layer
+global graph
+global sess
+
+
+
+
+class reValue:
+    def __init__(self, classifyStr, value):
+        self.label = classifyStr
+        self.value = value
+
+
+def Init(label_file, model_file):
+    global graph
+    global labels
+    global bInitFlag
+    global sess
+    if bInitFlag == False:
+        labels = load_labels(label_file)
+        graph = load_graph(model_file)
+        sess = tf.Session(graph=graph)
+        bInitFlag = True
 
 def load_graph(model_file):
+    #global graph
     graph = tf.Graph()
     graph_def = tf.GraphDef()
 
@@ -59,136 +95,50 @@ def load_labels(label_file):
         label.append(l.rstrip())
     return label
 
-def statics(PATH_TO_TEST_IMAGES_DIR):
+#if __name__ == "__main__":
+def seatClassify(image_path, label_path, model_path):
 
-    result = {}
+    global graph
+    global input_height
+    global input_width
+    global input_mean
+    global input_std
+    global input_layer
+    global output_layer
+    global input_name
+    global output_name
+    global labels
+    global sess
+    global bInitFlag
 
-    class_names = os.listdir(PATH_TO_TEST_IMAGES_DIR)
-
-    for class_name in class_names:
-        # print("class_name:",class_name)
-        images = os.listdir(os.path.join(PATH_TO_TEST_IMAGES_DIR,class_name))
-        # print("images:",images)
-        result[class_name] = {}
-        for image in images:
-            num =0
-            # print("image: ",image)
-            if os.path.isdir(os.path.join(PATH_TO_TEST_IMAGES_DIR,class_name,image)):
-                num = dir_statics(os.path.join(PATH_TO_TEST_IMAGES_DIR,class_name,image))
-                # print("num: ",num)
-
-                result[class_name][image]=num
-
-
-    print(result)
-
-# 统计文件夹下文件的个数
-def dir_statics(dir_path):
-    num_files=0
-
-    for fn in os.listdir(dir_path):
-        num_files +=1
-
-    return num_files
-
-
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--image_dir", default=r'/home/yqw/YiTuClassify0409/Picture/training20180428',help="image to be processed")
-    parser.add_argument("--graph", default=r'/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_graph.pb',help="graph/model to be executed")
-    parser.add_argument("--labels", default=r"/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_labels.txt",help="name of file containing labels")
-
-    args = parser.parse_args()
-
-    if args.graph:
-        model_file = args.graph
-    if args.image_dir:
-        PATH_TO_TEST_IMAGES_DIR = args.image_dir
-    if args.labels:
-        label_file = args.labels
-
-    # PATH_TO_TEST_IMAGES_DIR = 'F:\\tmp\\test_picture'
-    # PATH_TO_TEST_IMAGES_DIR = r'/home/yqw/YiTuClassify0409/Picture/training20180428'
-    class_names = os.listdir(PATH_TO_TEST_IMAGES_DIR)
-    # IMAGES = os.listdir(PATH_TO_TEST_IMAGES_DIR)
-    if len(class_names) == 0:
-        tf.logging.warning('No files found')
-    # model_file = \
-    #     r'/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_graph.pb'
-
-    # 'F:\\Project\\Project\\YiTuClassify\\tmp\\output_graph.pb'
-    graph = load_graph(model_file)
-    # label_file = "F:\\Project\\Project\\YiTuClassify\\tmp\\output_labels.txt"
-    # label_file = r"/home/yqw/YiTuClassify0409/训练结果集合/0514-92.8%-4500-training20180508/output_labels.txt"
-    input_height = 299
-    input_width = 299
-    input_mean = 0
-    input_std = 255
-    input_layer = "Mul"
-    output_layer = "final_result"
-    input_name = "import/" + input_layer
-    output_name = "import/" + output_layer
+    if bInitFlag == False:
+        Init(label_path, model_path)
+        bInitFlag = True
+    
     input_operation = graph.get_operation_by_name(input_name)
     output_operation = graph.get_operation_by_name(output_name)
-    list = []
 
-    # for image in IMAGES:
-    #
-    #     TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
-    #     print("Test_Image_Path： ",TEST_IMAGE_PATHS)
-    with tf.Session(graph=graph) as sess:
+    t = read_tensor_from_image_file(
+		image_path,
+		input_height=input_height,
+		input_width=input_width,
+		input_mean=input_mean,
+		input_std=input_std)
 
-        # TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
-        # for image_path in TEST_IMAGE_PATHS:
+    results = sess.run(output_operation.outputs[0], {
+		input_operation.outputs[0]: t
+	})
+    results = np.squeeze(results)
+    top_k = results.argsort()[-1:][::-1]
 
-        for class_name in class_names:
-            class_name_path = os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name)
-            images = os.listdir(class_name_path)
-            for image in images:
+    #tmpStr = reValue(labels[top_k[0]], results[top_k[0]])
 
-                image_path = os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,image)
-                t = read_tensor_from_image_file(
-                    image_path,
-                    input_height=input_height,
-                    input_width=input_width,
-                    input_mean=input_mean,
-                    input_std=input_std)
+    return (labels[top_k[0]], results[top_k[0]])
+                
 
-                results = sess.run(output_operation.outputs[0], {
-                    input_operation.outputs[0]: t
-                })
+                
 
-                results = np.squeeze(results)
-                top_k = results.argsort()[-1:][::-1]
-                labels = load_labels(label_file)
-                list_map = []
-                for i in top_k:
-                    if labels[i] == class_name:
-                        if os.path.exists(os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,class_name)):
-                            shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,class_name))
-                        else:
-                            os.makedirs(os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,class_name))
-                            # TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
-                            shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,class_name))
-                    else:
-                        if os.path.exists(os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,labels[i])):
-                            shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR,class_name, labels[i]))
-                        else:
-                            os.makedirs(os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,labels[i]))
-                            # TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
-                            shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,labels[i]))
-
-                    list_map.append(image)
-                    list_map.append(labels[i])
-                    list_map.append(results[i])
-                    list.append(list_map)
-    df = pd.DataFrame(list)
-    df.to_csv('output_csv.csv', index=False, header=False)
-    statics(PATH_TO_TEST_IMAGES_DIR)
-
-
+   
 
 
 

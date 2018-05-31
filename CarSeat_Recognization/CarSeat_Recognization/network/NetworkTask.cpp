@@ -8,6 +8,7 @@
 #include <IcmpAPI.h>
 #include "../common/utils.h"
 #include "../xml/tinyxml.h"
+#include <Python.h>
 
 //#include <time.h>
 #include <afxinet.h>
@@ -63,7 +64,7 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 		\n<bloodheart ip=\"%s\"  status=\"%s\" pcName=\"%s\" time=\"%s\"></bloodheart>";
 
 	char ipLocalStr[20] = { 0 };
-	snprintf(ipLocalStr, sizeof(ipLocalStr), "%d.%d.%d.%d", \
+	_snprintf_s(ipLocalStr, sizeof(ipLocalStr), "%d.%d.%d.%d", \
 		((localIp & 0xFF000000) >> 24), ((localIp & 0xFF0000) >> 16), \
 		((localIp & 0xFF00) >> 8), (localIp & 0xFF));
 
@@ -76,13 +77,13 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 	std::tm time;
 	localtime_s(&time, &t);
 	char timeStr[20] = { 0 };
-	snprintf(timeStr, sizeof(timeStr), "%04d%02d%02d-%02d%02d%02d", \
+	_snprintf_s(timeStr, sizeof(timeStr), "%04d%02d%02d-%02d%02d%02d", \
 		time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,		\
 		time.tm_hour, time.tm_min, time.tm_sec);
 
 	std::string tmpPCName = utils::WStrToStr(m_pParamManager->GetLocalName());
 	
-	snprintf(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
+	_snprintf_s(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
 		"success", tmpPCName.c_str(), timeStr);
 
 	bool ret = false;
@@ -216,9 +217,11 @@ void CNetworkTask::run()
 			}
 		}
 #endif // _DEBUG
+
+
 		
-
-
+		std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
+		__ImageClassify(tmpPath);
 		//CLOCKS_PER_SEC
 
 		//////////////////////////////
@@ -330,6 +333,69 @@ std::wstring CNetworkTask::TakeImage(std::wstring lineID)
 	std::wstring CameraID = m_pParamManager->FindCameraByLineID(lineID);
 	std::wstring path = m_Camera.takePhoto(CameraID);
 	return path;
+}
+
+std::wstring CNetworkTask::__ImageClassify(std::wstring & path)
+{
+	Py_Initialize();
+	if (!Py_IsInitialized())
+	{
+		return std::wstring();
+	}
+
+	PyRun_SimpleString("import label_image_command_line");
+
+	PyObject *pName = NULL, *pMoudle = NULL, *pDict = NULL, *pFunc = NULL;
+	PyObject *tmpModel = nullptr;
+
+	pName = PyUnicode_FromString("label_image_command_line");
+	
+	pMoudle = PyImport_Import(pName);
+	tmpModel = PyImport_ImportModule("label_image_command_line");
+	if ((pMoudle == nullptr) && (tmpModel == nullptr))
+	{
+		TRACE0("get moudle handle error");
+		return std::wstring();
+	}
+
+	pDict = PyModule_GetDict(pMoudle);
+
+	if (!pDict)
+	{
+		TRACE0("get moudledict handle error");
+		return std::wstring();
+	}
+
+	pFunc = PyDict_GetItemString(pDict, "seatClassify");
+
+	if (!pFunc || !PyCallable_Check(pFunc))
+	{
+		TRACE0("can't find function [add]");
+		//getchar();
+		return std::wstring();
+	}
+	char *pbGraph = "D:\\Cache\\GithubCache\\CarSeat_Recognization\\CarSeat_recognization\\Recognization_module\\output_graph.pb";
+	char *label = "D:\\Cache\\GithubCache\\CarSeat_Recognization\\CarSeat_recognization\\Recognization_module\\output_labels.txt";
+
+	std::string tmpStr = utils::WStrToStr(path);
+
+	PyObject *presult = PyEval_CallFunction(pFunc, "sss", tmpStr.c_str(), label, pbGraph);
+
+	//char *pout = PyString_AsString(presult);
+	char *buffer = NULL;
+	Py_ssize_t len = 0;
+	float reValue = 0;
+
+	int ok = PyArg_ParseTuple(presult, "sf", &buffer, &reValue);
+	
+	//std::string()
+	std::string tmpBuffer(buffer);
+
+	wchar_t *tmpWType = utils::CharToWchar(buffer);
+
+	std::wstring wstrBuffer(tmpWType);
+	
+	return wstrBuffer;
 }
 
 bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 

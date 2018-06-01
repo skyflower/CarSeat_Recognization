@@ -123,7 +123,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3_d.lib;python35_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3_d.lib;python35_d.lib;label_image_d.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\amd64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>

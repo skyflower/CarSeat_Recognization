@@ -66,10 +66,8 @@ OPC相关文件
 	#include “OPC.h”
 	OPC *pOCP
 	2、调用接口
-	COleVariant writedata[2]; //需要用 COleVariant类型定义数组
-	plc_flag = 1
-	writedata[0]=(COleVariant)plc_flag;
-	pOCP->WriteData(2,startnum,writedata);
+	float plc_flag=1
+	pOCP->WriteData(2,startnum,&COleVariant(plc_flag));
 /////////////////////////////////////////////////////////////////////////////
 其他注释:
 

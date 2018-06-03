@@ -23,10 +23,8 @@ public:
 	void PreWrite();
 	bool WriteData(long len, long startnum, VARIANT *WriteData);
 	// 说明:这里的WriteData需要用 COleVariant类型定义数组，例如:
-	// COleVariant writedata[2];
-	// plc_flag = 1
-	// writedata[0]=(COleVariant)plc_flag;
-	// WriteData(2,startnum,writedata);
+	// float plc_flag = 1
+	// WriteData(1,0,&COleVariant(plc_flag));
 	bool bOPCConnect;//判断服务器是否链接
 	
 private:

@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
+#include "../stdafx.h"
 #include "OPC.h"
 
 #ifdef _DEBUG
@@ -35,7 +35,7 @@ COPC::~COPC()
 
 void COPC::InitialOPC(WCHAR* SeverName,long WNum,COleVariant* WTagName)
 {
-	szName         = SeverName;
+	szName = SeverName;
 	WriteNum	   = WNum;
 	TagNameWrite   = WTagName;
 	hWriteServer = new OPCHANDLE[WriteNum*2]; 
@@ -68,11 +68,17 @@ bool COPC::ConnectServer()
 
 void COPC::PreWrite()
 {
-	OPCITEMRESULT *pItemResult = nullptr;
-	HRESULT *pErrors = nullptr;
+	OPCITEMRESULT *pItemResult;
+	HRESULT *pErrors;
 	HRESULT hr;
+	DWORD ActualRate;
+	float b = 0.0;
+	IUnknown *pGroupUnk;
+	OPCHANDLE hOPCServerGroup;
 	OPCITEMDEF *ItemArray = new OPCITEMDEF[WriteNum];
-	
+	hr = m_pServer->AddGroup(L"", TRUE, 500, 1235, 0, &b, 0, &hOPCServerGroup,
+		&ActualRate, IID_IUnknown, &pGroupUnk);
+	hr = pGroupUnk->QueryInterface(IID_IOPCItemMgt, (void **)&m_ItemMgt);
 	for(int ItemNumber = 0; ItemNumber < WriteNum; ItemNumber++)
 	{
 		if( TagNameWrite[ItemNumber].vt != VT_BSTR )
@@ -87,11 +93,9 @@ void COPC::PreWrite()
 	}
 	
 	hr = m_ItemMgt->AddItems(WriteNum, ItemArray, (OPCITEMRESULT**)&pItemResult,
-		                       (HRESULT **)&pErrors);
-	for (int i = 0; i < WriteNum; i++)
-	{
+		                         (HRESULT **)&pErrors);
+	for(int i = 0; i < WriteNum; i++)
 		hWriteServer[i] = pItemResult[i].hServer;
-	}
 
 	delete []ItemArray;
 	CoTaskMemFree( pItemResult );
@@ -100,20 +104,19 @@ void COPC::PreWrite()
 
 bool COPC::WriteData(long len, long startnum,VARIANT *WriteData)
 {
-	HRESULT *pErrors = nullptr;	
+	HRESULT hr;
+	HRESULT *pErrors;	
 	OPCHANDLE *hTagServer = new OPCHANDLE[WriteNum];
 	long *TagList = new long[len];
-	for (int i = 0; i < len; i++)
-	{
-		*(TagList + i) = startnum + i;
-	}
-	
 	for(int i = 0; i < len; i++)
+		*(TagList+i) = startnum+i;
+	
+	for( int i = 0; i < len; i++)
 	{
 		hTagServer[i] = hWriteServer[TagList[i]];
 	}
-	
-	HRESULT	hr  = m_pOPCSync->Write(len, hTagServer, WriteData, &pErrors);
+	hr = m_ItemMgt->QueryInterface(IID_IOPCSyncIO, (void **)&m_pOPCSync);
+	hr  = m_pOPCSync->Write(len, hTagServer, WriteData, &pErrors);
 
 	delete []hTagServer;  
 	delete []TagList;

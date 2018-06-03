@@ -8,7 +8,7 @@
 #include "InputDlg.h"
 // add start by xiexinpeng
 #include <string>
-#include "OPC.h"
+#include "kepserver/OPC.h"
 // add end by xiexinpeng
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -112,24 +112,23 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
     // ����kepserver add start by xiexinpeng	
     // kepserver ������
     COPC Opc;
-	COleVariant* WriteItem = nullptr;
-	// ��Ҫ�����PLC��־λ
-	std::string s = "PLC_flag";
-	CString cstr1(L"");
-	CString Cstr = L"OPCServer.WinCC";
+	// server name
+	CString Cstr = L"Kepware.KEPServerEX.V5";
 	wchar_t* opcServer = nullptr;
-	//opcServer = new wchar_t[20];
+	opcServer = new wchar_t[20];
 	opcServer = Cstr.AllocSysString();
 	
 	Opc.AddServerName(opcServer);
-
+	
 	if( TRUE == Opc.ConnectServer() )
 	{
 		Opc.bOPCConnect=true;
-		cstr1.Format(L"%s",s.c_str());
-		WriteItem[0] = COleVariant(cstr1);
-		Opc.InitialOPC(opcServer , 1 , WriteItem);
+		CString flag = L"Channel1.Device1.Tag2";
+		Opc.InitialOPC(opcServer, 1, &COleVariant(flag));
 		Opc.PreWrite();	
+		//wirte data demo
+		//float test = 500;
+		//Opc.WriteData(1, 0, &COleVariant(test));
 	}
 	// add end by xiexinpeng
 	return TRUE;  // ���ǽ��������õ��ؼ������򷵻� TRUE

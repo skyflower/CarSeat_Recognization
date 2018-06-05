@@ -7,6 +7,7 @@
 #include <mutex>
 #include <thread>
 #include "../image/Camera.h"
+#include "../image/ImageClassify.h"
 
 
 class CNetworkTask
@@ -33,6 +34,8 @@ public:
 	void SendMessageTo(message* msg);
 	bool GetThreadStatus();
 	void SetThreadStatus(bool status);
+	void SetImageClassify(CImageClassify *pClassify);
+
 
 	void run();
 	static CNetworkTask* GetInstance();
@@ -71,14 +74,13 @@ private:
 	std::wstring TakeImage(std::wstring lineID);
 
 	/*
-	function: 图像识别过程
+	function: 将图像发送到识别模块中
 
 	parameter:
 		图像路径
 
-	return:  返回识别结果
 	*/
-	std::wstring __ImageClassify(std::wstring &path);
+	bool __ImageClassify(std::wstring &path);
 	
 
 	std::mutex m_MutexMsg;
@@ -94,5 +96,6 @@ private:
 	CCamera m_Camera;
 
 	CParamManager *m_pParamManager;
+	CImageClassify *m_pClassify;
 };
 

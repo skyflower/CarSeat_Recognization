@@ -44,7 +44,7 @@ public:
 private:
 	enum
 	{
-		MAX_LOG_NUM = 10
+		MAX_LOG_NUM = 20
 	};
 
 	CLog();

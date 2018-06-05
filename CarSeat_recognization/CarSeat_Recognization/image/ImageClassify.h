@@ -16,10 +16,13 @@
 #include <string>
 #include <Python.h>
 #include "../common/utils.h"
+#include <unordered_map>
+#include <list>
+#include <thread>
+#include <mutex>
 
 class CImageClassify
 {
-public:
 public:
 
 	CImageClassify(const char*graphFile, const char* labelFile);
@@ -27,15 +30,37 @@ public:
 
 	bool initPython(const char *modulName,const char *functionName);
 
-	std::wstring compute(const char *filePath);
+	void pushImage(const char*filePath);
+
+	std::wstring GetImageType(const char*filePath);
+
+
+	//  ÷’÷πœﬂ≥Ã
+	bool terminate();
+	
+	void run();
+	
+private:
 
 	void destory();
 
-private:
-	PyObject * pName;
-	PyObject * pModule;
-	PyObject * pFunc;
-	PyObject * pDict;
+	std::wstring compute(const char *filePath);
+
+	size_t hashValue(const char* filePath);
+
+	PyObject * m_pPyName;
+	PyObject * m_pPyModule;
+	PyObject * m_pPyFunc;
+	PyObject * m_pPyDict;
+	std::hash<const char*> m_pHashFunc;
+
+	// 
+	std::unordered_map<size_t, std::wstring> *m_pType;
+	
+	std::list<std::string> *m_pReadyImage;
+	std::mutex m_Mutex;
+	//std::thread m_pThread;
+	bool m_bRunning;
 
 private:
 	enum
@@ -44,8 +69,6 @@ private:
 	};
 	char m_szGraph[MAX_CHAR_LENGTH];
 	char m_szLabel[MAX_CHAR_LENGTH];
-	//char m_szModule[MAX_NAME_LENGTH];
-	//char m_szFuncName[MAX_NAME_LENGTH];
 };
 
 

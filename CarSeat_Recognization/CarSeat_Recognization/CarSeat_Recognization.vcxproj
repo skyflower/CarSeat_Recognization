@@ -123,7 +123,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3_d.lib;python35_d.lib;label_image_d.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\amd64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -208,13 +208,14 @@
     <ClInclude Include="image\Camera.h" />
     <ClInclude Include="image\COrbFlann.h" />
     <ClInclude Include="image\FileManager.h" />
+    <ClInclude Include="image\ImageClassify.h" />
     <ClInclude Include="image\PatternManager.h" />
     <ClInclude Include="image\TypeIDManager.h" />
     <ClInclude Include="InputDlg.h" />
+    <ClInclude Include="kepserver\OPC.h" />
+    <ClInclude Include="kepserver\opccomn.h" />
+    <ClInclude Include="kepserver\opcda.h" />
     <ClInclude Include="network\NetworkTask.h" />
-    <ClInclude Include="OPC.h" />
-    <ClInclude Include="opccomn.h" />
-    <ClInclude Include="opcda.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -231,13 +232,14 @@
     <ClCompile Include="image\Camera.cpp" />
     <ClCompile Include="image\COrbFlann.cpp" />
     <ClCompile Include="image\FileManager.cpp" />
+    <ClCompile Include="image\ImageClassify.cpp" />
     <ClCompile Include="image\PatternManager.cpp" />
     <ClCompile Include="image\TypeIDManager.cpp" />
     <ClCompile Include="InputDlg.cpp" />
+    <ClCompile Include="kepserver\OPC.cpp" />
+    <ClCompile Include="kepserver\opccomn_i.c" />
+    <ClCompile Include="kepserver\opcda_i.c" />
     <ClCompile Include="network\NetworkTask.cpp" />
-    <ClCompile Include="OPC.cpp" />
-    <ClCompile Include="opccomn_i.c" />
-    <ClCompile Include="opcda_i.c" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

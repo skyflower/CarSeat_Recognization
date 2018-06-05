@@ -29,6 +29,7 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp()
 	m_pParamManager = nullptr;
 	m_pLog = nullptr;
 	m_pNetworkTask = nullptr;
+	m_pClassify = nullptr;
 	_tsetlocale(LC_ALL, _T("chs"));
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
@@ -68,6 +69,16 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	{
 		m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
 	}
+	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
+	m_pClassify->initPython("label_image_command_line", "seatClassify");
+	m_pNetworkTask->SetImageClassify(m_pClassify);
+
+	if (m_pClassify != nullptr)
+	{
+		m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
+	}
+
+
 
 
 	AfxEnableControlContainer();
@@ -124,6 +135,12 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		delete m_pParamManager;
 		m_pParamManager = nullptr;
 	}
+	if (m_pClassifyThread.joinable())
+	{
+		m_pClassify->terminate();
+		m_pClassifyThread.join();
+		
+	}
 	
 	if (m_NetworkThread.joinable())
 	{
@@ -134,10 +151,16 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		m_pNetworkTask->SendMessageTo(&msg);
 		m_NetworkThread.join();
 	}
+	
 	if (m_pNetworkTask != nullptr)
 	{
 		delete m_pNetworkTask;
 		m_pNetworkTask = nullptr;
+	}
+	if (m_pClassify != nullptr)
+	{
+		delete m_pClassify;
+		m_pClassify = nullptr;
 	}
 	if (m_pLog != nullptr)
 	{

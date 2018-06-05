@@ -14,6 +14,7 @@
 #include "./network/NetworkTask.h"
 #include <thread>
 #include <chrono>
+#include "./image/ImageClassify.h"
 
 
 // CCarSeat_RecognizationApp: 
@@ -37,6 +38,8 @@ private:
 	CNetworkTask *m_pNetworkTask;
 	std::thread m_NetworkThread;
 	
+	CImageClassify *m_pClassify;
+	std::thread m_pClassifyThread;
 
 
 	DECLARE_MESSAGE_MAP()

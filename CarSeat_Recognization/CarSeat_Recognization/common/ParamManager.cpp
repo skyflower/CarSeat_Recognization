@@ -212,6 +212,16 @@ unsigned int CParamManager::GetBarcodePort()
 	return m_nBarcodePort;
 }
 
+const char * CParamManager::GetGraphFile() const
+{
+	return m_szGraphFile.c_str();
+}
+
+const char * CParamManager::GetLabelFile() const
+{
+	return m_szLabelFile.c_str();
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -294,7 +304,7 @@ void CParamManager::Init()
 		m_nBarcodePort = tmpLocal;
 
 
-		char tmpStr[20] = { 0 };
+		char tmpStr[MAX_CHAR_LENGTH] = { 0 };
 		if (getValueByName(content, "serverport", tmpStr) == true)
 		{
 			m_nServerPort = atoi(tmpStr);
@@ -311,6 +321,20 @@ void CParamManager::Init()
 			m_nTestServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (getValueByName(content, "graphFile", tmpStr) == true)
+		{
+			m_szGraphFile = std::string(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (getValueByName(content, "labelFile", tmpStr) == true)
+		{
+			m_szLabelFile = std::string(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
+
 
 		if (content != nullptr)
 		{

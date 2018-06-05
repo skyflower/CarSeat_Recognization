@@ -26,20 +26,19 @@ const CLog & CLog::GetReference()
 
 int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 {
-	//Write(LogType::INFO, func, line, fmt, ...);
 	CLog *pLog = GetInstance();
 	if (pLog->m_pThread.native_handle() == nullptr)
 	{
 		pLog->m_pThread = std::thread(&CLog::run, pLog);
-		//pLog->m_pThread.detach();
+		
 	}
 	if (pLog == nullptr)
 	{
 		return 0;
 	}
-	std::unique_lock<std::mutex> lck(pLog->m_pMutex);// , std::defer_lock);
+	std::unique_lock<std::mutex> lck(pLog->m_pMutex , std::defer_lock);
 	int cnt = 0;
-	//if (lck.try_lock())
+	if (lck.try_lock())
 	{
 		size_t tmp = pLog->m_nCurBlank;
 		LogMessage *pMesg = &pLog->m_pMessage[tmp];
@@ -55,6 +54,8 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 		pLog->m_nCurBlank = (tmp + 1) % MAX_LOG_NUM;
 		pLog->SetFlag(true);
 		pLog->m_pCond.notify_one();
+
+
 	}
 	
 	
@@ -64,16 +65,15 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 
 void CLog::run()
 {
-	
 	LogMessage buffer;
 	while (1)
 	{
 		CLog *pLog = CLog::GetInstance();
-		std::unique_lock<std::mutex> lck(m_pMutex);
-		/*if (!lck.try_lock())
+		std::unique_lock<std::mutex> lck(m_pMutex, std::defer_lock);
+		if (!lck.try_lock())
 		{
 			continue;
-		}*/
+		}
 		m_pCond.wait(lck, [&pLog] {return pLog->GetFlag(); });
 		//m_pMessage[m_nCurValid];
 		memcpy(&buffer, &m_pMessage[m_nCurValid], sizeof(LogMessage));
@@ -83,7 +83,7 @@ void CLog::run()
 		{
 			pLog->SetFlag(false);
 		}
-		//lck.unlock();
+		lck.unlock();
 		if (m_pLog.good())
 		{
 			if (buffer.type == LogType::FATAL_ERROR)
@@ -111,7 +111,6 @@ void CLog::run()
 CLog::CLog()
 {
 	init();
-	
 }
 
 void CLog::init()

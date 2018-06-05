@@ -34,6 +34,9 @@ public:
 	unsigned int GetBarcodeIp();
 	unsigned int GetBarcodePort();
 
+	const char*GetGraphFile() const;
+	const char*GetLabelFile() const;
+
 	std::wstring GetLocalName() { return m_strLocalName; }
 
 
@@ -84,8 +87,13 @@ private:
 	//汽车座椅纹理类型
 	std::vector<std::wstring> *m_pTexture;
 
-	// ftp用户名密码以及图像的存储路径
+	//ftp用户名密码以及图像的存储路径
 	std::vector<std::wstring> *m_pFtp;
+
+	//graph
+	std::string m_szGraphFile;
+
+	std::string m_szLabelFile;
 
 	//产线和相机的对应关系
 	std::unordered_map<std::wstring, std::wstring> *m_pLineCamera;

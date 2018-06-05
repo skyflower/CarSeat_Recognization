@@ -5,19 +5,18 @@
 
 CCamera::CCamera()
 {
+
 }
 
 
 CCamera::~CCamera()
 {
+
 }
 
 std::wstring CCamera::takePhoto(std::wstring cameraID)
 {
 #ifdef  OPENCV
-
-
-
 	cv::VideoCapture  capture(0);
 	cv::Mat frame;
 	if (!capture.isOpened())

@@ -1,4 +1,4 @@
-// CarSeat_RecognizationDlg.cpp : ʵ���ļ�
+// CarSeat_RecognizationDlg.cpp :
 //
 
 #include "stdafx.h"
@@ -15,22 +15,20 @@
 #endif
 
 
-// ����Ӧ�ó��򡰹��ڡ��˵����?CAboutDlg �Ի���
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// �Ի�������
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ֧��
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 
 
-// ʵ��
+//
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -48,7 +46,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationDlg �Ի���
+// CCarSeat_RecognizationDlg
 
 BEGIN_DHTML_EVENT_MAP(CCarSeat_RecognizationDlg)
 
@@ -79,13 +77,12 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationDlg ��Ϣ�������?
+// CCarSeat_RecognizationDlg
 BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 {
 	CDHtmlDialog::OnInitDialog();
 
-	// ��������...���˵�����ӵ�ϵͳ�˵��С�?
-	// IDM_ABOUTBOX ������ϵͳ���Χ�ڡ�
+	// IDM_ABOUTBOX
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -103,19 +100,18 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		}
 	}
 
-	// ���ô˶Ի����ͼ��? ��Ӧ�ó��������ڲ��ǶԻ���ʱ����ܽ��Զ�?	//  ִ�д˲���
-	SetIcon(m_hIcon, TRUE);			// ���ô�ͼ��
-	SetIcon(m_hIcon, FALSE);		// ����Сͼ��
+	SetIcon(m_hIcon, TRUE);		
+	SetIcon(m_hIcon, FALSE);
 
-	// TODO: �ڴ���Ӷ���ĳ�ʼ������
 
-    // ����kepserver add start by xiexinpeng	
-    // kepserver ������
+    // kepserver add start by xiexinpeng	
+    // kepserver
     COPC Opc;
 	// server name
 	CString Cstr = L"Kepware.KEPServerEX.V5";
-	wchar_t* opcServer = nullptr;
-	opcServer = new wchar_t[20];
+	//wchar_t* opcServer = nullptr;
+	BSTR opcServer = nullptr;
+	//opcServer = new wchar_t[20];
 	opcServer = Cstr.AllocSysString();
 	
 	Opc.AddServerName(opcServer);
@@ -127,11 +123,32 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		Opc.InitialOPC(opcServer, 1, &COleVariant(flag));
 		Opc.PreWrite();	
 		//wirte data demo
-		//float test = 500;
-		//Opc.WriteData(1, 0, &COleVariant(test));
+		float test = 500;
+		Opc.WriteData(1, 0, &COleVariant(test));
 	}
+	if (opcServer != nullptr)
+	{
+		::SysFreeString(opcServer);
+	}
+
+	char tmpStr[] = "K215-黑色-菱形纹理";
+
+	m_barCode.SetWindowTextW(L"K215-黑色-菱形纹理");
+
+	double ratio = 1.0;
+	if (m_nFailCount + m_nSuccessCount != 0)
+	{
+		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
+	}
+	WCHAR result[200];
+	memset(result, 0, sizeof(WCHAR) * 200);
+	wprintf_s(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%%", m_nSuccessCount, m_nFailCount, ratio);
+
+	m_RegRatio.SetWindowTextW(result);
+
+
 	// add end by xiexinpeng
-	return TRUE;  // ���ǽ��������õ��ؼ������򷵻� TRUE
+	return TRUE;  //
 }
 
 void CCarSeat_RecognizationDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -147,19 +164,15 @@ void CCarSeat_RecognizationDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// �����Ի��������С����ť������Ҫ����Ĵ���
-//  �����Ƹ�ͼ�ꡣ  ����ʹ���ĵ�/��ͼģ�͵� MFC Ӧ�ó���
-//  �⽫�ɿ���Զ���ɡ�
 
 void CCarSeat_RecognizationDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ���ڻ��Ƶ��豸������
+		CPaintDC dc(this); //
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// ʹͼ���ڹ����������о���
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -167,25 +180,13 @@ void CCarSeat_RecognizationDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// ����ͼ��
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
 	{
 		CDHtmlDialog::OnPaint();
 	}
-	m_barCode.SetWindowTextW(L"K215-��ɫ-��������");
-
-	double ratio = 1.0;
-	if (m_nFailCount + m_nSuccessCount != 0)
-	{
-		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
-	}
-	WCHAR result[200];
-	memset(result, 0, sizeof(WCHAR) * 200);
-	wprintf_s(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%%", m_nSuccessCount, m_nFailCount, ratio);
-
-	m_RegRatio.SetWindowTextW(result);
+	
 }
 
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()

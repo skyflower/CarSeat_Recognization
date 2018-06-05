@@ -25,6 +25,9 @@
     <Filter Include="image">
       <UniqueIdentifier>{f72a318f-8c95-431d-b945-a89c0784cd58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kepserver">
+      <UniqueIdentifier>{bb3e75b3-2e6d-4bae-9f06-b076f4503a8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -63,15 +66,6 @@
     <ClInclude Include="xml\tinyxml.h">
       <Filter>xml</Filter>
     </ClInclude>
-    <ClInclude Include="OPC.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="opccomn.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="opcda.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="InputDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -92,6 +86,18 @@
     </ClInclude>
     <ClInclude Include="image\TypeIDManager.h">
       <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="image\ImageClassify.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="kepserver\OPC.h">
+      <Filter>kepserver</Filter>
+    </ClInclude>
+    <ClInclude Include="kepserver\opccomn.h">
+      <Filter>kepserver</Filter>
+    </ClInclude>
+    <ClInclude Include="kepserver\opcda.h">
+      <Filter>kepserver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,15 +134,6 @@
     <ClCompile Include="xml\tinyxmlparser.cpp">
       <Filter>xml</Filter>
     </ClCompile>
-    <ClCompile Include="OPC.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="opccomn_i.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="opcda_i.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="InputDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -157,6 +154,18 @@
     </ClCompile>
     <ClCompile Include="image\TypeIDManager.cpp">
       <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="image\ImageClassify.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="kepserver\OPC.cpp">
+      <Filter>kepserver</Filter>
+    </ClCompile>
+    <ClCompile Include="kepserver\opccomn_i.c">
+      <Filter>kepserver</Filter>
+    </ClCompile>
+    <ClCompile Include="kepserver\opcda_i.c">
+      <Filter>kepserver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

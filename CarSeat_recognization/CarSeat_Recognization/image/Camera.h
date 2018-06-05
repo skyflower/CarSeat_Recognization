@@ -1,7 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
+
+#include <unordered_map>
 
 #ifdef OPENCV
 #include<opencv2\highgui\highgui.hpp>  
@@ -21,6 +22,8 @@ public:
 	std::wstring takePhoto(std::wstring cameraID);
 
 
-
+private:
+	std::unordered_map<std::wstring, std::wstring> *m_pCameraLine;
+	
 };
 

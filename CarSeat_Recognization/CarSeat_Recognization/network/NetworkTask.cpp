@@ -10,26 +10,29 @@
 #include "../xml/tinyxml.h"
 #include <Python.h>
 
-//#include <time.h>
 #include <afxinet.h>
 
 CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 
 CNetworkTask::CNetworkTask():
-	m_bThreadStatus(true)
+	m_bThreadStatus(true),
+	m_pClassify(nullptr)
 {
 	m_pParamManager = CParamManager::GetInstance();
 	m_pMsgQueue = new message[CNetworkTask::msg::MAX_MSG_SIZE];
 	m_nMsgSize = 0;
 	m_nIn = m_nOut = 0;
-	//m_pTask = std::thread(this, &CNetworkTask::run);
 }
 
 
 CNetworkTask::~CNetworkTask()
 {
-
+	if (m_pMsgQueue != nullptr)
+	{
+		delete[]m_pMsgQueue;
+		m_pMsgQueue = nullptr;
+	}
 }
 
 bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
@@ -119,6 +122,7 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 		WriteError("replay package error");
 		return false;
 	}
+	lconfigXML.Clear();
 	return true;
 }
 
@@ -151,6 +155,11 @@ bool CNetworkTask::GetThreadStatus()
 void CNetworkTask::SetThreadStatus(bool status)
 {
 	m_bThreadStatus = status;
+}
+
+void CNetworkTask::SetImageClassify(CImageClassify * pClassify)
+{
+	m_pClassify = pClassify;
 }
 
 void CNetworkTask::run()
@@ -189,39 +198,39 @@ void CNetworkTask::run()
 		if (tmpBarcode.size() != 0)
 		{
 			std::wstring path = TakeImage(0);
-			
+			//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
+			__ImageClassify(path);
+
 		}
 
 
-#if (defined _DEBUG) && (defined FTP_TEST)
-		const wchar_t *filename = L"config.txt";
-		std::vector<std::wstring> *ftpParam = m_pParamManager->GetFtpParameter();
-
-		if ((ftpParam != nullptr) && (ftpParam->size() >= 3))
-		{
-			if (false == ftpUpload(m_pParamManager->GetServerIP(),
-				ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), ftpParam->at(2).c_str(), filename))
-			{
-				WriteError("user = %s, passwd = %s,upload File = %s to serverIp = %u Failed", ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), filename, m_pParamManager->GetServerIP());
-			}
-		}
-
-		const wchar_t *downloadFile = L"config_copy.txt";
-
-		if ((ftpParam != nullptr) && (ftpParam->size() >= 3))
-		{
-			if (false == ftpDownload(m_pParamManager->GetServerIP(),
-				ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), ftpParam->at(2).c_str(), downloadFile))
-			{
-				WriteError("user = %s, passwd = %s,download File = %s to serverIp = %u Failed", ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), downloadFile, m_pParamManager->GetServerIP());
-			}
-		}
-#endif // _DEBUG
-
+//#if (defined _DEBUG) && (defined FTP_TEST)
+//		const wchar_t *filename = L"config.txt";
+//		std::vector<std::wstring> *ftpParam = m_pParamManager->GetFtpParameter();
+//
+//		if ((ftpParam != nullptr) && (ftpParam->size() >= 3))
+//		{
+//			if (false == ftpUpload(m_pParamManager->GetServerIP(),
+//				ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), ftpParam->at(2).c_str(), filename))
+//			{
+//				WriteError("user = %s, passwd = %s,upload File = %s to serverIp = %u Failed", ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), filename, m_pParamManager->GetServerIP());
+//			}
+//		}
+//
+//		const wchar_t *downloadFile = L"config_copy.txt";
+//
+//		if ((ftpParam != nullptr) && (ftpParam->size() >= 3))
+//		{
+//			if (false == ftpDownload(m_pParamManager->GetServerIP(),
+//				ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), ftpParam->at(2).c_str(), downloadFile))
+//			{
+//				WriteError("user = %s, passwd = %s,download File = %s to serverIp = %u Failed", ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), downloadFile, m_pParamManager->GetServerIP());
+//			}
+//		}
+//#endif // _DEBUG
+//
 
 		
-		std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
-		__ImageClassify(tmpPath);
 		//CLOCKS_PER_SEC
 
 		//////////////////////////////
@@ -335,67 +344,16 @@ std::wstring CNetworkTask::TakeImage(std::wstring lineID)
 	return path;
 }
 
-std::wstring CNetworkTask::__ImageClassify(std::wstring & path)
+bool CNetworkTask::__ImageClassify(std::wstring & path)
 {
-	Py_Initialize();
-	if (!Py_IsInitialized())
+	if (m_pClassify != nullptr)
 	{
-		return std::wstring();
+		std::string tmpPath = utils::WStrToStr(path);
+
+		m_pClassify->pushImage(tmpPath.c_str());
+		return true;
 	}
-
-	PyRun_SimpleString("import label_image_command_line");
-
-	PyObject *pName = NULL, *pMoudle = NULL, *pDict = NULL, *pFunc = NULL;
-	PyObject *tmpModel = nullptr;
-
-	pName = PyUnicode_FromString("label_image_command_line");
-	
-	pMoudle = PyImport_Import(pName);
-	tmpModel = PyImport_ImportModule("label_image_command_line");
-	if ((pMoudle == nullptr) && (tmpModel == nullptr))
-	{
-		TRACE0("get moudle handle error");
-		return std::wstring();
-	}
-
-	pDict = PyModule_GetDict(pMoudle);
-
-	if (!pDict)
-	{
-		TRACE0("get moudledict handle error");
-		return std::wstring();
-	}
-
-	pFunc = PyDict_GetItemString(pDict, "seatClassify");
-
-	if (!pFunc || !PyCallable_Check(pFunc))
-	{
-		TRACE0("can't find function [add]");
-		//getchar();
-		return std::wstring();
-	}
-	char *pbGraph = "D:\\Cache\\GithubCache\\CarSeat_Recognization\\CarSeat_recognization\\Recognization_module\\output_graph.pb";
-	char *label = "D:\\Cache\\GithubCache\\CarSeat_Recognization\\CarSeat_recognization\\Recognization_module\\output_labels.txt";
-
-	std::string tmpStr = utils::WStrToStr(path);
-
-	PyObject *presult = PyEval_CallFunction(pFunc, "sss", tmpStr.c_str(), label, pbGraph);
-
-	//char *pout = PyString_AsString(presult);
-	char *buffer = NULL;
-	Py_ssize_t len = 0;
-	float reValue = 0;
-
-	int ok = PyArg_ParseTuple(presult, "sf", &buffer, &reValue);
-	
-	//std::string()
-	std::string tmpBuffer(buffer);
-
-	wchar_t *tmpWType = utils::CharToWchar(buffer);
-
-	std::wstring wstrBuffer(tmpWType);
-	
-	return wstrBuffer;
+	return false;
 }
 
 bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 

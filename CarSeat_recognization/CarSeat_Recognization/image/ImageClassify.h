@@ -14,7 +14,15 @@
 #define _PYTHON_INTERFACE_H_
 
 #include <string>
+
+#ifdef PYTHON_TENSORFLOW
+
 #include <Python.h>
+
+#endif // PYTHON_TENSORFLOW
+
+
+
 #include "../common/utils.h"
 #include <unordered_map>
 #include <list>
@@ -48,10 +56,17 @@ private:
 
 	size_t hashValue(const char* filePath);
 
+#ifdef PYTHON_TENSORFLOW
+
 	PyObject * m_pPyName;
 	PyObject * m_pPyModule;
 	PyObject * m_pPyFunc;
 	PyObject * m_pPyDict;
+
+#endif // PYTHON_TENSORFLOW
+
+	
+
 	std::hash<const char*> m_pHashFunc;
 
 	// 

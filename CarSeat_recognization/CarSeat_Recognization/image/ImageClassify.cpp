@@ -3,10 +3,13 @@
 //#include <xtr1common>
 
 CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
+#ifdef PYTHON_TENSORFLOW
 	m_pPyName(nullptr),
 	m_pPyModule(nullptr),
 	m_pPyFunc(nullptr),
 	m_pPyDict(nullptr),
+#endif // PYTHON_TENSORFLOW
+
 	m_bRunning(true),
 	m_Mutex()
 {
@@ -38,6 +41,8 @@ CImageClassify::~CImageClassify()
 
 bool CImageClassify::initPython(const char *modulName,const char *functionName)
 {
+#ifdef PYTHON_TENSORFLOW
+
 	Py_Initialize();
 	if (!Py_IsInitialized())
 	{
@@ -77,6 +82,7 @@ bool CImageClassify::initPython(const char *modulName,const char *functionName)
 		
 		return false;
 	}
+#endif // PYTHON_TENSORFLOW
 	return true;
 }
 
@@ -152,6 +158,12 @@ void CImageClassify::run()
 
 std::wstring CImageClassify::compute(const char *filePath)
 {
+	char *buffer = NULL;
+	float reValue = 0;
+#ifdef PYTHON_TENSORFLOW
+
+
+
 	if ((m_pPyFunc == nullptr) || (filePath == nullptr) ||	\
 		(strlen(m_szGraph) == 0) || (strlen(m_szGraph) == 0))
 	{
@@ -159,11 +171,13 @@ std::wstring CImageClassify::compute(const char *filePath)
 	}
 	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "sss", filePath, m_szLabel, m_szGraph);
 
-	char *buffer = NULL;
+	
 	Py_ssize_t len = 0;
-	float reValue = 0;
+	
 
 	int ok = PyArg_ParseTuple(presult, "sf", &buffer, &reValue);
+
+#endif // PYTHON_TENSORFLOW
 	
 	std::string tmpBuffer(buffer);
 
@@ -177,6 +191,10 @@ std::wstring CImageClassify::compute(const char *filePath)
 
 void CImageClassify::destory()
 {
+#ifdef PYTHON_TENSORFLOW
+
+
+
 	if (m_pPyFunc != nullptr)
 	{
 		Py_DECREF(m_pPyFunc);
@@ -195,6 +213,8 @@ void CImageClassify::destory()
 		Py_DECREF(m_pPyDict);
 	}
 	Py_Finalize();
+#endif // PYTHON_TENSORFLOW
+
 }
 
 size_t CImageClassify::hashValue(const char * filePath)

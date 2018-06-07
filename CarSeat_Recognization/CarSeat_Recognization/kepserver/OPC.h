@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 #include "opccomn.h"
 #include "opcda.h"
+#include "../common/utils.h"
 
 #if !defined(AFX_OPC_H__D5838E9D_B5AA_43B5_862D_64EE78AC2F41__INCLUDED_)
 #define AFX_OPC_H__D5838E9D_B5AA_43B5_862D_64EE78AC2F41__INCLUDED_
@@ -28,14 +29,14 @@ public:
 	bool bOPCConnect;//判断服务器是否链接
 	
 private:
-	WCHAR  *szName;
+	WCHAR  szName[MAX_CHAR_LENGTH];
     long WriteNum;
 	
 	IOPCServer *m_pServer;//服务器接口
 	IOPCItemMgt *m_ItemMgt;//读写控制
 	IOPCSyncIO *m_pOPCSync; //同步读写接口
 	
-	COleVariant *TagNameWrite;
+	COleVariant TagNameWrite;
     OPCHANDLE *hWriteServer;
 };
 

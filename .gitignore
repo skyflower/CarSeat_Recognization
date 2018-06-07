@@ -41,3 +41,8 @@ CarSeat_Recognization/CarSeat_Recognization.VC.VC.opendb
 *.db
 *.html
 *.exp
+*.xml
+*.jpg
+*.codeanalysisast
+*.codeanalysis
+CarSeat_recognization/Recognization_module/python

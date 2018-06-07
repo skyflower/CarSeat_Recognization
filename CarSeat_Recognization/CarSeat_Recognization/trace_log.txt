@@ -1,3 +1,2 @@
-Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xC0A80106, ServerIp = 0xC0A801B1
-Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
-Error	[CImageClassify::initPython,60]get moudle handle error
+Error	[CNetworkTask::IsReachable,52]icmpSendEcho failed clientIp = 0xC0A80106, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,52]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1

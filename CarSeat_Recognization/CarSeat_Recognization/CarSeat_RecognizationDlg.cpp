@@ -6,6 +6,7 @@
 #include "CarSeat_RecognizationDlg.h"
 #include "afxdialogex.h"
 #include "InputDlg.h"
+#include "./common/utils.h"
 // add start by xiexinpeng
 #include <string>
 #include "kepserver/OPC.h"
@@ -68,6 +69,7 @@ void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_IMAGE_REC, m_ImageRec);
 	DDX_Control(pDX, IDC_BARCODE, m_barCode);
 	DDX_Control(pDX, IDC_REG_RATIO, m_RegRatio);
+	DDX_Control(pDX, IDC_IMAGE_PATTERN, m_ImagePattern);
 }
 
 
@@ -130,24 +132,24 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	{
 		::SysFreeString(opcServer);
 	}
+	// add end by xiexinpeng
 
 	char tmpStr[] = "K215-黑色-菱形纹理";
-
+	WCHAR result[200];
+	
 	m_barCode.SetWindowTextW(L"K215-黑色-菱形纹理");
-
+		
 	double ratio = 1.0;
 	if (m_nFailCount + m_nSuccessCount != 0)
 	{
 		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
 	}
-	WCHAR result[200];
 	memset(result, 0, sizeof(WCHAR) * 200);
-	wprintf_s(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%%", m_nSuccessCount, m_nFailCount, ratio);
+	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%%", m_nSuccessCount, m_nFailCount, ratio);
 
 	m_RegRatio.SetWindowTextW(result);
 
-
-	// add end by xiexinpeng
+	
 	return TRUE;  //
 }
 

@@ -35,14 +35,20 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
-public:
+private:
 	CStatic m_ImagePattern;
 	CStatic m_ImageRec;
+
 	CStatic m_barCode;
 	// 显示统计结果，包括成功次数，失败次数，成功率
 	CStatic m_RegRatio;
 
 	size_t m_nSuccessCount;
 	size_t m_nFailCount;
+
+	void displayRecImage(const wchar_t *path);
+	//void 
+
+public:
 	afx_msg void OnUsrinput();
 };

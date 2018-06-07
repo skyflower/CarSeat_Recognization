@@ -276,8 +276,8 @@ void CParamManager::Init()
 		{
 			m_pLineCamera = new std::unordered_map<std::wstring, std::wstring>;
 		}
-		ret = parseMap(content, "lineCamera", m_pLineCamera);
-		if (ret == 0)
+		parseMap(content, "lineCamera", m_pLineCamera);
+		if ((m_pLineCamera == nullptr) || (m_pLineCamera->size() == 0))
 		{
 			WriteError("line Camera init Failed");
 		}
@@ -518,7 +518,6 @@ int CParamManager::parseMap(const char * content, const char * name, std::unorde
 		p = second + 1;
 
 	}
-
 
 	return pMap->size();
 }

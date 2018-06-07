@@ -8,7 +8,11 @@
 #include <IcmpAPI.h>
 #include "../common/utils.h"
 #include "../xml/tinyxml.h"
+
+#ifdef PYTHON_TENSORFLOW
 #include <Python.h>
+#endif // PYTHON_TENSORFLOW
+
 
 #include <afxinet.h>
 
@@ -198,6 +202,7 @@ void CNetworkTask::run()
 		if (tmpBarcode.size() != 0)
 		{
 			std::wstring path = TakeImage(0);
+
 			//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
 			__ImageClassify(path);
 

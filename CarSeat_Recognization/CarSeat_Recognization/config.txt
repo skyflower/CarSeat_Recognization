@@ -26,6 +26,9 @@ lineCamera={"L1":"001", "L2":"002", "L3":"003"}
 graphFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_graph.pb
 labelFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_labels.txt
 
+##
+modelImageFile=D:\Cache\image
+
 
 
 

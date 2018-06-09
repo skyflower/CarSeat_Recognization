@@ -21,7 +21,9 @@ CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 CNetworkTask::CNetworkTask():
 	m_bThreadStatus(true),
-	m_pClassify(nullptr)
+	m_pClassify(nullptr),
+	m_szBarCode(),
+	m_szImagePath()
 {
 	m_pParamManager = CParamManager::GetInstance();
 	m_pMsgQueue = new message[CNetworkTask::msg::MAX_MSG_SIZE];
@@ -114,7 +116,6 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 		return false;
 	}
 	TiXmlElement *rootElement = lconfigXML.RootElement();
-	
 
 	if ((rootElement = nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
 	{
@@ -166,6 +167,16 @@ void CNetworkTask::SetImageClassify(CImageClassify * pClassify)
 	m_pClassify = pClassify;
 }
 
+std::wstring CNetworkTask::GetCurrentImagePath()
+{
+	return m_szImagePath;
+}
+
+std::wstring CNetworkTask::GetCurrentBarcode()
+{
+	return m_szBarCode;
+}
+
 void CNetworkTask::run()
 {
 	std::chrono::system_clock::time_point preBlood = std::chrono::system_clock::now();
@@ -205,6 +216,9 @@ void CNetworkTask::run()
 
 			//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
 			__ImageClassify(path);
+
+			m_szBarCode = tmpBarcode;
+			m_szImagePath = path;
 
 		}
 

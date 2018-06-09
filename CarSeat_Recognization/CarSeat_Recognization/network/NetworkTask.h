@@ -32,9 +32,15 @@ public:
 
 
 	void SendMessageTo(message* msg);
+
 	bool GetThreadStatus();
 	void SetThreadStatus(bool status);
+
+
 	void SetImageClassify(CImageClassify *pClassify);
+
+	std::wstring GetCurrentImagePath();
+	std::wstring GetCurrentBarcode();
 
 
 	void run();
@@ -86,10 +92,14 @@ private:
 	std::mutex m_MutexMsg;
 	message *m_pMsgQueue;
 
-
 	size_t m_nMsgSize;
 	int m_nIn;
 	int m_nOut;
+
+	std::wstring m_szBarCode;
+	std::wstring m_szImagePath;
+
+
 
 	static CNetworkTask *m_pInstance;
 	bool m_bThreadStatus;

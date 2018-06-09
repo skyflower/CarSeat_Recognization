@@ -78,9 +78,6 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
 	}
 
-
-
-
 	AfxEnableControlContainer();
 
 	// 创建 shell 管理器，以防对话框包含
@@ -101,6 +98,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 
 	CCarSeat_RecognizationDlg dlg;
 	m_pMainWnd = &dlg;
+	dlg.SetImageClassify(m_pClassify);
+
+	m_UIThread = std::thread(&CCarSeat_RecognizationDlg::run, &dlg);
+	
+
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
@@ -130,6 +132,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
+
+	if (m_UIThread.joinable())
+	{
+		m_UIThread.join();
+	}
 	if (m_pParamManager != nullptr)
 	{
 		delete m_pParamManager;
@@ -139,7 +146,6 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	{
 		m_pClassify->terminate();
 		m_pClassifyThread.join();
-		
 	}
 	
 	if (m_NetworkThread.joinable())

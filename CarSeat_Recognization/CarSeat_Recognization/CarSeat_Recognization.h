@@ -41,6 +41,8 @@ private:
 	CImageClassify *m_pClassify;
 	std::thread m_pClassifyThread;
 
+	std::thread m_UIThread;
+
 
 	DECLARE_MESSAGE_MAP()
 };

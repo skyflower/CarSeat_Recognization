@@ -69,9 +69,12 @@ public:
 };
 
 
+//  log日志调用接口
 #define WriteInfo(x, ...) CLog::Write(CLog::LogType::INFO, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 #define WriteError(x, ...) CLog::Write(CLog::LogType::FATAL_ERROR, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 #define WriteWarning(x, ...) CLog::Write(CLog::LogType::WARNING, __FUNCTION__, __LINE__, x, __VA_ARGS__)
+
+// 不允许调用下面这个接口
 #define WriteExit(x, ...) CLog::Write(CLog::LogType::EXIT, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 
 //#define WriteLog(x)		CLog::GetReference() << __FUNCTION__ << "  " << __LINE__ << "  " << x;

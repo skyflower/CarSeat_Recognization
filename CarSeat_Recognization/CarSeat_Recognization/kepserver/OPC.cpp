@@ -74,7 +74,6 @@ bool COPC::ConnectServer()
 	if ( hr != 0 ) 
 		return false;
 
-	int tmpPointer = 0;
 	hr = pCom->QueryInterface(IID_IOPCServer, (void**)&m_pServer);
 	pCom->Release();
 	

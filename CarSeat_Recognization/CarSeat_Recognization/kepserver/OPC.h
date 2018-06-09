@@ -30,11 +30,13 @@ public:
 	
 private:
 	WCHAR  szName[MAX_CHAR_LENGTH];
+
     long WriteNum;
 	
 	IOPCServer *m_pServer;//服务器接口
 	IOPCItemMgt *m_ItemMgt;//读写控制
 	IOPCSyncIO *m_pOPCSync; //同步读写接口
+
 	
 	COleVariant TagNameWrite;
     OPCHANDLE *hWriteServer;

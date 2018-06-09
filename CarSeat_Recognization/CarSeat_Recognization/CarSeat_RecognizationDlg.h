@@ -36,19 +36,36 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
 private:
+	CFont m_pFont;
 	CStatic m_ImagePattern;
 	CStatic m_ImageRec;
 
 	CStatic m_barCode;
+	
 	// 显示统计结果，包括成功次数，失败次数，成功率
 	CStatic m_RegRatio;
 
 	size_t m_nSuccessCount;
 	size_t m_nFailCount;
 
-	void displayRecImage(const wchar_t *path);
-	//void 
+
+	//CLog *m_pLog;
+	CParamManager *m_pParamManager;
+	CNetworkTask *m_pNetworkTask;
+	//std::thread m_pUIThread;
+
+	CImageClassify *m_pClassify;
+
+	//void displayRecImage(const wchar_t *path);
+
 
 public:
 	afx_msg void OnUsrinput();
+
+	/*
+	ui界面刷新线程
+	*/
+	void run();
+
+	void SetImageClassify(CImageClassify*pClassify);
 };

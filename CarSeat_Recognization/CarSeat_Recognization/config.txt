@@ -10,7 +10,10 @@ testServerPort=10909
 color={"红","黄","蓝","绿","青","橙","紫"}
 outline={"K216","K215","D2"}
 texture={"真皮","鹿皮","菱形纹理","线性纹理","打孔纹理"}
-kepServerName="WinCC"
+
+kepServerName=WinCC
+kepServerLabel=tag
+
 
 ## ftp登录需要的用户名和账号，以及存储图像的路径
 ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}

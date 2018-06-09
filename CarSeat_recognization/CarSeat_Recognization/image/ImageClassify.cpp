@@ -1,6 +1,5 @@
 #include "ImageClassify.h"
 #include "../common/Log.h"
-//#include <xtr1common>
 
 CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
 #ifdef PYTHON_TENSORFLOW
@@ -53,13 +52,9 @@ bool CImageClassify::initPython(const char *modulName,const char *functionName)
 	sprintf_s(tmpChar, sizeof(tmpChar), "import %s", modulName);
 	PyRun_SimpleString(tmpChar);
 
-	//PyObject *m_pPyName = NULL, *pMoudle = NULL, *m_pPyDict = NULL, *m_pPyFunc = NULL;
-	//PyObject *tmpModel = nullptr;
-
 	m_pPyName = PyUnicode_FromString(modulName);
 	
 	m_pPyModule = PyImport_Import(m_pPyName);
-	//tmpModel = PyImport_ImportModule("label_image_command_line");
 	if (m_pPyModule == nullptr)
 	{
 		WriteError("get moudle handle error");
@@ -147,6 +142,7 @@ void CImageClassify::run()
 				}
 				size_t tmpHashValue = hashValue(tmpPath);
 				m_pType->insert(std::make_pair(tmpHashValue, tmpType));
+
 			}
 		}
 		else

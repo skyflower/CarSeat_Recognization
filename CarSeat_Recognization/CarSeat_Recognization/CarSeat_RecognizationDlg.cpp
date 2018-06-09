@@ -60,6 +60,11 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_nSuccessCount = 0;
 	m_nFailCount = 0;
+	m_pFont.CreatePointFont(24, L"楷体");
+
+	m_pParamManager = nullptr;
+	m_pNetworkTask = nullptr;
+	m_pClassify = nullptr;
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -104,6 +109,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SetIcon(m_hIcon, TRUE);		
 	SetIcon(m_hIcon, FALSE);
+	this->OnSetFont(&m_pFont);
 
 
     // kepserver add start by xiexinpeng	
@@ -111,14 +117,14 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
     COPC Opc;
 	// server name
 	CString Cstr = L"Kepware.KEPServerEX.V5";
-	//wchar_t* opcServer = nullptr;
+	
 	BSTR opcServer = nullptr;
-	//opcServer = new wchar_t[20];
+	
 	opcServer = Cstr.AllocSysString();
 	
 	Opc.AddServerName(opcServer);
 	
-	if( TRUE == Opc.ConnectServer() )
+	if(TRUE == Opc.ConnectServer())
 	{
 		Opc.bOPCConnect=true;
 		CString flag = L"Channel1.Device1.Tag2";
@@ -134,9 +140,12 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	}
 	// add end by xiexinpeng
 
+	CFont* curFont = this->GetFont();
+
+
 	char tmpStr[] = "K215-黑色-菱形纹理";
 	WCHAR result[200];
-	
+
 	m_barCode.SetWindowTextW(L"K215-黑色-菱形纹理");
 		
 	double ratio = 1.0;
@@ -145,11 +154,12 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
 	}
 	memset(result, 0, sizeof(WCHAR) * 200);
-	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%%", m_nSuccessCount, m_nFailCount, ratio);
+	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%", m_nSuccessCount, m_nFailCount, ratio);
 
 	m_RegRatio.SetWindowTextW(result);
 
-	
+	//m_pUIThread = std::thread(run, this);
+
 	return TRUE;  //
 }
 
@@ -196,6 +206,24 @@ HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CCarSeat_RecognizationDlg::run()
+{
+	std::wstring preImagePath;
+	m_pNetworkTask = CNetworkTask::GetInstance();
+	m_pParamManager = CParamManager::GetInstance();
+
+	while (1)
+	{
+		std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
+		break;
+	}
+}
+
+void CCarSeat_RecognizationDlg::SetImageClassify(CImageClassify * pClassify)
+{
+	m_pClassify = pClassify;
+}
 
 void CCarSeat_RecognizationDlg::OnUsrinput()
 {

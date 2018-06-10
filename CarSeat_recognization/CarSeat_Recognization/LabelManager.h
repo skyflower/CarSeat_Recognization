@@ -3,6 +3,8 @@
 #include <cstring>
 #include <unordered_map>
 
+
+
 class CLabelManager
 {
 public:
@@ -10,6 +12,10 @@ public:
 	~CLabelManager();
 	std::wstring GetInternalTypeByBarcode(std::wstring barcode);
 	std::wstring GetInternalTypeByClassifyType(std::wstring type);
+	
+	std::wstring GetExternalTypeByBarcode(std::wstring barcode);
+	std::wstring GetExternalTypeByClassifyType(std::wstring classifyType);
+	
 	std::vector<std::wstring> GetBarcode();
 	std::vector<std::wstring> GetInternalType();
 	std::vector<std::wstring> GetClassifyType();

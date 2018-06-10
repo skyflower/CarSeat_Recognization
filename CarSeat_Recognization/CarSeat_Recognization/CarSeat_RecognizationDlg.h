@@ -49,6 +49,11 @@ private:
 	size_t m_nSuccessCount;
 	size_t m_nFailCount;
 
+	bool m_bThreadStatus;
+
+	/* CImage::Load(filePath)   */
+	// CStatic.SetBitmap((HBITMAP)CImage))
+	//CImage m_image;
 
 	//CLog *m_pLog;
 	CParamManager *m_pParamManager;
@@ -76,4 +81,6 @@ public:
 	void run();
 
 	void SetImageClassify(CImageClassify*pClassify);
+
+	void terminate();
 };

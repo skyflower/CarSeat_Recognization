@@ -202,6 +202,7 @@
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
     <ClInclude Include="common\Log.h" />
+    <ClInclude Include="common\md5.h" />
     <ClInclude Include="common\ParamManager.h" />
     <ClInclude Include="common\utils.h" />
     <ClInclude Include="image\BaseMatch.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
     <ClCompile Include="common\Log.cpp" />
+    <ClCompile Include="common\md5.cpp" />
     <ClCompile Include="common\ParamManager.cpp" />
     <ClCompile Include="common\utils.cpp" />
     <ClCompile Include="image\BaseMatch.cpp" />

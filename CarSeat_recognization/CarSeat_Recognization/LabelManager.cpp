@@ -149,4 +149,40 @@ std::vector<std::wstring> CLabelManager::GetClassifyType()
 	}
 	return pVec;
 }
-
+std::wstring CLabelManager::GetExternalTypeByBarcode(std::wstring barcode)
+{
+	if (m_pBarcode != nullptr)
+	{
+		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->find(barcode);
+		if (iter != m_pBarcode->end())
+		{
+			return iter->second;
+		}
+	}
+	return std::wstring();
+}
+std::wstring CLabelManager::GetExternalTypeByClassifyType(std::wstring classifyType)
+{
+	std::wstring internalType;
+	if (m_pClassifyType != nullptr)
+	{
+		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pClassifyType->find(classifyType);
+		if (iter != m_pClassifyType->end())
+		{
+			internalType = iter->second;
+		}
+	}
+	if (internalType.size() == 0)
+	{
+		return internalType;
+	}
+	if (m_pBarcode != nullptr)
+	{
+		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->find(internalType);
+		if (iter != m_pBarcode->end())
+		{
+			return iter->second;
+		}
+	}
+	return std::wstring();
+}

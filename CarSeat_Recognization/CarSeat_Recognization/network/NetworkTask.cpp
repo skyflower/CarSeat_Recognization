@@ -181,6 +181,7 @@ void CNetworkTask::run()
 {
 	std::chrono::system_clock::time_point preBlood = std::chrono::system_clock::now();
 	message tmpMsg;
+	message recvMsg;
 	while (m_bThreadStatus)
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
@@ -193,13 +194,15 @@ void CNetworkTask::run()
 			std::unique_lock<std::mutex> lock(m_MutexMsg, std::defer_lock);
 			if (lock.try_lock())
 			{
-				if ((m_pMsgQueue[m_nOut].serverIp == -1) && (m_pMsgQueue[m_nOut].serverPort == -1))
+				memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
+				m_nOut--;
+				m_nMsgSize--;
+				if ((tmpMsg.serverIp == -1) && (tmpMsg.serverPort == -1))
 				{
-					memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
-					m_nOut--;
-					m_nMsgSize--;
 					break;
 				}
+				size_t recvLength = 0;
+				__sendToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.data, strlen(tmpMsg.data), recvMsg.data, recvLength);
 			}
 		}
 		///////////////////////////

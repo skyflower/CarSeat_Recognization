@@ -100,7 +100,6 @@ private:
 	std::wstring m_szImagePath;
 
 
-
 	static CNetworkTask *m_pInstance;
 	bool m_bThreadStatus;
 	CCamera m_Camera;

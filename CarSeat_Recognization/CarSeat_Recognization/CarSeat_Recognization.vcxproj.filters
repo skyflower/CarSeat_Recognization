@@ -102,6 +102,9 @@
     <ClInclude Include="LabelManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="common\md5.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -172,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="LabelManager.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\md5.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -55,19 +55,20 @@ END_DHTML_EVENT_MAP()
 
 
 CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
-	: CDHtmlDialog(IDD_CARSEAT_RECOGNIZATION_DIALOG, IDR_HTML_CARSEAT_RECOGNIZATION_DIALOG, pParent)
+	: CDHtmlDialog(IDD_CARSEAT_RECOGNIZATION_DIALOG, IDR_HTML_CARSEAT_RECOGNIZATION_DIALOG, pParent),
+	m_bThreadStatus(true),
+	m_nSuccessCount(0),
+	m_nFailCount(0),
+	m_pParamManager(nullptr),
+	m_pNetworkTask(nullptr),
+	m_pClassify(nullptr)
+
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_nSuccessCount = 0;
-	m_nFailCount = 0;
+	
 	m_pFont.CreatePointFont(24, L"楷体");
 
-	m_pParamManager = nullptr;
-	m_pNetworkTask = nullptr;
-	m_pClassify = nullptr;
-
-	m_pLabelManager = new CLabelManager();
-	
+	m_pLabelManager = new CLabelManager();	
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -220,7 +221,7 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		return;
 	}
-	while (1)
+	while (m_bThreadStatus)
 	{
 		std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
 		if (preImagePath != currentImage)
@@ -233,8 +234,10 @@ void CCarSeat_RecognizationDlg::run()
 				CheckAndUpdate(barcode, type);
 			}
 		}
+		
 
-		break;
+		////// not implement send to server
+		//
 
 	}
 }
@@ -242,6 +245,11 @@ void CCarSeat_RecognizationDlg::run()
 void CCarSeat_RecognizationDlg::SetImageClassify(CImageClassify * pClassify)
 {
 	m_pClassify = pClassify;
+}
+
+void CCarSeat_RecognizationDlg::terminate()
+{
+	m_bThreadStatus = false;
 }
 
 void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstring type)
@@ -252,6 +260,11 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	*/
 	std::wstring barInternalType = m_pLabelManager->GetInternalTypeByBarcode(barcode);
 	std::wstring typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(type);
+	std::wstring reType;
+
+	wchar_t result[MAX_CHAR_LENGTH] = { 0 };
+	CNetworkTask::message msg;
+	bool bUsrInput = true;
 	if (barInternalType != typeInternalType)
 	{
 		/*
@@ -264,16 +277,30 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		
 		if (msg == IDOK)
 		{
-			std::wstring reType = dlg.GetInputType();
-
+			reType = dlg.GetInputType();
 		}
+		////// send message to server
+		////
+		///  not implement
 	}
 	else
 	{
 		m_nSuccessCount++;
+		////// send message to server
+		////
+		///  not implement
 	}
 
+	
+	float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
 
+	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%2f", m_nSuccessCount, m_nFailCount, ratio);
+	m_RegRatio.SetWindowTextW(result);
+
+
+	memset(result, 0, sizeof(result));
+	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", barcode, type, reType);
+	m_barCode.SetWindowTextW(result);
 }
 
 void CCarSeat_RecognizationDlg::OnUsrinput()

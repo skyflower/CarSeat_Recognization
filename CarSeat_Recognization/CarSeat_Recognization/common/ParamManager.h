@@ -26,9 +26,6 @@ public:
 	unsigned int GetTestClientPort();
 
 	std::vector<std::wstring> *GetFtpParameter();
-	std::vector<std::wstring> *GetOutlineParameter();
-	std::vector<std::wstring> *GetTextureParameter();
-	std::vector<std::wstring> *GetColorParameter();
 	std::wstring FindCameraByLineID(std::wstring lineID);
 
 	unsigned int GetBarcodeIp();
@@ -45,12 +42,7 @@ private:
 	static CParamManager *m_pInstance;
 
 	void Init();
-	bool parseVector(const char *content, const char*name, std::vector<std::wstring> *pVector);
-	bool parseLineSegment(const char *name, size_t, std::vector<std::wstring> *pVec);
-	int parseIp(const char *content, const char *name);
-	int parseMap(const char*content, const char*name, std::unordered_map<std::wstring, std::wstring>*pMap);
-
-	bool getValueByName(const char *content, const char*name, char*value);
+	
 
 	unsigned int __auxLocalIP();
 
@@ -77,15 +69,6 @@ private:
 
 	// 本机名
 	std::wstring m_strLocalName;
-
-	// 颜色选项
-	std::vector<std::wstring> *m_pColor;
-
-	// 汽车座椅外形
-	std::vector<std::wstring> *m_pOutline;
-
-	//汽车座椅纹理类型
-	std::vector<std::wstring> *m_pTexture;
 
 	//ftp用户名密码以及图像的存储路径
 	std::vector<std::wstring> *m_pFtp;

@@ -65,6 +65,9 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pParamManager = nullptr;
 	m_pNetworkTask = nullptr;
 	m_pClassify = nullptr;
+
+	m_pLabelManager = new CLabelManager();
+	
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -210,13 +213,29 @@ HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 void CCarSeat_RecognizationDlg::run()
 {
 	std::wstring preImagePath;
+	std::wstring barcode;
 	m_pNetworkTask = CNetworkTask::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
-
+	if ((m_pNetworkTask == nullptr) || (m_pParamManager == nullptr))
+	{
+		return;
+	}
 	while (1)
 	{
 		std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
+		if (preImagePath != currentImage)
+		{
+			barcode = m_pNetworkTask->GetCurrentBarcode();
+			std::string szCurImage = utils::WStrToStr(currentImage);
+			std::wstring type = m_pClassify->GetImageType(szCurImage.c_str());
+			if (type.size() != 0)
+			{
+				CheckAndUpdate(barcode, type);
+			}
+		}
+
 		break;
+
 	}
 }
 
@@ -225,16 +244,46 @@ void CCarSeat_RecognizationDlg::SetImageClassify(CImageClassify * pClassify)
 	m_pClassify = pClassify;
 }
 
+void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstring type)
+{
+	/*
+	先将barcode转换成和type一致的类型，然后比较，然后刷新界面，如果错误，则弹出对话框，人工干预
+	
+	*/
+	std::wstring barInternalType = m_pLabelManager->GetInternalTypeByBarcode(barcode);
+	std::wstring typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(type);
+	if (barInternalType != typeInternalType)
+	{
+		/*
+		添加报警系统，以及人工输入代码
+		*/
+		//m_nFailCount;
+		CInputDlg dlg;
+		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
+		INT_PTR msg = dlg.DoModal();
+		
+		if (msg == IDOK)
+		{
+			std::wstring reType = dlg.GetInputType();
+
+		}
+	}
+	else
+	{
+		m_nSuccessCount++;
+	}
+
+
+}
+
 void CCarSeat_RecognizationDlg::OnUsrinput()
 {
 	// TODO: 在此添加命令处理程序代码
 	CInputDlg dlg;
+	dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
 	INT_PTR msg = dlg.DoModal();
-	if (msg == IDOK)
-	{
 
-	}
-	else if(msg == IDCANCEL)
+	if (msg == IDOK)
 	{
 
 	}

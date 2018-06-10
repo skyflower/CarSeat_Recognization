@@ -1,5 +1,7 @@
 #pragma once
 #include "afxwin.h"
+#include "./common/ParamManager.h"
+#include "LabelManager.h"
 
 
 // CInputDlg ¶Ô»°¿ò
@@ -22,13 +24,19 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 private:
-	CComboBox m_ColorCombo;
-
-	CComboBox m_OutlineCombo;
-	CComboBox m_TexCombo;
+	
 	CStatic m_StPatternImage;
-private:
+
 	CStatic m_StTestImage;
+	CParamManager *m_pParamManager;
+	CLabelManager *m_pLabelManager;
+
 public:
 	virtual BOOL OnInitDialog();
+
+	std::wstring GetInputType();
+
+	void SetManagePointer(CParamManager *pParamManager, CLabelManager *pLabelManager);
+private:
+	CComboBox m_TypeCombo;
 };

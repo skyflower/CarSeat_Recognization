@@ -4,6 +4,7 @@
 
 #pragma once
 #include "afxwin.h"
+#include "LabelManager.h"
 
 
 // CCarSeat_RecognizationDlg ¶Ô»°¿ò
@@ -55,8 +56,15 @@ private:
 	//std::thread m_pUIThread;
 
 	CImageClassify *m_pClassify;
+	CLabelManager *m_pLabelManager;
+
+	//CLabelManager *m_pLabelManager;
+
 
 	//void displayRecImage(const wchar_t *path);
+
+	void CheckAndUpdate(std::wstring barcode, std::wstring type);
+	
 
 
 public:

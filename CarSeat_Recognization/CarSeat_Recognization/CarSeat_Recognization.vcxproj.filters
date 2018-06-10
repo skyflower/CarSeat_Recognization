@@ -99,6 +99,9 @@
     <ClInclude Include="kepserver\opcda.h">
       <Filter>kepserver</Filter>
     </ClInclude>
+    <ClInclude Include="LabelManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="kepserver\opcda_i.c">
       <Filter>kepserver</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelManager.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

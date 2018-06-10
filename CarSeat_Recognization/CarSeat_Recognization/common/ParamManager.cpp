@@ -10,9 +10,6 @@
 CParamManager *CParamManager::m_pInstance = nullptr;
 
 CParamManager::CParamManager() :
-m_pColor(nullptr),
-m_pOutline(nullptr),
-m_pTexture(nullptr),
 m_pFtp(nullptr),
 m_pLineCamera(nullptr),
 m_nLocalIp(-1),
@@ -29,24 +26,6 @@ m_nBarcodePort(-1)
 
 CParamManager::~CParamManager()
 {
-	if (m_pColor != nullptr)
-	{
-		m_pColor->clear();
-		delete m_pColor;
-		m_pColor = nullptr;
-	}
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->clear();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
-	if (m_pOutline != nullptr)
-	{
-		m_pOutline->clear();
-		delete m_pOutline;
-		m_pOutline = nullptr;
-	}
 	if (m_pFtp != nullptr)
 	{
 		m_pFtp->clear();
@@ -171,20 +150,6 @@ std::vector<std::wstring>* CParamManager::GetFtpParameter()
 	return m_pFtp;
 }
 
-std::vector<std::wstring>* CParamManager::GetOutlineParameter()
-{
-	return m_pOutline;
-}
-
-std::vector<std::wstring>* CParamManager::GetTextureParameter()
-{
-	return m_pTexture;
-}
-
-std::vector<std::wstring>* CParamManager::GetColorParameter()
-{
-	return m_pColor;
-}
 
 std::wstring CParamManager::FindCameraByLineID(std::wstring lineID)
 {
@@ -236,38 +201,11 @@ void CParamManager::Init()
 		fseek(fp, 0, SEEK_SET);
 		fread_s(content, length, 1, length, fp);
 		
-		if (m_pColor == nullptr)
-		{
-			m_pColor = new std::vector<std::wstring>;
-		}
-		ret = parseVector(content, "color", m_pColor);
-		if (ret == false)
-		{
-			TRACE0("init color Failed\n");
-		}
-		if (m_pOutline == nullptr)
-		{
-			m_pOutline = new std::vector<std::wstring>;
-		}
-		ret = parseVector(content, "outline", m_pOutline);
-		if (ret == false)
-		{
-			TRACE0("out line init Failed\n");
-		}
-		if (m_pTexture == nullptr)
-		{
-			m_pTexture = new std::vector<std::wstring>;
-		}
-		ret = parseVector(content, "texture", m_pTexture);
-		if (ret == false)
-		{
-			TRACE0("texture init Failed\n");
-		}
 		if (m_pFtp == nullptr)
 		{
 			m_pFtp = new std::vector<std::wstring>;
 		}
-		ret = parseVector(content, "ftpLogin", m_pFtp);
+		ret = utils::parseVector(content, "ftpLogin", m_pFtp);
 		if(ret == false)
 		{
 			WriteError("ftp Parameter init Failed");
@@ -276,27 +214,27 @@ void CParamManager::Init()
 		{
 			m_pLineCamera = new std::unordered_map<std::wstring, std::wstring>;
 		}
-		parseMap(content, "lineCamera", m_pLineCamera);
+		utils::parseMap(content, "lineCamera", m_pLineCamera);
 		if ((m_pLineCamera == nullptr) || (m_pLineCamera->size() == 0))
 		{
 			WriteError("line Camera init Failed");
 		}
 
-		unsigned int tmpLocal = parseIp(content, "serverip");
+		unsigned int tmpLocal = utils::parseIp(content, "serverip");
 		if (tmpLocal == 0)
 		{
 			TRACE0("get ServerIp Failed\n");
 		}
 		m_nServerIp = tmpLocal;
 
-		tmpLocal = parseIp(content, "barcodeIp");
+		tmpLocal = utils::parseIp(content, "barcodeIp");
 		if (tmpLocal == 0)
 		{
 			TRACE0("get barcodeIp Failed\n");
 		}
 		m_nBarcodeIp = tmpLocal;
 
-		tmpLocal = parseIp(content, "barcodePort");
+		tmpLocal = utils::parseIp(content, "barcodePort");
 		if (tmpLocal == 0)
 		{
 			TRACE0("get barcodeIp Failed\n");
@@ -305,30 +243,30 @@ void CParamManager::Init()
 
 
 		char tmpStr[MAX_CHAR_LENGTH] = { 0 };
-		if (getValueByName(content, "serverport", tmpStr) == true)
+		if (utils::getValueByName(content, "serverport", tmpStr) == true)
 		{
 			m_nServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
-		if (getValueByName(content, "testClientPort", tmpStr) == true)
+		if (utils::getValueByName(content, "testClientPort", tmpStr) == true)
 		{
 			m_nTestClientPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
-		if (getValueByName(content, "testServerPort", tmpStr) == true)
+		if (utils::getValueByName(content, "testServerPort", tmpStr) == true)
 		{
 			m_nTestServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
-		if (getValueByName(content, "graphFile", tmpStr) == true)
+		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
 		{
 			m_szGraphFile = std::string(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
-		if (getValueByName(content, "labelFile", tmpStr) == true)
+		if (utils::getValueByName(content, "labelFile", tmpStr) == true)
 		{
 			m_szLabelFile = std::string(tmpStr);
 		}
@@ -348,205 +286,4 @@ void CParamManager::Init()
 		m_nLocalIp = tmpLocal;
 	}
 }
-
-bool CParamManager::parseVector(const char *content, const char * name, std::vector<std::wstring>* pVector)
-{
-	if ((content == nullptr) || (name == nullptr) || (pVector == nullptr))
-	{
-		return false;
-	}
-	char *p = const_cast<char*>(strstr(content, name));
-	if (p != NULL)
-	{
-		char *line = strchr(p, '=');
-		char *end = strchr(p, '\n');
-		if ((line != NULL) && (end != NULL))
-		{
-
-#if _DEBUG
-
-			char tmpStr[100] = { 0 };
-			memcpy(tmpStr, line + 1, end - line - 1);
-			//setlocale(LC_ALL, "chs");
-			TRACE2("name = %s, tmpStr = %s\n", name, tmpStr);
-
-#endif
-			if (parseLineSegment(line + 1, end - line - 1, pVector) == true)
-			{
-#if _DEBUG
-				for (auto &k : *pVector)
-				{
-					TRACE2("name = %s, value = %s\n", name, k);
-				}
-#endif // _DEBUG
-
-				
-			}
-		}
-	}
-	return true;
-}
-
-bool CParamManager::parseLineSegment(const char * pContent, size_t length, std::vector<std::wstring>* pData)
-{
-	if ((pContent == nullptr) || (length < 1) || (pData == nullptr))
-	{
-		return false;
-	}
-
-	char *p = const_cast<char*>(pContent);
-	char tmpStr[100];
-	char c = '\"';
-	while (p < pContent + length)
-	{
-		char* begin = strchr(p, c);
-		if ((begin == NULL) || (begin >= pContent + length))
-		{
-			break;
-		}
-		char* end = strchr(begin + 1, c);
-		if ((end == NULL) || (end >= pContent + length))
-		{
-			break;
-		}
-		p = end + 1;
-		if (end - begin - 1 != 0)
-		{
-			memset(tmpStr, 0, sizeof(tmpStr));
-			memcpy(tmpStr, begin + 1, sizeof(char)*(end - begin - 1));
-			wchar_t *wchar = utils::CharToWchar(tmpStr);
-			if (wchar == nullptr)
-			{
-				continue;
-			}
-			std::wstring wStr(wchar);
-			pData->push_back(wStr);
-			if (wchar != nullptr)
-			{
-				delete[]wchar;
-				wchar = nullptr;
-			}
-		}
-	}
-	return true;
-}
-
-int CParamManager::parseIp(const char * content, const char * name)
-{
-	if ((content == nullptr) || (name == nullptr))
-	{
-		return 0;
-	}
-	char *p = const_cast<char*>(strstr(content, name));
-	if (p == nullptr)
-	{
-		return 0;
-	}
-	const char *quote = strchr(content, '=');
-	if (quote == nullptr)
-	{
-		return 0;
-	}
-	const char *endline = strchr(quote + 1, '\n');
-	char str[100];
-	memset(str, 0, sizeof(str));
-	memcpy(str, quote + 1, endline - quote - 1);
-	TRACE1("ServerIp = %s", str);
-	unsigned int one = 0;
-	unsigned int two = 0;
-	unsigned int three = 0;
-	unsigned int four = 0;
-	sscanf_s(str, "%d.%d.%d.%d", &one, &two, &three, &four);
-	unsigned int tmpServerIp = (one << 24) | (two << 16) | (three << 8) | four;
-
-	return tmpServerIp;
-}
-
-int CParamManager::parseMap(const char * content, const char * name, std::unordered_map<std::wstring, std::wstring>* pMap)
-{
-	if ((content == nullptr) || (name == nullptr) || (pMap == nullptr))
-	{
-		return 0;
-	}
-	const char *p = strstr(content, name);
-	if (p == nullptr)
-	{
-		return 0;
-	}
-	const char *endLine = strchr(p, '\n');
-	if (endLine == nullptr)
-	{
-		return 0;
-	}
-	char tmpStr[20] = { 0 };
-	while (p < endLine)
-	{
-		const char *first = strchr(p, '\"');
-		if ((first > endLine) || (first == nullptr))
-		{
-			return pMap->size();
-		}
-		const char *second = strchr(first + 1, '\"');
-		if ((second > endLine) || (second == nullptr))
-		{
-			return pMap->size();
-		}
-		memset(tmpStr, 0, sizeof(tmpStr));
-		memcpy(tmpStr, first, second - first);
-		std::string keyChar(tmpStr);
-		std::wstring keyWChar = utils::StrToWStr(keyChar);
-
-		p = second + 1;
-
-		first = strchr(p, '\"');
-		if ((first > endLine) || (first == nullptr))
-		{
-			return pMap->size();
-		}
-		second = strchr(first + 1, '\"');
-		if ((second > endLine) || (second == nullptr))
-		{
-			return pMap->size();
-		}
-		memset(tmpStr, 0, sizeof(tmpStr));
-		memcpy(tmpStr, first, second - first);
-		std::string valueChar(tmpStr);
-		std::wstring valueWChar = utils::StrToWStr(valueChar);
-
-		pMap->insert(std::make_pair(keyWChar, valueWChar));
-
-		p = second + 1;
-
-	}
-
-	return pMap->size();
-}
-
-bool CParamManager::getValueByName(const char *content, const char * name, char * value)
-{
-	if ((name == nullptr) || (value == nullptr) || (content == nullptr))
-	{
-		return false;
-	}
-
-	char *p = strstr(const_cast<char*>(content), name);
-	if (p == NULL)
-	{
-		return false;
-	}
-	char *lineEnd = strstr(p, "\n");
-	if (lineEnd == NULL)
-	{
-		return false;
-	}
-	char *begin = strstr(p + 1, "=");
-	if ((begin == NULL) || (begin >= lineEnd))
-	{
-		return false;
-	}
-	memcpy_s(value, MAX_CHAR_LENGTH, begin + 1, lineEnd - begin - 1);
-
-	return true;
-}
-
 

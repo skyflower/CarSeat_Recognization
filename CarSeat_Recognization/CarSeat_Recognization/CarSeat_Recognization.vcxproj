@@ -215,6 +215,7 @@
     <ClInclude Include="kepserver\OPC.h" />
     <ClInclude Include="kepserver\opccomn.h" />
     <ClInclude Include="kepserver\opcda.h" />
+    <ClInclude Include="LabelManager.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="kepserver\OPC.cpp" />
     <ClCompile Include="kepserver\opccomn_i.c" />
     <ClCompile Include="kepserver\opcda_i.c" />
+    <ClCompile Include="LabelManager.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

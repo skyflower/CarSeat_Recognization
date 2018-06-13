@@ -94,18 +94,18 @@ def dir_statics(dir_path):
 if __name__ == "__main__":
 
     # PATH_TO_TEST_IMAGES_DIR = 'F:\\tmp\\test_picture'
-    PATH_TO_TEST_IMAGES_DIR = r'/home/yqw/YiTuClassify0409/Picture/training20180501'
+    PATH_TO_TEST_IMAGES_DIR = r'/home/yqw/CarSeat_Recognization_Picture/backupImage'
     class_names = os.listdir(PATH_TO_TEST_IMAGES_DIR)
     # IMAGES = os.listdir(PATH_TO_TEST_IMAGES_DIR)
     if len(class_names) == 0:
         tf.logging.warning('No files found')
     model_file = \
-        r'/home/yqw/YiTuClassify0409/训练结果集合/0515-94.9%-4500-training20180508-save/output_graph.pb'
+        r'/home/yqw/CarSeat_Recognization/CarSeat_Recognization/Recognization_module/output_graph.pb'
 
     # 'F:\\Project\\Project\\YiTuClassify\\tmp\\output_graph.pb'
     graph = load_graph(model_file)
     # label_file = "F:\\Project\\Project\\YiTuClassify\\tmp\\output_labels.txt"
-    label_file = r"/home/yqw/YiTuClassify0409/训练结果集合/0515-94.9%-4500-training20180508-save/output_labels.txt"
+    label_file = r"/home/yqw/CarSeat_Recognization/CarSeat_Recognization/Recognization_module/output_labels.txt"
     input_height = 299
     input_width = 299
     input_mean = 128

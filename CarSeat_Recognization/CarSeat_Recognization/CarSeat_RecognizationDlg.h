@@ -22,8 +22,6 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
-	//HRESULT OnButtonOK(IHTMLElement *pElement);
-	//HRESULT OnButtonCancel(IHTMLElement *pElement);
 
 // 实现
 protected:

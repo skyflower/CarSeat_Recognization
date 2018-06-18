@@ -46,7 +46,7 @@ BEGIN
     "\r\n"
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
-    "#include ""res\\Query_module.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""res\\Query_Module.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
     "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
     "#if !defined(_AFXDLL)\r\n"
     "#include ""l.CHS\\afxprint.rc""        // 打印/打印预览资源\r\n"
@@ -69,7 +69,7 @@ END
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
-IDR_MAINFRAME           ICON         "res\\Query_module.ico"
+IDR_MAINFRAME           ICON         "res\\Query_Module.ico"
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,6 +79,12 @@ IDR_MAINFRAME           ICON         "res\\Query_module.ico"
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+IDB_MAIN                BITMAP                  "res\\main.bmp"
+IDB_FILELARGE           BITMAP                  "res\\filelarge.bmp"
+IDB_FILESMALL           BITMAP                  "res\\filesmall.bmp"
+IDB_WRITELARGE          BITMAP                  "res\\writelarge.bmp"
+IDB_WRITESMALL          BITMAP                  "res\\writesmall.bmp"
+IDB_BUTTONS             BITMAP                  "res\\buttons.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -126,35 +132,15 @@ BEGIN
     END
     POPUP "视图(&V)"
     BEGIN
-        POPUP "工具栏和停靠窗口(&T)"
-        BEGIN
-            MENUITEM "<占位符>",           ID_VIEW_TOOLBAR
-        END
         MENUITEM "状态栏(&S)",                 ID_VIEW_STATUS_BAR
-        POPUP "应用程序外观(&A)"
-        BEGIN
-            MENUITEM "Windows 2000(&2)",           ID_VIEW_APPLOOK_WIN_2000
-            MENUITEM "Office XP(&X)",              ID_VIEW_APPLOOK_OFF_XP
-            MENUITEM "Windows XP(&W)",             ID_VIEW_APPLOOK_WIN_XP
-            MENUITEM "Office 2003(&3)",            ID_VIEW_APPLOOK_OFF_2003
-            MENUITEM "Visual Studio 200&5",     ID_VIEW_APPLOOK_VS_2005
-            MENUITEM "Visual Studio 200&8",     ID_VIEW_APPLOOK_VS_2008
-            POPUP "Office 2007(&7)"
-            BEGIN
-                MENUITEM "蓝色样式(&B)",         ID_VIEW_APPLOOK_OFF_2007_BLUE
-                MENUITEM "黑色样式(&L)",        ID_VIEW_APPLOOK_OFF_2007_BLACK
-                MENUITEM "银色样式(&S)",       ID_VIEW_APPLOOK_OFF_2007_SILVER
-                MENUITEM "水绿色样式(&A)",         ID_VIEW_APPLOOK_OFF_2007_AQUA
-            END
-        END
     END
     POPUP "帮助(&H)"
     BEGIN
-        MENUITEM "关于 Query_module(&A)...",          ID_APP_ABOUT
+        MENUITEM "关于 Query_Module(&A)...",          ID_APP_ABOUT
     END
 END
 
-IDR_Query_moduleTYPE MENU
+IDR_Query_ModuleTYPE MENU
 BEGIN
     POPUP "文件(&F)"
     BEGIN
@@ -173,31 +159,11 @@ BEGIN
     END
     POPUP "视图(&V)"
     BEGIN
-        POPUP "工具栏和停靠窗口(&T)"
-        BEGIN
-            MENUITEM "<占位符>",           ID_VIEW_TOOLBAR
-        END
         MENUITEM "状态栏(&S)",                 ID_VIEW_STATUS_BAR
-        POPUP "应用程序外观(&A)"
-        BEGIN
-            MENUITEM "Windows 2000(&2)",           ID_VIEW_APPLOOK_WIN_2000
-            MENUITEM "Office XP(&X)",              ID_VIEW_APPLOOK_OFF_XP
-            MENUITEM "Windows XP(&W)",             ID_VIEW_APPLOOK_WIN_XP
-            MENUITEM "Office 2003(&3)",            ID_VIEW_APPLOOK_OFF_2003
-            MENUITEM "Visual Studio 200&5",     ID_VIEW_APPLOOK_VS_2005
-            MENUITEM "Visual Studio 200&8",     ID_VIEW_APPLOOK_VS_2008
-            POPUP "Office 2007(&7)"
-            BEGIN
-                MENUITEM "蓝色样式(&B)",         ID_VIEW_APPLOOK_OFF_2007_BLUE
-                MENUITEM "黑色样式(&L)",        ID_VIEW_APPLOOK_OFF_2007_BLACK
-                MENUITEM "银色样式(&S)",       ID_VIEW_APPLOOK_OFF_2007_SILVER
-                MENUITEM "水绿色样式(&A)",         ID_VIEW_APPLOOK_OFF_2007_AQUA
-            END
-        END
     END
     POPUP "帮助(&H)"
     BEGIN
-        MENUITEM "关于 Query_module(&A)...",          ID_APP_ABOUT
+        MENUITEM "关于 Query_Module(&A)...",          ID_APP_ABOUT
     END
 END
 
@@ -214,18 +180,14 @@ BEGIN
     END
 END
 
-IDR_HELP_MENU MENU 
+IDR_WINDOWS_MENU MENU
 BEGIN
-    MENUITEM "关于 Query_module(&A)...",          ID_APP_ABOUT
+    MENUITEM "新建窗口(&N)",                 ID_WINDOW_NEW
 END
 
-IDR_THEME_MENU MENU
+IDR_HELP_MENU MENU 
 BEGIN
-    MENUITEM "Office 2007 (蓝色样式)(&B)",       ID_VIEW_APPLOOK_OFF_2007_BLUE
-    MENUITEM "Office 2007 (黑色样式)(&L)",      ID_VIEW_APPLOOK_OFF_2007_BLACK
-    MENUITEM "Office 2007 (银色样式)(&S)",     ID_VIEW_APPLOOK_OFF_2007_SILVER
-    MENUITEM "Office 2007 (水绿色样式)(&A)",       ID_VIEW_APPLOOK_OFF_2007_AQUA
-    MENUITEM "Windows 7(&D)",                      ID_VIEW_APPLOOK_WINDOWS_7
+    MENUITEM "关于 Query_Module(&A)...",          ID_APP_ABOUT
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -258,11 +220,11 @@ END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "关于 Query_module"
+CAPTION "关于 Query_Module"
 FONT 9, "MS Shell Dlg"
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
-    LTEXT           "Query_module，1.0 版",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Query_Module，1.0 版",IDC_STATIC,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2018",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
 END
@@ -292,11 +254,11 @@ BEGIN
         BLOCK "080404B0"
         BEGIN
             VALUE "CompanyName", "TODO: <公司名>"
-            VALUE "FileDescription", "Query_module"
+            VALUE "FileDescription", "Query_Module"
             VALUE "FileVersion",     "1.0.0.1"
-            VALUE "InternalName",    "Query_module.exe"
+            VALUE "InternalName",    "Query_Module.exe"
             VALUE "LegalCopyright", "TODO:  (C) <公司名>。  保留所有权利。"
-            VALUE "OriginalFilename","Query_module.exe"
+            VALUE "OriginalFilename","Query_Module.exe"
             VALUE "ProductName", "TODO: <产品名>"
             VALUE "ProductVersion",  "1.0.0.1"
         END
@@ -338,12 +300,12 @@ END
 STRINGTABLE
 BEGIN
 // 非 Mac 应用程序将移除额外的两个子字符串
-    IDR_MAINFRAME           "Query_module"
-    IDR_Query_moduleTYPE         "\nQuery_module\nQuery_module"
+    IDR_MAINFRAME           "Query_Module"
+    IDR_Query_ModuleTYPE         "\nQuery_Module\nQuery_Module"
 END
 STRINGTABLE
 BEGIN
-    AFX_IDS_APP_TITLE       "Query_module"
+    AFX_IDS_APP_TITLE       "Query_Module"
     AFX_IDS_IDLEMESSAGE     "就绪"
 END
 STRINGTABLE
@@ -379,6 +341,7 @@ BEGIN
     ID_EDIT_SELECT_ALL      "选定整个文档\n全选"
     ID_EDIT_UNDO            "撤消上一操作\n撤消"
     ID_EDIT_REDO            "重做上次撤消的操作\n重做"
+    ID_VIEW_TOOLBAR         "显示或隐藏工具栏\n切换工具栏"
     ID_VIEW_STATUS_BAR      "显示或隐藏状态栏\n切换状态栏"
 END
 
@@ -401,11 +364,17 @@ STRINGTABLE
 BEGIN
     IDS_STATUS_PANE1        "窗格 1"
     IDS_STATUS_PANE2        "窗格 2"
-    IDS_TOOLBAR_STANDARD    "标准"
-    IDS_TOOLBAR_CUSTOMIZE   "自定义..."
     ID_WINDOW_MANAGER       "窗口(&W)..."
     IDS_EDIT_MENU           "编辑"
 END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 功能区
+//
+
+IDR_RIBBON             RT_RIBBON_XML           "res\\ribbon.mfcribbon-ms"
+
 #endif
 
 #ifndef APSTUDIO_INVOKED
@@ -420,7 +389,7 @@ END
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
-#include "res\\Query_module.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "res\\Query_Module.rc2"  // 非 Microsoft Visual C++ 编辑的资源
 #include "l.CHS\\afxres.rc"      // 标准组件
 #if !defined(_AFXDLL)
 #include "l.CHS\\afxprint.rc"        // 打印/打印预览资源

@@ -1,11 +1,21 @@
+// 这段 MFC 示例源代码演示如何使用 MFC Microsoft Office Fluent 用户界面 
+// (“Fluent UI”)。该示例仅供参考，
+// 用以补充《Microsoft 基础类参考》和 
+// MFC C++ 库软件随附的相关电子文档。  
+// 复制、使用或分发 Fluent UI 的许可条款是单独提供的。  
+// 若要了解有关 Fluent UI 许可计划的详细信息，请访问 
+// http://go.microsoft.com/fwlink/?LinkId=238214。
+//
+// 版权所有(C) Microsoft Corporation
+// 保留所有权利。
 
-// Query_module.cpp : 定义应用程序的类行为。
+// Query_Module.cpp : 定义应用程序的类行为。
 //
 
 #include "stdafx.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
-#include "Query_module.h"
+#include "Query_Module.h"
 #include "MainFrm.h"
 
 #include "ChildFrm.h"
@@ -15,20 +25,18 @@
 #endif
 
 
-// CQuery_moduleApp
+// CQuery_ModuleApp
 
-BEGIN_MESSAGE_MAP(CQuery_moduleApp, CWinAppEx)
-	ON_COMMAND(ID_APP_ABOUT, &CQuery_moduleApp::OnAppAbout)
-	ON_COMMAND(ID_FILE_NEW, &CQuery_moduleApp::OnFileNew)
+BEGIN_MESSAGE_MAP(CQuery_ModuleApp, CWinAppEx)
+	ON_COMMAND(ID_APP_ABOUT, &CQuery_ModuleApp::OnAppAbout)
+	ON_COMMAND(ID_FILE_NEW, &CQuery_ModuleApp::OnFileNew)
 END_MESSAGE_MAP()
 
 
-// CQuery_moduleApp 构造
+// CQuery_ModuleApp 构造
 
-CQuery_moduleApp::CQuery_moduleApp()
+CQuery_ModuleApp::CQuery_ModuleApp()
 {
-	m_bHiColorIcons = TRUE;
-
 	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 #ifdef _MANAGED
@@ -40,20 +48,20 @@ CQuery_moduleApp::CQuery_moduleApp()
 
 	// TODO: 将以下应用程序 ID 字符串替换为唯一的 ID 字符串；建议的字符串格式
 	//为 CompanyName.ProductName.SubProduct.VersionInformation
-	SetAppID(_T("Query_module.AppID.NoVersion"));
+	SetAppID(_T("Query_Module.AppID.NoVersion"));
 
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
-// 唯一的一个 CQuery_moduleApp 对象
+// 唯一的一个 CQuery_ModuleApp 对象
 
-CQuery_moduleApp theApp;
+CQuery_ModuleApp theApp;
 
 
-// CQuery_moduleApp 初始化
+// CQuery_ModuleApp 初始化
 
-BOOL CQuery_moduleApp::InitInstance()
+BOOL CQuery_ModuleApp::InitInstance()
 {
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
@@ -120,8 +128,8 @@ BOOL CQuery_moduleApp::InitInstance()
 	//TODO: 添加附加成员变量，并加载对
 	//	应用程序可能需要的附加菜单类型的调用
 	HINSTANCE hInst = AfxGetResourceHandle();
-	m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_Query_moduleTYPE));
-	m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_Query_moduleTYPE));
+	m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
+	m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
 
 
 
@@ -133,7 +141,7 @@ BOOL CQuery_moduleApp::InitInstance()
 	return TRUE;
 }
 
-int CQuery_moduleApp::ExitInstance()
+int CQuery_ModuleApp::ExitInstance()
 {
 	//TODO: 处理可能已添加的附加资源
 	if (m_hMDIMenu != NULL)
@@ -146,15 +154,15 @@ int CQuery_moduleApp::ExitInstance()
 	return CWinAppEx::ExitInstance();
 }
 
-// CQuery_moduleApp 消息处理程序
+// CQuery_ModuleApp 消息处理程序
 
-void CQuery_moduleApp::OnFileNew() 
+void CQuery_ModuleApp::OnFileNew() 
 {
 	CMainFrame* pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
 	pFrame->LockWindowUpdate();
 	// 创建新的 MDI 子窗口
 	pFrame->CreateNewChild(
-		RUNTIME_CLASS(CChildFrame), IDR_Query_moduleTYPE, m_hMDIMenu, m_hMDIAccel);
+		RUNTIME_CLASS(CChildFrame), IDR_Query_ModuleTYPE, m_hMDIMenu, m_hMDIAccel);
 	pFrame->UnlockWindowUpdate();
 }
 
@@ -191,15 +199,15 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 // 用于运行对话框的应用程序命令
-void CQuery_moduleApp::OnAppAbout()
+void CQuery_ModuleApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-// CQuery_moduleApp 自定义加载/保存方法
+// CQuery_ModuleApp 自定义加载/保存方法
 
-void CQuery_moduleApp::PreLoadState()
+void CQuery_ModuleApp::PreLoadState()
 {
 	BOOL bNameValid;
 	CString strName;
@@ -208,15 +216,15 @@ void CQuery_moduleApp::PreLoadState()
 	GetContextMenuManager()->AddMenu(strName, IDR_POPUP_EDIT);
 }
 
-void CQuery_moduleApp::LoadCustomState()
+void CQuery_ModuleApp::LoadCustomState()
 {
 }
 
-void CQuery_moduleApp::SaveCustomState()
+void CQuery_ModuleApp::SaveCustomState()
 {
 }
 
-// CQuery_moduleApp 消息处理程序
+// CQuery_ModuleApp 消息处理程序
 
 
 

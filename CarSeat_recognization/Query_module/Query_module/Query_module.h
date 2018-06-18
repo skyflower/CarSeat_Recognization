@@ -1,5 +1,15 @@
+// 这段 MFC 示例源代码演示如何使用 MFC Microsoft Office Fluent 用户界面 
+// (“Fluent UI”)。该示例仅供参考，
+// 用以补充《Microsoft 基础类参考》和 
+// MFC C++ 库软件随附的相关电子文档。  
+// 复制、使用或分发 Fluent UI 的许可条款是单独提供的。  
+// 若要了解有关 Fluent UI 许可计划的详细信息，请访问 
+// http://go.microsoft.com/fwlink/?LinkId=238214。
+//
+// 版权所有(C) Microsoft Corporation
+// 保留所有权利。
 
-// Query_module.h : Query_module 应用程序的主头文件
+// Query_Module.h : Query_Module 应用程序的主头文件
 //
 #pragma once
 
@@ -10,14 +20,14 @@
 #include "resource.h"       // 主符号
 
 
-// CQuery_moduleApp:
-// 有关此类的实现，请参阅 Query_module.cpp
+// CQuery_ModuleApp:
+// 有关此类的实现，请参阅 Query_Module.cpp
 //
 
-class CQuery_moduleApp : public CWinAppEx
+class CQuery_ModuleApp : public CWinAppEx
 {
 public:
-	CQuery_moduleApp();
+	CQuery_ModuleApp();
 
 
 // 重写
@@ -31,9 +41,6 @@ protected:
 	HACCEL m_hMDIAccel;
 
 public:
-	UINT  m_nAppLook;
-	BOOL  m_bHiColorIcons;
-
 	virtual void PreLoadState();
 	virtual void LoadCustomState();
 	virtual void SaveCustomState();
@@ -43,4 +50,4 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
-extern CQuery_moduleApp theApp;
+extern CQuery_ModuleApp theApp;

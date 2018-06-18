@@ -57,6 +57,7 @@ public:
 	afx_msg void OnFileNew();
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnButtonChoose();
+	afx_msg void OnButtonBarcode();
 };
 
 extern CQuery_ModuleApp theApp;

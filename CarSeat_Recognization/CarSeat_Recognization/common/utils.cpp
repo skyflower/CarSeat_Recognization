@@ -203,7 +203,7 @@ namespace utils
 		{
 			return 0;
 		}
-		const char *quote = strchr(content, '=');
+		const char *quote = strchr(p, '=');
 		if (quote == nullptr)
 		{
 			return 0;

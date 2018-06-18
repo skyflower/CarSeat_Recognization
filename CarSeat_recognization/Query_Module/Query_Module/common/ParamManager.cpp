@@ -11,14 +11,12 @@ CParamManager *CParamManager::m_pInstance = nullptr;
 
 CParamManager::CParamManager() :
 m_pFtp(nullptr),
-m_pLineCamera(nullptr),
+m_pLineVec(nullptr),
 m_nLocalIp(-1),
 m_nServerIp(-1),
 m_nServerPort(-1),
-m_nTestClientPort(-1),
-m_nTestServerPort(-1),
-m_nBarcodeIp(-1),
-m_nBarcodePort(-1)
+m_pMethodType(nullptr),
+m_pSeatType(nullptr)
 {
 	Init();
 }
@@ -135,62 +133,35 @@ unsigned int CParamManager::GetServerPort()
 	return m_nServerPort;
 }
 
-unsigned int CParamManager::GetTestServerPort()
-{
-	return m_nTestServerPort;
-}
-
-unsigned int CParamManager::GetTestClientPort()
-{
-	return m_nTestClientPort;
-}
-
-std::vector<std::wstring>* CParamManager::GetFtpParameter()
+const std::vector<std::wstring>* CParamManager::GetFtpParameter() const
 {
 	return m_pFtp;
+	return nullptr;
 }
 
-
-std::wstring CParamManager::FindCameraByLineID(std::wstring lineID)
+const std::vector<std::wstring>* CParamManager::GetMethodType() const
 {
-	if (m_pLineCamera != nullptr)
-	{
-		std::unordered_map < std::wstring, std::wstring>::const_iterator iter = \
-			m_pLineCamera->find(lineID);
-		if (iter == m_pLineCamera->end())
-		{
-			return std::wstring();
-		}
-		return iter->second;
-	}
-	return std::wstring();
+	return m_pMethodType;
+	return nullptr;
 }
 
-unsigned int CParamManager::GetBarcodeIp()
+const std::vector<std::wstring>* CParamManager::GetSeatType() const
 {
-	return m_nBarcodeIp;
+	return m_pSeatType;
+	return nullptr;
 }
 
-unsigned int CParamManager::GetBarcodePort()
+const std::vector<std::wstring>* CParamManager::GetLineNo() const
 {
-
-	return m_nBarcodePort;
+	return m_pLineVec;
+	return nullptr;
 }
 
-const char * CParamManager::GetGraphFile() const
-{
-	return m_szGraphFile.c_str();
-}
-
-const char * CParamManager::GetLabelFile() const
-{
-	return m_szLabelFile.c_str();
-}
 
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
-	fopen_s(&fp, "./config.txt", "rb");
+	fopen_s(&fp, "./queryConfig.txt", "rb");
 	bool ret = true;
 	if (fp != nullptr)
 	{
@@ -210,14 +181,35 @@ void CParamManager::Init()
 		{
 			WriteError("ftp Parameter init Failed");
 		}
-		if (m_pLineCamera == nullptr)
+		if (m_pLineVec == nullptr)
 		{
-			m_pLineCamera = new std::unordered_map<std::wstring, std::wstring>;
+			m_pLineVec = new std::vector<std::wstring>;
 		}
-		utils::parseMap(content, "lineCamera", m_pLineCamera);
-		if ((m_pLineCamera == nullptr) || (m_pLineCamera->size() == 0))
+		utils::parseVector(content, "line", m_pLineVec);
+		if ((m_pLineVec == nullptr) || (m_pLineVec->size() == 0))
 		{
-			WriteError("line Camera init Failed");
+			WriteError("line No. init Failed");
+		}
+
+		if (m_pMethodType == nullptr)
+		{
+			m_pMethodType = new std::vector<std::wstring>;
+		}
+		utils::parseVector(content, "methodType", m_pMethodType);
+		if ((m_pMethodType == nullptr) || (m_pMethodType->size() == 0))
+		{
+			WriteError("method type init Failed");
+		}
+
+
+		if (m_pSeatType == nullptr)
+		{
+			m_pSeatType = new std::vector<std::wstring>;
+		}
+		utils::parseVector(content, "seatType", m_pSeatType);
+		if ((m_pSeatType == nullptr) || (m_pSeatType->size() == 0))
+		{
+			WriteError("method type init Failed");
 		}
 
 		unsigned int tmpLocal = utils::parseIp(content, "serverip");
@@ -227,20 +219,6 @@ void CParamManager::Init()
 		}
 		m_nServerIp = tmpLocal;
 
-		tmpLocal = utils::parseIp(content, "barcodeIp");
-		if (tmpLocal == 0)
-		{
-			TRACE0("get barcodeIp Failed\n");
-		}
-		m_nBarcodeIp = tmpLocal;
-
-		tmpLocal = utils::parseIp(content, "barcodePort");
-		if (tmpLocal == 0)
-		{
-			TRACE0("get barcodeIp Failed\n");
-		}
-		m_nBarcodePort = tmpLocal;
-
 
 		char tmpStr[MAX_CHAR_LENGTH] = { 0 };
 		if (utils::getValueByName(content, "serverport", tmpStr) == true)
@@ -248,31 +226,6 @@ void CParamManager::Init()
 			m_nServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
-		if (utils::getValueByName(content, "testClientPort", tmpStr) == true)
-		{
-			m_nTestClientPort = atoi(tmpStr);
-		}
-		memset(tmpStr, 0, sizeof(tmpStr));
-
-		if (utils::getValueByName(content, "testServerPort", tmpStr) == true)
-		{
-			m_nTestServerPort = atoi(tmpStr);
-		}
-		memset(tmpStr, 0, sizeof(tmpStr));
-
-		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
-		{
-			m_szGraphFile = std::string(tmpStr);
-		}
-		memset(tmpStr, 0, sizeof(tmpStr));
-
-		if (utils::getValueByName(content, "labelFile", tmpStr) == true)
-		{
-			m_szLabelFile = std::string(tmpStr);
-		}
-		memset(tmpStr, 0, sizeof(tmpStr));
-
-
 
 		if (content != nullptr)
 		{

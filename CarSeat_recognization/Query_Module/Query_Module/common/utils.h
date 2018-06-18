@@ -4,14 +4,6 @@
 #include <vector>
 #include <unordered_map>
 
-#ifdef OPENCV
-#include <opencv2\core\core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#endif // OPENCV
-
-
-
 
 #define MAX_CHAR_LENGTH 256
 

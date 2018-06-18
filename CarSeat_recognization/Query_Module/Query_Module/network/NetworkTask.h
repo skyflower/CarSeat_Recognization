@@ -6,8 +6,6 @@
 #include "../common/ParamManager.h"
 #include <mutex>
 #include <thread>
-#include "../image/Camera.h"
-#include "../image/ImageClassify.h"
 
 
 class CNetworkTask
@@ -36,8 +34,6 @@ public:
 	bool GetThreadStatus();
 	void SetThreadStatus(bool status);
 
-
-	void SetImageClassify(CImageClassify *pClassify);
 
 	std::wstring GetCurrentImagePath();
 	std::wstring GetCurrentBarcode();
@@ -102,9 +98,7 @@ private:
 
 	static CNetworkTask *m_pInstance;
 	bool m_bThreadStatus;
-	CCamera m_Camera;
 
 	CParamManager *m_pParamManager;
-	CImageClassify *m_pClassify;
 };
 

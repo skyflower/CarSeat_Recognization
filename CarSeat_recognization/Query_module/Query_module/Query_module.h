@@ -18,7 +18,7 @@
 #endif
 
 #include "resource.h"       // 主符号
-
+#include "ConditonDlg.h"
 
 // CQuery_ModuleApp:
 // 有关此类的实现，请参阅 Query_Module.cpp
@@ -40,6 +40,9 @@ protected:
 	HMENU  m_hMDIMenu;
 	HACCEL m_hMDIAccel;
 
+private:
+	CConditonDlg mConditionDlg;
+
 public:
 	virtual void PreLoadState();
 	virtual void LoadCustomState();
@@ -48,6 +51,7 @@ public:
 	afx_msg void OnAppAbout();
 	afx_msg void OnFileNew();
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnButtonChoose();
 };
 
 extern CQuery_ModuleApp theApp;

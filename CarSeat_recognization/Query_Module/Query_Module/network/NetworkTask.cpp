@@ -17,7 +17,6 @@ CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 CNetworkTask::CNetworkTask():
 	m_bThreadStatus(true),
-	m_szBarCode(),
 	m_szImagePath()
 {
 	m_pParamManager = CParamManager::GetInstance();
@@ -163,10 +162,6 @@ std::wstring CNetworkTask::GetCurrentImagePath()
 	return m_szImagePath;
 }
 
-std::wstring CNetworkTask::GetCurrentBarcode()
-{
-	return m_szBarCode;
-}
 
 void CNetworkTask::run()
 {

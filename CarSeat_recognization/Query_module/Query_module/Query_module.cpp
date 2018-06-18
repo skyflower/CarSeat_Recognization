@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(CQuery_ModuleApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &CQuery_ModuleApp::OnAppAbout)
 	ON_COMMAND(ID_FILE_NEW, &CQuery_ModuleApp::OnFileNew)
 	ON_COMMAND(ID_BUTTON_CHOOSE, &CQuery_ModuleApp::OnButtonChoose)
+	ON_COMMAND(ID_BUTTON_BARCODE, &CQuery_ModuleApp::OnButtonBarcode)
 END_MESSAGE_MAP()
 
 
@@ -243,12 +244,8 @@ void CQuery_ModuleApp::SaveCustomState()
 
 }
 
+
 // CQuery_ModuleApp 消息处理程序
-
-
-
-
-
 void CQuery_ModuleApp::OnButtonChoose()
 {
 	// TODO: 在此添加命令处理程序代码
@@ -258,4 +255,14 @@ void CQuery_ModuleApp::OnButtonChoose()
 		CConditionFilter filter = mConditionDlg.GetFilterCondition();
 	}
 	TRACE1("ret = %d\n", ret);
+
+
+
+}
+
+
+void CQuery_ModuleApp::OnButtonBarcode()
+{
+	// TODO: 在此添加命令处理程序代码
+
 }

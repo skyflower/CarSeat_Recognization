@@ -132,8 +132,8 @@ namespace utils
 		char *p = const_cast<char*>(strstr(content, name));
 		if (p != NULL)
 		{
-			char *line = strchr(p, '=');
-			char *end = strchr(p, '\n');
+			char *line = strchr(p, '{');
+			char *end = strchr(p, '}');
 			if ((line != NULL) && (end != NULL))
 			{
 
@@ -203,7 +203,7 @@ namespace utils
 		{
 			return 0;
 		}
-		const char *quote = strchr(content, '=');
+		const char *quote = strchr(p, '=');
 		if (quote == nullptr)
 		{
 			return 0;

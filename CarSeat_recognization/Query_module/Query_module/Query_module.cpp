@@ -51,6 +51,10 @@ CQuery_ModuleApp::CQuery_ModuleApp()
 	//为 CompanyName.ProductName.SubProduct.VersionInformation
 	SetAppID(_T("Query_Module.AppID.NoVersion"));
 
+	m_pLog = CLog::GetInstance();
+	m_pParamManager = CParamManager::GetInstance();
+
+
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }
@@ -149,6 +153,19 @@ int CQuery_ModuleApp::ExitInstance()
 		FreeResource(m_hMDIMenu);
 	if (m_hMDIAccel != NULL)
 		FreeResource(m_hMDIAccel);
+
+	if (m_pParamManager != nullptr)
+	{
+		delete m_pParamManager;
+		m_pParamManager = nullptr;
+	}
+
+	if (m_pLog != nullptr)
+	{
+		delete m_pLog;
+		m_pLog = nullptr;
+	}
+
 
 	AfxOleTerm(FALSE);
 

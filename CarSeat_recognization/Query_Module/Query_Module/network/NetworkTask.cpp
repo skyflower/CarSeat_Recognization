@@ -9,10 +9,6 @@
 #include "../common/utils.h"
 #include "../xml/tinyxml.h"
 
-#ifdef PYTHON_TENSORFLOW
-#include <Python.h>
-#endif // PYTHON_TENSORFLOW
-
 
 #include <afxinet.h>
 
@@ -21,7 +17,6 @@ CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 CNetworkTask::CNetworkTask():
 	m_bThreadStatus(true),
-	m_pClassify(nullptr),
 	m_szBarCode(),
 	m_szImagePath()
 {
@@ -162,10 +157,6 @@ void CNetworkTask::SetThreadStatus(bool status)
 	m_bThreadStatus = status;
 }
 
-void CNetworkTask::SetImageClassify(CImageClassify * pClassify)
-{
-	m_pClassify = pClassify;
-}
 
 std::wstring CNetworkTask::GetCurrentImagePath()
 {
@@ -208,22 +199,6 @@ void CNetworkTask::run()
 		///////////////////////////
 		//  add code
 
-		unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
-		unsigned int barcodePort = m_pParamManager->GetBarcodePort();
-
-		std::wstring tmpBarcode = getBarcodeByNet(barcodeIp, barcodePort);
-
-		if (tmpBarcode.size() != 0)
-		{
-			std::wstring path = TakeImage(0);
-
-			//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
-			__ImageClassify(path);
-
-			m_szBarCode = tmpBarcode;
-			m_szImagePath = path;
-
-		}
 
 
 //#if (defined _DEBUG) && (defined FTP_TEST)
@@ -349,34 +324,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	return true;
 }
 
-std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
-{
-	// 添加获取条形码的代码
-	// 暂时为空
-	
-	return std::wstring();
-}
 
-//  
-
-std::wstring CNetworkTask::TakeImage(std::wstring lineID)
-{
-	std::wstring CameraID = m_pParamManager->FindCameraByLineID(lineID);
-	std::wstring path = m_Camera.takePhoto(CameraID);
-	return path;
-}
-
-bool CNetworkTask::__ImageClassify(std::wstring & path)
-{
-	if (m_pClassify != nullptr)
-	{
-		std::string tmpPath = utils::WStrToStr(path);
-
-		m_pClassify->pushImage(tmpPath.c_str());
-		return true;
-	}
-	return false;
-}
 
 bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 
 	const wchar_t *fileName)

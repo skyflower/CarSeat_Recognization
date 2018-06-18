@@ -19,6 +19,8 @@
 
 #include "resource.h"       // 主符号
 #include "ConditonDlg.h"
+#include "./common/ParamManager.h"
+#include "./common/Log.h"
 
 // CQuery_ModuleApp:
 // 有关此类的实现，请参阅 Query_Module.cpp
@@ -42,6 +44,9 @@ protected:
 
 private:
 	CConditonDlg mConditionDlg;
+	CLog *m_pLog;
+	CParamManager *m_pParamManager;
+
 
 public:
 	virtual void PreLoadState();

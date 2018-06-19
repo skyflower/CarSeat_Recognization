@@ -75,6 +75,6 @@ public:
 	afx_msg void OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnSelchangeLineBegin();
-	afx_msg void OnSelchangeLineEnd();
+	afx_msg void OnSetfocusLineEnd();
+	afx_msg void OnSetfocusLineBegin();
 };

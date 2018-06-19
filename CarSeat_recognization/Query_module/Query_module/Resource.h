@@ -43,9 +43,9 @@
 #define IDC_BARCODE_END                 1015
 #define IDC_SEAT_TYPE                   1016
 #define IDC_METHOD_TYPE                 1017
+#define IDC_DATE_END2                   1018
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_BUTTON_CHOOSE                32772
-#define ID_BUTTON_                      32773
 #define ID_BUTTON_BARCODE               32773
 
 // Next default values for new objects

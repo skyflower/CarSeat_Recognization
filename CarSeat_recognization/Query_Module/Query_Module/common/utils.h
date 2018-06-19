@@ -36,18 +36,7 @@ namespace utils
 	// XXX=AAA
 	bool getValueByName(const char *content, const char*name, char*value);
 
-#ifdef OPENCV
-	void showImageHist(const cv::Mat & img);
-
-	cv::Rect splitFrameGrayImage(const cv::Mat &img);
-
-	cv::Rect calcRect(const std::vector<cv::Point2f> &point);
-
-	double calcArea(const cv::Rect &rect);
-
-	double calcAvgPixel(const cv::Mat &img, int minPixelValue, int maxPixelValue);
-
-#endif // OPENCV
+	int SystemTimeCmp(SYSTEMTIME a, SYSTEMTIME b);
 
 };
 

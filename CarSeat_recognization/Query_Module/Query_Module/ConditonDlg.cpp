@@ -51,8 +51,8 @@ BEGIN_MESSAGE_MAP(CConditonDlg, CDialogEx)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TIME_BEGIN, &CConditonDlg::OnDatetimechangeTimeBegin)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TIME_END, &CConditonDlg::OnDatetimechangeTimeEnd)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATE_END, &CConditonDlg::OnDatetimechangeDateEnd)
-	ON_CBN_SELCHANGE(IDC_LINE_BEGIN, &CConditonDlg::OnSelchangeLineBegin)
-	ON_CBN_SELCHANGE(IDC_LINE_END, &CConditonDlg::OnSelchangeLineEnd)
+	ON_CBN_SETFOCUS(IDC_LINE_END, &CConditonDlg::OnSetfocusLineEnd)
+	ON_CBN_SETFOCUS(IDC_LINE_BEGIN, &CConditonDlg::OnSetfocusLineBegin)
 END_MESSAGE_MAP()
 
 
@@ -179,17 +179,28 @@ void CConditonDlg::OnDatetimechangeDateBegin(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
-	wchar_t text[200];
-	memset(text, 0, sizeof(text));
-	GetDlgItemText(IDC_DATE_BEGIN, text, sizeof(text));
-	TRACE1("date time begin = %s\n", text);
 
-	memset(text, 0, sizeof(text));
-	GetDlgItemText(IDC_DATE_END, text, sizeof(text));
-	TRACE1("date time end = %s\n", text);
+	
+	SYSTEMTIME curTime;
+	GetLocalTime(&curTime);
 
+	SYSTEMTIME begin;
+	memset(&begin, 0, sizeof(begin));
+	mDateBegin.GetTime(&begin);
 
+	if (utils::SystemTimeCmp(curTime, begin) < 0)
+	{
+		mDateBegin.SetTime(&curTime);
+		return;
+	}
 
+	SYSTEMTIME end;
+	memset(&end, 0, sizeof(end));
+	mDateEnd.GetTime(&end);
+	if (utils::SystemTimeCmp(end, begin) < 0)
+	{
+		mDateEnd.SetTime(&begin);
+	}
 
 	*pResult = 0;
 }
@@ -200,6 +211,27 @@ void CConditonDlg::OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+
+	SYSTEMTIME curTime;
+	GetLocalTime(&curTime);
+
+	SYSTEMTIME begin;
+	memset(&begin, 0, sizeof(begin));
+	mTimeBegin.GetTime(&begin);
+
+	if (utils::SystemTimeCmp(curTime, begin) < 0)
+	{
+		mTimeBegin.SetTime(&curTime);
+		return;
+	}
+
+	SYSTEMTIME end;
+	memset(&end, 0, sizeof(end));
+	mTimeEnd.GetTime(&end);
+	if (utils::SystemTimeCmp(end, begin) < 0)
+	{
+		mTimeEnd.SetTime(&begin);
+	}
 }
 
 
@@ -208,6 +240,27 @@ void CConditonDlg::OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+
+	SYSTEMTIME curTime;
+	GetLocalTime(&curTime);
+
+	SYSTEMTIME end;
+	memset(&end, 0, sizeof(end));
+	mTimeEnd.GetTime(&end);
+
+	if (utils::SystemTimeCmp(curTime, end) < 0)
+	{
+		mTimeBegin.SetTime(&curTime);
+		return;
+	}
+
+	SYSTEMTIME begin;
+	memset(&begin, 0, sizeof(begin));
+	mTimeBegin.GetTime(&begin);
+	if (utils::SystemTimeCmp(end, begin) < 0)
+	{
+		mTimeEnd.SetTime(&begin);
+	}
 }
 
 
@@ -216,16 +269,62 @@ void CConditonDlg::OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+
+	SYSTEMTIME curTime;
+	GetLocalTime(&curTime);
+
+	SYSTEMTIME end;
+	memset(&end, 0, sizeof(end));
+	mDateEnd.GetTime(&end);
+
+	if (utils::SystemTimeCmp(curTime, end) < 0)
+	{
+		mDateBegin.SetTime(&curTime);
+		return;
+	}
+
+	SYSTEMTIME begin;
+	memset(&begin, 0, sizeof(begin));
+	mDateBegin.GetTime(&begin);
+	if (utils::SystemTimeCmp(end, begin) < 0)
+	{
+		mDateEnd.SetTime(&begin);
+	}
+}
+
+void CConditonDlg::OnSetfocusLineEnd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	const size_t length = 20;
+	wchar_t begin[20] = { 0 };
+	int sel = mBarcodeBegin.GetCurSel();
+	mBarcodeBegin.GetLBText(sel, begin);
+
+	wchar_t end[length] = { 0 };
+	sel = mBarcodeEnd.GetCurSel();
+	mBarcodeEnd.GetLBText(sel, end);
+
+	if (wcscmp(begin, end) > 0)
+	{
+		int sel = mBarcodeBegin.GetCurSel();
+		mBarcodeEnd.SetCurSel(sel);
+	}
 }
 
 
-void CConditonDlg::OnSelchangeLineBegin()
+void CConditonDlg::OnSetfocusLineBegin()
 {
 	// TODO: 在此添加控件通知处理程序代码
-}
+	const size_t length = 20;
+	wchar_t begin[20] = { 0 };
+	mBarcodeBegin.GetWindowTextW(begin, length);
 
+	wchar_t end[length] = { 0 };
+	mBarcodeEnd.GetWindowTextW(end, length);
 
-void CConditonDlg::OnSelchangeLineEnd()
-{
-	// TODO: 在此添加控件通知处理程序代码
+	if (wcscmp(begin, end) > 0)
+	{
+		int sel = mBarcodeEnd.GetCurSel();
+		mBarcodeBegin.SetCurSel(sel);
+	}
 }

@@ -313,5 +313,68 @@ namespace utils
 
 		return true;
 	}
+	int SystemTimeCmp(SYSTEMTIME a, SYSTEMTIME b)
+	{
+		do
+		{
+			if (a.wYear > b.wYear)
+			{
+				return 1;
+			}
+			else if (a.wYear < b.wYear)
+			{
+				return -1;
+			}
+			if (a.wMonth > b.wMonth)
+			{
+				return 1;
+			}
+			else if (a.wMonth < b.wMonth)
+			{
+				return -1;
+			}
+			if (a.wDay > b.wDay)
+			{
+				return 1;
+			}
+			else if (a.wDay < b.wDay)
+			{
+				return -1;
+			}
+			if (a.wHour > b.wHour)
+			{
+				return 1;
+			}
+			else if (a.wHour < b.wHour)
+			{
+				return -1;
+			}
+			if (a.wMinute > b.wMinute)
+			{
+				return 1;
+			}
+			else if (a.wMinute < b.wMinute)
+			{
+				return -1;
+			}
+			if (a.wSecond > b.wSecond)
+			{
+				return 1;
+			}
+			else if (a.wSecond < b.wSecond)
+			{
+				return -1;
+			}
+			if (a.wMilliseconds > b.wMilliseconds)
+			{
+				return 1;
+			}
+			else if (a.wMilliseconds < b.wMilliseconds)
+			{
+				return -1;
+			}
 
+		} while (0);
+		return 0;
+	}
 }

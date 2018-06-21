@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "utils.h"
+#include "Log.h"
 
 
 
@@ -377,4 +378,83 @@ namespace utils
 		} while (0);
 		return 0;
 	}
+
+
+
+	bool sendToServer(unsigned int serverIp, int port, unsigned int localIp, const char *sendMsg, \
+		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen)
+	{
+		//unsigned int localIp = CParamManager::GetIn->GetLocalIP();
+		if ((localIp == 0) || (localIp == -1))
+		{
+			recvMsgLen = 0;
+			return false;
+		}
+
+		WSADATA wsaData;
+		int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
+		if (err != 0)
+		{
+			err = WSAGetLastError();
+			WriteError("err = %u", err);
+			recvMsgLen = 0;
+			return false;
+		}
+		SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (socketFD == -1)
+		{
+			TRACE("create socket failed\n");
+			WSACleanup();
+			recvMsgLen = 0;
+			return false;
+		}
+
+		sockaddr_in addr;
+
+		//接收时限
+		int nNetTimeout = 1000;
+		setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(port);
+		addr.sin_addr.S_un.S_addr = htonl(serverIp);
+
+		if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
+		{
+			err = WSAGetLastError();
+			TRACE1("connect failed,err = %u\n", err);
+			WriteError("connect failed, err = %u", err);
+			closesocket(socketFD);
+			WSACleanup();
+			recvMsgLen = 0;
+			return false;
+		}
+
+		size_t tmpLen = send(socketFD, sendMsg, sendMsgLen, 0);// MSG_DONTROUTE);
+		if (tmpLen == SOCKET_ERROR)
+		{
+			WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
+			closesocket(socketFD);
+			WSACleanup();
+			recvMsgLen = 0;
+			return false;
+		}
+		tmpLen = recv(socketFD, recvMsg, recvMsgLen, MSG_WAITALL);
+		if (SOCKET_ERROR == tmpLen)
+		{
+			WriteError("recv Failed, Err: %u", GetLastError());
+			closesocket(socketFD);
+			WSACleanup();
+			recvMsgLen = 0;
+			return false;
+		}
+		recvMsgLen = tmpLen;
+		closesocket(socketFD);
+		socketFD = -1;
+
+		WSACleanup();
+
+		return true;
+	}
+
 }

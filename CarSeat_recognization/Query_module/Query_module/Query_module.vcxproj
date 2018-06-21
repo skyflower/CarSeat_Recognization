@@ -196,6 +196,7 @@
     <ClInclude Include="common\ParamManager.h" />
     <ClInclude Include="common\utils.h" />
     <ClInclude Include="ConditonDlg.h" />
+    <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="Query_Module.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="common\ParamManager.cpp" />
     <ClCompile Include="common\utils.cpp" />
     <ClCompile Include="ConditonDlg.cpp" />
+    <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="Query_Module.cpp" />

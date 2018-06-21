@@ -243,6 +243,7 @@ CNetworkTask * CNetworkTask::GetInstance()
 	return m_pInstance;
 }
 
+
 bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
 	size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen)
 {

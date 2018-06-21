@@ -22,3 +22,7 @@ ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
 
 
 methodType={"auto", "manual"}
+
+username=
+passwd=
+

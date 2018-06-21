@@ -25,6 +25,8 @@
 #define IDS_EDIT_MENU                   306
 #define IDR_RIBBON                      307
 #define IDD_DIALOG_CONDITION            310
+#define IDD_DIALOG1                     312
+#define IDD_DIALOG_LOGIN                312
 #define IDC_STATIC_TIME                 1000
 #define IDC_STATIC_LINE                 1001
 #define IDC_STATIC_BARCODE              1002
@@ -37,24 +39,29 @@
 #define IDC_TIME_END                    1009
 #define IDC_LINE_BEGIN                  1010
 #define IDC_STATIC_LINE_2               1011
+#define IDC_EDIT_PASSWD                 1011
 #define IDC_LINE_END                    1012
+#define IDC_EDIT_USERNAME               1012
 #define IDC_BARCODE_BEGIN               1013
+#define IDC_CHECK_SAVE_USERNAME_PASSWD  1013
 #define IDC_STATIC_LINE_3               1014
+#define IDC_STATIC_USERNAME             1014
 #define IDC_BARCODE_END                 1015
+#define IDC_STATIC_PASSWD               1015
 #define IDC_SEAT_TYPE                   1016
 #define IDC_METHOD_TYPE                 1017
-#define IDC_DATE_END2                   1018
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_BUTTON_CHOOSE                32772
 #define ID_BUTTON_BARCODE               32773
+#define ID_BUTTON_LOGIN                 32774
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
-#define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1011
+#define _APS_NEXT_RESOURCE_VALUE        314
+#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_CONTROL_VALUE         1016
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

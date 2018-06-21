@@ -53,6 +53,7 @@ BEGIN_MESSAGE_MAP(CConditonDlg, CDialogEx)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATE_END, &CConditonDlg::OnDatetimechangeDateEnd)
 	ON_CBN_SETFOCUS(IDC_LINE_END, &CConditonDlg::OnSetfocusLineEnd)
 	ON_CBN_SETFOCUS(IDC_LINE_BEGIN, &CConditonDlg::OnSetfocusLineBegin)
+	ON_CBN_SELCHANGE(IDC_LINE_BEGIN, &CConditonDlg::OnSelchangeLineBegin)
 END_MESSAGE_MAP()
 
 
@@ -321,6 +322,26 @@ void CConditonDlg::OnSetfocusLineBegin()
 
 	wchar_t end[length] = { 0 };
 	mBarcodeEnd.GetWindowTextW(end, length);
+
+	if (wcscmp(begin, end) > 0)
+	{
+		int sel = mBarcodeEnd.GetCurSel();
+		mBarcodeBegin.SetCurSel(sel);
+	}
+}
+
+
+void CConditonDlg::OnSelchangeLineBegin()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	const size_t length = 20;
+	wchar_t begin[20] = { 0 };
+	int sel = mBarcodeBegin.GetCurSel();
+	mBarcodeBegin.GetLBText(sel, begin);
+	
+	wchar_t end[length] = { 0 };
+	sel = mBarcodeEnd.GetCurSel();
+	mBarcodeEnd.GetLBText(sel, end);
 
 	if (wcscmp(begin, end) > 0)
 	{

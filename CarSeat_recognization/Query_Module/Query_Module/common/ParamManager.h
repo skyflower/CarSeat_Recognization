@@ -30,6 +30,11 @@ public:
 
 
 	std::wstring GetLocalName() { return m_strLocalName; }
+	std::wstring GetLoginUserName() { return m_strUsrName; }
+	std::wstring GetLoginPasswd() { return m_strPasswd; }
+
+	bool SetLoginUserName(std::wstring tmpUserName);
+	bool SetLoginPasswd(std::wstring tmpPasswd);
 
 
 private:
@@ -37,9 +42,14 @@ private:
 	static CParamManager *m_pInstance;
 
 	void Init();
+
+	void serialization();
 	
 
 	unsigned int __auxLocalIP();
+
+	//自动保存标志
+	bool mAutoSaveFlag;
 
 	// serverip， 服务器Ip
 	size_t m_nServerIp;
@@ -52,6 +62,9 @@ private:
 
 	// 本机名
 	std::wstring m_strLocalName;
+
+	std::wstring m_strUsrName;
+	std::wstring m_strPasswd;
 
 	//ftp用户名密码以及图像的存储路径
 	std::vector<std::wstring> *m_pFtp;

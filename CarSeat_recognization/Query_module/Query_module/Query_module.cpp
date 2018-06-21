@@ -17,8 +17,10 @@
 #include "afxdialogex.h"
 #include "Query_Module.h"
 #include "MainFrm.h"
-
+#include "LoginDlg.h"
+#include "./common/utils.h"
 #include "ChildFrm.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -32,6 +34,10 @@ BEGIN_MESSAGE_MAP(CQuery_ModuleApp, CWinAppEx)
 	ON_COMMAND(ID_FILE_NEW, &CQuery_ModuleApp::OnFileNew)
 	ON_COMMAND(ID_BUTTON_CHOOSE, &CQuery_ModuleApp::OnButtonChoose)
 	ON_COMMAND(ID_BUTTON_BARCODE, &CQuery_ModuleApp::OnButtonBarcode)
+	ON_COMMAND(ID_BUTTON_LOGIN, &CQuery_ModuleApp::OnButtonLogin)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_CHOOSE, &CQuery_ModuleApp::OnUpdateButtonChoose)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_BARCODE, &CQuery_ModuleApp::OnUpdateButtonBarcode)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_LOGIN, &CQuery_ModuleApp::OnUpdateButtonLogin)
 END_MESSAGE_MAP()
 
 
@@ -58,6 +64,20 @@ CQuery_ModuleApp::CQuery_ModuleApp()
 
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+	/*CMFCRibbonBar* pRibbon = ((CMDIFrameWndEx*)AfxGetMainWnd())->GetRibbonBar();
+	if (pRibbon != nullptr)
+	{
+		CMFCRibbonBaseElement *pChooseButton = pRibbon->FindByID(ID_BUTTON_CHOOSE);
+		if (pChooseButton != nullptr)
+		{
+			pChooseButton->OnShow(FALSE);
+		}
+		pChooseButton = pRibbon->FindByID(ID_BUTTON_BARCODE);
+		if (pChooseButton != nullptr)
+		{
+			pChooseButton->OnShow(FALSE);
+		}
+	}*/
 }
 
 // 唯一的一个 CQuery_ModuleApp 对象
@@ -137,6 +157,8 @@ BOOL CQuery_ModuleApp::InitInstance()
 	m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
 	m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
 
+
+	
 
 
 
@@ -250,10 +272,12 @@ void CQuery_ModuleApp::OnButtonChoose()
 {
 	// TODO: 在此添加命令处理程序代码
 	int ret = mConditionDlg.DoModal();
-	if (ret == IDOK)
+
+	if (ret == IDCANCEL)
 	{
-		CConditionFilter filter = mConditionDlg.GetFilterCondition();
+		return;
 	}
+	CConditionFilter filter = mConditionDlg.GetFilterCondition();
 	TRACE1("ret = %d\n", ret);
 
 
@@ -264,5 +288,63 @@ void CQuery_ModuleApp::OnButtonChoose()
 void CQuery_ModuleApp::OnButtonBarcode()
 {
 	// TODO: 在此添加命令处理程序代码
+
+
+}
+
+
+void CQuery_ModuleApp::OnButtonLogin()
+{
+	// TODO: 在此添加命令处理程序代码
+	CLoginDlg dlg;
+	int ret = dlg.DoModal();
+	if (ret == IDCANCEL)
+	{
+		return;
+	}
+
+	int length = 0;
+	if (dlg.GetLoginUserName(mUsrName, length) == false)
+	{
+		AfxMessageBox(L"获取用户名失败");
+		return;
+	}
+	if (dlg.GetLoginPasswd(mPasswd, length) == false)
+	{
+		AfxMessageBox(L"获取密码失败");
+		return;
+	}
+
+	bool tmpSaveFlag = dlg.GetAutoSaveFlag();
+	m_pParamManager->SetLoginUserName(std::wstring(mUsrName));
+	m_pParamManager->SetLoginPasswd(std::wstring(mPasswd));
+}
+
+
+void CQuery_ModuleApp::OnUpdateButtonChoose(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	std::wstring tmpUserName = m_pParamManager->GetLoginUserName();
+	if ((tmpUserName.size() == 0) ||(wcslen(mUsrName) == 0))
+	{
+		pCmdUI->Enable(FALSE);
+	}
+}
+
+
+void CQuery_ModuleApp::OnUpdateButtonBarcode(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	std::wstring tmpUserName = m_pParamManager->GetLoginUserName();
+	if ((tmpUserName.size() == 0) || (wcslen(mUsrName) == 0))
+	{
+		pCmdUI->Enable(FALSE);
+	}
+}
+
+
+void CQuery_ModuleApp::OnUpdateButtonLogin(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
 
 }

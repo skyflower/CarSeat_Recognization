@@ -21,6 +21,7 @@
 #include "ConditonDlg.h"
 #include "./common/ParamManager.h"
 #include "./common/Log.h"
+#include "./common/utils.h"
 
 // CQuery_ModuleApp:
 // 有关此类的实现，请参阅 Query_Module.cpp
@@ -47,6 +48,9 @@ private:
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;
 
+	wchar_t mUsrName[MAX_CHAR_LENGTH];
+	wchar_t mPasswd[MAX_CHAR_LENGTH];
+
 
 public:
 	virtual void PreLoadState();
@@ -58,6 +62,10 @@ public:
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnButtonChoose();
 	afx_msg void OnButtonBarcode();
+	afx_msg void OnButtonLogin();
+	afx_msg void OnUpdateButtonChoose(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateButtonBarcode(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateButtonLogin(CCmdUI *pCmdUI);
 };
 
 extern CQuery_ModuleApp theApp;

@@ -89,6 +89,25 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 将改进任务栏的可用性，因为显示的文档名带有缩略图。
 	ModifyStyle(0, FWS_PREFIXTITLE);
 
+
+	//CMFCRibbonBar* pRibbon = ((CMDIFrameWndEx*)AfxGetMainWnd())->GetRibbonBar();
+	//m_wndRibbonBar
+	//if (m_wndRibbonBar.GetSafeHwnd() != INVALID_HANDLE_VALUE)
+	//{
+	//	CMFCRibbonBaseElement *pChooseButton = m_wndRibbonBar.FindByID(ID_BUTTON_CHOOSE);
+	//	if (pChooseButton != nullptr)
+	//	{
+	//		//pChooseButton->OnShow(FALSE);
+	//		pChooseButton->SetVisible(FALSE);
+	//	}
+	//	pChooseButton = m_wndRibbonBar.FindByID(ID_BUTTON_BARCODE);
+	//	if (pChooseButton != nullptr)
+	//	{
+	//		pChooseButton->OnShow(FALSE);
+	//	}
+	//}
+
+
 	return 0;
 }
 

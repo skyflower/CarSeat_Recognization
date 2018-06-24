@@ -176,5 +176,3 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	}
 	return FALSE;
 }
-
-

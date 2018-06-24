@@ -94,7 +94,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);;D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\CarSeat_Recognization\Camera\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,12 +119,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\include;./Camera/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\amd64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;MvCameraControl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\amd64\Debug;D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\CarSeat_Recognization\Camera\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -146,7 +146,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);PYTHON_TENSORFLOW</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);;D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\CarSeat_Recognization\Camera\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -175,13 +175,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions);PYTHON_TENSORFLOW</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\SoftwareInstall\Python_v3.5.2_x64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\SoftwareInstall\Python_v3.5.2_x64\include;D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\CarSeat_Recognization\Camera\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3.lib;python35.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3.lib;python35.lib;MvCameraControl.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\SoftwareInstall\Python_v3.5.2_x64\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -199,6 +199,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
     <ClInclude Include="common\Log.h" />
@@ -206,7 +208,6 @@
     <ClInclude Include="common\ParamManager.h" />
     <ClInclude Include="common\utils.h" />
     <ClInclude Include="image\BaseMatch.h" />
-    <ClInclude Include="image\Camera.h" />
     <ClInclude Include="image\COrbFlann.h" />
     <ClInclude Include="image\FileManager.h" />
     <ClInclude Include="image\ImageClassify.h" />
@@ -225,6 +226,8 @@
     <ClInclude Include="xml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
     <ClCompile Include="common\Log.cpp" />
@@ -232,7 +235,6 @@
     <ClCompile Include="common\ParamManager.cpp" />
     <ClCompile Include="common\utils.cpp" />
     <ClCompile Include="image\BaseMatch.cpp" />
-    <ClCompile Include="image\Camera.cpp" />
     <ClCompile Include="image\COrbFlann.cpp" />
     <ClCompile Include="image\FileManager.cpp" />
     <ClCompile Include="image\ImageClassify.cpp" />

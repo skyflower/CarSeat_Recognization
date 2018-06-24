@@ -5,6 +5,8 @@
 #pragma once
 #include "afxwin.h"
 #include "LabelManager.h"
+#include "./Camera/Camera.h"
+#include "./Camera/CameraManager.h"
 
 
 // CCarSeat_RecognizationDlg ¶Ô»°¿ò
@@ -62,6 +64,7 @@ private:
 	CLabelManager *m_pLabelManager;
 
 	//CLabelManager *m_pLabelManager;
+	CCameraManager *m_pCameraManager;
 
 
 	//void displayRecImage(const wchar_t *path);
@@ -81,4 +84,9 @@ public:
 	void SetImageClassify(CImageClassify*pClassify);
 
 	void terminate();
+	afx_msg void OnStartCamera();
+	afx_msg void OnUpdateStartCamera(CCmdUI *pCmdUI);
+	afx_msg void OnClose();
+	afx_msg void OnTakePhoto();
+	afx_msg void OnUpdateTakePhoto(CCmdUI *pCmdUI);
 };

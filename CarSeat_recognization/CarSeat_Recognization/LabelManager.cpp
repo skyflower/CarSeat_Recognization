@@ -3,6 +3,7 @@
 #include "./common/Log.h"
 #include <sys/stat.h>
 #include "./common/utils.h"
+#include <Windows.h>
 
 bool CLabelManager::m_bInitFlag = false;
 
@@ -10,9 +11,11 @@ CLabelManager::CLabelManager()
 {
 	m_pBarcode = nullptr;
 	m_pClassifyType = nullptr;
+	
 	if (m_bInitFlag == false)
 	{
 		m_bInitFlag = init();
+		m_bSerialize = false;
 	}
 }
 
@@ -113,6 +116,60 @@ bool CLabelManager::init()
 	return true;
 }
 
+bool CLabelManager::serialize()
+{
+	FILE *fp = nullptr;
+	fopen_s(&fp, "labelConfig.txt.bak", "wb");
+	if (fp == nullptr)
+	{
+		WriteError("Failed labelConfig.txt.bak");
+		return false;
+	}
+
+	const size_t Length = 2000;
+	wchar_t *tmpStr = new wchar_t[Length];
+	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+
+	if ((m_pBarcode != nullptr) && (m_pBarcode->size() > 0))
+	{
+		lstrcatW(tmpStr, L"barcodeTable={");
+		size_t tmpSize = m_pBarcode->size();
+		int i = 0;
+		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->begin();
+		for (; i < tmpSize - 1; ++i)
+		{
+			wsprintfW(tmpStr, L"%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
+				iter->second.c_str());
+			++iter;
+		}
+		wsprintfW(tmpStr, L"%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
+			iter->second.c_str());
+	}
+	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+
+	if ((m_pClassifyType != nullptr) && (m_pClassifyType->size() > 0))
+	{
+		lstrcatW(tmpStr, L"classifyType={");
+		size_t tmpSize = m_pClassifyType->size();
+		int i = 0;
+		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pClassifyType->begin();
+		for (; i < tmpSize - 1; ++i)
+		{
+			wsprintfW(tmpStr, L"%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
+				iter->second.c_str());
+			++iter;
+		}
+		wsprintfW(tmpStr, L"%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
+			iter->second.c_str());
+	}
+	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+
+
+	return true;
+}
+
 
 std::vector<std::wstring> CLabelManager::GetBarcode()
 {
@@ -148,6 +205,10 @@ std::vector<std::wstring> CLabelManager::GetClassifyType()
 		}
 	}
 	return pVec;
+}
+void CLabelManager::UpdateBarcode(const char *xmlContent, size_t len)
+{
+
 }
 std::wstring CLabelManager::GetExternalTypeByBarcode(std::wstring barcode)
 {

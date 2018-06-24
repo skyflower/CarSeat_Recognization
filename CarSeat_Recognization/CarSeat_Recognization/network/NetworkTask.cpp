@@ -362,8 +362,8 @@ std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
 std::wstring CNetworkTask::TakeImage(std::wstring lineID)
 {
 	std::wstring CameraID = m_pParamManager->FindCameraByLineID(lineID);
-	std::wstring path = m_Camera.takePhoto(CameraID);
-	return path;
+	//std::wstring path = m_Camera.takePhoto(CameraID);
+	return CameraID;
 }
 
 bool CNetworkTask::__ImageClassify(std::wstring & path)

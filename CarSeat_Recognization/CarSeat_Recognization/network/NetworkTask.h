@@ -6,7 +6,6 @@
 #include "../common/ParamManager.h"
 #include <mutex>
 #include <thread>
-#include "../image/Camera.h"
 #include "../image/ImageClassify.h"
 
 
@@ -102,7 +101,7 @@ private:
 
 	static CNetworkTask *m_pInstance;
 	bool m_bThreadStatus;
-	CCamera m_Camera;
+	//CCamera m_Camera;
 
 	CParamManager *m_pParamManager;
 	CImageClassify *m_pClassify;

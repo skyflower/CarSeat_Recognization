@@ -21,7 +21,7 @@ public:
 	std::vector<std::wstring> GetClassifyType();
 
 	/*  not implement，从服务器发过来的xml，更新条形码对照表 */
-	void UpdateBarcode();
+	void UpdateBarcode(const char *xmlContent, size_t len);
 
 
 private:
@@ -30,6 +30,8 @@ private:
 
 	/*  not implement,保存到labelConfig.txt文件 */
 	bool serialize();
+
+	bool m_bSerialize;
 
 	std::unordered_map<std::wstring, std::wstring> *m_pBarcode;
 	std::unordered_map<std::wstring, std::wstring> *m_pClassifyType;

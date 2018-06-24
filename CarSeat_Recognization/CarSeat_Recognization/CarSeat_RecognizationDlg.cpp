@@ -69,6 +69,7 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pFont.CreatePointFont(24, L"楷体");
 
 	m_pLabelManager = new CLabelManager();	
+	m_pCameraManager = new CCameraManager();
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -85,6 +86,11 @@ void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_WM_SYSCOMMAND()
 	ON_COMMAND(ID_USRINPUT, &CCarSeat_RecognizationDlg::OnUsrinput)
+	ON_COMMAND(ID_START_CAMERA, &CCarSeat_RecognizationDlg::OnStartCamera)
+	ON_UPDATE_COMMAND_UI(ID_START_CAMERA, &CCarSeat_RecognizationDlg::OnUpdateStartCamera)
+	ON_WM_CLOSE()
+	ON_COMMAND(ID_TAKE_PHOTO, &CCarSeat_RecognizationDlg::OnTakePhoto)
+	ON_UPDATE_COMMAND_UI(ID_TAKE_PHOTO, &CCarSeat_RecognizationDlg::OnUpdateTakePhoto)
 END_MESSAGE_MAP()
 
 
@@ -161,7 +167,8 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%", m_nSuccessCount, m_nFailCount, ratio);
 
 	m_RegRatio.SetWindowTextW(result);
-
+	 
+	
 	//m_pUIThread = std::thread(run, this);
 
 	return TRUE;  //
@@ -221,8 +228,12 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		return;
 	}
+
+	
+
 	while (m_bThreadStatus)
 	{
+		
 		std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
 		if (preImagePath != currentImage)
 		{
@@ -315,4 +326,117 @@ void CCarSeat_RecognizationDlg::OnUsrinput()
 
 	}
 
+}
+
+
+void CCarSeat_RecognizationDlg::OnStartCamera()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (m_pCameraManager == nullptr)
+	{
+		m_pCameraManager = new CCameraManager();
+	}
+	CCameraManager::CameraStatus status = m_pCameraManager->GetStatus();
+	TRACE1("Camera Status = %d\n", status);
+	bool ret = true;
+	switch(status)
+	{
+		case CCameraManager::CameraStatus::INIT:
+			if ((ret = m_pCameraManager->EnumButton()) == false)
+			{
+				TRACE0("CameraManager Enum Cameras Failed\n");
+			}
+
+		case CCameraManager::CameraStatus::SEARCH:
+			if (ret == true)
+			{
+				if ((ret = m_pCameraManager->OpenButton()) == false)
+				{
+					TRACE0("Open Camera Failed\n");
+				}
+			}
+
+		case CCameraManager::CameraStatus::OPEN:
+			if (ret == true)
+			{
+				HWND hwnd = GetDlgItem(IDC_IMAGE_REC)->GetSafeHwnd();
+				m_pCameraManager->SetDisplayHwnd(hwnd);
+			}
+
+		case CCameraManager::CameraStatus::BIND:
+			if (ret == true)
+			{
+				m_pCameraManager->StartGrabbingButton();
+			}
+
+		case CCameraManager::CameraStatus::GRAB:
+
+		default:
+			break;
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+
+	if (m_pCameraManager == nullptr)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+	if (m_pCameraManager->GetCameraCount() == 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	pCmdUI->Enable(TRUE);
+	return;
+}
+
+
+void CCarSeat_RecognizationDlg::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	if (m_pCameraManager)
+	{
+		delete m_pCameraManager;
+		m_pCameraManager = nullptr;
+	}
+	if (m_pLabelManager != nullptr)
+	{
+		delete m_pLabelManager;
+		m_pLabelManager = nullptr;
+	}
+
+	CDHtmlDialog::OnClose();
+}
+
+
+void CCarSeat_RecognizationDlg::OnTakePhoto()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (m_pCameraManager != nullptr)
+	{
+		CCameraManager::CameraStatus status = m_pCameraManager->GetStatus();
+		if (status == CCameraManager::CameraStatus::GRAB)
+		{
+			m_pCameraManager->SaveJpgButton();
+		}
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnUpdateTakePhoto(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	if ((m_pCameraManager == nullptr) || (m_pCameraManager->GetStatus() != CCameraManager::CameraStatus::GRAB))
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+	pCmdUI->Enable(TRUE);
 }

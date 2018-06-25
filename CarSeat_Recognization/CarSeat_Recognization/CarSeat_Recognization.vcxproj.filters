@@ -111,7 +111,10 @@
     <ClInclude Include="Camera\CameraManager.h">
       <Filter>camera</Filter>
     </ClInclude>
-    <ClInclude Include="CameraParameter.h">
+    <ClInclude Include="LoginDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraParameterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -191,7 +194,10 @@
     <ClCompile Include="Camera\CameraManager.cpp">
       <Filter>camera</Filter>
     </ClCompile>
-    <ClCompile Include="CameraParameter.cpp">
+    <ClCompile Include="LoginDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraParameterDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

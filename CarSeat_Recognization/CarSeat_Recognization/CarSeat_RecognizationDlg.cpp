@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 #include "InputDlg.h"
 #include "./common/utils.h"
+#include "LoginDlg.h"
 // add start by xiexinpeng
 #include <string>
 #include "kepserver/OPC.h"
@@ -91,6 +92,7 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_WM_CLOSE()
 	ON_COMMAND(ID_TAKE_PHOTO, &CCarSeat_RecognizationDlg::OnTakePhoto)
 	ON_UPDATE_COMMAND_UI(ID_TAKE_PHOTO, &CCarSeat_RecognizationDlg::OnUpdateTakePhoto)
+	ON_COMMAND(ID_USR_LOGIN, &CCarSeat_RecognizationDlg::OnUsrLogin)
 END_MESSAGE_MAP()
 
 
@@ -439,4 +441,17 @@ void CCarSeat_RecognizationDlg::OnUpdateTakePhoto(CCmdUI *pCmdUI)
 		return;
 	}
 	pCmdUI->Enable(TRUE);
+}
+
+
+void CCarSeat_RecognizationDlg::OnUsrLogin()
+{
+	// TODO: 在此添加命令处理程序代码
+	CLoginDlg dlg;
+	int ret = dlg.DoModal();
+	if (ret == IDOK)
+	{
+		// 登录部分代码，更新用户名和密码
+
+	}
 }

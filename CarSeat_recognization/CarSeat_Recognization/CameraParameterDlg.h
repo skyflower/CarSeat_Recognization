@@ -2,15 +2,15 @@
 #include <Windows.h>
 #include <iostream>
 
-// CCameraParameter 对话框
+// CCameraParameterDlg 对话框
 
-class CCameraParameter : public CDialogEx
+class CCameraParameterDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CCameraParameter)
+	DECLARE_DYNAMIC(CCameraParameterDlg)
 
 public:
-	CCameraParameter(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CCameraParameter();
+	CCameraParameterDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CCameraParameterDlg();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME

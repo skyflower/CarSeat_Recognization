@@ -111,6 +111,9 @@
     <ClInclude Include="Camera\CameraManager.h">
       <Filter>camera</Filter>
     </ClInclude>
+    <ClInclude Include="CameraParameter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -187,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="Camera\CameraManager.cpp">
       <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraParameter.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

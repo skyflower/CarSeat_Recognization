@@ -199,6 +199,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraParameter.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="CarSeat_Recognization.h" />
@@ -226,6 +227,7 @@
     <ClInclude Include="xml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraParameter.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="CarSeat_Recognization.cpp" />

@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include "MvCameraControl.h"
 
+
+#define STATUS_ERROR            -1
+#define IMAGE_NAME_LEN          64
+
 class CCamera
 {
 public:

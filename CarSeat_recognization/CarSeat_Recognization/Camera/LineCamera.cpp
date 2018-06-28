@@ -3,7 +3,7 @@
 // 
 
 #include "../stdafx.h"
-#include "CameraManager.h"
+#include "LineCamera.h"
 #include "../common/Log.h"
 #include "../common/utils.h"
 
@@ -14,14 +14,14 @@
 
 
 
-CCameraManager::CCameraManager():m_pcMyCamera(NULL)
-    , m_nDeviceCombo(0)
+CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
     , m_bOpenDevice(FALSE)
+	, m_pDevice(pDevice)
     , m_bStartGrabbing(false)
     , m_nTriggerMode(MV_TRIGGER_MODE_OFF)
-    , m_dExposureEdit(0)
-    , m_dGainEdit(0)
-    , m_dFrameRateEdit(0)
+    , m_dExposureTime(0)
+    , m_dExposureGain(0)
+    , m_dFrameRate(0)
     , m_bSoftWareTriggerCheck(FALSE)
     , m_nSaveImageType(MV_Image_Undefined)
     , m_nTriggerSource(MV_TRIGGER_SOURCE_SOFTWARE)
@@ -30,18 +30,17 @@ CCameraManager::CCameraManager():m_pcMyCamera(NULL)
     , m_pBufForDriver(NULL)
     , m_nBufSizeForDriver(0)
 {
-	m_Status = CCameraManager::CameraStatus::INIT;
 	//m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-CCameraManager::~CCameraManager()
+CLineCamera::~CLineCamera()
 {
 	CloseDevice();
 }
 
 
 // ch:显示错误信息 | en:Show error message
-void CCameraManager::ShowErrorMsg(CString csMessage, int nErrorNum)
+void CLineCamera::ShowErrorMsg(CString csMessage, int nErrorNum)
 {
     CString errorMsg;
     if (nErrorNum == 0)
@@ -78,26 +77,15 @@ void CCameraManager::ShowErrorMsg(CString csMessage, int nErrorNum)
 }
 
 // ch:打开设备 | en:Open Device
-int CCameraManager::OpenDevice(void)
+int CLineCamera::OpenDevice(void)
 {
     if (TRUE == m_bOpenDevice)
     {
         return STATUS_ERROR;
     }
-    //UpdateData(TRUE);
-    if(TRUE == m_bOpenDevice)
-    {
-        return STATUS_ERROR;
-    }
-    int nIndex = m_nDeviceCombo;
-    if ((nIndex < 0) | (nIndex >= MV_MAX_DEVICE_NUM))
-    {
-        ShowErrorMsg(TEXT("Please select device"), 0);
-        return STATUS_ERROR;
-    }
 
     // ch:由设备信息创建设备实例 | en:Device instance created by device information
-    if (NULL == m_stDevList.pDeviceInfo[nIndex])
+    if (NULL == m_pDevice)
     {
         ShowErrorMsg(TEXT("Device does not exist"), 0);
         return STATUS_ERROR;
@@ -114,7 +102,7 @@ int CCameraManager::OpenDevice(void)
         return STATUS_ERROR;
     }
 
-    int nRet = m_pcMyCamera->Open(m_stDevList.pDeviceInfo[nIndex]);
+    int nRet = m_pcMyCamera->Open(m_pDevice);
     if (MV_OK != nRet)
     {
         delete m_pcMyCamera;
@@ -123,12 +111,11 @@ int CCameraManager::OpenDevice(void)
     }
 
     m_bOpenDevice = TRUE;
-	m_Status = CCameraManager::CameraStatus::OPEN;
     return MV_OK;
 }
 
 // ch:关闭设备 | en:Close Device
-int CCameraManager::CloseDevice(void)
+int CLineCamera::CloseDevice(void)
 {   
     if (m_pcMyCamera)
     {
@@ -153,200 +140,167 @@ int CCameraManager::CloseDevice(void)
         m_pBufForSaveImage = NULL;
     }
     m_nBufSizeForSaveImage  = 0;
-	m_Status = CCameraManager::CameraStatus::CLOSE;
     return MV_OK;
 }
 
 // ch:获取触发模式 | en:Get Trigger Mode
-int CCameraManager::GetTriggerMode(void)
+MV_CAM_TRIGGER_MODE CLineCamera::GetTriggerMode()
 {
-    CString strFeature;
+	if (m_nTriggerMode != MV_TRIGGER_MODE_UNKNOWN)
+	{
+		return m_nTriggerMode;
+	}
     unsigned int nEnumValue = 0;
 
     int nRet = m_pcMyCamera->GetEnumValue("TriggerMode", &nEnumValue);
     if (MV_OK != nRet)
     {
-        return nRet;
+        return MV_TRIGGER_MODE_UNKNOWN;
     }
 
-    m_nTriggerMode = nEnumValue;
-    if (MV_TRIGGER_MODE_ON ==  m_nTriggerMode)
+    
+    /*if (MV_TRIGGER_MODE_ON ==  m_nTriggerMode)
     {
-        TriggerModeRadio();
+        TriggerMode();
     }
     else if (MV_TRIGGER_MODE_OFF == m_nTriggerMode)
     {
-        ContinusModeRadio();
+        ContinusMode();
     }
     else
     {
-        return STATUS_ERROR;
-    }
-
-    return MV_OK;
+		m_nTriggerMode = MV_TRIGGER_MODE_UNKNOWN;
+        return MV_TRIGGER_MODE_UNKNOWN;
+    }*/
+	m_nTriggerMode = (MV_CAM_TRIGGER_MODE)nEnumValue;
+    return m_nTriggerMode;
 }
 
 // ch:设置触发模式 | en:Set Trigger Mode
-int CCameraManager::SetTriggerMode(void)
+bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 {
+	if (mode == MV_TRIGGER_MODE_UNKNOWN)
+	{
+		return false;
+	}
+	
     int nRet = m_pcMyCamera->SetEnumValue("TriggerMode", m_nTriggerMode);
     if (MV_OK != nRet)
     {
-        return nRet;
+        return false;
     }
-
-    return MV_OK;
+	m_nTriggerMode = mode;
+    return true;
 }
 
 // ch:获取曝光时间 | en:Get Exposure Time
-int CCameraManager::GetExposureTime(void)
+double CLineCamera::GetExposureTime()
 {
-    float  fFloatValue = 0.0;
-    int nRet = m_pcMyCamera->GetFloatValue("ExposureTime", &fFloatValue);
-    if (MV_OK != nRet)
-    {
-        return nRet;
-    }
-
-    m_dExposureEdit = fFloatValue;
-
-    return MV_OK;
+    return m_dExposureTime;
 }
 
 // ch:设置曝光时间 | en:Set Exposure Time
-int CCameraManager::SetExposureTime(void)
+bool CLineCamera::SetExposureTime(double time)
 {
     // ch:调节这两个曝光模式，才能让曝光时间生效
     // en:Adjust these two exposure mode to allow exposure time effective
     int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", MV_EXPOSURE_MODE_TIMED);
     if (MV_OK != nRet)
     {
-        return nRet;
+        return false;
     }
 
     nRet = m_pcMyCamera->SetEnumValue("ExposureAuto", MV_EXPOSURE_AUTO_MODE_OFF);
-
-    nRet = m_pcMyCamera->SetFloatValue("ExposureTime", m_dExposureEdit);
+	if (nRet != MV_OK)
+	{
+		return false;
+	}
+    nRet = m_pcMyCamera->SetFloatValue("ExposureTime", time);
     if (MV_OK != nRet)
     {
-        return nRet;
+        return false;
     }
-
-    return MV_OK;
+	m_dExposureTime = time;
+    return true;
 }
 
 // ch:获取增益 | en:Get Gain
-int CCameraManager::GetGain(void)
+double CLineCamera::GetGain()
 {
-    float  fFloatValue = 0.0;
-
-    int nRet = m_pcMyCamera->GetFloatValue("Gain", &fFloatValue);
-    if (MV_OK != nRet)
-    {
-        return nRet;
-    }
-    m_dGainEdit = (int)fFloatValue;
-
-    return MV_OK;
+    return m_dExposureGain;
 }
 
 // ch:设置增益 | en:Set Gain
-int CCameraManager::SetGain(void)
+bool CLineCamera::SetGain(int gain)
 {
     // ch:设置增益前先把自动增益关闭，失败无需返回
     //en:Set Gain after Auto Gain is turned off, this failure does not need to return
     int nRet = m_pcMyCamera->SetEnumValue("GainAuto", 0);
+	if (nRet != MV_OK)
+	{
+		return false;
+	}
+	nRet = m_pcMyCamera->SetFloatValue("Gain", gain);
+	if (nRet != MV_OK)
+	{
+		return false;
+	}
 
-    return m_pcMyCamera->SetFloatValue("Gain", m_dGainEdit);
+	m_dExposureGain = gain;
+	return true;
 }
 
 // ch:获取帧率 | en:Get Frame Rate
-int CCameraManager::GetFrameRate(void)
+double CLineCamera::GetFrameRate()
 {
-    CString strFeature;
-
-    float  fFloatValue = 0.0;
-
-    int nRet = m_pcMyCamera->GetFloatValue("ResultingFrameRate", &fFloatValue);
-    if (MV_OK != nRet)
-    {
-        return nRet;
-    }
-    m_dFrameRateEdit = fFloatValue;
-
-    return MV_OK;
+    return m_dFrameRate;
 }
 
 // ch:设置帧率 | en:Set Frame Rate
-int CCameraManager::SetFrameRate(void)
+bool CLineCamera::SetFrameRate(double rate)
 {
     int nRet = m_pcMyCamera->SetBoolValue("AcquisitionFrameRateEnable", true);
     if (MV_OK != nRet)
     {
-        return nRet;
+        return false;
     }
 
-    return m_pcMyCamera->SetFloatValue("AcquisitionFrameRate", m_dFrameRateEdit);
+	nRet = m_pcMyCamera->SetFloatValue("AcquisitionFrameRate", rate);
+	if (nRet != MV_OK)
+	{
+		return false;
+	}
+	m_dFrameRate = rate;
+	return true;
 }
 
 // ch:获取触发源 | en:Get Trigger Source
-int CCameraManager::GetTriggerSource(void)
+MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSource()
 {
-    unsigned int nEnumValue = 0;
-
-    int nRet = m_pcMyCamera->GetEnumValue("TriggerSource", &nEnumValue);
-    if (MV_OK != nRet)
-    {
-        return nRet;
-    }
-
-    if ((unsigned int)MV_TRIGGER_SOURCE_SOFTWARE == nEnumValue)
-    {
-        m_bSoftWareTriggerCheck = TRUE;
-    }
-    else
-    {
-        m_bSoftWareTriggerCheck = FALSE;
-    }
-
-    return MV_OK;
+    return m_nTriggerSource;
 }
 
 // ch:设置触发源 | en:Set Trigger Source
-int CCameraManager::SetTriggerSource(void)
+bool CLineCamera::SetTriggerSource(MV_CAM_TRIGGER_SOURCE source)
 {
-    if (m_bSoftWareTriggerCheck)
+    
+    //m_nTriggerSource = MV_TRIGGER_SOURCE_SOFTWARE;
+    int nRet = m_pcMyCamera->SetEnumValue("TriggerSource", source);
+    if (MV_OK != nRet)
     {
-        m_nTriggerSource = MV_TRIGGER_SOURCE_SOFTWARE;
-        int nRet = m_pcMyCamera->SetEnumValue("TriggerSource", m_nTriggerSource);
-        if (MV_OK != nRet)
-        {
-            ShowErrorMsg(TEXT("Set Software Trigger Fail"), nRet);
-            return nRet;
-        }
-        //GetDlgItem(IDC_SOFTWARE_ONCE_BUTTON )->EnableWindow(TRUE);
+        WriteError("Set Software Trigger Fail");
+        return false;
     }
-    else
-    {
-        m_nTriggerSource = MV_TRIGGER_SOURCE_LINE0;
-        int nRet = m_pcMyCamera->SetEnumValue("TriggerSource", m_nTriggerSource);
-        if (MV_OK != nRet)
-        {
-            ShowErrorMsg(TEXT("Set Hardware Trigger Fail"), nRet);
-            return nRet;
-        }
-        //GetDlgItem(IDC_SOFTWARE_ONCE_BUTTON )->EnableWindow(FALSE);
-    }
-
-    return MV_OK;
+	m_nTriggerSource = source;
+    return true;
 }
 
 // ch:保存图片 | en:Save Image
-int CCameraManager::SaveImage()
+std::string CLineCamera::SaveImage()
 {
     if (FALSE == m_bStartGrabbing)
     {
-        return STATUS_ERROR;
+        return std::string();
     }
     // ch:获取1张图 | en:get one image
     unsigned int nRecvBufSize = 0;
@@ -361,7 +315,7 @@ int CCameraManager::SaveImage()
         if (nRet != MV_OK)
         {
             ShowErrorMsg(TEXT("failed in get PayloadSize"), nRet);
-            return nRet;
+            return std::string();
         }
         // ch:一帧数据大小
         // en:One frame size
@@ -370,7 +324,7 @@ int CCameraManager::SaveImage()
         if (NULL == m_pBufForDriver)
         {
             ShowErrorMsg(TEXT("malloc m_pBufForDriver failed, run out of memory"), 0);
-            return nRet;
+            return std::string();
         }
     }
 
@@ -380,6 +334,8 @@ int CCameraManager::SaveImage()
     unsigned int nDataSize = nRecvBufSize;
     unsigned int nImageNum = 1;
     unsigned int nDataLen = 0;
+
+	std::string imagePath;
 
     while(nImageNum)
     {
@@ -436,10 +392,11 @@ int CCameraManager::SaveImage()
             if (NULL == fp)
             {
                 ShowErrorMsg(TEXT("write image failed, maybe you have no privilege"), 0);
-                return STATUS_ERROR;
+                return std::string();
             }
             fwrite(m_pBufForSaveImage, 1, stParam.nImageLen, fp);
             fclose(fp);
+			imagePath = std::string(chImageName);
         }
         else
         {
@@ -447,115 +404,71 @@ int CCameraManager::SaveImage()
         }
     }
 
-    return nRet;
+    return imagePath;
 }
 
-
-// ch:按下查找设备按钮:枚举 | en:Click Find Device button:Enumeration 
-bool  CCameraManager::EnumButton()
+MV_CAM_TRIGGER_MODE CLineCamera::GetTriggerModeByCamera()
 {
-    CString strMsg;
+	MV_CAM_TRIGGER_MODE nEnumValue = MV_TRIGGER_MODE_UNKNOWN;
 
-    // ch:初始化设备信息列表 | en:Device Information List Initialization
-    memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
-
-    // ch:枚举子网内所有设备 | en:Enumerate all devices within subnet
-    int nRet = CCamera::EnumDevices(&m_stDevList);
-    if (MV_OK != nRet)
-    {
-        return false;
-    }
-
-    // ch:将值加入到信息列表框中并显示出来 | en:Add value to the information list box and display
-    unsigned int i;
-    int nIp1, nIp2, nIp3, nIp4;
-    for (i = 0; i < m_stDevList.nDeviceNum; i++)
-    {
-        MV_CC_DEVICE_INFO* pDeviceInfo = m_stDevList.pDeviceInfo[i];
-        if (NULL == pDeviceInfo)
-        {
-            continue;
-        }
-        if (pDeviceInfo->nTLayerType == MV_GIGE_DEVICE)
-        {
-            nIp1 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0xff000000) >> 24);
-            nIp2 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0x00ff0000) >> 16);
-            nIp3 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0x0000ff00) >> 8);
-            nIp4 = (m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0x000000ff);
-
-            wchar_t* pUserName = NULL;
-            if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName)) != 0)
-            {
-                DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName), -1, NULL, 0);
-                pUserName = new wchar_t[dwLenUserName];
-                MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName), -1, pUserName, dwLenUserName);
-            }
-            else
-            {
-                char strUserName[256] = {0};
-                sprintf_s(strUserName, "%s %s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName,
-                    pDeviceInfo->SpecialInfo.stGigEInfo.chModelName,
-                    pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
-                DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
-                pUserName = new wchar_t[dwLenUserName];
-                MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
-            }
-            strMsg.Format(_T("[%d]GigE:    %s  (%d.%d.%d.%d)"), i, 
-                pUserName, nIp1, nIp2, nIp3, nIp4);
-            if (NULL != pUserName)
-            {
-                delete(pUserName);
-                pUserName = NULL;
-            }
-
-        }
-        else if (pDeviceInfo->nTLayerType == MV_USB_DEVICE)
-        {
-            wchar_t* pUserName = NULL;
-
-            if (strcmp("", (char*)pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName) != 0)
-            {
-                DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName), -1, NULL, 0);
-                pUserName = new wchar_t[dwLenUserName];
-                MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName), -1, pUserName, dwLenUserName);
-            }
-            else
-            {
-                char strUserName[256];
-                sprintf_s(strUserName, "%s %s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName,
-                    pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
-                    pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
-                DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
-                pUserName = new wchar_t[dwLenUserName];
-                MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
-            }
-            strMsg.Format(_T("[%d]UsbV3:  %s"), i, pUserName);
-            if (NULL != pUserName)
-            {
-                delete(pUserName);
-                pUserName = NULL;
-            }
-
-        }
-        else
-        {
-            ShowErrorMsg(TEXT("Unknown device enumerated"), 0);;
-        }
-        //m_ctrlDeviceCombo.AddString(strMsg);
-    }
-
-    if (0 == m_stDevList.nDeviceNum)
-    {
-        ShowErrorMsg(TEXT("No device"), 0);
-        return false;
-    }
-    //m_ctrlDeviceCombo.SetCurSel(0);
-	m_Status = CCameraManager::CameraStatus::SEARCH;
-    return true;
+	int nRet = m_pcMyCamera->GetEnumValue("TriggerMode", (unsigned int*)&nEnumValue);
+	if (MV_OK != nRet)
+	{
+		return MV_TRIGGER_MODE_UNKNOWN;
+	}
+	return nEnumValue;
 }
+
+double CLineCamera::GetGainByCamera()
+{
+	float  fFloatValue = 0.0;
+	int nRet = m_pcMyCamera->GetFloatValue("ExposureTime", &fFloatValue);
+	if (MV_OK != nRet)
+	{
+		return -1;
+	}
+	return fFloatValue;
+}
+
+double CLineCamera::GetFrameRateByCamera()
+{
+	float  fFloatValue = 0.0;
+
+	int nRet = m_pcMyCamera->GetFloatValue("ResultingFrameRate", &fFloatValue);
+	if (MV_OK != nRet)
+	{
+		return -1;
+	}
+	return fFloatValue;
+}
+
+double CLineCamera::GetExposureTimeByCamera()
+{
+	float  fFloatValue = 0.0;
+	int nRet = m_pcMyCamera->GetFloatValue("ExposureTime", &fFloatValue);
+	if (MV_OK != nRet)
+	{
+		return -1;
+	}
+	return fFloatValue;
+}
+
+MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
+{
+	MV_CAM_TRIGGER_SOURCE nEnumValue = MV_TRIGGER_SOURCE_UNKNOWN;
+
+	int nRet = m_pcMyCamera->GetEnumValue("TriggerSource", (unsigned int*)&nEnumValue);
+	if (MV_OK != nRet)
+	{
+		return MV_TRIGGER_SOURCE_UNKNOWN;
+	}
+	return nEnumValue;
+}
+
+
 
 // ch:按下打开设备按钮：打开设备 | en:Click Open button: Open Device
-bool CCameraManager::OpenButton()
+bool CLineCamera::OpenButton()
 {
     int nRet = OpenDevice();
     if (MV_OK != nRet)
@@ -564,49 +477,14 @@ bool CCameraManager::OpenButton()
         return false;
     }
 
-    GetParameterButton(); // ch:获取参数 | en:Get Parameter
+    GetParameter(); // ch:获取参数 | en:Get Parameter
     
     return true;
 }
 
 
-
-// ch:按下连续模式按钮 | en:Click Continues button
-void CCameraManager::ContinusModeRadio()
-{
-    m_nTriggerMode = MV_TRIGGER_MODE_OFF;
-    int nRet = SetTriggerMode();
-    if (MV_OK != nRet)
-    {
-        return;
-    }
-    return;
-}
-
-// ch:按下触发模式按钮 | en:Click Trigger Mode button
-void CCameraManager::TriggerModeRadio()
-{
-    m_nTriggerMode = MV_TRIGGER_MODE_ON;
-    int nRet = SetTriggerMode();
-    if (MV_OK != nRet)
-    {
-        ShowErrorMsg(TEXT("Set Trigger Mode Fail"), nRet);
-        return;
-    }
-
-    if (m_bStartGrabbing == TRUE)
-    {
-        if (TRUE == m_bSoftWareTriggerCheck)
-        {
-            //GetDlgItem(IDC_SOFTWARE_ONCE_BUTTON )->EnableWindow(TRUE);
-        }
-    }
-
-    return;
-}
-
 // ch:按下开始采集按钮 | en:Click Start button
-bool CCameraManager::StartGrabbingButton()
+bool CLineCamera::StartGrabbing()
 {
     if (FALSE == m_bOpenDevice || TRUE == m_bStartGrabbing)
     {
@@ -619,7 +497,6 @@ bool CCameraManager::StartGrabbingButton()
         nRet = m_pcMyCamera->StartGrabbing();
         if (nRet == MV_OK)
         {
-			m_Status = CCameraManager::CameraStatus::GRAB;
             nRet = m_pcMyCamera->Display(m_hwndDisplay);
         }
     }
@@ -638,7 +515,7 @@ bool CCameraManager::StartGrabbingButton()
 }
 
 // ch:按下结束采集按钮 | en:Click Stop button
-void CCameraManager::StopGrabbingButton()
+void CLineCamera::StopGrabbing()
 {
     if (FALSE == m_bOpenDevice || FALSE == m_bStartGrabbing)
     {
@@ -665,105 +542,48 @@ void CCameraManager::StopGrabbingButton()
 }
 
 // ch:按下获取参数按钮 | en:Click Get Parameter button
-void CCameraManager::GetParameterButton()
+void CLineCamera::GetParameter()
 {
-    int nRet = GetTriggerMode();
-    if (nRet != MV_OK)
+	m_nTriggerMode = GetTriggerModeByCamera();
+    if (m_nTriggerMode != MV_TRIGGER_MODE_UNKNOWN)
     {
-        ShowErrorMsg(TEXT("Get Trigger Mode Fail"), nRet);
+        WriteError("Get Trigger Mode Fail");
+    }
+	
+	m_dExposureTime = GetExposureTimeByCamera();
+    if (m_dExposureTime != -1)
+    {
+		WriteError("Get Exposure Time Fail");
     }
 
-    nRet = GetExposureTime();
-    if (nRet != MV_OK)
+	m_dExposureGain = GetGainByCamera();
+    if (m_dExposureGain != -1)
     {
-        ShowErrorMsg(TEXT("Get Exposure Time Fail"), nRet);
+		WriteError("Get Gain Fail");
     }
 
-    nRet = GetGain();
-    if (nRet != MV_OK)
+	m_dFrameRate = GetFrameRateByCamera();
+    if (m_dFrameRate != -1)
     {
-        ShowErrorMsg(TEXT("Get Gain Fail"), nRet);
+		WriteError("Get Frame Rate Fail");
     }
 
-    nRet = GetFrameRate();
-    if (nRet != MV_OK)
+	m_nTriggerSource = GetTriggerSourceByCamera();
+    if (m_nTriggerSource != MV_TRIGGER_SOURCE_UNKNOWN)
     {
-        ShowErrorMsg(TEXT("Get Frame Rate Fail"), nRet);
+		WriteError("Get Trigger Source Fail");
     }
-
-    nRet = GetTriggerSource();
-    if (nRet != MV_OK)
-    {
-        ShowErrorMsg(TEXT("Get Trigger Source Fail"), nRet);
-    }
-
-    //UpdateData(FALSE);
     return;
 }
 
-// ch:按下设置参数按钮 | en:Click Set Parameter button
-void CCameraManager::SetParameterButton()
-{
-    
-    bool bIsSetSucceed = true;
-    int nRet = SetExposureTime();
-    if (nRet != MV_OK)
-    {
-        bIsSetSucceed = false;
-        ShowErrorMsg(TEXT("Set Exposure Time Fail"), nRet);
-    }
-    nRet = SetGain();
-    if (nRet != MV_OK)
-    {
-        bIsSetSucceed = false;
-        ShowErrorMsg(TEXT("Set Gain Fail"), nRet);
-    }
-    nRet = SetFrameRate();
-    if (nRet != MV_OK)
-    {
-        bIsSetSucceed = false;
-        ShowErrorMsg(TEXT("Set Frame Rate Fail"), nRet);
-    }
-    
-    if (true == bIsSetSucceed)
-    {
-        ShowErrorMsg(TEXT("Set Parameter Succeed"), nRet);
-    }
-
-    return;
-}
-
-int CCameraManager::GetCameraCount()
-{
-	return m_stDevList.nDeviceNum;
-}
-
-void CCameraManager::SetDisplayHwnd(HWND hwnd)
+void CLineCamera::SetDisplayHwnd(HWND hwnd)
 {
 	m_hwndDisplay = hwnd;
-	m_Status = CameraStatus::BIND;
 }
 
-CCameraManager::CameraStatus CCameraManager::GetStatus()
-{
-	return m_Status;
-}
-
-// ch:按下软触发按钮 | en:Click Software button
-void CCameraManager::SoftwareTriggerCheck()
-{
-
-    int nRet = SetTriggerSource();
-    if (nRet != MV_OK)
-    {
-        return;
-    }
-
-    return;
-}
 
 // ch:按下软触发一次按钮 | en:Click Execute button
-void CCameraManager::SoftwareOnceButton()
+void CLineCamera::SoftwareOnce()
 {
     if (TRUE != m_bStartGrabbing)
     {
@@ -776,31 +596,30 @@ void CCameraManager::SoftwareOnceButton()
 }
 
 // ch:按下保存bmp图片按钮 | en:Click Save BMP button
-void CCameraManager::SaveBmpButton()
+std::string CLineCamera::SaveBmp()
 {
     m_nSaveImageType = MV_Image_Bmp;
-    int nRet = SaveImage();
-    if (MV_OK != nRet)
+    std::string path = SaveImage();
+    if (path.size() == 0)
     {
-        ShowErrorMsg(TEXT("Save bmp fail"), nRet);
-        return;
+        WriteError("Save bmp fail");
+        return path;
     }
-    ShowErrorMsg(TEXT("Save bmp succeed"), nRet);
+    //ShowErrorMsg(TEXT("Save bmp succeed"), nRet);
 
-    return;
+    return path;
 }
 
 // ch:按下保存jpg图片按钮 | en:Click Save JPG button
-void CCameraManager::SaveJpgButton()
+std::string CLineCamera::SaveJpg()
 {
     m_nSaveImageType = MV_Image_Jpeg;
-    int nRet = SaveImage();
-    if (MV_OK != nRet)
+	std::string path = SaveImage();
+    if (path.size() != 0)
     {
-        ShowErrorMsg(TEXT("Save jpg fail"), nRet);
-        return;
+        WriteError("Save jpg fail");
+        return path;
     }
-    ShowErrorMsg(TEXT("Save jpg succeed"), nRet);
-
-    return;
+    //ShowErrorMsg(TEXT("Save jpg succeed"), nRet);
+    return path;
 }

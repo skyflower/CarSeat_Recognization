@@ -8,9 +8,6 @@
 #include "Camera.h"
 #include <Windows.h>
 
-#define STATUS_ERROR            -1
-#define IMAGE_NAME_LEN          64
-
 
 class CCameraManager
 {

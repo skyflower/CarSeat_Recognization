@@ -89,4 +89,5 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnTakePhoto();
 	afx_msg void OnUpdateTakePhoto(CCmdUI *pCmdUI);
+	afx_msg void OnUsrLogin();
 };

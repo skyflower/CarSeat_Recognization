@@ -202,6 +202,7 @@
     <ClInclude Include="CameraParameterDlg.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraManager.h" />
+    <ClInclude Include="Camera\LineCamera.h" />
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
     <ClInclude Include="common\Log.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="CameraParameterDlg.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
+    <ClCompile Include="Camera\LineCamera.cpp" />
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
     <ClCompile Include="common\Log.cpp" />

@@ -281,21 +281,21 @@ typedef enum _MV_CAM_EXPOSURE_AUTO_MODE_
     MV_EXPOSURE_AUTO_MODE_OFF        = 0,            // ch:关闭 | en:Off
     MV_EXPOSURE_AUTO_MODE_ONCE       = 1,            // ch:一次 | en:Once
     MV_EXPOSURE_AUTO_MODE_CONTINUOUS = 2,            // ch:连续 | en:Continuous
-
+	MV_EXPOSURE_AUTO_MODE_UNKNOWN
 }MV_CAM_EXPOSURE_AUTO_MODE;
 
 typedef enum _MV_CAM_TRIGGER_MODE_
 {
     MV_TRIGGER_MODE_OFF         = 0,            // ch:关闭 | en:Off
     MV_TRIGGER_MODE_ON          = 1,            // ch:打开 | en:ON
-
+	MV_TRIGGER_MODE_UNKNOWN
 }MV_CAM_TRIGGER_MODE;
 
 typedef enum _MV_CAM_GAMMA_SELECTOR_
 {
     MV_GAMMA_SELECTOR_USER      = 1,
     MV_GAMMA_SELECTOR_SRGB      = 2,
-
+	MV_GAMMA_SELECTOR_UNKNOWN
 }MV_CAM_GAMMA_SELECTOR;
 
 typedef enum _MV_CAM_BALANCEWHITE_AUTO_
@@ -303,7 +303,7 @@ typedef enum _MV_CAM_BALANCEWHITE_AUTO_
     MV_BALANCEWHITE_AUTO_OFF            = 0,
     MV_BALANCEWHITE_AUTO_ONCE           = 2,
     MV_BALANCEWHITE_AUTO_CONTINUOUS     = 1,            // ch:连续 | en:Continuous
-
+	MV_BALANCEWHITE_AUTO_UNKNOWN
 }MV_CAM_BALANCEWHITE_AUTO;
 
 typedef enum _MV_CAM_TRIGGER_SOURCE_
@@ -316,7 +316,7 @@ typedef enum _MV_CAM_TRIGGER_SOURCE_
 
     MV_TRIGGER_SOURCE_SOFTWARE          = 7,
     MV_TRIGGER_SOURCE_FrequencyConverter= 8,
-
+	MV_TRIGGER_SOURCE_UNKNOWN
 }MV_CAM_TRIGGER_SOURCE;
 
 typedef enum _MV_GIGE_TRANSMISSION_TYPE_

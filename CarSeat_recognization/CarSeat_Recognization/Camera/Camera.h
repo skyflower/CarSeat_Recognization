@@ -15,6 +15,15 @@
 class CCamera
 {
 public:
+
+	enum class CameraStatus
+	{
+		CAMERA_INIT,
+		CAMERA_OPEN,
+		//CAMERA_CLOSE,
+		CAMERA_GRAB,
+		//CAMERA_UNKNOWN
+	};
     CCamera();
     ~CCamera();
 

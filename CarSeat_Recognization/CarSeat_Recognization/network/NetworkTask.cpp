@@ -188,6 +188,7 @@ void CNetworkTask::run()
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 60 * 1000)
 		{
 			heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+			preBlood = now;
 		}
 		if (m_nMsgSize > 0)
 		{

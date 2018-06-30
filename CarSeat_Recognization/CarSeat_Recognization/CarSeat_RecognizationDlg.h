@@ -7,6 +7,7 @@
 #include "LabelManager.h"
 #include "./Camera/Camera.h"
 #include "./Camera/CameraManager.h"
+#include "./Camera/LineCamera.h"
 
 
 // CCarSeat_RecognizationDlg ¶Ô»°¿ò
@@ -37,7 +38,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
 private:
-	CFont m_pFont;
+	//CFont m_pFont;
 	CStatic m_ImagePattern;
 	CStatic m_ImageRec;
 
@@ -58,17 +59,16 @@ private:
 	//CLog *m_pLog;
 	CParamManager *m_pParamManager;
 	CNetworkTask *m_pNetworkTask;
-	//std::thread m_pUIThread;
-
+	
 	CImageClassify *m_pClassify;
 	CLabelManager *m_pLabelManager;
 
-	//CLabelManager *m_pLabelManager;
 	CCameraManager *m_pCameraManager;
+	int m_nCameraIndex;
+	CLineCamera *m_pLineCamera;
 
 
-	//void displayRecImage(const wchar_t *path);
-
+	
 	void CheckAndUpdate(std::wstring barcode, std::wstring type);
 	
 
@@ -90,4 +90,7 @@ public:
 	afx_msg void OnTakePhoto();
 	afx_msg void OnUpdateTakePhoto(CCmdUI *pCmdUI);
 	afx_msg void OnUsrLogin();
+	afx_msg void OnCloseCamera();
+	afx_msg void OnUpdateCloseCamera(CCmdUI *pCmdUI);
+	afx_msg void OnExposureTimeTest();
 };

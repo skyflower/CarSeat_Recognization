@@ -60,17 +60,19 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_bThreadStatus(true),
 	m_nSuccessCount(0),
 	m_nFailCount(0),
+	m_nCameraIndex(-1),
 	m_pParamManager(nullptr),
 	m_pNetworkTask(nullptr),
-	m_pClassify(nullptr)
+	m_pClassify(nullptr),
+	m_pLineCamera(nullptr)
 
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	
-	m_pFont.CreatePointFont(24, L"楷体");
+	//m_pFont.CreatePointFont(24, L"楷体");
 
 	m_pLabelManager = new CLabelManager();	
-	m_pCameraManager = new CCameraManager();
+	m_pCameraManager = CCameraManager::GetInstance();
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -93,6 +95,9 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_TAKE_PHOTO, &CCarSeat_RecognizationDlg::OnTakePhoto)
 	ON_UPDATE_COMMAND_UI(ID_TAKE_PHOTO, &CCarSeat_RecognizationDlg::OnUpdateTakePhoto)
 	ON_COMMAND(ID_USR_LOGIN, &CCarSeat_RecognizationDlg::OnUsrLogin)
+	ON_COMMAND(ID_CLOSE_CAMERA, &CCarSeat_RecognizationDlg::OnCloseCamera)
+	ON_UPDATE_COMMAND_UI(ID_CLOSE_CAMERA, &CCarSeat_RecognizationDlg::OnUpdateCloseCamera)
+	ON_COMMAND(ID_EXPOSURE_TIME_TEST, &CCarSeat_RecognizationDlg::OnExposureTimeTest)
 END_MESSAGE_MAP()
 
 
@@ -121,7 +126,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SetIcon(m_hIcon, TRUE);		
 	SetIcon(m_hIcon, FALSE);
-	this->OnSetFont(&m_pFont);
+	//this->OnSetFont(&m_pFont);
 
 
     // kepserver add start by xiexinpeng	
@@ -169,7 +174,28 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%", m_nSuccessCount, m_nFailCount, ratio);
 
 	m_RegRatio.SetWindowTextW(result);
-	 
+	
+	if (m_pCameraManager != nullptr)
+	{
+		if (m_pCameraManager->EnumCamera() == false)
+		{
+			TRACE0("init camera Failed\n");
+		}
+		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount());
+		if (m_pCameraManager->GetCameraCount() > 0)
+		{
+			m_nCameraIndex = 0;
+		}
+	}
+	if (m_pLineCamera == nullptr)
+	{
+		if (m_nCameraIndex != -1)
+		{
+
+			MV_CC_DEVICE_INFO * pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
+			m_pLineCamera = new CLineCamera(pDevice);
+		}
+	}
 	
 	//m_pUIThread = std::thread(run, this);
 
@@ -336,46 +362,91 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 	// TODO: 在此添加命令处理程序代码
 	if (m_pCameraManager == nullptr)
 	{
-		m_pCameraManager = new CCameraManager();
+		m_pCameraManager = CCameraManager::GetInstance();
 	}
-	CCameraManager::CameraStatus status = m_pCameraManager->GetStatus();
-	TRACE1("Camera Status = %d\n", status);
-	bool ret = true;
-	switch(status)
+	if (m_nCameraIndex == -1)
 	{
-		case CCameraManager::CameraStatus::INIT:
-			if ((ret = m_pCameraManager->EnumButton()) == false)
-			{
-				TRACE0("CameraManager Enum Cameras Failed\n");
-			}
-
-		case CCameraManager::CameraStatus::SEARCH:
-			if (ret == true)
-			{
-				if ((ret = m_pCameraManager->OpenButton()) == false)
-				{
-					TRACE0("Open Camera Failed\n");
-				}
-			}
-
-		case CCameraManager::CameraStatus::OPEN:
-			if (ret == true)
-			{
-				HWND hwnd = GetDlgItem(IDC_IMAGE_REC)->GetSafeHwnd();
-				m_pCameraManager->SetDisplayHwnd(hwnd);
-			}
-
-		case CCameraManager::CameraStatus::BIND:
-			if (ret == true)
-			{
-				m_pCameraManager->StartGrabbingButton();
-			}
-
-		case CCameraManager::CameraStatus::GRAB:
-
-		default:
-			break;
+		if (m_pCameraManager->EnumCamera() == false)
+		{
+			AfxMessageBox(L"enum Camera Failed");
+			return;
+		}
+		if (m_pCameraManager->GetCameraCount() == 0)
+		{
+			AfxMessageBox(L"no Camera connect software");
+			return;
+		}
+		m_nCameraIndex = 0;
 	}
+	if ((m_pLineCamera == nullptr) && (m_nCameraIndex != -1))
+	{
+		MV_CC_DEVICE_INFO *pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
+		if (pDevice == nullptr)
+		{
+			AfxMessageBox(L"get Camera device Failed");
+			return;
+		}
+		m_pLineCamera = new CLineCamera(pDevice);
+	}
+	if (m_pLineCamera == nullptr)
+	{
+		AfxMessageBox(L"line camera init Failed");
+		return;
+	}
+	CCamera::CameraStatus tmpStatus = m_pLineCamera->GetCameraStatus();
+	if (tmpStatus == CCamera::CameraStatus::CAMERA_GRAB)
+	{
+		return;
+	}
+
+	do
+	{
+		if (tmpStatus != CCamera::CameraStatus::CAMERA_OPEN)
+		{
+			if (m_pLineCamera->OpenButton() == false)
+			{
+				TRACE0("open button Failed\n");
+				WriteError("open button Failed");
+				break;
+			}
+		}
+		
+		if (m_pLineCamera->SetFrameRate(20.0) == false)
+		{
+			TRACE0("SetFrameRate Failed\n");
+			WriteError("SetFrameRate Failed");
+		}
+		if (m_pLineCamera->SetGain(0) == false)
+		{
+			TRACE0("SetGain Failed\n");
+			WriteError("SetGain Failed");
+		}
+		if (m_pLineCamera->SetTriggerMode(MV_TRIGGER_MODE_OFF) == false)
+		{
+			TRACE0("SetTriggerMode MV_TRIGGER_MODE_ON Failed\n");
+			WriteError("SetTriggerMode MV_TRIGGER_MODE_ON Failed");
+		}
+		if (m_pLineCamera->SetTriggerSource(MV_TRIGGER_SOURCE_LINE0) == false)
+		{
+			TRACE0("SetTriggerSource MV_TRIGGER_SOURCE_LINE0 Failed\n");
+			WriteError("SetTriggerSource MV_TRIGGER_SOURCE_LINE0 Failed");
+		}
+		HWND imageHwnd = GetDlgItem(IDC_IMAGE_REC)->GetSafeHwnd();
+		m_pLineCamera->SetDisplayHwnd(imageHwnd);
+		if (m_pLineCamera->StartGrabbing() == false)
+		{
+			TRACE0("StartGrabbing Failed\n");
+			WriteError("StartGrabbing Failed");
+			break;
+		}
+		return;
+	} while (0);
+	
+
+	m_pLineCamera->CloseDevice();
+
+
+	
 }
 
 
@@ -390,8 +461,12 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 	}
 	if (m_pCameraManager->GetCameraCount() == 0)
 	{
-		pCmdUI->Enable(FALSE);
-		return;
+		m_pCameraManager->EnumCamera();
+		if (m_pCameraManager->GetCameraCount() == 0)
+		{
+			pCmdUI->Enable(FALSE);
+			return;
+		}
 	}
 
 	pCmdUI->Enable(TRUE);
@@ -402,7 +477,11 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 void CCarSeat_RecognizationDlg::OnClose()
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-
+	if (m_pLineCamera)
+	{
+		delete m_pLineCamera;
+		m_pLineCamera = nullptr;
+	}
 	if (m_pCameraManager)
 	{
 		delete m_pCameraManager;
@@ -421,12 +500,12 @@ void CCarSeat_RecognizationDlg::OnClose()
 void CCarSeat_RecognizationDlg::OnTakePhoto()
 {
 	// TODO: 在此添加命令处理程序代码
-	if (m_pCameraManager != nullptr)
+	if (m_pLineCamera != nullptr)
 	{
-		CCameraManager::CameraStatus status = m_pCameraManager->GetStatus();
-		if (status == CCameraManager::CameraStatus::GRAB)
+		CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
+		if (status == CCamera::CameraStatus::CAMERA_GRAB)
 		{
-			m_pCameraManager->SaveJpgButton();
+			std::wstring path = m_pLineCamera->SaveJpg();
 		}
 	}
 }
@@ -435,7 +514,7 @@ void CCarSeat_RecognizationDlg::OnTakePhoto()
 void CCarSeat_RecognizationDlg::OnUpdateTakePhoto(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
-	if ((m_pCameraManager == nullptr) || (m_pCameraManager->GetStatus() != CCameraManager::CameraStatus::GRAB))
+	if ((m_pLineCamera == nullptr) ||(m_pLineCamera->GetCameraStatus() != CCamera::CameraStatus::CAMERA_GRAB))
 	{
 		pCmdUI->Enable(FALSE);
 		return;
@@ -453,5 +532,63 @@ void CCarSeat_RecognizationDlg::OnUsrLogin()
 	{
 		// 登录部分代码，更新用户名和密码
 
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnCloseCamera()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->CloseDevice();
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnUpdateCloseCamera(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	if (m_pLineCamera == nullptr)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+	CCamera::CameraStatus tmpStatus = m_pLineCamera->GetCameraStatus();
+	if (tmpStatus == CCamera::CameraStatus::CAMERA_INIT)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+	pCmdUI->Enable(TRUE);
+}
+
+
+void CCarSeat_RecognizationDlg::OnExposureTimeTest()
+{
+	// TODO: 在此添加命令处理程序代码
+	//SendMessage()
+
+	if (m_pLineCamera != nullptr)
+	{
+		CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
+		if (status == CCamera::CameraStatus::CAMERA_GRAB)
+		{
+			
+			m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_OFF);
+			double timeMax, timeMin;
+			m_pLineCamera->GetExposureTimeRange(&timeMax, &timeMin);
+			m_pLineCamera->SetImageSaveDirectory(L"C:\\Users\\Administrator\\Desktop\\CodeStudy\\hikvision\\");
+			
+			TRACE2("exposure time range = %f, %f\n", timeMax, timeMin);
+
+			const size_t M = 20;
+			double timeStep = (timeMax - timeMin) / M;
+			for (int i = 0; i < M; ++i)
+			{
+				m_pLineCamera->SetExposureTime(timeMin + i * timeStep);
+				std::wstring path = m_pLineCamera->SaveJpg();
+			}
+		}
 	}
 }

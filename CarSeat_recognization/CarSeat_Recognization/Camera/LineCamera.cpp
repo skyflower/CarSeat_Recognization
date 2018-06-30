@@ -15,22 +15,25 @@
 
 
 CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
-    , m_bOpenDevice(FALSE)
+    //, m_bOpenDevice(FALSE)
 	, m_pDevice(pDevice)
-    , m_bStartGrabbing(false)
+    //, m_bStartGrabbing(false)
     , m_nTriggerMode(MV_TRIGGER_MODE_OFF)
     , m_dExposureTime(0)
     , m_dExposureGain(0)
     , m_dFrameRate(0)
-    , m_bSoftWareTriggerCheck(FALSE)
+    //, m_bSoftWareTriggerCheck(FALSE)
     , m_nSaveImageType(MV_Image_Undefined)
     , m_nTriggerSource(MV_TRIGGER_SOURCE_SOFTWARE)
     , m_pBufForSaveImage(NULL)
     , m_nBufSizeForSaveImage(0)
     , m_pBufForDriver(NULL)
     , m_nBufSizeForDriver(0)
+	, m_status(CCamera::CameraStatus::CAMERA_INIT)
 {
-	//m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	//GetCurrentDirectory()
+	memset(m_szImageDir, 0, sizeof(m_szImageDir));
+	StrCpy(m_szImageDir, L".\\");
 }
 
 CLineCamera::~CLineCamera()
@@ -39,55 +42,15 @@ CLineCamera::~CLineCamera()
 }
 
 
-// ch:显示错误信息 | en:Show error message
-void CLineCamera::ShowErrorMsg(CString csMessage, int nErrorNum)
-{
-    CString errorMsg;
-    if (nErrorNum == 0)
-    {
-        errorMsg.Format(_T("%s"), csMessage);
-    }
-    else
-    {
-        errorMsg.Format(_T("%s: Error = %x: "), csMessage, nErrorNum);
-    }
-
-    switch(nErrorNum)
-    {
-    case MV_E_HANDLE:           errorMsg += "Error or invalid handle ";                                         break;
-    case MV_E_SUPPORT:          errorMsg += "Not supported function ";                                          break;
-    case MV_E_BUFOVER:          errorMsg += "Cache is full ";                                                   break;
-    case MV_E_CALLORDER:        errorMsg += "Function calling order error ";                                    break;
-    case MV_E_PARAMETER:        errorMsg += "Incorrect parameter ";                                             break;
-    case MV_E_RESOURCE:         errorMsg += "Applying resource failed ";                                        break;
-    case MV_E_NODATA:           errorMsg += "No data ";                                                         break;
-    case MV_E_PRECONDITION:     errorMsg += "Precondition error, or running environment changed ";              break;
-    case MV_E_VERSION:          errorMsg += "Version mismatches ";                                              break;
-    case MV_E_NOENOUGH_BUF:     errorMsg += "Insufficient memory ";                                             break;
-    case MV_E_ABNORMAL_IMAGE:   errorMsg += "Abnormal image, maybe incomplete image because of lost packet ";   break;
-    case MV_E_UNKNOW:           errorMsg += "Unknown error ";                                                   break;
-    case MV_E_GC_GENERIC:       errorMsg += "General error ";                                                   break;
-    case MV_E_GC_ACCESS:        errorMsg += "Node accessing condition error ";                                  break;
-    case MV_E_ACCESS_DENIED:	errorMsg += "No permission ";                                                   break;
-    case MV_E_BUSY:             errorMsg += "Device is busy, or network disconnected ";                         break;
-    case MV_E_NETER:            errorMsg += "Network error ";                                                   break;
-    }
-	
-    //AfxMessageBox(errorMsg, TEXT("PROMPT"), MB_OK | MB_ICONWARNING);
-}
 
 // ch:打开设备 | en:Open Device
 int CLineCamera::OpenDevice(void)
 {
-    if (TRUE == m_bOpenDevice)
-    {
-        return STATUS_ERROR;
-    }
 
     // ch:由设备信息创建设备实例 | en:Device instance created by device information
     if (NULL == m_pDevice)
     {
-        ShowErrorMsg(TEXT("Device does not exist"), 0);
+        WriteError("Device does not exist");
         return STATUS_ERROR;
     }
 
@@ -110,7 +73,7 @@ int CLineCamera::OpenDevice(void)
         return nRet;
     }
 
-    m_bOpenDevice = TRUE;
+	m_status = CCamera::CameraStatus::CAMERA_OPEN;
     return MV_OK;
 }
 
@@ -124,8 +87,9 @@ int CLineCamera::CloseDevice(void)
         m_pcMyCamera = NULL;
     }
 
-    m_bOpenDevice = FALSE;
-    m_bStartGrabbing = FALSE;
+    //m_bOpenDevice = FALSE;
+    //m_bStartGrabbing = FALSE;
+	m_status = CCamera::CameraStatus::CAMERA_INIT;
 
     if (m_pBufForDriver)
     {
@@ -174,6 +138,11 @@ MV_CAM_TRIGGER_MODE CLineCamera::GetTriggerMode()
     }*/
 	m_nTriggerMode = (MV_CAM_TRIGGER_MODE)nEnumValue;
     return m_nTriggerMode;
+}
+
+CCamera::CameraStatus CLineCamera::GetCameraStatus()
+{
+	return m_status;
 }
 
 // ch:设置触发模式 | en:Set Trigger Mode
@@ -295,12 +264,70 @@ bool CLineCamera::SetTriggerSource(MV_CAM_TRIGGER_SOURCE source)
     return true;
 }
 
-// ch:保存图片 | en:Save Image
-std::string CLineCamera::SaveImage()
+bool CLineCamera::GetExposureTimeRange(double * timeMax, double * timeMin)
 {
-    if (FALSE == m_bStartGrabbing)
+	*timeMax = m_dExposureTimeMax;
+	*timeMin = m_dExposureTimeMin;
+	return true;
+}
+
+bool CLineCamera::SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode)
+{
+
+	int nRet = m_pcMyCamera->SetEnumValue("ExposureAuto", mode);
+	if (MV_OK != nRet)
+	{
+		WriteError("Set Software Trigger Fail");
+		return false;
+	}
+	m_nExposureAutoMode = mode;
+	return true;
+}
+
+bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
+{
+	if (fileDir == nullptr)
+	{
+		return false;
+	}
+
+	//memcpy(m_szImageDir, fileDir, strlen(fileDir));
+	size_t length = wcslen(fileDir);
+	if (std::find(fileDir, fileDir + length, L'\\') != (fileDir + length))
+	{
+		if (fileDir[length - 1] == L'\\')
+		{
+			wmemcpy(m_szImageDir, fileDir, wcslen(fileDir));
+			return true;
+		}
+		swprintf_s(m_szImageDir, sizeof(m_szImageDir), L"%s\\", fileDir);
+		return true;
+	}
+	if (std::find(fileDir, fileDir + length, L'/') != (fileDir + length))
+	{
+		if (fileDir[length - 1] == L'/')
+		{
+			wmemcpy(m_szImageDir, fileDir, wcslen(fileDir));
+			return true;
+		}
+		swprintf_s(m_szImageDir, sizeof(m_szImageDir), L"%s/", fileDir);
+		return true;
+	}
+	swprintf_s(m_szImageDir, sizeof(m_szImageDir), L"%s\\", fileDir);
+	return true;
+}
+
+const wchar_t * CLineCamera::GetImageSaveDirectory()
+{
+	return m_szImageDir;
+}
+
+// ch:保存图片 | en:Save Image
+std::wstring CLineCamera::SaveImage()
+{
+    if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
-        return std::string();
+        return std::wstring();
     }
     // ch:获取1张图 | en:get one image
     unsigned int nRecvBufSize = 0;
@@ -314,8 +341,8 @@ std::string CLineCamera::SaveImage()
         nRet = m_pcMyCamera->GetIntValue("PayloadSize", &nRecvBufSize);
         if (nRet != MV_OK)
         {
-            ShowErrorMsg(TEXT("failed in get PayloadSize"), nRet);
-            return std::string();
+            WriteError("failed in get PayloadSize, nRet = %d", nRet);
+            return std::wstring();
         }
         // ch:一帧数据大小
         // en:One frame size
@@ -323,8 +350,8 @@ std::string CLineCamera::SaveImage()
         m_pBufForDriver = (unsigned char *)malloc(m_nBufSizeForDriver);
         if (NULL == m_pBufForDriver)
         {
-            ShowErrorMsg(TEXT("malloc m_pBufForDriver failed, run out of memory"), 0);
-            return std::string();
+			WriteError("malloc m_pBufForDriver failed, run out of memory");
+            return std::wstring();
         }
     }
 
@@ -335,7 +362,7 @@ std::string CLineCamera::SaveImage()
     unsigned int nImageNum = 1;
     unsigned int nDataLen = 0;
 
-	std::string imagePath;
+	std::wstring imagePath;
 
     while(nImageNum)
     {
@@ -377,26 +404,44 @@ std::string CLineCamera::SaveImage()
                 break;
             }
 
-            char chImageName[IMAGE_NAME_LEN] = {0};
+            wchar_t chImageName[IMAGE_NAME_LEN] = {0};
             if (MV_Image_Bmp == stParam.enImageType)
             {
-                sprintf_s(chImageName, IMAGE_NAME_LEN, "Image_w%d_h%d_fn%03d.bmp", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
+                swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.bmp", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
             }
             else if (MV_Image_Jpeg == stParam.enImageType)
             {
-                sprintf_s(chImageName, IMAGE_NAME_LEN, "Image_w%d_h%d_fn%03d.jpg", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
+                swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.jpg", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
             }
-            
+			wchar_t absoluteName[MAX_CHAR_LENGTH] = { 0 };
+
+			WriteInfo("m_szImageDir = %s", m_szImageDir);
+			WriteInfo("chImageName = %s", chImageName);
+
+			TRACE1("m_szImageDir = %s\n", m_szImageDir);
+			TRACE1("chImageName = %s\n", chImageName);
+			
+			swprintf_s(absoluteName, sizeof(absoluteName), L"%s%s", m_szImageDir, chImageName);
+			
+			char *tmpFileName = utils::WcharToChar(absoluteName);
+			if (tmpFileName == nullptr)
+			{
+				return std::wstring();
+			}
 			FILE* fp = nullptr;
-			fopen_s(&fp, chImageName, "wb");
+			fopen_s(&fp, tmpFileName, "wb");
+
+			delete tmpFileName;
+			tmpFileName = nullptr;
+
             if (NULL == fp)
             {
-                ShowErrorMsg(TEXT("write image failed, maybe you have no privilege"), 0);
-                return std::string();
+                WriteError("write image failed, maybe you have no privilege");
+                return std::wstring();
             }
             fwrite(m_pBufForSaveImage, 1, stParam.nImageLen, fp);
             fclose(fp);
-			imagePath = std::string(chImageName);
+			imagePath = std::wstring(chImageName);
         }
         else
         {
@@ -465,6 +510,62 @@ MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
 	return nEnumValue;
 }
 
+double CLineCamera::GetExposureTimeMaxByCamera()
+{
+	float tmpValue = 0;
+	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeLowerLimit", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		return -1;
+	}
+	return tmpValue;
+}
+
+double CLineCamera::GetExposureTimeMinByCamera()
+{
+	float tmpValue = 0;
+	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeUpperLimit", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		return -1;
+	}
+	return tmpValue;
+}
+
+MV_CAM_EXPOSURE_AUTO_MODE CLineCamera::GetExposureAutoModeByCamera()
+{
+	MV_CAM_EXPOSURE_AUTO_MODE tmpValue = MV_EXPOSURE_AUTO_MODE_UNKNOWN;
+	int nRet = m_pcMyCamera->GetEnumValue("ExposureAuto", (unsigned int*)&tmpValue);
+	if (nRet != MV_OK)
+	{
+		return MV_EXPOSURE_AUTO_MODE_UNKNOWN;
+	}
+	return tmpValue;
+}
+
+int CLineCamera::GetWidthMaxByCamera()
+{
+	//
+	unsigned int tmpValue = -1;
+	int nRet = m_pcMyCamera->GetIntValue("WidthMax", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		return -1;
+	}
+	return tmpValue;
+}
+
+int CLineCamera::GetHeightMaxByCamera()
+{
+	unsigned int tmpValue = -1;
+	int nRet = m_pcMyCamera->GetIntValue("HeightMax", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		return -1;
+	}
+	return tmpValue;
+}
+
 
 
 // ch:按下打开设备按钮：打开设备 | en:Click Open button: Open Device
@@ -473,7 +574,7 @@ bool CLineCamera::OpenButton()
     int nRet = OpenDevice();
     if (MV_OK != nRet)
     {
-        ShowErrorMsg(TEXT("Open Fail"), nRet);
+        WriteError("Open Fail, nRet = %u", nRet);
         return false;
     }
 
@@ -486,10 +587,10 @@ bool CLineCamera::OpenButton()
 // ch:按下开始采集按钮 | en:Click Start button
 bool CLineCamera::StartGrabbing()
 {
-    if (FALSE == m_bOpenDevice || TRUE == m_bStartGrabbing)
-    {
-        return false;
-    }
+	if ((m_status == CCamera::CameraStatus::CAMERA_GRAB) || (m_status != CCamera::CameraStatus::CAMERA_OPEN))
+	{
+		return false;
+	}
 
     int nRet = MV_OK;
     if (NULL != m_pcMyCamera)
@@ -509,7 +610,7 @@ bool CLineCamera::StartGrabbing()
     {
         return false;
     }
-    m_bStartGrabbing = TRUE;
+	m_status = CCamera::CameraStatus::CAMERA_GRAB;
     
     return true;
 }
@@ -517,10 +618,10 @@ bool CLineCamera::StartGrabbing()
 // ch:按下结束采集按钮 | en:Click Stop button
 void CLineCamera::StopGrabbing()
 {
-    if (FALSE == m_bOpenDevice || FALSE == m_bStartGrabbing)
-    {
-        return;
-    }
+	if ((m_status != CCamera::CameraStatus::CAMERA_GRAB) && (m_status != CCamera::CameraStatus::CAMERA_OPEN))
+	{
+		return;
+	}
 
     int nRet = MV_OK;
     if (NULL != m_pcMyCamera)
@@ -536,7 +637,8 @@ void CLineCamera::StopGrabbing()
     {
         return ;
     }
-    m_bStartGrabbing = FALSE;
+    //m_bStartGrabbing = FALSE;
+	m_status = CCamera::CameraStatus::CAMERA_OPEN;
     
     return;
 }
@@ -545,34 +647,47 @@ void CLineCamera::StopGrabbing()
 void CLineCamera::GetParameter()
 {
 	m_nTriggerMode = GetTriggerModeByCamera();
-    if (m_nTriggerMode != MV_TRIGGER_MODE_UNKNOWN)
+    if (m_nTriggerMode == MV_TRIGGER_MODE_UNKNOWN)
     {
         WriteError("Get Trigger Mode Fail");
     }
 	
 	m_dExposureTime = GetExposureTimeByCamera();
-    if (m_dExposureTime != -1)
+    if (m_dExposureTime == -1)
     {
 		WriteError("Get Exposure Time Fail");
     }
 
 	m_dExposureGain = GetGainByCamera();
-    if (m_dExposureGain != -1)
+    if (m_dExposureGain == -1)
     {
 		WriteError("Get Gain Fail");
     }
 
 	m_dFrameRate = GetFrameRateByCamera();
-    if (m_dFrameRate != -1)
+    if (m_dFrameRate == -1)
     {
 		WriteError("Get Frame Rate Fail");
     }
 
 	m_nTriggerSource = GetTriggerSourceByCamera();
-    if (m_nTriggerSource != MV_TRIGGER_SOURCE_UNKNOWN)
+    if (m_nTriggerSource == MV_TRIGGER_SOURCE_UNKNOWN)
     {
 		WriteError("Get Trigger Source Fail");
     }
+	m_dExposureTimeMax = GetExposureTimeMaxByCamera();
+	if (m_dExposureTimeMax == -1)
+	{
+		WriteError("Get Exposure Time Max Fail");
+	}
+	m_dExposureTimeMin = GetExposureTimeMinByCamera();
+	if (m_dExposureTimeMin == -1)
+	{
+		WriteError("Get Exposure Time Min Fail");
+	}
+
+
+	//m_pcMyCamera->
     return;
 }
 
@@ -585,7 +700,7 @@ void CLineCamera::SetDisplayHwnd(HWND hwnd)
 // ch:按下软触发一次按钮 | en:Click Execute button
 void CLineCamera::SoftwareOnce()
 {
-    if (TRUE != m_bStartGrabbing)
+    if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
         return;
     }
@@ -596,10 +711,10 @@ void CLineCamera::SoftwareOnce()
 }
 
 // ch:按下保存bmp图片按钮 | en:Click Save BMP button
-std::string CLineCamera::SaveBmp()
+std::wstring CLineCamera::SaveBmp()
 {
     m_nSaveImageType = MV_Image_Bmp;
-    std::string path = SaveImage();
+    std::wstring path = SaveImage();
     if (path.size() == 0)
     {
         WriteError("Save bmp fail");
@@ -611,15 +726,14 @@ std::string CLineCamera::SaveBmp()
 }
 
 // ch:按下保存jpg图片按钮 | en:Click Save JPG button
-std::string CLineCamera::SaveJpg()
+std::wstring CLineCamera::SaveJpg()
 {
     m_nSaveImageType = MV_Image_Jpeg;
-	std::string path = SaveImage();
-    if (path.size() != 0)
+	std::wstring path = SaveImage();
+    if (path.size() == 0)
     {
         WriteError("Save jpg fail");
         return path;
     }
-    //ShowErrorMsg(TEXT("Save jpg succeed"), nRet);
     return path;
 }

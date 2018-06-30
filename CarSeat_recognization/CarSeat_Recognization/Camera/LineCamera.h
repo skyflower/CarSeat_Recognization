@@ -8,23 +8,25 @@
 #include "Camera.h"
 #include <Windows.h>
 #include <Windows.h>
+#include "../common/utils.h"
 
 class CLineCamera
 {
 // Construction
 public:
 	CLineCamera(MV_CC_DEVICE_INFO *pDevice);	// Standard constructor
+	CLineCamera() = delete;
+
+
 
 	~CLineCamera();
 
 /*ch:控件对应变量 | en:Control corresponding variable*/
 private:
-    /*ch:初始化 | en:Initialization*/
-    
-	//CameraStatus m_Status;
+   
     /*ch:图像采集 | en:Image Acquisition*/
       // ch:软触发 | en:Software trigger
-    BOOL    m_bSoftWareTriggerCheck;
+    //BOOL    m_bSoftWareTriggerCheck;
             // ch:保存为jpg | en:Save as jpg
 
     /*ch:参数设置获取 | en:Get Parameter Setting*/
@@ -32,16 +34,25 @@ private:
     double  m_dExposureTime;	//曝光时间
     double  m_dExposureGain; // 增益
     double  m_dFrameRate;  // fps 
-    
-    /*ch:设备显示下拉框 | en:Device display drop-down box*/
-    //int      m_nDeviceCombo;
 
+	CCamera::CameraStatus m_status;
+	double m_dExposureTimeMax;
+	double m_dExposureTimeMin;
+
+	MV_CAM_EXPOSURE_AUTO_MODE m_nExposureAutoMode;
+	int m_nWidthMax;
+	int m_nHeightMax;
+	wchar_t m_szImageDir[MAX_CHAR_LENGTH];
+
+
+
+
+    
+   
 /*ch:内部函数 | en:Built-in function*/
-private:
+public:
     
-    void ShowErrorMsg(CString csMessage, int nErrorNum);
-
-    
+	CCamera::CameraStatus GetCameraStatus();
    
     /*ch:设置、获取参数操作 | en:Set and get parameters operation*/
     bool SetTriggerMode(MV_CAM_TRIGGER_MODE mode);                // ch:设置触发模式 | en:Set Trigger Mode
@@ -54,10 +65,14 @@ private:
     bool SetFrameRate(double rate);
 	MV_CAM_TRIGGER_SOURCE GetTriggerSource(void);              // ch:设置触发源 | en:Set Trigger Source
     bool SetTriggerSource(MV_CAM_TRIGGER_SOURCE source);
+	bool GetExposureTimeRange(double *timeMax, double *timeMin);
+	bool SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode);
+	bool SetImageSaveDirectory(const wchar_t* fileDir);
+	const wchar_t *GetImageSaveDirectory();
 
 
     /*ch:图片保存 | en:Save Image*/
-    std::string SaveImage(void);                     // ch:保存图片 | en:Save Image
+    std::wstring SaveImage(void);                     // ch:保存图片 | en:Save Image
 
    
 /*ch:自定义变量 | en:User Defined Variable*/
@@ -67,14 +82,20 @@ private:
 	double GetFrameRateByCamera();
 	double GetExposureTimeByCamera();
 	MV_CAM_TRIGGER_SOURCE GetTriggerSourceByCamera(void);
+	double GetExposureTimeMaxByCamera();
+	double GetExposureTimeMinByCamera();
+	MV_CAM_EXPOSURE_AUTO_MODE GetExposureAutoModeByCamera();
+	int GetWidthMaxByCamera();
+	int GetHeightMaxByCamera();
+
+
+	/*ch:参数设置获取 | en:Parameters Get and Set*/
+	void GetParameter();       // ch:获取参数 | en:Get Parameter
 	
 
-
-
-
     /*ch:状态 | en:Status*/
-    BOOL  m_bOpenDevice;                        // ch:是否打开设备 | en:Whether to open device
-    BOOL  m_bStartGrabbing;                     // ch:是否开始抓图 | en:Whether to start grabbing
+    //BOOL  m_bOpenDevice;                        // ch:是否打开设备 | en:Whether to open device
+    //BOOL  m_bStartGrabbing;                     // ch:是否开始抓图 | en:Whether to start grabbing
 	MV_CAM_TRIGGER_MODE   m_nTriggerMode;                       // ch:触发模式 | en:Trigger Mode
 	MV_CAM_TRIGGER_SOURCE   m_nTriggerSource;                     // ch:触发源 | en:Trigger Source
     MV_SAVE_IAMGE_TYPE   m_nSaveImageType;      // ch:保存图像格式 | en:Save Image Type
@@ -83,9 +104,7 @@ private:
     CCamera*      m_pcMyCamera;               // ch:CMyCamera封装了常用接口 | en:CMyCamera packed commonly used interface
     HWND  m_hwndDisplay;                        // ch:显示句柄 | en:Display Handle
 	MV_CC_DEVICE_INFO *m_pDevice;
-	//MV_CC_DEVICE_INFO_LIST m_stDevList;         // ch:设备信息列表结构体变量，用来存储设备列表
-                                                //en:Device information list structure variable used to store device list
-
+	
     unsigned char*  m_pBufForSaveImage;         // ch:用于保存图像的缓存 | en:Buffer to save image
     unsigned int    m_nBufSizeForSaveImage;
 
@@ -94,10 +113,6 @@ private:
 
 /*ch:按下控件操作 | en:Control operation*/
 public:
-
-
-
-
 
     /*ch:初始化 | en:Initialization*/
     //bool EnumButton();               // ch:查找设备 | en:Find Devices
@@ -110,23 +125,15 @@ public:
 	/*ch:初始化相机操作 | en:Initialization*/
 	int OpenDevice();   // ch:打开相机 | en:Open Device
 
-   
-    /*ch:图像采集 | en:Image Acquisition*/
-    //void ContinusMode();        // ch:连续模式 | en:Continus Mode
-    //void TriggerMode();         // ch:触发模式 | en:Trigger Mode
-    
-
 	bool StartGrabbing();      // ch:开始采集 | en:Start Grabbing
     void StopGrabbing();       // ch:结束采集 | en:Stop Grabbing
     void SoftwareOnce();       // ch:软触发一次 | en:Software Trigger Execute Once
   
     /*ch:图像保存 | en:Image Save*/
-    std::string SaveBmp();            // ch:保存bmp | en:Save bmp
-    std::string SaveJpg();            // ch:保存jpg | en:Save jpg
+    std::wstring SaveBmp();            // ch:保存bmp | en:Save bmp
+    std::wstring SaveJpg();            // ch:保存jpg | en:Save jpg
   
-    /*ch:参数设置获取 | en:Parameters Get and Set*/
-    void GetParameter();       // ch:获取参数 | en:Get Parameter
+   
     
 	void SetDisplayHwnd(HWND hwnd);
-
 };

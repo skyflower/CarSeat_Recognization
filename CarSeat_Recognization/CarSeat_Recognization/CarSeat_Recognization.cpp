@@ -6,6 +6,7 @@
 #include "CarSeat_Recognization.h"
 #include "CarSeat_RecognizationDlg.h"
 #include <locale>
+#include "LoginDlg.h"
 
 
 #ifdef _DEBUG
@@ -30,6 +31,7 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp()
 	m_pLog = nullptr;
 	m_pNetworkTask = nullptr;
 	m_pClassify = nullptr;
+	m_pLabelManager = nullptr;
 	_tsetlocale(LC_ALL, _T("chs"));
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
@@ -78,6 +80,8 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
 	}
 
+	m_pLabelManager = new CLabelManager;
+
 	AfxEnableControlContainer();
 
 	// 创建 shell 管理器，以防对话框包含
@@ -97,13 +101,30 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	CCarSeat_RecognizationDlg dlg;
-	m_pMainWnd = &dlg;
-	dlg.SetImageClassify(m_pClassify);
 
-	m_UIThread = std::thread(&CCarSeat_RecognizationDlg::run, &dlg);
+	CLoginDlg loginDlg;
+	loginDlg.SetLabelManager(m_pLabelManager);
+
+	INT_PTR nResponse = loginDlg.DoModal();
+	if (nResponse == IDOK)
+	{
+		
+		m_pMainWnd = &dlg;
+
+		dlg.SetImageClassify(m_pClassify);
+		dlg.SetLabelManager(m_pLabelManager);
+
+		m_UIThread = std::thread(&CCarSeat_RecognizationDlg::run, &dlg);
+
+
+		nResponse = dlg.DoModal();
+	}
+	else if (nResponse == IDCANCEL)
+	{
+
+	}
 	
-
-	INT_PTR nResponse = dlg.DoModal();
+	
 	if (nResponse == IDOK)
 	{
 		// TODO: 在此放置处理何时用
@@ -138,11 +159,7 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		dlg.terminate();
 		m_UIThread.join();
 	}
-	if (m_pParamManager != nullptr)
-	{
-		delete m_pParamManager;
-		m_pParamManager = nullptr;
-	}
+	
 	if (m_pClassifyThread.joinable())
 	{
 		m_pClassify->terminate();
@@ -169,10 +186,21 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		delete m_pClassify;
 		m_pClassify = nullptr;
 	}
+	if (m_pLabelManager != nullptr)
+	{
+		delete m_pLabelManager;
+		m_pLabelManager = nullptr;
+	}
+	if (m_pParamManager != nullptr)
+	{
+		delete m_pParamManager;
+		m_pParamManager = nullptr;
+	}
 	if (m_pLog != nullptr)
 	{
 		delete m_pLog;
 		m_pLog = nullptr;
 	}
+	
 	return FALSE;
 }

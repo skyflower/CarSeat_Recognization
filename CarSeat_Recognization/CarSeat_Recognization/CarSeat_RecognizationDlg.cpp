@@ -1,4 +1,4 @@
-// CarSeat_RecognizationDlg.cpp :
+﻿// CarSeat_RecognizationDlg.cpp :
 //
 
 #include "stdafx.h"
@@ -70,9 +70,7 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	
-	//m_pFont.CreatePointFont(24, L"楷体");
-
-	m_pLabelManager = new CLabelManager();	
+	//m_pLabelManager = new CLabelManager();	
 	m_pCameraManager = CCameraManager::GetInstance();
 }
 
@@ -129,8 +127,6 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SetIcon(m_hIcon, TRUE);		
 	SetIcon(m_hIcon, FALSE);
-	//this->OnSetFont(&m_pFont);
-
 
     // kepserver add start by xiexinpeng	
     // kepserver
@@ -158,25 +154,22 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	{
 		::SysFreeString(opcServer);
 	}
+	
+
 	// add end by xiexinpeng
-
-	CFont* curFont = this->GetFont();
-
-
-	char tmpStr[] = "K215-黑色-菱形纹理";
-	WCHAR result[200];
-
-	m_barCode.SetWindowTextW(L"K215-黑色-菱形纹理");
-		
-	double ratio = 1.0;
+	wchar_t tmpStr[] = L"K215-黑色-菱形纹理";
+	CString tmpBarcodeStr;
+	tmpBarcodeStr.Format(L"%s", tmpStr);
+	m_barCode.SetWindowTextW(tmpBarcodeStr);
+	
+	float ratio = 0.0;
 	if (m_nFailCount + m_nSuccessCount != 0)
 	{
 		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
 	}
-	memset(result, 0, sizeof(WCHAR) * 200);
-	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%f%", m_nSuccessCount, m_nFailCount, ratio);
-
-	m_RegRatio.SetWindowTextW(result);
+	
+	tmpBarcodeStr.Format(L"Success:%d\nFailed:%d\nSuccess Rate:%f", m_nSuccessCount, m_nFailCount, ratio);
+	m_RegRatio.SetWindowTextW(tmpBarcodeStr);
 	
 	if (m_pCameraManager != nullptr)
 	{
@@ -194,13 +187,10 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	{
 		if (m_nCameraIndex != -1)
 		{
-
 			MV_CC_DEVICE_INFO * pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
 			m_pLineCamera = new CLineCamera(pDevice);
 		}
 	}
-	
-	//m_pUIThread = std::thread(run, this);
 
 	return TRUE;  //
 }
@@ -261,7 +251,6 @@ void CCarSeat_RecognizationDlg::run()
 	}
 
 	
-
 	while (m_bThreadStatus)
 	{
 		
@@ -292,6 +281,16 @@ void CCarSeat_RecognizationDlg::SetImageClassify(CImageClassify * pClassify)
 void CCarSeat_RecognizationDlg::terminate()
 {
 	m_bThreadStatus = false;
+}
+
+bool CCarSeat_RecognizationDlg::SetLabelManager(CLabelManager * pLabelManager)
+{
+	if (pLabelManager == nullptr)
+	{
+		return false;
+	}
+	m_pLabelManager = pLabelManager;
+	return true;
 }
 
 void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstring type)
@@ -486,11 +485,6 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pCameraManager;
 		m_pCameraManager = nullptr;
 	}
-	if (m_pLabelManager != nullptr)
-	{
-		delete m_pLabelManager;
-		m_pLabelManager = nullptr;
-	}
 
 	CDHtmlDialog::OnClose();
 }
@@ -612,6 +606,7 @@ void CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter(CCmdUI *pCmdUI)
 	if (m_pLineCamera == nullptr)
 	{
 		pCmdUI->Enable(FALSE);
+		
 		return;
 	}
 	CCamera::CameraStatus tmpStatus = m_pLineCamera->GetCameraStatus();

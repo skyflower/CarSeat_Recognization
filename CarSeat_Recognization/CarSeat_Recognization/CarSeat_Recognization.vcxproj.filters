@@ -99,9 +99,6 @@
     <ClInclude Include="kepserver\opcda.h">
       <Filter>kepserver</Filter>
     </ClInclude>
-    <ClInclude Include="LabelManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="common\md5.h">
       <Filter>common</Filter>
     </ClInclude>
@@ -119,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="Camera\LineCamera.h">
       <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="LabelManager.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +185,6 @@
     <ClCompile Include="kepserver\opcda_i.c">
       <Filter>kepserver</Filter>
     </ClCompile>
-    <ClCompile Include="LabelManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="common\md5.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -205,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="Camera\LineCamera.cpp">
       <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="LabelManager.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

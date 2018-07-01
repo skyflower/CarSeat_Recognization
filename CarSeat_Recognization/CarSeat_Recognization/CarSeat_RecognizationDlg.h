@@ -93,4 +93,6 @@ public:
 	afx_msg void OnCloseCamera();
 	afx_msg void OnUpdateCloseCamera(CCmdUI *pCmdUI);
 	afx_msg void OnExposureTimeTest();
+	afx_msg void OnSetCameraParameter();
+	afx_msg void OnUpdateSetCameraParameter(CCmdUI *pCmdUI);
 };

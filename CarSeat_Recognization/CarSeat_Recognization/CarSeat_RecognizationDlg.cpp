@@ -8,6 +8,7 @@
 #include "InputDlg.h"
 #include "./common/utils.h"
 #include "LoginDlg.h"
+#include "CameraParameterDlg.h"
 // add start by xiexinpeng
 #include <string>
 #include "kepserver/OPC.h"
@@ -98,6 +99,8 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_CLOSE_CAMERA, &CCarSeat_RecognizationDlg::OnCloseCamera)
 	ON_UPDATE_COMMAND_UI(ID_CLOSE_CAMERA, &CCarSeat_RecognizationDlg::OnUpdateCloseCamera)
 	ON_COMMAND(ID_EXPOSURE_TIME_TEST, &CCarSeat_RecognizationDlg::OnExposureTimeTest)
+	ON_COMMAND(ID_SET_CAMERA_PARAMETER, &CCarSeat_RecognizationDlg::OnSetCameraParameter)
+	ON_UPDATE_COMMAND_UI(ID_SET_CAMERA_PARAMETER, &CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter)
 END_MESSAGE_MAP()
 
 
@@ -442,11 +445,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		return;
 	} while (0);
 	
-
 	m_pLineCamera->CloseDevice();
-
-
-	
 }
 
 
@@ -591,4 +590,37 @@ void CCarSeat_RecognizationDlg::OnExposureTimeTest()
 			}
 		}
 	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnSetCameraParameter()
+{
+	// TODO: 在此添加命令处理程序代码
+	CCameraParameterDlg dlg;
+	dlg.SetLineCamera(m_pLineCamera);
+	INT_PTR ret = dlg.DoModal();
+	if (ret == IDOK)
+	{
+
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	if (m_pLineCamera == nullptr)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+	CCamera::CameraStatus tmpStatus = m_pLineCamera->GetCameraStatus();
+	if ((tmpStatus == CCamera::CameraStatus::CAMERA_OPEN) || \
+		(tmpStatus == CCamera::CameraStatus::CAMERA_GRAB))
+	{
+		pCmdUI->Enable(TRUE);
+		return;
+	}
+	pCmdUI->Enable(FALSE);
+	return;
 }

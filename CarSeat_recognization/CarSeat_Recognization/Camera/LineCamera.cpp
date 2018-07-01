@@ -405,6 +405,7 @@ std::wstring CLineCamera::SaveImage()
             }
 
             wchar_t chImageName[IMAGE_NAME_LEN] = {0};
+			memset(chImageName, 0, sizeof(wchar_t) * IMAGE_NAME_LEN);
             if (MV_Image_Bmp == stParam.enImageType)
             {
                 swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.bmp", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
@@ -414,6 +415,7 @@ std::wstring CLineCamera::SaveImage()
                 swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.jpg", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
             }
 			wchar_t absoluteName[MAX_CHAR_LENGTH] = { 0 };
+			memset(absoluteName, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
 
 			WriteInfo("m_szImageDir = %s", m_szImageDir);
 			WriteInfo("chImageName = %s", chImageName);
@@ -431,7 +433,7 @@ std::wstring CLineCamera::SaveImage()
 			FILE* fp = nullptr;
 			fopen_s(&fp, tmpFileName, "wb");
 
-			delete tmpFileName;
+			delete []tmpFileName;
 			tmpFileName = nullptr;
 
             if (NULL == fp)

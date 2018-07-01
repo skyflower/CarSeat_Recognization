@@ -14,6 +14,7 @@
 
 
 #define MAX_CHAR_LENGTH 256
+#define MAX_USR_NAME_AND_PASSWD	80
 
 
 namespace utils

@@ -47,14 +47,16 @@ public:
 	bool ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
 	bool ftpDownload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
 
+	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
+		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
+
 private:
 	enum msg
 	{
 		MAX_MSG_SIZE = 20
 	};
 
-	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
-		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
+	
 
 	/*
 	function: 获取网络条形码的接口,

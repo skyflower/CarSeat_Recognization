@@ -38,7 +38,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
 private:
-	//CFont m_pFont;
+
 	CStatic m_ImagePattern;
 	CStatic m_ImageRec;
 
@@ -67,11 +67,8 @@ private:
 	int m_nCameraIndex;
 	CLineCamera *m_pLineCamera;
 
-
-	
 	void CheckAndUpdate(std::wstring barcode, std::wstring type);
 	
-
 
 public:
 	afx_msg void OnUsrinput();
@@ -84,6 +81,9 @@ public:
 	void SetImageClassify(CImageClassify*pClassify);
 
 	void terminate();
+	bool SetLabelManager(CLabelManager *pLabelManager);
+
+
 	afx_msg void OnStartCamera();
 	afx_msg void OnUpdateStartCamera(CCmdUI *pCmdUI);
 	afx_msg void OnClose();

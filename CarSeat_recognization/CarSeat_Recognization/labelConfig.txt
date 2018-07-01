@@ -22,6 +22,8 @@ classifyType={"k216 black pvc diamond cloth":"201456",
 "k216 black pvc leather":"401416"}
 
 
-
+LoginUsrName=root
+LoginPasswd=12345678
+LoginInfoAutoSave=1
 
 

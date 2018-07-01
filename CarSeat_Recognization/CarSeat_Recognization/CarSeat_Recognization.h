@@ -15,6 +15,7 @@
 #include <thread>
 #include <chrono>
 #include "./image/ImageClassify.h"
+#include "./LabelManager.h"
 
 
 // CCarSeat_RecognizationApp: 
@@ -40,6 +41,7 @@ private:
 	
 	CImageClassify *m_pClassify;
 	std::thread m_pClassifyThread;
+	CLabelManager *m_pLabelManager;
 
 	std::thread m_UIThread;
 

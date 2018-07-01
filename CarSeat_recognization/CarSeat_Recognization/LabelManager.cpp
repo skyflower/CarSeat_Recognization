@@ -11,6 +11,9 @@ CLabelManager::CLabelManager()
 {
 	m_pBarcode = nullptr;
 	m_pClassifyType = nullptr;
+	memset(m_strLoginName, 0, sizeof(m_strLoginName));
+	memset(m_strLoginPasswd, 0, sizeof(m_strLoginPasswd));
+	m_bLoginAutoSave = false;
 	
 	if (m_bInitFlag == false)
 	{
@@ -54,6 +57,47 @@ bool CLabelManager::init()
 	{
 		return false;
 	}
+
+	char tmpValue[MAX_USR_NAME_AND_PASSWD] = { 0 };
+	memset(tmpValue, 0, sizeof(tmpValue));
+
+	if (true == utils::getValueByName(content, "LoginUsrName", tmpValue))
+	{
+		wchar_t *tmp = utils::CharToWchar(tmpValue);
+		if (tmp != nullptr)
+		{
+			wmemcpy(m_strLoginName, tmp, wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+		}
+		
+	}
+
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "LoginPasswd", tmpValue))
+	{
+		wchar_t *tmp = utils::CharToWchar(tmpValue);
+		if (tmp != nullptr)
+		{
+			wmemcpy(m_strLoginPasswd, tmp, wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+		}
+	}
+
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "LoginInfoAutoSave", tmpValue))
+	{
+		if (tmpValue[0] == L'1')
+		{
+			m_bLoginAutoSave = true;
+		}
+		else
+		{
+			m_bLoginAutoSave = false;
+		}
+	}
+
 
 	// barcodeTable
 	// classifyType
@@ -118,6 +162,10 @@ bool CLabelManager::init()
 
 bool CLabelManager::serialize()
 {
+	if (m_bSerialize == false)
+	{
+		return false;
+	}
 	FILE *fp = nullptr;
 	fopen_s(&fp, "labelConfig.txt.bak", "wb");
 	if (fp == nullptr)
@@ -167,6 +215,12 @@ bool CLabelManager::serialize()
 	memset(tmpStr, 0, sizeof(wchar_t) * Length);
 
 
+	wsprintfW(tmpStr, L"\nLoginUsrName=%s\nLoginPasswd=%s\nLoginInfoAutoSave=%d\n", \
+		m_strLoginName, m_strLoginPasswd, (m_bLoginAutoSave == true ? 1 : 0));
+	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
+	//memset(tmpStr, 0, sizeof(wchar_t) * Length);
+
+
 	return true;
 }
 
@@ -205,6 +259,49 @@ std::vector<std::wstring> CLabelManager::GetClassifyType()
 		}
 	}
 	return pVec;
+}
+bool CLabelManager::SetLoginUsrName(const wchar_t * name)
+{
+	if ((name == nullptr) || (wcslen(name) > MAX_USR_NAME_AND_PASSWD))
+	{
+		return false;
+	}
+	memset(m_strLoginName, 0, sizeof(m_strLoginName));
+	wmemcpy(m_strLoginName, name, wcslen(name));
+	m_bSerialize = true;
+	return true;
+}
+bool CLabelManager::SetLoginPasswd(const wchar_t * passwd)
+{
+	if ((passwd == nullptr) || (wcslen(passwd) > MAX_USR_NAME_AND_PASSWD))
+	{
+		return false;
+	}
+	memset(m_strLoginPasswd, 0, sizeof(m_strLoginPasswd));
+	wmemcpy(m_strLoginPasswd, passwd, wcslen(passwd));
+	m_bSerialize = true;
+	return true;
+}
+bool CLabelManager::GetLoginAutoSave()
+{
+	return m_bLoginAutoSave;
+}
+void CLabelManager::SetLoginAutoSave(bool autoSave)
+{
+	if (autoSave == m_bLoginAutoSave)
+	{
+		return;
+	}
+	m_bLoginAutoSave = autoSave;
+	m_bSerialize = true;
+}
+const wchar_t * CLabelManager::GetLoginUsrName() const
+{
+	return m_strLoginName;
+}
+const wchar_t * CLabelManager::GetLoginPasswd() const
+{
+	return m_strLoginPasswd;
 }
 void CLabelManager::UpdateBarcode(const char *xmlContent, size_t len)
 {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./LabelManager.h"
 
 // CLoginDlg 对话框
 
@@ -25,6 +26,8 @@ public:
 	BOOL GetAutoSaveFlag();
 	CString GetLoginUsrName();
 	CString GetLoginPasswd();
+
+	bool SetLabelManager(CLabelManager *pLabelManager);
 	
 private:
 	// //自动保存用户名和密码
@@ -33,6 +36,15 @@ private:
 	CString m_strUsrName;
 	// //密码
 	CString m_strPasswd;
+
+	CLabelManager *m_pLabelManager;
+
+	/*
+	通过网络模块验证用户名和密码，还未全部实现，默认返回验证通过
+	*/
+	bool CheckUsrNameAndPasswd();
+
 public:
 	afx_msg void OnBnClickedOk();
+	virtual BOOL OnInitDialog();
 };

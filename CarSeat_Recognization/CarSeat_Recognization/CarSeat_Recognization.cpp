@@ -23,7 +23,8 @@ END_MESSAGE_MAP()
 
 // CCarSeat_RecognizationApp 构造
 
-CCarSeat_RecognizationApp::CCarSeat_RecognizationApp()
+CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
+	m_pCameraManager(nullptr)
 {
 	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
@@ -64,23 +65,10 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
 		return FALSE;
 	}
-	m_pParamManager = CParamManager::GetInstance();
-	m_pLog = CLog::GetInstance();
-	m_pNetworkTask = CNetworkTask::GetInstance();
-	if (m_pNetworkTask != nullptr)
-	{
-		m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
-	}
-	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
-	m_pClassify->initPython("label_image_command_line", "seatClassify");
-	m_pNetworkTask->SetImageClassify(m_pClassify);
 
-	if (m_pClassify != nullptr)
-	{
-		m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
-	}
 
-	m_pLabelManager = new CLabelManager;
+	//初始化参数模块，标签模块，网络模块，识别模块
+	initSystem();
 
 	AfxEnableControlContainer();
 
@@ -100,13 +88,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
+	
 	CCarSeat_RecognizationDlg dlg;
-
-	CLoginDlg loginDlg;
-	loginDlg.SetLabelManager(m_pLabelManager);
-
-	INT_PTR nResponse = loginDlg.DoModal();
-	if (nResponse == IDOK)
+	
+	INT_PTR nResponse = IDOK;
+	if (LoginSystem() == true)
 	{
 		
 		m_pMainWnd = &dlg;
@@ -116,25 +102,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 
 		m_UIThread = std::thread(&CCarSeat_RecognizationDlg::run, &dlg);
 
-
 		nResponse = dlg.DoModal();
 	}
-	else if (nResponse == IDCANCEL)
-	{
-
-	}
 	
 	
-	if (nResponse == IDOK)
-	{
-		// TODO: 在此放置处理何时用
-		//  “确定”来关闭对话框的代码
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: 在此放置处理何时用
-		//  “取消”来关闭对话框的代码
-	}
+	
 	else if (nResponse == -1)
 	{
 		TRACE(traceAppMsg, 0, "警告: 对话框创建失败，应用程序将意外终止。\n");
@@ -154,18 +126,63 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
 	
+
 	if (m_UIThread.joinable())
 	{
 		dlg.terminate();
 		m_UIThread.join();
 	}
+
+	DeInitSystem();
 	
+	
+	return FALSE;
+}
+
+bool CCarSeat_RecognizationApp::LoginSystem()
+{
+	CLoginDlg loginDlg;
+	loginDlg.SetLabelManager(m_pLabelManager);
+
+	INT_PTR nResponse = loginDlg.DoModal();
+	if (nResponse == IDOK)
+	{
+		return true;
+	}
+	return false;
+}
+
+void CCarSeat_RecognizationApp::initSystem()
+{
+	m_pParamManager = CParamManager::GetInstance();
+	m_pLog = CLog::GetInstance();
+	m_pNetworkTask = CNetworkTask::GetInstance();
+	if (m_pNetworkTask != nullptr)
+	{
+		m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
+	}
+	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
+	m_pClassify->initPython("label_image_command_line", "seatClassify");
+	m_pNetworkTask->SetImageClassify(m_pClassify);
+
+	if (m_pClassify != nullptr)
+	{
+		m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
+	}
+
+	m_pLabelManager = new CLabelManager;
+	m_pCameraManager = CCameraManager::GetInstance();
+
+}
+
+void CCarSeat_RecognizationApp::DeInitSystem()
+{
 	if (m_pClassifyThread.joinable())
 	{
 		m_pClassify->terminate();
 		m_pClassifyThread.join();
 	}
-	
+
 	if (m_NetworkThread.joinable())
 	{
 		CNetworkTask::message msg;
@@ -175,7 +192,7 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		m_pNetworkTask->SendMessageTo(&msg);
 		m_NetworkThread.join();
 	}
-	
+
 	if (m_pNetworkTask != nullptr)
 	{
 		delete m_pNetworkTask;
@@ -201,6 +218,9 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		delete m_pLog;
 		m_pLog = nullptr;
 	}
-	
-	return FALSE;
+	if (m_pCameraManager != nullptr)
+	{
+		delete m_pCameraManager;
+		m_pCameraManager = nullptr;
+	}
 }

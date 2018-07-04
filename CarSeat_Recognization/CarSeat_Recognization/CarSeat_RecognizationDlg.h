@@ -62,10 +62,10 @@ private:
 	
 	CImageClassify *m_pClassify;
 	CLabelManager *m_pLabelManager;
-
-	CCameraManager *m_pCameraManager;
-	int m_nCameraIndex;
 	CLineCamera *m_pLineCamera;
+	int m_nCameraIndex;
+	CCameraManager *m_pCameraManager;
+	
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type);
 	

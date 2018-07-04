@@ -475,6 +475,10 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 void CCarSeat_RecognizationDlg::OnClose()
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (m_bThreadStatus == true)
+	{
+		m_bThreadStatus = false;
+	}
 	if (m_pLineCamera)
 	{
 		delete m_pLineCamera;

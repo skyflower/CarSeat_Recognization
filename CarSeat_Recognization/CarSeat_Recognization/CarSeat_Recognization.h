@@ -33,6 +33,16 @@ public:
 
 private:
 
+
+	bool LoginSystem();
+	
+	void initSystem();
+
+
+	//销毁系统
+	void DeInitSystem();
+
+
 // 实现
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;
@@ -42,6 +52,8 @@ private:
 	CImageClassify *m_pClassify;
 	std::thread m_pClassifyThread;
 	CLabelManager *m_pLabelManager;
+
+	CCameraManager *m_pCameraManager;
 
 	std::thread m_UIThread;
 

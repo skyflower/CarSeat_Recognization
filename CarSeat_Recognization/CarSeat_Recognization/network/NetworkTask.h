@@ -7,6 +7,9 @@
 #include <mutex>
 #include <thread>
 #include "../image/ImageClassify.h"
+#include "../Camera/CameraManager.h"
+#include "../Camera/LineCamera.h"
+#include "../Camera/Camera.h"
 
 
 class CNetworkTask

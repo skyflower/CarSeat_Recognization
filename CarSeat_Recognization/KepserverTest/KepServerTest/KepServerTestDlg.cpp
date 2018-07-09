@@ -186,6 +186,10 @@ void CKepServerTestDlg::OnBnClickedButtonConnect()
 		Opc.InitialOPC(opcServer, 1, &COleVariant(flag));
 		Opc.PreWrite();
 	}
+	else
+	{
+		AfxMessageBox(L"");
+	}
 }
 
 

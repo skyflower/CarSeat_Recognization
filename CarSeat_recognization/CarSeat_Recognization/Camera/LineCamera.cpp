@@ -322,6 +322,98 @@ const wchar_t * CLineCamera::GetImageSaveDirectory()
 	return m_szImageDir;
 }
 
+void CLineCamera::GetROIParameter(int * width, int * height, int * offsetX, int * offsetY)
+{
+	if (width != nullptr)
+	{
+		*width = m_nROI_Width;
+		if (m_nROI_Width == -1)
+		{
+			int tmpWidth = -1;
+			int tmpHeight = -1;
+			int tmpOffsetX = -1;
+			int tmpOffsetY = -1;
+			bool ret = GetROIParameterByCamera(&tmpWidth, &tmpHeight, &tmpOffsetX, &tmpOffsetY);
+			if (ret == true)
+			{
+				m_nROI_Height = tmpHeight;
+				m_nROI_Width = tmpWidth;
+				m_nROI_OffsetX = tmpOffsetX;
+				m_nROI_OffsetY = tmpOffsetY;
+			}
+			*width = tmpWidth;
+		}
+	}
+	if (height != nullptr)
+	{
+		*height = m_nROI_Height;
+		if (m_nROI_Height == -1)
+		{
+			int tmpWidth = -1;
+			int tmpHeight = -1;
+			int tmpOffsetX = -1;
+			int tmpOffsetY = -1;
+			bool ret = GetROIParameterByCamera(&tmpWidth, &tmpHeight, &tmpOffsetX, &tmpOffsetY);
+			if (ret == true)
+			{
+				m_nROI_Height = tmpHeight;
+				m_nROI_Width = tmpWidth;
+				m_nROI_OffsetX = tmpOffsetX;
+				m_nROI_OffsetY = tmpOffsetY;
+			}
+			*height = tmpHeight;
+		}
+	}
+	if (offsetX != nullptr)
+	{
+		*offsetX = m_nROI_OffsetX;
+		if (m_nROI_OffsetX == -1)
+		{
+			int tmpWidth = -1;
+			int tmpHeight = -1;
+			int tmpOffsetX = -1;
+			int tmpOffsetY = -1;
+			bool ret = GetROIParameterByCamera(&tmpWidth, &tmpHeight, &tmpOffsetX, &tmpOffsetY);
+			if (ret == true)
+			{
+				m_nROI_Height = tmpHeight;
+				m_nROI_Width = tmpWidth;
+				m_nROI_OffsetX = tmpOffsetX;
+				m_nROI_OffsetY = tmpOffsetY;
+			}
+			*offsetX = tmpOffsetX;
+		}
+	}
+	if (offsetY != nullptr)
+	{
+		*offsetY = m_nROI_OffsetY;
+		if (m_nROI_OffsetY == -1)
+		{
+			int tmpWidth = -1;
+			int tmpHeight = -1;
+			int tmpOffsetX = -1;
+			int tmpOffsetY = -1;
+			bool ret = GetROIParameterByCamera(&tmpWidth, &tmpHeight, &tmpOffsetX, &tmpOffsetY);
+			if (ret == true)
+			{
+				m_nROI_Height = tmpHeight;
+				m_nROI_Width = tmpWidth;
+				m_nROI_OffsetX = tmpOffsetX;
+				m_nROI_OffsetY = tmpOffsetY;
+			}
+			*offsetY = tmpOffsetY;
+		}
+	}
+}
+
+SIZE CLineCamera::GetImageSize()
+{
+	SIZE tmpSize;
+	tmpSize.cx = m_nWidthMax;
+	tmpSize.cy = m_nHeightMax;
+	return tmpSize;
+}
+
 // ch:保存图片 | en:Save Image
 std::wstring CLineCamera::SaveImage()
 {
@@ -568,6 +660,73 @@ int CLineCamera::GetHeightMaxByCamera()
 	return tmpValue;
 }
 
+bool CLineCamera::GetROIParameterByCamera(int * width, int * height, int * offsetX, int * offsetY)
+{
+	*width = *height = *offsetX = *offsetY = -1;
+
+	unsigned int tmpValue = -1;
+	bool flag = true;
+	int nRet = m_pcMyCamera->GetIntValue("Width", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		TRACE1("get roi width failed, nret = %d\n", nRet);
+		WriteError("get roi width failed,nret = %d", nRet);
+		*width = -1;
+		flag = false;
+	}
+	else
+	{
+		*width = tmpValue;
+	}
+	
+
+	tmpValue = -1;
+	nRet = m_pcMyCamera->GetIntValue("Height", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		TRACE1("get roi Height failed, nret = %d\n", nRet);
+		WriteError("get roi Height failed,nret = %d", nRet);
+		*height = -1;
+		flag = false;
+	}
+	else
+	{
+		*height = tmpValue;
+	}
+	
+
+	tmpValue = -1;
+	nRet = m_pcMyCamera->GetIntValue("OffsetX", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		TRACE1("get roi OffsetX failed, nret = %d\n", nRet);
+		WriteError("get roi OffsetX failed,nret = %d", nRet);
+		*offsetX = -1;
+		flag = false;
+	}
+	else
+	{
+		*offsetX = tmpValue;
+	}
+	
+
+	tmpValue = -1;
+	nRet = m_pcMyCamera->GetIntValue("OffsetY", &tmpValue);
+	if (nRet != MV_OK)
+	{
+		TRACE1("get roi OffsetY failed, nret = %d\n", nRet);
+		WriteError("get roi OffsetY failed,nret = %d", nRet);
+		*offsetY = -1;
+		flag = false;
+	}
+	else
+	{
+		*offsetY = tmpValue;
+	}
+	
+	return flag;
+}
+
 
 
 // ch:按下打开设备按钮：打开设备 | en:Click Open button: Open Device
@@ -686,6 +845,14 @@ void CLineCamera::GetParameter()
 	if (m_dExposureTimeMin == -1)
 	{
 		WriteError("Get Exposure Time Min Fail");
+	}
+
+	if (GetROIParameterByCamera(&m_nROI_Width, &m_nROI_Height, &m_nROI_OffsetX, &m_nROI_OffsetY) == false)
+	{
+		TRACE2("get roi width =%d, height = %d\n", m_nROI_Width, m_nROI_Height);
+		WriteError("get roi width =%d, height = %d", m_nROI_Width, m_nROI_Height);
+		TRACE2("get roi offsetX =%d, offsetY = %d\n", m_nROI_OffsetX, m_nROI_OffsetY);
+		WriteError("get roi offsetX =%d, offsetY = %d", m_nROI_OffsetX, m_nROI_OffsetY);
 	}
 
 

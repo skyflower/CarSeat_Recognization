@@ -18,7 +18,7 @@ CCameraManager *CCameraManager::m_pInstance = nullptr;
 
 CCameraManager::CCameraManager()
 {
-	
+	memset(&m_stDevList, 0, sizeof(m_stDevList));
 }
 
 CCameraManager * CCameraManager::GetInstance()
@@ -34,10 +34,6 @@ CCameraManager::~CCameraManager()
 {
 
 }
-
-
-
-
 
 
 // ch:按下查找设备按钮:枚举 | en:Click Find Device button:Enumeration 

@@ -85,7 +85,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExecutablePath>D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\amd64\Release;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -119,12 +119,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\include;./Camera/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);../Python_v3.5.2_x64/include;./Camera/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;MvCameraControl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Python_v3.5.2_x64\amd64\Debug;D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\CarSeat_Recognization\Camera\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Python_v3.5.2_x64/amd64/Debug;./Camera/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -175,7 +175,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions);PYTHON_TENSORFLOW</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\SoftwareInstall\Python_v3.5.2_x64\include;D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\CarSeat_Recognization\Camera\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\Python_v3.5.2_x64\include;.\Camera\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

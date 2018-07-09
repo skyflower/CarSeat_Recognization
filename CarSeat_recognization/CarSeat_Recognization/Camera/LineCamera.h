@@ -39,6 +39,11 @@ private:
 	double m_dExposureTimeMax;
 	double m_dExposureTimeMin;
 
+	int m_nROI_Width;
+	int m_nROI_Height;
+	int m_nROI_OffsetX;
+	int m_nROI_OffsetY;
+
 	MV_CAM_EXPOSURE_AUTO_MODE m_nExposureAutoMode;
 	int m_nWidthMax;
 	int m_nHeightMax;
@@ -70,6 +75,9 @@ public:
 	bool SetImageSaveDirectory(const wchar_t* fileDir);
 	const wchar_t *GetImageSaveDirectory();
 
+	void GetROIParameter(int *width, int *height, int *offsetX, int *offsetY);
+
+	SIZE GetImageSize();
 
     /*ch:图片保存 | en:Save Image*/
     std::wstring SaveImage(void);                     // ch:保存图片 | en:Save Image
@@ -87,6 +95,7 @@ private:
 	MV_CAM_EXPOSURE_AUTO_MODE GetExposureAutoModeByCamera();
 	int GetWidthMaxByCamera();
 	int GetHeightMaxByCamera();
+	bool GetROIParameterByCamera(int *width, int *height, int *offsetX, int *offsetY);
 
 
 	/*ch:参数设置获取 | en:Parameters Get and Set*/

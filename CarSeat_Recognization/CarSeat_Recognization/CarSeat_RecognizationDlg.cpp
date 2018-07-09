@@ -171,26 +171,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	tmpBarcodeStr.Format(L"Success:%d\nFailed:%d\nSuccess Rate:%f", m_nSuccessCount, m_nFailCount, ratio);
 	m_RegRatio.SetWindowTextW(tmpBarcodeStr);
 	
-	if (m_pCameraManager != nullptr)
-	{
-		if (m_pCameraManager->EnumCamera() == false)
-		{
-			TRACE0("init camera Failed\n");
-		}
-		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount());
-		if (m_pCameraManager->GetCameraCount() > 0)
-		{
-			m_nCameraIndex = 0;
-		}
-	}
-	if (m_pLineCamera == nullptr)
-	{
-		if (m_nCameraIndex != -1)
-		{
-			MV_CC_DEVICE_INFO * pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
-			m_pLineCamera = new CLineCamera(pDevice);
-		}
-	}
+	initCameraModule();
 
 	return TRUE;  //
 }
@@ -253,6 +234,10 @@ void CCarSeat_RecognizationDlg::run()
 	
 	while (m_bThreadStatus)
 	{
+		if (m_pCameraManager->GetCameraCount() == 0)
+		{
+			m_pCameraManager->EnumCamera();
+		}
 		
 		std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
 		if (preImagePath != currentImage)
@@ -342,6 +327,54 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	memset(result, 0, sizeof(result));
 	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", barcode, type, reType);
 	m_barCode.SetWindowTextW(result);
+}
+
+void CCarSeat_RecognizationDlg::initCameraModule()
+{
+	if (m_pCameraManager == nullptr)
+	{
+		m_pCameraManager = CCameraManager::GetInstance();
+	}
+	if (m_pCameraManager != nullptr)
+	{
+		if (m_pCameraManager->EnumCamera() == false)
+		{
+			TRACE0("init camera Failed\n");
+		}
+		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount());
+		if (m_pCameraManager->GetCameraCount() > 0)
+		{
+			m_nCameraIndex = 0;
+		}
+	}
+	if (m_pLineCamera == nullptr)
+	{
+		if (m_nCameraIndex != -1)
+		{
+			MV_CC_DEVICE_INFO * pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
+			m_pLineCamera = new CLineCamera(pDevice);
+		}
+	}
+}
+
+SIZE CCarSeat_RecognizationDlg::adjustRecSize(SIZE imageSize, SIZE recSize)
+{
+	if ((imageSize.cx == 0) || (imageSize.cy == 0) || (recSize.cx == 0) || (recSize.cy == 0))
+	{
+		return recSize;
+	}
+	double ratio = static_cast<double>(imageSize.cx) / imageSize.cy;
+	double tmpRatio = static_cast<double>(recSize.cx) / recSize.cy;
+	SIZE result = recSize;
+	if (ratio > tmpRatio)
+	{
+		result.cy = recSize.cx / ratio;
+	}
+	else
+	{
+		result.cx = recSize.cy * ratio;
+	}
+	return result;
 }
 
 void CCarSeat_RecognizationDlg::OnUsrinput()
@@ -435,6 +468,24 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		}
 		HWND imageHwnd = GetDlgItem(IDC_IMAGE_REC)->GetSafeHwnd();
 		m_pLineCamera->SetDisplayHwnd(imageHwnd);
+		
+		SIZE tmpSize = m_pLineCamera->GetImageSize();
+		if ((tmpSize.cx != 0) && (tmpSize.cy != 0))
+		{
+			RECT tmpRecRect;
+			GetDlgItem(IDC_IMAGE_REC)->GetClientRect(&tmpRecRect);
+			SIZE recSize;
+			recSize.cx = tmpRecRect.right - tmpRecRect.left;
+			recSize.cy = tmpRecRect.bottom - tmpRecRect.top;
+			SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
+			GetDlgItem(IDC_IMAGE_REC)->MoveWindow(tmpRecRect.left, tmpRecRect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
+
+			//HRGN 
+			//GetDlgItem(IDC_IMAGE_REC)->SetWindowPos;
+		}
+
+
+
 		if (m_pLineCamera->StartGrabbing() == false)
 		{
 			TRACE0("StartGrabbing Failed\n");
@@ -452,7 +503,7 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 
-	if (m_pCameraManager == nullptr)
+	/*if (m_pCameraManager == nullptr)
 	{
 		pCmdUI->Enable(FALSE);
 		return;
@@ -465,7 +516,7 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 			pCmdUI->Enable(FALSE);
 			return;
 		}
-	}
+	}*/
 
 	pCmdUI->Enable(TRUE);
 	return;
@@ -484,12 +535,6 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pLineCamera;
 		m_pLineCamera = nullptr;
 	}
-	if (m_pCameraManager)
-	{
-		delete m_pCameraManager;
-		m_pCameraManager = nullptr;
-	}
-
 	CDHtmlDialog::OnClose();
 }
 

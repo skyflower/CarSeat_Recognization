@@ -105,8 +105,6 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 		nResponse = dlg.DoModal();
 	}
 	
-	
-	
 	else if (nResponse == -1)
 	{
 		TRACE(traceAppMsg, 0, "警告: 对话框创建失败，应用程序将意外终止。\n");

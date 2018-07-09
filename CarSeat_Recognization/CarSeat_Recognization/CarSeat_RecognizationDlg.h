@@ -69,6 +69,9 @@ private:
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type);
 	
+	void initCameraModule();
+
+	SIZE adjustRecSize(SIZE imageSize, SIZE recSize);
 
 public:
 	afx_msg void OnUsrinput();
@@ -82,6 +85,8 @@ public:
 
 	void terminate();
 	bool SetLabelManager(CLabelManager *pLabelManager);
+
+
 
 
 	afx_msg void OnStartCamera();

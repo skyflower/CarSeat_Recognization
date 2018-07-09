@@ -366,7 +366,7 @@ std::wstring CNetworkTask::TakeImage(std::wstring lineID)
 	CCameraManager *pManager = CCameraManager::GetInstance();
 	if (pManager->GetCameraCount() == 0)
 	{
-		return; std::wstring();
+		return std::wstring();
 	}
 	
 	//std::wstring path = m_Camera.takePhoto(CameraID);

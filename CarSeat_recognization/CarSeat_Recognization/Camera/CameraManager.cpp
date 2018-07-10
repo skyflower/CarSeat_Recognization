@@ -120,7 +120,6 @@ bool  CCameraManager::EnumCamera()
                 delete(pUserName);
                 pUserName = NULL;
             }
-
         }
     }
 

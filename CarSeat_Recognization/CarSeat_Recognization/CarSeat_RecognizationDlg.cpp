@@ -323,7 +323,6 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%2f", m_nSuccessCount, m_nFailCount, ratio);
 	m_RegRatio.SetWindowTextW(result);
 
-
 	memset(result, 0, sizeof(result));
 	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", barcode, type, reType);
 	m_barCode.SetWindowTextW(result);
@@ -337,10 +336,14 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 	}
 	if (m_pCameraManager != nullptr)
 	{
-		if (m_pCameraManager->EnumCamera() == false)
+		if (m_pCameraManager->GetCameraCount() == 0)
 		{
-			TRACE0("init camera Failed\n");
+			if (m_pCameraManager->EnumCamera() == false)
+			{
+				TRACE0("init camera Failed\n");
+			}
 		}
+		
 		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount());
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
@@ -401,11 +404,15 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 	}
 	if (m_nCameraIndex == -1)
 	{
-		if (m_pCameraManager->EnumCamera() == false)
+		if (m_pCameraManager->GetCameraCount() == 0)
 		{
-			AfxMessageBox(L"enum Camera Failed");
-			return;
+			if (m_pCameraManager->EnumCamera() == false)
+			{
+				AfxMessageBox(L"enum Camera Failed");
+				return;
+			}
 		}
+		
 		if (m_pCameraManager->GetCameraCount() == 0)
 		{
 			AfxMessageBox(L"no Camera connect software");
@@ -474,11 +481,17 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		{
 			RECT tmpRecRect;
 			GetDlgItem(IDC_IMAGE_REC)->GetClientRect(&tmpRecRect);
+
+			CRect rect;
+
+			GetDlgItem(IDC_IMAGE_REC)->GetWindowRect(&rect);//获取控件的屏幕坐标
+			ScreenToClient(&rect);//转换为对话框上的客户坐标
+
 			SIZE recSize;
 			recSize.cx = tmpRecRect.right - tmpRecRect.left;
 			recSize.cy = tmpRecRect.bottom - tmpRecRect.top;
 			SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
-			GetDlgItem(IDC_IMAGE_REC)->MoveWindow(tmpRecRect.left, tmpRecRect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
+			GetDlgItem(IDC_IMAGE_REC)->MoveWindow(rect.left, rect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
 
 			//HRGN 
 			//GetDlgItem(IDC_IMAGE_REC)->SetWindowPos;

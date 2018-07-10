@@ -95,8 +95,8 @@ def load_labels(label_file):
         label.append(l.rstrip())
     return label
 
-#if __name__ == "__main__":
-def seatClassify(image_path, label_path, model_path):
+if __name__ == "__main__":
+#def seatClassify(image_path, label_path, model_path):
 
     global graph
     global input_height
@@ -110,6 +110,9 @@ def seatClassify(image_path, label_path, model_path):
     global labels
     global sess
     global bInitFlag
+    label_model_dir = "D:\\Cache\\GithubCache\\CarSeat_Recognization\\CarSeat_recognization\\Recognization_module\\"
+    label_path = label_model_dir + "output_labels.txt"
+    model_path = label_model_dir + "output_graph.pb"
 
     if bInitFlag == False:
         Init(label_path, model_path)
@@ -118,22 +121,35 @@ def seatClassify(image_path, label_path, model_path):
     input_operation = graph.get_operation_by_name(input_name)
     output_operation = graph.get_operation_by_name(output_name)
 
-    t = read_tensor_from_image_file(
-		image_path,
-		input_height=input_height,
-		input_width=input_width,
-		input_mean=input_mean,
-		input_std=input_std)
+    filedir = "J:\\AutocarSeat_Recognition\\OriginalImage\\20180707_hik_test\\"
+    listSubdir = os.listdir(filedir)
+    for tmpsubdir in listSubdir:
+        listImagePath = os.walk(filedir + "\\" + tmpsubdir)
+        print(listImagePath)
+        print(type(listImagePath))
+        for tmpImagePath in listImagePath[2]:
+            image_path = filedir+"\\" + tmpsubdir + "\\" + tmpImagePath
+            if ".jpg" not in image_path:
+                continue
+            t = read_tensor_from_image_file(
+                image_path,
+                input_height=input_height,
+                input_width=input_width,
+                input_mean=input_mean,
+                input_std=input_std)
 
-    results = sess.run(output_operation.outputs[0], {
-		input_operation.outputs[0]: t
-	})
-    results = np.squeeze(results)
-    top_k = results.argsort()[-1:][::-1]
+            results = sess.run(output_operation.outputs[0], {
+                input_operation.outputs[0]: t
+            })
+            results = np.squeeze(results)
+            top_k = results.argsort()[-1:][::-1]
 
-    #tmpStr = reValue(labels[top_k[0]], results[top_k[0]])
+            #tmpStr = reValue(labels[top_k[0]], results[top_k[0]])
 
-    return (labels[top_k[0]], results[top_k[0]])
+            print(labels[top_k[0]])
+            print(results[top_k[0]])
+
+    #return (labels[top_k[0]], results[top_k[0]])
                 
 
                 

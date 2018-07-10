@@ -118,6 +118,30 @@ int     CCamera::Display(void* hWnd)
     return MV_CC_Display(m_hDevHandle, hWnd);
 }
 
+bool CCamera::SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile)
+{
+	unsigned int nValue = balanceWhile; //一次白平衡模式
+	int nRet = MV_CC_SetBalanceWhiteAuto(m_hDevHandle, nValue);
+	if (MV_OK != nRet)
+	{
+		//printf("error: SetBalanceWhiteAuto fail [%x]\n", nRet);
+		return false;
+	}
+	return true;
+}
+
+MV_CAM_BALANCEWHITE_AUTO CCamera::GetBalanceWhile()
+{
+	MVCC_ENUMVALUE struEnumValue = { 0 };
+	int nRet = MV_CC_GetBalanceWhiteAuto(m_hDevHandle, &struEnumValue);
+	if (MV_OK != nRet)
+	{
+		//printf("error: GetBalanceWhiteAuto fail [%x]\n", nRet);
+		return MV_BALANCEWHITE_AUTO_UNKNOWN;
+	}
+	return (MV_CAM_BALANCEWHITE_AUTO)struEnumValue.nCurValue;
+}
+
 
 int CCamera::SaveImage(MV_SAVE_IMAGE_PARAM_EX* pstParam)
 {

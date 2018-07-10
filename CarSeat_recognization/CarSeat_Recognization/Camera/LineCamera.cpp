@@ -30,6 +30,7 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
     , m_pBufForDriver(NULL)
     , m_nBufSizeForDriver(0)
 	, m_status(CCamera::CameraStatus::CAMERA_INIT)
+	, m_nBalanceWhile(MV_BALANCEWHITE_AUTO_CONTINUOUS)
 {
 	//GetCurrentDirectory()
 	memset(m_szImageDir, 0, sizeof(m_szImageDir));
@@ -320,6 +321,26 @@ bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
 const wchar_t * CLineCamera::GetImageSaveDirectory()
 {
 	return m_szImageDir;
+}
+
+bool CLineCamera::SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile)
+{
+	//设置自动白平衡模式
+	if (m_pcMyCamera != nullptr)
+	{
+		bool flag = m_pcMyCamera->SetBalanceWhile(balanceWhile);
+		return flag;
+	}
+	return false;
+}
+
+MV_CAM_BALANCEWHITE_AUTO CLineCamera::GetBalanceWhile()
+{
+	if (m_pcMyCamera != nullptr)
+	{
+		return m_pcMyCamera->GetBalanceWhile();
+	}
+	return MV_BALANCEWHITE_AUTO_UNKNOWN;
 }
 
 void CLineCamera::GetROIParameter(int * width, int * height, int * offsetX, int * offsetY)

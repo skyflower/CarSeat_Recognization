@@ -30,7 +30,12 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
     , m_pBufForDriver(NULL)
     , m_nBufSizeForDriver(0)
 	, m_status(CCamera::CameraStatus::CAMERA_INIT)
-	, m_nBalanceWhile(MV_BALANCEWHITE_AUTO_CONTINUOUS)
+	, m_nWidthMax(0)
+	, m_nHeightMax(0)
+	, m_nROI_Height(0)
+	, m_nROI_Width(0)
+	, m_nROI_OffsetX(0)
+	, m_nROI_OffsetY(0)
 {
 	//GetCurrentDirectory()
 	memset(m_szImageDir, 0, sizeof(m_szImageDir));
@@ -875,6 +880,24 @@ void CLineCamera::GetParameter()
 		TRACE2("get roi offsetX =%d, offsetY = %d\n", m_nROI_OffsetX, m_nROI_OffsetY);
 		WriteError("get roi offsetX =%d, offsetY = %d", m_nROI_OffsetX, m_nROI_OffsetY);
 	}
+
+	m_nWidthMax = GetWidthMaxByCamera();
+	if(m_nWidthMax == -1)
+	{
+		TRACE0("get m_nWidthMax failed\n");
+		WriteError("get m_nWidthMax failed\n");
+		m_nWidthMax = 0;
+	}
+	m_nHeightMax = GetHeightMaxByCamera();
+	if (m_nHeightMax == -1)
+	{
+		TRACE0("get m_nHeightMax failed\n");
+		WriteError("get m_nHeightMax failed\n");
+		m_nHeightMax = 0;
+	}
+	//m_nWidthMax(0)
+	//m_nHeightMax(0)
+		
 
 
 	//m_pcMyCamera->

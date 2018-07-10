@@ -47,6 +47,10 @@ public:
     // ch:设置显示窗口句柄 | en:Set Display Window Handle
     int     Display(void* hWnd);
 
+	// 设置白平衡
+	bool SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile);
+	MV_CAM_BALANCEWHITE_AUTO GetBalanceWhile();
+
     // ch:保存图片 | en:save image
     int     SaveImage(MV_SAVE_IMAGE_PARAM_EX* pstParam);
 
@@ -92,6 +96,7 @@ public:
 private:
 
     void*               m_hDevHandle;
+	//MV_CAM_BALANCEWHITE_AUTO m_nBalanceWhite;
 
 public:
     unsigned char*  m_pBufForSaveImage;         // 用于保存图像的缓存

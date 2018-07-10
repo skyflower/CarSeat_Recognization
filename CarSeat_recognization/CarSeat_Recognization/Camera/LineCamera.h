@@ -49,6 +49,8 @@ private:
 	int m_nHeightMax;
 	wchar_t m_szImageDir[MAX_CHAR_LENGTH];
 
+	//MV_CAM_BALANCEWHITE_AUTO m_nBalanceWhile;
+
 
 
 
@@ -74,6 +76,11 @@ public:
 	bool SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode);
 	bool SetImageSaveDirectory(const wchar_t* fileDir);
 	const wchar_t *GetImageSaveDirectory();
+
+	bool SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile);
+	MV_CAM_BALANCEWHITE_AUTO GetBalanceWhile();
+
+
 
 	void GetROIParameter(int *width, int *height, int *offsetX, int *offsetY);
 

@@ -39,6 +39,9 @@ protected:
 	DECLARE_DHTML_EVENT_MAP()
 private:
 
+	int m_nCxScreen;
+	int m_nCyScreen;
+	
 	CStatic m_ImagePattern;
 	CStatic m_ImageRec;
 
@@ -73,6 +76,8 @@ private:
 
 	SIZE adjustRecSize(SIZE imageSize, SIZE recSize);
 
+	void adjustControlLocate(int width, int height);
+
 public:
 	afx_msg void OnUsrinput();
 
@@ -100,4 +105,5 @@ public:
 	afx_msg void OnExposureTimeTest();
 	afx_msg void OnSetCameraParameter();
 	afx_msg void OnUpdateSetCameraParameter(CCmdUI *pCmdUI);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

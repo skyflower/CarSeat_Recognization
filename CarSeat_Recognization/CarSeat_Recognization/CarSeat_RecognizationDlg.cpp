@@ -65,7 +65,9 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pParamManager(nullptr),
 	m_pNetworkTask(nullptr),
 	m_pClassify(nullptr),
-	m_pLineCamera(nullptr)
+	m_pLineCamera(nullptr),
+	m_nCxScreen(0),
+	m_nCyScreen(0)
 
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -99,6 +101,7 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_EXPOSURE_TIME_TEST, &CCarSeat_RecognizationDlg::OnExposureTimeTest)
 	ON_COMMAND(ID_SET_CAMERA_PARAMETER, &CCarSeat_RecognizationDlg::OnSetCameraParameter)
 	ON_UPDATE_COMMAND_UI(ID_SET_CAMERA_PARAMETER, &CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -127,6 +130,13 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SetIcon(m_hIcon, TRUE);		
 	SetIcon(m_hIcon, FALSE);
+
+	m_nCxScreen = GetSystemMetrics(SM_CXSCREEN);
+	m_nCyScreen = GetSystemMetrics(SM_CYSCREEN);
+
+	SendMessage(WM_SIZE, m_nCxScreen * 5 / 7, m_nCyScreen * 5 / 7);
+
+
 
     // kepserver add start by xiexinpeng	
     // kepserver
@@ -380,6 +390,55 @@ SIZE CCarSeat_RecognizationDlg::adjustRecSize(SIZE imageSize, SIZE recSize)
 	return result;
 }
 
+void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
+{
+	RECT clientRecRect;
+	this->GetClientRect(&clientRecRect);
+	ScreenToClient(&clientRecRect);
+
+	int yStep = (clientRecRect.bottom - clientRecRect.top) / 5;
+	int xStep = (clientRecRect.right - clientRecRect.left) / 5;
+
+	CWnd * pWnd = GetDlgItem(IDC_BARCODE);
+	if (pWnd != nullptr)
+	{
+		pWnd->MoveWindow(0, 20, xStep, yStep, TRUE);
+	}
+	pWnd = GetDlgItem(IDC_REG_RATIO);
+	if (pWnd != nullptr)
+	{
+		pWnd->MoveWindow(0, 50 + yStep, xStep, yStep, TRUE);
+	}
+
+	pWnd = GetDlgItem(IDC_IMAGE_PATTERN);
+	if (pWnd != nullptr)
+	{
+		pWnd->MoveWindow(xStep, 20, 2 * xStep, 4 * yStep, TRUE);
+	}
+
+	pWnd = GetDlgItem(IDC_IMAGE_REC);
+	if (pWnd != nullptr)
+	{
+		pWnd->MoveWindow(3 * xStep, 20, 2 * xStep, 4 * yStep, TRUE);
+	}
+	Invalidate();
+
+
+	//CRect rect;
+
+	//GetDlgItem(IDC_IMAGE_REC)->GetWindowRect(&rect);//获取控件的屏幕坐标
+	//ScreenToClient(&rect);//转换为对话框上的客户坐标
+
+	//SIZE recSize;
+	//recSize.cx = tmpRecRect.right - tmpRecRect.left;
+	//recSize.cy = tmpRecRect.bottom - tmpRecRect.top;
+	//SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
+	//GetDlgItem(IDC_IMAGE_REC)->MoveWindow(rect.left, rect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
+
+
+
+}
+
 void CCarSeat_RecognizationDlg::OnUsrinput()
 {
 	// TODO: 在此添加命令处理程序代码
@@ -493,11 +552,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 			SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
 			GetDlgItem(IDC_IMAGE_REC)->MoveWindow(rect.left, rect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
 
-			//HRGN 
-			//GetDlgItem(IDC_IMAGE_REC)->SetWindowPos;
 		}
-
-
 
 		if (m_pLineCamera->StartGrabbing() == false)
 		{
@@ -680,4 +735,13 @@ void CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter(CCmdUI *pCmdUI)
 	}
 	pCmdUI->Enable(FALSE);
 	return;
+}
+
+
+void CCarSeat_RecognizationDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDHtmlDialog::OnSize(nType, cx, cy);
+	// TODO: 在此处添加消息处理程序代码
+	adjustControlLocate(cx, cy);
+
 }

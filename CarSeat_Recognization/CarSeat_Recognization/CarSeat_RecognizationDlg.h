@@ -4,7 +4,7 @@
 
 #pragma once
 #include "afxwin.h"
-#include "LabelManager.h"
+#include "./common/LabelManager.h"
 #include "./Camera/Camera.h"
 #include "./Camera/CameraManager.h"
 #include "./Camera/LineCamera.h"
@@ -77,6 +77,13 @@ private:
 	SIZE adjustRecSize(SIZE imageSize, SIZE recSize);
 
 	void adjustControlLocate(int width, int height);
+
+
+	/*
+	获取条形码函数接口
+	*/
+
+
 
 public:
 	afx_msg void OnUsrinput();

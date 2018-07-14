@@ -1,6 +1,6 @@
 #pragma once
 
-#include "./LabelManager.h"
+#include "./common/LabelManager.h"
 
 // CLoginDlg ¶Ô»°¿ò
 

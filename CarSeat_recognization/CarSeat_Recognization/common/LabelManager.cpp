@@ -1,8 +1,8 @@
 #include "LabelManager.h"
 #include <cstdlib>
-#include "./common/Log.h"
+#include "./Log.h"
 #include <sys/stat.h>
-#include "./common/utils.h"
+#include "./utils.h"
 #include <Windows.h>
 
 bool CLabelManager::m_bInitFlag = false;

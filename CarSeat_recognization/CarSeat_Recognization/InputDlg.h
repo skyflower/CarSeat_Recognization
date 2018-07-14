@@ -1,7 +1,7 @@
 #pragma once
 #include "afxwin.h"
 #include "./common/ParamManager.h"
-#include "LabelManager.h"
+#include "./common/LabelManager.h"
 
 
 // CInputDlg ¶Ô»°¿ò

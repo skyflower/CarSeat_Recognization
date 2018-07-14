@@ -111,14 +111,17 @@
     <ClInclude Include="LoginDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CameraParameterDlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Camera\LineCamera.h">
       <Filter>camera</Filter>
     </ClInclude>
-    <ClInclude Include="LabelManager.h">
+    <ClInclude Include="common\LabelManager.h">
       <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\RFIDReader.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraParameterDlg.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,14 +200,17 @@
     <ClCompile Include="LoginDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CameraParameterDlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Camera\LineCamera.cpp">
       <Filter>camera</Filter>
     </ClCompile>
-    <ClCompile Include="LabelManager.cpp">
+    <ClCompile Include="common\LabelManager.cpp">
       <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\RFIDReader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraParameterDlg.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

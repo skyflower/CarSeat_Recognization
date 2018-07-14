@@ -32,18 +32,15 @@ public:
 	static bool IsReachable(unsigned int clientIp, unsigned int serverIp);
 	bool heartBlood(unsigned int serverIp, unsigned int port);
 
-
 	void SendMessageTo(message* msg);
 
 	bool GetThreadStatus();
 	void SetThreadStatus(bool status);
 
-
 	void SetImageClassify(CImageClassify *pClassify);
 
 	std::wstring GetCurrentImagePath();
 	std::wstring GetCurrentBarcode();
-
 
 	void run();
 	static CNetworkTask* GetInstance();

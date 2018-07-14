@@ -15,7 +15,7 @@
 #include <thread>
 #include <chrono>
 #include "./image/ImageClassify.h"
-#include "./LabelManager.h"
+#include "./common/LabelManager.h"
 
 
 // CCarSeat_RecognizationApp: 

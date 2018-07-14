@@ -205,9 +205,11 @@
     <ClInclude Include="Camera\LineCamera.h" />
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
+    <ClInclude Include="common\LabelManager.h" />
     <ClInclude Include="common\Log.h" />
     <ClInclude Include="common\md5.h" />
     <ClInclude Include="common\ParamManager.h" />
+    <ClInclude Include="common\RFIDReader.h" />
     <ClInclude Include="common\utils.h" />
     <ClInclude Include="image\BaseMatch.h" />
     <ClInclude Include="image\COrbFlann.h" />
@@ -219,7 +221,6 @@
     <ClInclude Include="kepserver\OPC.h" />
     <ClInclude Include="kepserver\opccomn.h" />
     <ClInclude Include="kepserver\opcda.h" />
-    <ClInclude Include="LabelManager.h" />
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="Resource.h" />
@@ -235,9 +236,11 @@
     <ClCompile Include="Camera\LineCamera.cpp" />
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
+    <ClCompile Include="common\LabelManager.cpp" />
     <ClCompile Include="common\Log.cpp" />
     <ClCompile Include="common\md5.cpp" />
     <ClCompile Include="common\ParamManager.cpp" />
+    <ClCompile Include="common\RFIDReader.cpp" />
     <ClCompile Include="common\utils.cpp" />
     <ClCompile Include="image\BaseMatch.cpp" />
     <ClCompile Include="image\COrbFlann.cpp" />
@@ -249,7 +252,6 @@
     <ClCompile Include="kepserver\OPC.cpp" />
     <ClCompile Include="kepserver\opccomn_i.c" />
     <ClCompile Include="kepserver\opcda_i.c" />
-    <ClCompile Include="LabelManager.cpp" />
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -25,6 +25,16 @@ CLabelManager::CLabelManager()
 
 CLabelManager::~CLabelManager()
 {
+	if (m_pBarcode != nullptr)
+	{
+		delete m_pBarcode;
+		m_pBarcode = nullptr;
+	}
+	if (m_pClassifyType != nullptr)
+	{
+		delete m_pClassifyType;
+		m_pClassifyType = nullptr;
+	}
 }
 
 std::wstring CLabelManager::GetInternalTypeByBarcode(std::wstring barcode)

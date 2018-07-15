@@ -106,6 +106,8 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_SET_CAMERA_PARAMETER, &CCarSeat_RecognizationDlg::OnSetCameraParameter)
 	ON_UPDATE_COMMAND_UI(ID_SET_CAMERA_PARAMETER, &CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter)
 	ON_WM_SIZE()
+	ON_COMMAND(ID_MENU_QUERY_BARCODE, &CCarSeat_RecognizationDlg::OnMenuQueryBarcode)
+	ON_UPDATE_COMMAND_UI(ID_MENU_QUERY_BARCODE, &CCarSeat_RecognizationDlg::OnUpdateMenuQueryBarcode)
 END_MESSAGE_MAP()
 
 
@@ -855,4 +857,21 @@ void CCarSeat_RecognizationDlg::OnSize(UINT nType, int cx, int cy)
 	// TODO: 在此处添加消息处理程序代码
 	adjustControlLocate(cx, cy);
 
+}
+
+
+void CCarSeat_RecognizationDlg::OnMenuQueryBarcode()
+{
+	// TODO: 在此添加命令处理程序代码
+
+}
+
+
+void CCarSeat_RecognizationDlg::OnUpdateMenuQueryBarcode(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	if (pCmdUI != NULL)
+	{
+		pCmdUI->Enable(TRUE);
+	}
 }

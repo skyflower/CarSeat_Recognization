@@ -223,6 +223,7 @@
     <ClInclude Include="kepserver\opcda.h" />
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="network\NetworkTask.h" />
+    <ClInclude Include="QueryDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="kepserver\opcda_i.c" />
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
+    <ClCompile Include="QueryDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

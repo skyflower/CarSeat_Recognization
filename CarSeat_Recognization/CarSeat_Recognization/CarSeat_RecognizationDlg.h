@@ -79,6 +79,9 @@ private:
 	void adjustControlLocate(int width, int height);
 
 
+	void testXML();
+
+
 	/*
 	获取条形码函数接口
 	*/

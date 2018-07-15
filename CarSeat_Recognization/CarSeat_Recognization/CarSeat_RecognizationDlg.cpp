@@ -8,7 +8,10 @@
 #include "InputDlg.h"
 #include "./common/utils.h"
 #include "LoginDlg.h"
+#include "./xml/tinyxml.h"
 #include "CameraParameterDlg.h"
+#include "./common/Log.h"
+#include <stack>
 // add start by xiexinpeng
 #include <string>
 #include "kepserver/OPC.h"
@@ -182,6 +185,8 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	m_RegRatio.SetWindowTextW(tmpBarcodeStr);
 	
 	initCameraModule();
+
+	testXML();
 
 	return TRUE;  //
 }
@@ -436,6 +441,84 @@ void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
 	//GetDlgItem(IDC_IMAGE_REC)->MoveWindow(rect.left, rect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
 
 
+
+}
+
+void CCarSeat_RecognizationDlg::testXML()
+{
+	char greedyXML[] = "<frame>	\
+		<cmd>							\
+		<id>100000129</id>		\
+		<hostGreetings>			\
+		<readerType>SIMATIC_RF640R</readerType>	\
+		<readerMode>Run</readerMode>	\
+		<supportedVersions>								\
+		<version>V1.0</version>			\
+		</supportedVersions>							\
+		</hostGreetings>								\
+		</cmd>				\
+		</frame>";
+
+	char reXml[] = "<frame>								\
+		<reply>											\
+		<id>100000129</id>							\
+		<resultCode>0</resultCode>					\
+		<hostGreetings>									\
+		<returnValue>									\
+		<version>V1.0</version>			\
+		<configType>value_configType</configType>	\
+		<configID>value_configID</configID>			\
+		</returnValue>								\
+		</hostGreetings>								\
+		</reply>										\
+		</frame>";
+
+
+	TiXmlDocument lconfigXML;
+	//TiXmlParsingData data;
+	lconfigXML.Parse(greedyXML);
+	if (lconfigXML.Error())
+	{
+		TRACE0("xml Format is invalid\n");
+		WriteError("recvBlood = [%s]", greedyXML);
+		return ;
+	}
+	TiXmlElement *rootElement = lconfigXML.RootElement();
+	if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "frame", strlen("frame")) != 0))
+	{
+		WriteError("recvBlood get root element Failed, %s", greedyXML);
+		return ;
+	}
+
+	if (rootElement->FirstChildElement() != nullptr)
+	{
+		std::stack<TiXmlElement*> tmpVec;
+		tmpVec.push(rootElement->FirstChildElement());
+		while (tmpVec.size() != 0)
+		{
+			TiXmlElement* tmpNode = tmpVec.top();
+			tmpVec.pop();
+			for (TiXmlElement *child = tmpNode->FirstChildElement();	\
+				child != NULL; child = child->NextSiblingElement())
+			{
+				tmpVec.push(child);
+			}
+
+			WriteInfo("value = %s, text = %s", tmpNode->Value(), tmpNode->GetText());
+			//tmpNode->GetText();
+
+			for (TiXmlAttribute *attribute = tmpNode->FirstAttribute(); attribute != NULL;
+				attribute->Next())
+			{
+				WriteInfo("attribute name = %s, value = %s", attribute->Name(),	\
+				attribute->Value());
+			}
+		}
+	}
+	
+
+	rootElement->Clear();
+	lconfigXML.Clear();
 
 }
 

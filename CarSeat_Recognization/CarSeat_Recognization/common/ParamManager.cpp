@@ -32,6 +32,13 @@ CParamManager::~CParamManager()
 		delete m_pFtp;
 		m_pFtp = nullptr;
 	}
+	if (m_pLineCamera != nullptr)
+	{
+		//m_pLineCamera->clear();
+		delete m_pLineCamera;
+		m_pLineCamera = nullptr;
+	}
+
 }
 
 

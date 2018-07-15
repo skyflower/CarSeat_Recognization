@@ -8,9 +8,54 @@ Info	[CCarSeat_RecognizationDlg::testXML,507]value = supportedVersions, text = (
 Info	[CCarSeat_RecognizationDlg::testXML,507]value = version, text = V1.0
 Info	[CCarSeat_RecognizationDlg::testXML,507]value = readerType, text = SIMATIC_RF640R
 Info	[CCarSeat_RecognizationDlg::testXML,507]value = id, text = 100000129
-Error	[CLineCamera::GetParameter,868]Get Exposure Time Max Fail
-Info	[CLineCamera::SaveImage,538]m_szImageDir = .
-Info	[CLineCamera::SaveImage,539]chImageName = I
+Error	[CLineCamera::GetParameter,890]Get Exposure Time Max Fail
+Error	[CLineCamera::GetParameter,895]Get Exposure Time Min Fail
+Info	[CLineCamera::SaveImage,556]m_szImageDir = .
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FEB92A, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xAC1E9621, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
+Info	[CLineCamera::SaveImage,556]m_szImageDir = C
+Info	[CLineCamera::SaveImage,557]chImageName = I
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FEB92A, ServerIp = 0xC0A801B1
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xAC1E9621, ServerIp = 0xC0A801B1

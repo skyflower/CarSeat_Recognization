@@ -81,6 +81,11 @@ public:
 	MV_CAM_BALANCEWHITE_AUTO GetBalanceWhile();
 
 
+	/*DeviceConnectionStatus	IEnumeration	"0：Active
+		1：Inactive"	R	设备连接状态*/
+
+	bool GetConnectStatus();
+
 
 	void GetROIParameter(int *width, int *height, int *offsetX, int *offsetY);
 

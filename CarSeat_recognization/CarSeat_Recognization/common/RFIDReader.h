@@ -31,6 +31,14 @@ public:
 	CRFIDReader();
 	~CRFIDReader();
 
+
+	/*
+	读取条形码接口，其他暂时没有实现
+	*/
+	std::wstring readBarcode();
+
+
+
 private:
 	bool init();
 

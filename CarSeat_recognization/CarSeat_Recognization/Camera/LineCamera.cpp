@@ -45,6 +45,16 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
 CLineCamera::~CLineCamera()
 {
 	CloseDevice();
+	if (m_pBufForSaveImage != NULL)
+	{
+		delete []m_pBufForSaveImage;
+		m_pBufForSaveImage = nullptr;
+	}
+	if (m_pBufForDriver != NULL)
+	{
+		delete[]m_pBufForDriver;
+		m_pBufForDriver = nullptr;
+	}
 }
 
 
@@ -348,6 +358,15 @@ MV_CAM_BALANCEWHITE_AUTO CLineCamera::GetBalanceWhile()
 	return MV_BALANCEWHITE_AUTO_UNKNOWN;
 }
 
+bool CLineCamera::GetConnectStatus()
+{
+	
+	//MV_CC_IsDeviceAccessible(m_pDevice, 0);
+
+
+	return false;
+}
+
 void CLineCamera::GetROIParameter(int * width, int * height, int * offsetX, int * offsetY)
 {
 	if (width != nullptr)
@@ -465,12 +484,13 @@ std::wstring CLineCamera::SaveImage()
         // ch:一帧数据大小
         // en:One frame size
         m_nBufSizeForDriver = nRecvBufSize;  
-        m_pBufForDriver = (unsigned char *)malloc(m_nBufSizeForDriver);
+        m_pBufForDriver = new unsigned char[m_nBufSizeForDriver];
         if (NULL == m_pBufForDriver)
         {
 			WriteError("malloc m_pBufForDriver failed, run out of memory");
             return std::wstring();
         }
+		memset(m_pBufForDriver, 0, sizeof(unsigned char) * m_nBufSizeForDriver);
     }
 
     MV_FRAME_OUT_INFO_EX stImageInfo = {0};
@@ -497,11 +517,12 @@ std::wstring CLineCamera::SaveImage()
                 // en:// BMP image size: width * height * 3 + 2048 (Reserved BMP header size)
                 m_nBufSizeForSaveImage = stImageInfo.nWidth * stImageInfo.nHeight * 3 + 2048;
 
-                m_pBufForSaveImage = (unsigned char*)malloc(m_nBufSizeForSaveImage);
+                m_pBufForSaveImage = new unsigned char[m_nBufSizeForSaveImage];
                 if (NULL == m_pBufForSaveImage)
                 {
                     break;
                 }
+				memset(m_pBufForSaveImage, 0, sizeof(unsigned char) * m_nBufSizeForSaveImage);
             }
             // ch:设置对应的相机参数 | en:Set camera parameter
             MV_SAVE_IMAGE_PARAM_EX stParam = {0};
@@ -513,7 +534,7 @@ std::wstring CLineCamera::SaveImage()
             stParam.pData       = m_pBufForDriver;
             stParam.pImageBuffer = m_pBufForSaveImage;
             stParam.nBufferSize = m_nBufSizeForSaveImage;  // ch:存储节点的大小 | en:Buffer node size
-            stParam.nJpgQuality     = 80;       // ch:jpg编码，仅在保存Jpg图像时有效。保存BMP时SDK内忽略该参数
+            stParam.nJpgQuality     = 99;       // ch:jpg编码，仅在保存Jpg图像时有效。保存BMP时SDK内忽略该参数
                                                 // en:jpg encoding, only valid when saving as Jpg. SDK ignore this parameter when saving as BMP
 
             nRet = m_pcMyCamera->SaveImage(&stParam);
@@ -541,7 +562,7 @@ std::wstring CLineCamera::SaveImage()
 			TRACE1("m_szImageDir = %s\n", m_szImageDir);
 			TRACE1("chImageName = %s\n", chImageName);
 			
-			swprintf_s(absoluteName, sizeof(absoluteName), L"%s%s", m_szImageDir, chImageName);
+			swprintf_s(absoluteName, MAX_CHAR_LENGTH, L"%s%s", m_szImageDir, chImageName);
 			
 			char *tmpFileName = utils::WcharToChar(absoluteName);
 			if (tmpFileName == nullptr)
@@ -551,17 +572,21 @@ std::wstring CLineCamera::SaveImage()
 			FILE* fp = nullptr;
 			fopen_s(&fp, tmpFileName, "wb");
 
-			delete []tmpFileName;
-			tmpFileName = nullptr;
-
+			
             if (NULL == fp)
             {
                 WriteError("write image failed, maybe you have no privilege");
-                return std::wstring();
+				delete[]tmpFileName;
+				tmpFileName = nullptr;
+				return std::wstring();
             }
             fwrite(m_pBufForSaveImage, 1, stParam.nImageLen, fp);
             fclose(fp);
+			fp = nullptr;
+
 			imagePath = std::wstring(chImageName);
+			delete[]tmpFileName;
+			tmpFileName = nullptr;
         }
         else
         {
@@ -895,12 +920,6 @@ void CLineCamera::GetParameter()
 		WriteError("get m_nHeightMax failed\n");
 		m_nHeightMax = 0;
 	}
-	//m_nWidthMax(0)
-	//m_nHeightMax(0)
-		
-
-
-	//m_pcMyCamera->
     return;
 }
 

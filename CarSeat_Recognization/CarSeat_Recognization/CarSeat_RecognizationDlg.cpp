@@ -70,7 +70,8 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pClassify(nullptr),
 	m_pLineCamera(nullptr),
 	m_nCxScreen(0),
-	m_nCyScreen(0)
+	m_nCyScreen(0),
+	m_pRFIDReader(nullptr)
 
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -246,15 +247,39 @@ void CCarSeat_RecognizationDlg::run()
 		return;
 	}
 
-	
+	std::wstring imagepath;
+	std::wstring reType;
 	while (m_bThreadStatus)
 	{
-		if (m_pCameraManager->GetCameraCount() == 0)
-		{
-			m_pCameraManager->EnumCamera();
-		}
 		
-		std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
+		imagepath = std::wstring();
+		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
+		if (tmpBarcode.size() != 0)
+		{
+			imagepath = m_pLineCamera->SaveJpg();
+			if (imagepath.size() == 0)
+			{
+				initCameraModule();
+				OnStartCamera();
+
+				if (m_pLineCamera != nullptr)
+				{
+					CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
+					if (status == CCamera::CameraStatus::CAMERA_GRAB)
+					{
+						imagepath = m_pLineCamera->SaveJpg();
+					}
+				}
+			}
+		}
+		if (imagepath.size() != 0)
+		{
+			std::string tmpPath = utils::WStrToStr(imagepath);
+			reType = m_pClassify->compute(tmpPath.c_str());
+
+		}
+		CheckAndUpdate(tmpBarcode, reType);
+		/*std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
 		if (preImagePath != currentImage)
 		{
 			barcode = m_pNetworkTask->GetCurrentBarcode();
@@ -264,7 +289,9 @@ void CCarSeat_RecognizationDlg::run()
 			{
 				CheckAndUpdate(barcode, type);
 			}
-		}
+		}*/
+
+
 		
 
 		////// not implement send to server
@@ -330,6 +357,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		////// send message to server
 		////
 		///  not implement
+
 	}
 
 	

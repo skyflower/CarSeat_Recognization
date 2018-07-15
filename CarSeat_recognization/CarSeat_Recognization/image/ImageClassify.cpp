@@ -158,8 +158,6 @@ std::wstring CImageClassify::compute(const char *filePath)
 	float reValue = 0;
 #ifdef PYTHON_TENSORFLOW
 
-
-
 	if ((m_pPyFunc == nullptr) || (filePath == nullptr) ||	\
 		(strlen(m_szGraph) == 0) || (strlen(m_szGraph) == 0))
 	{

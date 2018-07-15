@@ -105,6 +105,7 @@ public:
     unsigned char*  m_pBufForDriver;            // 用于从驱动获取图像的缓存
     unsigned int    m_nBufSizeForDriver;
 
+
 };
 
 #endif

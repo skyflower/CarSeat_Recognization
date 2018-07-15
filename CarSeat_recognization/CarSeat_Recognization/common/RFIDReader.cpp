@@ -29,6 +29,11 @@ CRFIDReader::~CRFIDReader()
 	}
 }
 
+std::wstring CRFIDReader::readBarcode()
+{
+	return std::wstring();
+}
+
 bool CRFIDReader::init()
 {
 	memset(m_szDefaultIp, 0, sizeof(m_szDefaultIp));

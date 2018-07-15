@@ -38,6 +38,9 @@ public:
 
 	bool initPython(const char *modulName,const char *functionName);
 
+	/*
+	异步计算接口
+	*/
 	void pushImage(const char*filePath);
 
 	std::wstring GetImageType(const char*filePath);
@@ -47,12 +50,18 @@ public:
 	bool terminate();
 	
 	void run();
+
+
+	/*
+	同步计算接口
+	*/
+	std::wstring compute(const char *filePath);
 	
 private:
 
 	void destory();
 
-	std::wstring compute(const char *filePath);
+	
 
 	size_t hashValue(const char* filePath);
 

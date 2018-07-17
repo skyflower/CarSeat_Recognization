@@ -123,6 +123,12 @@
     <ClInclude Include="CameraParameterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="QueryDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RecogResultManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -210,6 +216,12 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="CameraParameterDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RecogResultManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

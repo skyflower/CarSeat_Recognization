@@ -12,6 +12,7 @@
 #include "CameraParameterDlg.h"
 #include "./common/Log.h"
 #include <stack>
+#include "QueryDlg.h"
 // add start by xiexinpeng
 #include <string>
 #include "kepserver/OPC.h"
@@ -253,7 +254,7 @@ void CCarSeat_RecognizationDlg::run()
 	std::wstring reType;
 	while (m_bThreadStatus)
 	{
-		
+
 		imagepath = std::wstring();
 		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
 		if (tmpBarcode.size() != 0)
@@ -278,9 +279,11 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			std::string tmpPath = utils::WStrToStr(imagepath);
 			reType = m_pClassify->compute(tmpPath.c_str());
-
 		}
-		CheckAndUpdate(tmpBarcode, reType);
+		if ((tmpBarcode.size() != 0) && (reType.size() != 0))
+		{
+			CheckAndUpdate(tmpBarcode, reType);
+		}
 		/*std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
 		if (preImagePath != currentImage)
 		{
@@ -863,7 +866,8 @@ void CCarSeat_RecognizationDlg::OnSize(UINT nType, int cx, int cy)
 void CCarSeat_RecognizationDlg::OnMenuQueryBarcode()
 {
 	// TODO: 在此添加命令处理程序代码
-
+	CQueryDlg dlg;
+	INT_PTR ret = dlg.DoModal();
 }
 
 

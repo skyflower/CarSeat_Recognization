@@ -1,5 +1,3 @@
-
-
 barcodeTable={"201456":"红色-d2-皮革",
 "201457":"红色-d2-菱形纹理",
 "201458":"红色-d2-孔形纹理",
@@ -10,20 +8,19 @@ barcodeTable={"201456":"红色-d2-皮革",
 "301436":"红色-d4-皮革",
 "401416":"白色-k2-皮革"}
 
-
-classifyType={"k216 black pvc diamond cloth":"201456",
-"k216 ecru pvc diamond cloth":"201458",
-"k215 ecru pvc leather":"201459",
-"k215 black pvc leather":"201446",
-"d2 black pvc leather":"201436",
-"d2 black pvc hole cloth":"201416",
-"d2 black pvc line cloth":"201457",
-"k215 ecru pvc buckskin":"301436",
-"k216 black pvc leather":"401416"}
+classifyType={"k216_black_pvc_diamond_cloth":"201456",
+"k216_ecru_pvc_diamond_cloth":"201458",
+"k215_ecru_pvc_leather":"201459",
+"k215_black_pvc_leather":"201446",
+"d2_black_pvc_leather":"201436",
+"d2_black_pvc_hole_cloth":"201416",
+"d2_black_pvc_line_cloth":"201457",
+"k215_ecru_pvc_buckskin":"301436",
+"k216_black_pvc_leather":"401416"}
 
 
 LoginUsrName=root
 LoginPasswd=12345678
-LoginInfoAutoSave=1
+LoginInfoAutoSave=0
 
 

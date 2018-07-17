@@ -213,7 +213,7 @@ void CImageClassify::destory()
 
 size_t CImageClassify::hashValue(const char * filePath)
 {	
-	size_t hashValue = m_pHashFunc(filePath);
+	size_t Value = m_pHashFunc(filePath);
 
-	return hashValue;
+	return Value;
 }

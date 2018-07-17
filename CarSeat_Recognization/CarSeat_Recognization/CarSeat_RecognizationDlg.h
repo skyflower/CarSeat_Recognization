@@ -119,4 +119,6 @@ public:
 	afx_msg void OnSetCameraParameter();
 	afx_msg void OnUpdateSetCameraParameter(CCmdUI *pCmdUI);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnMenuQueryBarcode();
+	afx_msg void OnUpdateMenuQueryBarcode(CCmdUI *pCmdUI);
 };

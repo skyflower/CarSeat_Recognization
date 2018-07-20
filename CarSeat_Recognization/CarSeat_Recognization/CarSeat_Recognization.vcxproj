@@ -209,6 +209,7 @@
     <ClInclude Include="common\Log.h" />
     <ClInclude Include="common\md5.h" />
     <ClInclude Include="common\ParamManager.h" />
+    <ClInclude Include="common\RecogResultManager.h" />
     <ClInclude Include="common\RFIDReader.h" />
     <ClInclude Include="common\utils.h" />
     <ClInclude Include="image\BaseMatch.h" />
@@ -224,7 +225,6 @@
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="QueryDlg.h" />
-    <ClInclude Include="RecogResultManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -242,6 +242,7 @@
     <ClCompile Include="common\Log.cpp" />
     <ClCompile Include="common\md5.cpp" />
     <ClCompile Include="common\ParamManager.cpp" />
+    <ClCompile Include="common\RecogResultManager.cpp" />
     <ClCompile Include="common\RFIDReader.cpp" />
     <ClCompile Include="common\utils.cpp" />
     <ClCompile Include="image\BaseMatch.cpp" />
@@ -257,7 +258,6 @@
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="QueryDlg.cpp" />
-    <ClCompile Include="RecogResultManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

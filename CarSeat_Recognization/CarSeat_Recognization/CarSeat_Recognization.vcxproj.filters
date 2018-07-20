@@ -126,8 +126,8 @@
     <ClInclude Include="QueryDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="RecogResultManager.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="common\RecogResultManager.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +221,8 @@
     <ClCompile Include="QueryDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RecogResultManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="common\RecogResultManager.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <vector>
 #include <unordered_map>
+#include "./RecogResultManager.h"
 
 #ifdef OPENCV
 #include <opencv2\core\core.hpp>
@@ -25,6 +26,10 @@ namespace utils
 	std::wstring StrToWStr(const std::string str);
 	std::string WStrToStr(const std::wstring wstr);
 
+	bool RecogResultCToW(struct RecogResult &a, struct RecogResultW &b);
+
+	bool RecogResultWToC(struct RecogResultW &a, struct RecogResult &b);
+
 	bool delBlankSpace(char *text, size_t len);
 
 	bool readFile(char *file, char *&content, size_t &FileSize);
@@ -44,6 +49,8 @@ namespace utils
 
 	// XXX=AAA
 	bool getValueByName(const char *content, const char*name, char*value);
+
+
 
 #ifdef OPENCV
 	void showImageHist(const cv::Mat & img);

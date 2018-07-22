@@ -1,12 +1,14 @@
 #include "RecogResultManager.h"
 #include <functional>
 #include <fstream>
+#include "Log.h"
 
 
 CRecogResultManager* CRecogResultManager::m_pInstance = nullptr;
 
 CRecogResultManager::CRecogResultManager():
-	m_pRecogResult(nullptr)
+	m_pRecogResult(nullptr),
+	m_bAutoSave(false)
 {
 	memset(m_szName, 0, sizeof(m_szName));
 	strcpy_s(m_szName, "recogResult.csv");
@@ -17,7 +19,7 @@ void CRecogResultManager::init()
 {
 	if (m_pRecogResult == nullptr)
 	{
-		m_pRecogResult = new std::unordered_map<size_t, RecogResult>;
+		m_pRecogResult = new std::list<RecogResult>;
 	}
 	/*
 	初始化本地文件，对于日期时间超过一个月以上的识别结果不予初始化,not implement
@@ -60,9 +62,10 @@ void CRecogResultManager::init()
 		tmpChar[i] = ',';
 		if (parseLine(tmpChar, tmpResult) == true)
 		{
-			size_t tmpHashValue = m_pHashFunc(tmpResult.m_szBarcode);
-			m_pRecogResult->insert(std::make_pair(tmpHashValue, tmpResult));
+			//size_t tmpHashValue = m_pHashFunc(tmpResult.m_szBarcode);
+			m_pRecogResult->push_back(tmpResult);
 		}
+		//output(tmpResult);
 		begin = begin + i + 1;
 	}
 }
@@ -73,25 +76,25 @@ bool CRecogResultManager::serialize()
 {
 	if ((m_pRecogResult != nullptr) || (m_pRecogResult->size() == 0))
 	{
-		return;
+		return true;
 	}
 	std::fstream fs(m_szName, std::ios::in | std::ios::out);
-	std::unordered_map<size_t, struct RecogResult>::const_iterator iter = m_pRecogResult->begin();
+	std::list<struct RecogResult>::const_iterator iter = m_pRecogResult->begin();
 	for (; iter != m_pRecogResult->end(); ++iter)
 	{
-		fs << iter->second.m_szBarcode << ","	\
-			<<  iter->second.m_szTime << ","	\
-			<< iter->second.m_szTypeByRecog << ",";
-		fs << iter->second.m_szTypeByBarcode << ","		\
-			<< iter->second.m_bIsCorrect << ",";
-		fs << iter->second.m_szRecogMethod << "," \
-			<< iter->second.m_szCameraName << "," \
-			<< iter->second.m_szLineName << ",";
-		fs << iter->second.m_szUsrName << ","	\
-			<< iter->second.m_szImagePath << "\n";
+		fs << iter->m_szBarcode << ","	\
+			<<  iter->m_szTime << ","	\
+			<< iter->m_szTypeByRecog << ",";
+		fs << iter->m_szTypeByBarcode << ","		\
+			<< iter->m_bIsCorrect << ",";
+		fs << iter->m_szRecogMethod << "," \
+			<< iter->m_szCameraName << "," \
+			<< iter->m_szLineName << ",";
+		fs << iter->m_szUsrName << ","	\
+			<< iter->m_szImagePath << "\n";
 	}
 	fs.close();
-	return false;
+	return true;
 }
 
 bool CRecogResultManager::parseLine(char * line, RecogResult & a)
@@ -188,19 +191,25 @@ bool CRecogResultManager::parseLine(char * line, RecogResult & a)
 		memcpy(a.m_szImagePath, begin, end - begin);
 		begin = end + 1;
 		
-		memcpy(a.m_szUsrName, begin, end - begin);
-
-
-
-
 	} while (0);
 	return true;
+}
+
+void CRecogResultManager::output(RecogResult & a)
+{
+	char tmp[MAX_CHAR_LENGTH] = { 0 };
+	memset(tmp, 0, sizeof(tmp));
+	sprintf_s(tmp, sizeof(tmp), "%s,%s,path = %s", a.m_szBarcode, a.m_szTime, a.m_szImagePath);
+	WriteInfo("%s", tmp);
 }
 
 
 CRecogResultManager::~CRecogResultManager()
 {
-	serialize();
+	if (m_bAutoSave == true)
+	{
+		serialize();
+	}
 	if (m_pRecogResult != nullptr)
 	{
 		delete m_pRecogResult;
@@ -222,13 +231,25 @@ const RecogResult * CRecogResultManager::findByBarcode(const char * barcode) con
 {
 	if ((m_pRecogResult == nullptr) || (barcode == nullptr))
 	{
-		return nullptr;
+		return nullptr; 
 	}
-	size_t tmpValue = m_pHashFunc(barcode);
+	//size_t tmpValue = m_pHashFunc(barcode);
 
-	std::unordered_map<size_t, RecogResult>::const_iterator iter = m_pRecogResult->find(tmpValue);
+	std::list<RecogResult>::const_iterator iter = m_pRecogResult->cbegin();
+	size_t tmpLen = strlen(barcode);
+	while (iter != m_pRecogResult->cend())
+	{
+		int ret = strncmp(iter->m_szBarcode, barcode, tmpLen);
+		if (ret == 0)
+		{
+			break;
+		}
+		//WriteInfo("ret = %d, %s, %s, %d", ret, iter->m_szBarcode, barcode, strlen(barcode));
+		++iter;
+	}
+	//, m_pRecogResult->end());
 
-	if (iter == m_pRecogResult->end())
+	if (iter == m_pRecogResult->cend())
 	{
 		return nullptr;
 	}
@@ -239,10 +260,11 @@ bool CRecogResultManager::add(const RecogResult & a)
 {
 	if (m_pRecogResult == nullptr)
 	{
-		m_pRecogResult = new std::unordered_map<size_t, RecogResult>;
+		m_pRecogResult = new std::list<RecogResult>;
 	}
-	size_t tmpValue = m_pHashFunc(a.m_szBarcode);
-	m_pRecogResult->insert(std::make_pair(tmpValue, a));
+	//size_t tmpValue = m_pHashFunc(a.m_szBarcode);
+	m_pRecogResult->push_front(a);
+	m_bAutoSave = true;
 	
-	return false;
+	return true;
 }

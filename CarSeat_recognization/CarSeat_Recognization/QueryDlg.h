@@ -1,5 +1,7 @@
 #pragma once
 #include "afxwin.h"
+#include "./common/RecogResultManager.h"
+#include <atlimage.h>
 
 
 // CQueryDlg ¶Ô»°¿ò
@@ -22,9 +24,13 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 private:
+	CRecogResultManager *m_pRecogManager;
 
 	CButton m_QueryButton;
 	CString m_szQueryBarcode;
 	CStatic m_ImageDisplay;
 	CString m_szQueryResult;
+	CImage m_Image;
+public:
+	afx_msg void OnBnClickedButtonQuery();
 };

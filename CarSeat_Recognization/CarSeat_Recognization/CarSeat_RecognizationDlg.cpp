@@ -79,6 +79,7 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	
 	//m_pLabelManager = new CLabelManager();	
 	m_pCameraManager = CCameraManager::GetInstance();
+	m_pRecogManager = CRecogResultManager::GetInstance();
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -719,6 +720,11 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pLineCamera;
 		m_pLineCamera = nullptr;
 	}
+	if (m_pRecogManager != nullptr)
+	{
+		delete m_pRecogManager;
+		m_pRecogManager = nullptr;
+	}
 	CDHtmlDialog::OnClose();
 }
 
@@ -867,6 +873,7 @@ void CCarSeat_RecognizationDlg::OnMenuQueryBarcode()
 {
 	// TODO: 在此添加命令处理程序代码
 	CQueryDlg dlg;
+
 	INT_PTR ret = dlg.DoModal();
 }
 

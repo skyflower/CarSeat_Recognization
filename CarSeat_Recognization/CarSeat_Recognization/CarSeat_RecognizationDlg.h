@@ -9,6 +9,7 @@
 #include "./Camera/CameraManager.h"
 #include "./Camera/LineCamera.h"
 #include "./common/RFIDReader.h"
+#include "./common/RecogResultManager.h"
 
 
 // CCarSeat_RecognizationDlg ¶Ô»°¿ò
@@ -71,6 +72,7 @@ private:
 	CCameraManager *m_pCameraManager;
 
 	CRFIDReader *m_pRFIDReader;
+	CRecogResultManager *m_pRecogManager;
 	
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type);

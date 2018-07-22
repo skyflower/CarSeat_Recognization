@@ -49,6 +49,194 @@ namespace utils
 		return tmpStr;
 	}
 
+	bool RecogResultCToW(struct RecogResult & a, struct RecogResultW & b)
+	{
+		bool flag = false;
+		do
+		{
+			memset(&b, 0, sizeof(b));
+			wchar_t *tmp = utils::CharToWchar(a.m_szBarcode);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szRecogMethod);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szRecogMethod, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szCameraName);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szImagePath);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szImagePath, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szLineName);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szLineName, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szTime);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szTime, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szTypeByBarcode);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szTypeByRecog);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szTypeByRecog, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::CharToWchar(a.m_szUsrName);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szUsrName, tmp, sizeof(wchar_t) * wcslen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			b.m_bIsCorrect = a.m_bIsCorrect;
+			flag = true;
+
+		} while (0);
+		return flag;
+	}
+
+	bool RecogResultWToC(RecogResultW & a, RecogResult & b)
+	{
+		bool flag = false;
+		do
+		{
+			memset(&b, 0, sizeof(b));
+			char *tmp = utils::WcharToChar(a.m_szBarcode);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szBarcode, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szRecogMethod);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szRecogMethod, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szCameraName);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szImagePath);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szImagePath, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szLineName);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szLineName, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szTime);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szTime, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szTypeByBarcode);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szTypeByRecog);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szTypeByRecog, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			tmp = utils::WcharToChar(a.m_szUsrName);
+			if (tmp == nullptr)
+			{
+				break;
+			}
+			memcpy(b.m_szUsrName, tmp, sizeof(wchar_t) * strlen(tmp));
+			delete[]tmp;
+			tmp = nullptr;
+
+			b.m_bIsCorrect = a.m_bIsCorrect;
+			flag = true;
+
+		} while (0);
+		return flag;
+	}
+
 	bool delBlankSpace(char * text, size_t len)
 	{
 		if ((text == nullptr) || (len == 0))

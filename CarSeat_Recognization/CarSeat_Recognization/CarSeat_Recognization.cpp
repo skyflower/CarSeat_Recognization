@@ -145,6 +145,7 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 	INT_PTR nResponse = loginDlg.DoModal();
 	if (nResponse == IDOK)
 	{
+
 		return true;
 	}
 	return false;

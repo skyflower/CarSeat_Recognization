@@ -13,6 +13,7 @@
 #include "./common/Log.h"
 #include <stack>
 #include "QueryDlg.h"
+#include "./common/RecogResultManager.h"
 // add start by xiexinpeng
 #include <string>
 #include "kepserver/OPC.h"
@@ -276,15 +277,13 @@ void CCarSeat_RecognizationDlg::run()
 				}
 			}
 		}
-		if (imagepath.size() != 0)
+		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
 			std::string tmpPath = utils::WStrToStr(imagepath);
 			reType = m_pClassify->compute(tmpPath.c_str());
+			CheckAndUpdate(tmpBarcode, reType, tmpPath);
 		}
-		if ((tmpBarcode.size() != 0) && (reType.size() != 0))
-		{
-			CheckAndUpdate(tmpBarcode, reType);
-		}
+		
 		/*std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
 		if (preImagePath != currentImage)
 		{
@@ -326,25 +325,62 @@ bool CCarSeat_RecognizationDlg::SetLabelManager(CLabelManager * pLabelManager)
 	return true;
 }
 
-void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstring type)
+void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstring RecogType, std::string tmpPath)
 {
 	/*
 	先将barcode转换成和type一致的类型，然后比较，然后刷新界面，如果错误，则弹出对话框，人工干预
 	
 	*/
 	std::wstring barInternalType = m_pLabelManager->GetInternalTypeByBarcode(barcode);
-	std::wstring typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(type);
+	std::wstring typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(RecogType);
+	std::wstring RecogExternalType = m_pLabelManager->GetExternalTypeByClassifyType(RecogType);
+	std::wstring barExternalType = m_pLabelManager->GetExternalTypeByBarcode(barcode);
+
 	std::wstring reType;
 
 	wchar_t result[MAX_CHAR_LENGTH] = { 0 };
 	CNetworkTask::message msg;
 	bool bUsrInput = true;
+	struct RecogResult tmpResult;
+	memset(&tmpResult, 0, sizeof(RecogResult));
+
+	std::string cBarcode = utils::WStrToStr(barcode);
+	memcpy(tmpResult.m_szBarcode, cBarcode.c_str(), sizeof(char) * cBarcode.size());
+
+	std::string cRecogExternalType = utils::WStrToStr(RecogExternalType);
+	memcpy(tmpResult.m_szTypeByRecog, cRecogExternalType.c_str(), sizeof(char) * cRecogExternalType.size());
+
+	strcpy(tmpResult.m_szCameraName, "CC-HIKIVIOSON-MV100");
+	strcpy(tmpResult.m_szLineName, "LINE1");
+
+	strcpy(tmpResult.m_szRecogMethod, "auto");
+
+	std::string cBarExternalType = utils::WStrToStr(barExternalType);
+	memcpy(tmpResult.m_szTypeByBarcode, cBarExternalType.c_str(), sizeof(char) * cBarExternalType.size());
+
+	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
+
+	struct tm * tmpTime = localtime(&time1);//转换成tm类型的结构体;
+
+	sprintf_s(tmpResult.m_szTime, "%04d-%02d-%02d:%02d-%02d-%02d",	\
+		tmpTime->tm_year + 1900, tmpTime->tm_mon + 1, tmpTime->tm_mday,	\
+		tmpTime->tm_hour, tmpTime->tm_min, tmpTime->tm_sec);
+
+	std::wstring tmpUsrName(m_pLabelManager->GetLoginUsrName());
+	std::string cUsrName = utils::WStrToStr(tmpUsrName);
+
+	memcpy(tmpResult.m_szUsrName, cUsrName.c_str(), sizeof(char) * cUsrName.size());	
+
+	memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
+
+
 	if (barInternalType != typeInternalType)
 	{
 		/*
 		添加报警系统，以及人工输入代码
 		*/
 		//m_nFailCount;
+		tmpResult.m_bIsCorrect = false;
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
 		INT_PTR msg = dlg.DoModal();
@@ -352,6 +388,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		if (msg == IDOK)
 		{
 			reType = dlg.GetInputType();
+			std::string cReType = utils::WStrToStr(reType);
+			memcpy(tmpResult.m_szTypeByUsrInput, cReType.c_str(), sizeof(char) * cReType.size());
 		}
 		////// send message to server
 		////
@@ -360,6 +398,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	else
 	{
 		m_nSuccessCount++;
+		tmpResult.m_bIsCorrect = true;
 		////// send message to server
 		////
 		///  not implement
@@ -373,7 +412,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	m_RegRatio.SetWindowTextW(result);
 
 	memset(result, 0, sizeof(result));
-	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", barcode, type, reType);
+	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", barcode, RecogType, reType);
 	m_barCode.SetWindowTextW(result);
 }
 

@@ -86,6 +86,7 @@ bool CRecogResultManager::serialize()
 			<<  iter->m_szTime << ","	\
 			<< iter->m_szTypeByRecog << ",";
 		fs << iter->m_szTypeByBarcode << ","		\
+			<< iter->m_szTypeByUsrInput << ","	\
 			<< iter->m_bIsCorrect << ",";
 		fs << iter->m_szRecogMethod << "," \
 			<< iter->m_szCameraName << "," \
@@ -137,6 +138,18 @@ bool CRecogResultManager::parseLine(char * line, RecogResult & a)
 		}
 		memcpy(a.m_szTypeByBarcode, begin, end - begin);
 		begin = end + 1;
+
+		end = strchr(begin, quote);
+		if (end == NULL)
+		{
+			break;
+		}
+		if (end - begin > 0)
+		{
+			memcpy(a.m_szTypeByUsrInput, begin, end - begin);
+		}
+		begin = end + 1;
+
 		end = strchr(begin, quote);
 		if (end == NULL)
 		{

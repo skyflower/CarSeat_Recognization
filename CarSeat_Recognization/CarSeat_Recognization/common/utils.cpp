@@ -8,7 +8,10 @@ namespace utils
 
 	char* WcharToChar(wchar_t* wc)
 	{
-
+		if ((wc == nullptr) || (wcslen(wc) == 0))
+		{
+			return nullptr;
+		}
 		int len = WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), NULL, 0, NULL, NULL);
 		char *m_char = new char[len + 1];
 		memset(m_char, 0, sizeof(char) * (len + 1));
@@ -19,7 +22,10 @@ namespace utils
 	}
 	wchar_t* CharToWchar(char* c)
 	{
-
+		if ((c == nullptr) || (strlen(c) == 0))
+		{
+			return nullptr;
+		}
 		int len = MultiByteToWideChar(CP_ACP, 0, c, strlen(c), NULL, 0);
 		wchar_t *m_wchar = new wchar_t[len + 1];
 		memset(m_wchar, 0, sizeof(wchar_t) * (len + 1));
@@ -31,17 +37,24 @@ namespace utils
 
 	std::wstring StrToWStr(const std::string str)
 	{
-		//wchar_t* CharToWchar(char* c);
 		wchar_t *pWChar = CharToWchar(const_cast<char*>(str.c_str()));
+		if (pWChar == nullptr)
+		{
+			return std::wstring();
+		}
 		std::wstring tmpStr(pWChar);
 		delete[]pWChar;
 		pWChar = nullptr;
+
 		return tmpStr;
 	}
 	std::string WStrToStr(const std::wstring wstr)
 	{
 		char *pChar = WcharToChar(const_cast<wchar_t*>(wstr.c_str()));
-
+		if (pChar == nullptr)
+		{
+			return std::string();
+		}
 		std::string tmpStr(pChar);
 		delete[]pChar;
 		pChar = nullptr;
@@ -56,85 +69,86 @@ namespace utils
 		{
 			memset(&b, 0, sizeof(b));
 			wchar_t *tmp = utils::CharToWchar(a.m_szBarcode);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::CharToWchar(a.m_szRecogMethod);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szRecogMethod, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szRecogMethod, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::CharToWchar(a.m_szCameraName);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
+			
 
 			tmp = utils::CharToWchar(a.m_szImagePath);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szImagePath, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szImagePath, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
 
+			tmp = utils::CharToWchar(a.m_szTypeByUsrInput);
+			if (tmp != nullptr)
+			{
+				memcpy(b.m_szTypeByUsrInput, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
+			}
+			
 			tmp = utils::CharToWchar(a.m_szLineName);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szLineName, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szLineName, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::CharToWchar(a.m_szTime);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szTime, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szTime, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::CharToWchar(a.m_szTypeByBarcode);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
+			
 
 			tmp = utils::CharToWchar(a.m_szTypeByRecog);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szTypeByRecog, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szTypeByRecog, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::CharToWchar(a.m_szUsrName);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szUsrName, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szUsrName, tmp, sizeof(wchar_t) * wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
 
 			b.m_bIsCorrect = a.m_bIsCorrect;
 			flag = true;
@@ -150,86 +164,85 @@ namespace utils
 		{
 			memset(&b, 0, sizeof(b));
 			char *tmp = utils::WcharToChar(a.m_szBarcode);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szBarcode, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szBarcode, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::WcharToChar(a.m_szRecogMethod);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szRecogMethod, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szRecogMethod, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
 
+			tmp = utils::WcharToChar(a.m_szTypeByUsrInput);
+			if (tmp != nullptr)
+			{
+				memcpy(b.m_szTypeByUsrInput, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
+			}
+			
 			tmp = utils::WcharToChar(a.m_szCameraName);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::WcharToChar(a.m_szImagePath);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szImagePath, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szImagePath, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::WcharToChar(a.m_szLineName);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szLineName, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szLineName, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
 
 			tmp = utils::WcharToChar(a.m_szTime);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szTime, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szTime, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::WcharToChar(a.m_szTypeByBarcode);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::WcharToChar(a.m_szTypeByRecog);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szTypeByRecog, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szTypeByRecog, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			tmp = utils::WcharToChar(a.m_szUsrName);
-			if (tmp == nullptr)
+			if (tmp != nullptr)
 			{
-				break;
+				memcpy(b.m_szUsrName, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
 			}
-			memcpy(b.m_szUsrName, tmp, sizeof(wchar_t) * strlen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-
+			
 			b.m_bIsCorrect = a.m_bIsCorrect;
 			flag = true;
 
@@ -619,6 +632,7 @@ namespace utils
 
 		return cv::Rect(cv::Point(0, 0), cv::Point(img.cols - 1, img.rows - 1));
 	}
+
 	cv::Rect calcRect(const std::vector<cv::Point2f>& point)
 	{
 		double minX = INT_MAX;

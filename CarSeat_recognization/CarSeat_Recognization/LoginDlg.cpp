@@ -84,6 +84,13 @@ void CLoginDlg::OnBnClickedOk()
 	{
 		return;
 	}
+	m_pLabelManager->SetLoginPasswd(m_strPasswd.GetBuffer());
+	m_strPasswd.ReleaseBuffer();
+
+	m_pLabelManager->SetLoginUsrName(m_strUsrName.GetBuffer());
+	m_strUsrName.ReleaseBuffer();
+
+	m_pLabelManager->SetLoginAutoSave(m_bAutoSaveFlag);
 	
 	CDialogEx::OnOK();
 }

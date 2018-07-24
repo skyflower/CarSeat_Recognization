@@ -75,7 +75,7 @@ private:
 	CRecogResultManager *m_pRecogManager;
 	
 
-	void CheckAndUpdate(std::wstring barcode, std::wstring type);
+	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);
 	
 	void initCameraModule();
 

@@ -18,9 +18,13 @@ m_nServerPort(-1),
 m_nTestClientPort(-1),
 m_nTestServerPort(-1),
 m_nBarcodeIp(-1),
-m_nBarcodePort(-1)
+m_nBarcodePort(-1),
+m_nKepServerIp(-1),
+m_nKepServerPort(-1)
 {
 	Init();
+	memset(m_szImagePath, 0, sizeof(m_szImagePath));
+	memset(m_szLineName, 0, sizeof(m_szLineName));
 }
 
 
@@ -152,6 +156,16 @@ unsigned int CParamManager::GetTestClientPort()
 	return m_nTestClientPort;
 }
 
+unsigned int CParamManager::GetKepServerIp()
+{
+	return m_nKepServerIp;
+}
+
+unsigned int CParamManager::GetKepServerPort()
+{
+	return m_nKepServerPort;
+}
+
 std::vector<std::wstring>* CParamManager::GetFtpParameter()
 {
 	return m_pFtp;
@@ -192,6 +206,16 @@ const char * CParamManager::GetGraphFile() const
 const char * CParamManager::GetLabelFile() const
 {
 	return m_szLabelFile.c_str();
+}
+
+const char * CParamManager::GetImageDirectory() const
+{
+	return m_szImagePath;
+}
+
+const char * CParamManager::GetLineName() const
+{
+	return m_szLineName;
 }
 
 void CParamManager::Init()
@@ -241,12 +265,12 @@ void CParamManager::Init()
 		}
 		m_nBarcodeIp = tmpLocal;
 
-		tmpLocal = utils::parseIp(content, "barcodePort");
+		tmpLocal = utils::parseIp(content, "kepServerIp");
 		if (tmpLocal == 0)
 		{
-			TRACE0("get barcodeIp Failed\n");
+			TRACE0("get kepServerIp Failed\n");
 		}
-		m_nBarcodePort = tmpLocal;
+		m_nKepServerIp = tmpLocal;
 
 
 		char tmpStr[MAX_CHAR_LENGTH] = { 0 };
@@ -258,6 +282,12 @@ void CParamManager::Init()
 		if (utils::getValueByName(content, "testClientPort", tmpStr) == true)
 		{
 			m_nTestClientPort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (utils::getValueByName(content, "barcodePort", tmpStr) == true)
+		{
+			m_nKepServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
@@ -279,6 +309,15 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
+		if (utils::getValueByName(content, "imagePath", m_szImagePath) == true)
+		{
+			//////
+		}
+		if (utils::getValueByName(content, "lineName", m_szLineName) == true)
+		{
+			//////
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
 
 
 		if (content != nullptr)

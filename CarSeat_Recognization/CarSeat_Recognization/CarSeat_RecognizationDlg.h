@@ -10,6 +10,7 @@
 #include "./Camera/LineCamera.h"
 #include "./common/RFIDReader.h"
 #include "./common/RecogResultManager.h"
+#include "KepServerSocket.h"
 
 
 // CCarSeat_RecognizationDlg ¶Ô»°¿ò
@@ -73,6 +74,7 @@ private:
 
 	CRFIDReader *m_pRFIDReader;
 	CRecogResultManager *m_pRecogManager;
+	CKepServerSocket *m_pKepServer;
 	
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);

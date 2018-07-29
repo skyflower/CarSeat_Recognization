@@ -127,6 +127,7 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 		WriteError("replay package error");
 		return false;
 	}
+	rootElement->Clear();
 	lconfigXML.Clear();
 	return true;
 }
@@ -471,6 +472,7 @@ bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name,
 	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
 	//设置服务器的目录
 	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
+	//setsockopt
 	if (bRetVal == FALSE)
 	{
 		AfxMessageBox(L"目录设置失败");

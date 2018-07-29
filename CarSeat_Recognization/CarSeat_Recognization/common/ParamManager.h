@@ -25,6 +25,10 @@ public:
 	unsigned int GetTestServerPort();
 	unsigned int GetTestClientPort();
 
+	unsigned int GetKepServerIp();
+	unsigned int GetKepServerPort();
+
+
 	std::vector<std::wstring> *GetFtpParameter();
 	std::wstring FindCameraByLineID(std::wstring lineID);
 
@@ -33,6 +37,8 @@ public:
 
 	const char*GetGraphFile() const;
 	const char*GetLabelFile() const;
+	const char*GetImageDirectory() const;
+	const char*GetLineName() const;
 
 	std::wstring GetLocalName() { return m_strLocalName; }
 
@@ -47,13 +53,13 @@ private:
 	unsigned int __auxLocalIP();
 
 	// serverip， 服务器Ip
-	size_t m_nServerIp;
+	unsigned int m_nServerIp;
 
 	// serverport 服务器通信端口号
 	int m_nServerPort;
 
 	// 本机和服务器通信的Ip
-	size_t m_nLocalIp;
+	unsigned int m_nLocalIp;
 
 	// 和服务器测试连通的服务器端口号
 	int m_nTestServerPort;
@@ -62,10 +68,22 @@ private:
 	int m_nTestClientPort;
 
 	// 获取条形码的ip
-	size_t m_nBarcodeIp;
+	unsigned int m_nBarcodeIp;
 
 	//获取条形码的端口号
-	size_t m_nBarcodePort;
+	unsigned int m_nBarcodePort;
+
+	// kepServer模块通信ip地址
+	unsigned int m_nKepServerIp;
+
+	// kepServer模块通信端口
+	unsigned int m_nKepServerPort;
+
+	//拍照图像本地保存路径
+	char m_szImagePath[256];
+
+	//产线名称编号
+	char m_szLineName[20];
 
 	// 本机名
 	std::wstring m_strLocalName;

@@ -20,11 +20,19 @@ barcodeIp=192.168.2.253
 barcodePort=18795
 
 ##产线对应的相机名称
-lineCamera={"L1":"001", "L2":"002", "L3":"003"}
+lineCamera={"Line01":"001", "Line02":"002", "Line03":"003"}
+
+lineName=Line01
 
 ##
 graphFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_graph.pb
 labelFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_labels.txt
+
+imagePath=C:\carseat\imageDir
+
+kepServerIp=127.0.0.1
+kepServerPort=37000
+
 
 ##
 modelImageFile=D:\Cache\image

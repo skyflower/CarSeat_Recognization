@@ -251,11 +251,30 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		return;
 	}
+	const char* tmpImageDir = m_pParamManager->GetImageDirectory();
+	//char *tmpPointer = const_cast<char*>(tmpImageDir);
+	wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
+
+	if (tmpWPath != nullptr)
+	{
+		if (m_pLineCamera != nullptr)
+		{
+			m_pLineCamera->SetImageSaveDirectory(tmpWPath);
+		}
+		delete[]tmpWPath;
+		tmpWPath = nullptr;
+	}
+	if (m_pParamManager != nullptr)
+	{
+		m_pKepServer = new CKepServerSocket(m_pParamManager->GetKepServerIp(), m_pParamManager->GetKepServerPort());
+	}
 
 	std::wstring imagepath;
 	std::wstring reType;
 	while (m_bThreadStatus)
 	{
+		// 和kepServer模块的心跳包
+		m_pKepServer->HeartBlood();
 
 		imagepath = std::wstring();
 		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
@@ -350,21 +369,23 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	std::string cRecogExternalType = utils::WStrToStr(RecogExternalType);
 	memcpy(tmpResult.m_szTypeByRecog, cRecogExternalType.c_str(), sizeof(char) * cRecogExternalType.size());
 
-	strcpy(tmpResult.m_szCameraName, "CC-HIKIVIOSON-MV100");
-	strcpy(tmpResult.m_szLineName, "LINE1");
+	strcpy_s(tmpResult.m_szCameraName, "CC-HIKIVIOSON-MV100");
 
-	strcpy(tmpResult.m_szRecogMethod, "auto");
+	strcpy_s(tmpResult.m_szLineName, m_pParamManager->GetLineName());
+
+	strcpy_s(tmpResult.m_szRecogMethod, "auto");
 
 	std::string cBarExternalType = utils::WStrToStr(barExternalType);
 	memcpy(tmpResult.m_szTypeByBarcode, cBarExternalType.c_str(), sizeof(char) * cBarExternalType.size());
 
 	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
 
-	struct tm * tmpTime = localtime(&time1);//转换成tm类型的结构体;
+	struct tm tmpTime;
+	localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
 
 	sprintf_s(tmpResult.m_szTime, "%04d-%02d-%02d:%02d-%02d-%02d",	\
-		tmpTime->tm_year + 1900, tmpTime->tm_mon + 1, tmpTime->tm_mday,	\
-		tmpTime->tm_hour, tmpTime->tm_min, tmpTime->tm_sec);
+		tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday,	\
+		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 
 	std::wstring tmpUsrName(m_pLabelManager->GetLoginUsrName());
 	std::string cUsrName = utils::WStrToStr(tmpUsrName);
@@ -394,6 +415,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		////// send message to server
 		////
 		///  not implement
+		m_pKepServer->SetError();
 	}
 	else
 	{
@@ -402,7 +424,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		////// send message to server
 		////
 		///  not implement
-
+		m_pKepServer->SetCorrect();
 	}
 
 	
@@ -519,29 +541,31 @@ void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
 
 void CCarSeat_RecognizationDlg::testXML()
 {
-	char greedyXML[] = "<frame>	\
-		<cmd>							\
-		<id>100000129</id>		\
-		<hostGreetings>			\
-		<readerType>SIMATIC_RF640R</readerType>	\
-		<readerMode>Run</readerMode>	\
+	char greedyXML[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
+		<frame>													\
+		<cmd>											\
+		<id>100000129</id>								\
+		<hostGreetings>									\
+		<readerType>SIMATIC_RF640R</readerType>			\
+		<readerMode>Run</readerMode>					\
 		<supportedVersions>								\
-		<version>V1.0</version>			\
+		<version>V1.0</version>							\
 		</supportedVersions>							\
 		</hostGreetings>								\
-		</cmd>				\
+		</cmd>											\
 		</frame>";
 
-	char reXml[] = "<frame>								\
+	char reXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
+		<frame>											\
 		<reply>											\
-		<id>100000129</id>							\
-		<resultCode>0</resultCode>					\
+		<id>100000129</id>								\
+		<resultCode>0</resultCode>						\
 		<hostGreetings>									\
 		<returnValue>									\
-		<version>V1.0</version>			\
-		<configType>value_configType</configType>	\
-		<configID>value_configID</configID>			\
-		</returnValue>								\
+		<version>V1.0</version>							\
+		<configType>value_configType</configType>		\
+		<configID>value_configID</configID>				\
+		</returnValue>									\
 		</hostGreetings>								\
 		</reply>										\
 		</frame>";

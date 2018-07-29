@@ -9,7 +9,10 @@ namespace utils
 
 	char* WcharToChar(wchar_t* wc)
 	{
-
+		if (wc == nullptr)
+		{
+			return nullptr;
+		}
 		int len = WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), NULL, 0, NULL, NULL);
 		char *m_char = new char[len + 1];
 		memset(m_char, 0, sizeof(char) * (len + 1));
@@ -20,7 +23,10 @@ namespace utils
 	}
 	wchar_t* CharToWchar(char* c)
 	{
-
+		if (c == nullptr)
+		{
+			return nullptr;
+		}
 		int len = MultiByteToWideChar(CP_ACP, 0, c, strlen(c), NULL, 0);
 		wchar_t *m_wchar = new wchar_t[len + 1];
 		memset(m_wchar, 0, sizeof(wchar_t) * (len + 1));
@@ -28,6 +34,40 @@ namespace utils
 		MultiByteToWideChar(CP_ACP, 0, c, strlen(c), m_wchar, len);
 		m_wchar[len] = '\0';
 		return m_wchar;
+	}
+
+	bool WCharToChar(wchar_t * wc, char * bc, int * length)
+	{
+		if ((wc == nullptr) || (bc == nullptr) || (length == nullptr))
+		{
+			return false;
+		}
+		int len = WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), NULL, 0, NULL, NULL);
+		if (*length < len)
+		{
+			return false;
+		}
+		WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), bc, len, NULL, NULL);
+		*length = len;
+		bc[len] = '\0';
+		return true;
+	}
+
+	bool CharToWChar(char * bc, wchar_t * wc, int * length)
+	{
+		if ((bc == nullptr) || (wc == nullptr) || (length == nullptr))
+		{
+			return false;
+		}
+		int len = MultiByteToWideChar(CP_ACP, 0, bc, strlen(bc), NULL, 0);
+		if (*length < len)
+		{
+			return false;
+		}
+		MultiByteToWideChar(CP_ACP, 0, bc, strlen(bc), wc, len);
+		wc[len] = '\0';
+		*length = len;
+		return true;
 	}
 
 	std::wstring StrToWStr(const std::string str)

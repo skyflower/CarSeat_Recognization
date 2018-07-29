@@ -20,6 +20,7 @@
 #include "LoginDlg.h"
 #include "./common/utils.h"
 #include "ChildFrm.h"
+#include <time.h>
 
 
 #ifdef _DEBUG
@@ -279,16 +280,70 @@ void CQuery_ModuleApp::OnButtonChoose()
 	}
 	CConditionFilter filter = mConditionDlg.GetFilterCondition();
 	TRACE1("ret = %d\n", ret);
+	WriteInfo("date = [begin = %s],[end = %s]", filter.mDateBeign, filter.mDateEnd);
+	WriteInfo("time = [begin = %s],[end = %s]", filter.mTimeBegin, filter.mTimeEnd);
+	WriteInfo("line = [begin = %s],[end = %s]", filter.mLineBegin, filter.mLineEnd);
+	WriteInfo("barcode = [begin = %s],[end = %s]", filter.mBarcodeBegin, filter.mBarcodeEnd);
+	WriteInfo("seatType = [%s], methodType = [%s]", filter.mSeatType, filter.mMethodType);
+	
+
+
+	char mDateBeign[20];
+	char mDateEnd[20];
+	char mTimeBegin[20];
+	char mTimeEnd[20];
+	char mLineBegin[20];
+	char mLineEnd[20];
+	char mBarcodeBegin[50];
+	char mBarcodeEnd[50];
+	char mSeatType[50];
+	char mMethodType[20];
+
+	char tmpTime[20] = { 0 };
+	memset(tmpTime, 0, sizeof(tmpTime));
+
+	time_t now_time = time(NULL);
+	tm *tmp_now_tm = localtime(&now_time);
+
+	
+
+	/*
+	将查询条件以及用户名和密码发送到服务器端
+	*/
+	char queryXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
+		<search>																	\
+		<ip=\"%s\" usr=\"%s\" passwd=\"%s\" time=\"%s\"/>					\
+		<timePolicy control=\"%d\" startTime=\"%s\" endTime=\"%s\"/>				\
+		<linePolicy control=\"%d\" startLine=\"%s\" endLine=\"%s\"/>				\
+		<barcodePolicy control=\"%d\" startBarcode=\"%s\" endBarcode=\"%s\"/>		\
+		<typePolicy control=\"%d\" type=\"%s\"/>										\
+		<methodPolicy control=\"%d\" method=\"%s\"/>							\
+		</search>";
+
+	const size_t length = 1000;
+	char *tmpXml = new char[length];
+	if (tmpXml == nullptr)
+	{
+		WriteError("malloc %d memory failed", length);
+		AfxMessageBox(L"malloc 1000 memory faield");
+		return;
+	}
+	memset(tmpXml, 0, sizeof(char) * length);
 
 
 
+
+	delete[]tmpXml;
+	tmpXml = nullptr;
 }
 
 
 void CQuery_ModuleApp::OnButtonBarcode()
 {
 	// TODO: 在此添加命令处理程序代码
-
+	/*
+	条形码对照表
+	*/
 
 }
 
@@ -316,6 +371,11 @@ void CQuery_ModuleApp::OnButtonLogin()
 	}
 
 	bool tmpSaveFlag = dlg.GetAutoSaveFlag();
+
+	/*
+	判断用户名是否正确，
+	
+	*/
 	m_pParamManager->SetLoginUserName(std::wstring(mUsrName));
 	m_pParamManager->SetLoginPasswd(std::wstring(mPasswd));
 }

@@ -129,6 +129,9 @@
     <ClInclude Include="common\RecogResultManager.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="KepServerSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -223,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="common\RecogResultManager.cpp">
       <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="KepServerSocket.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

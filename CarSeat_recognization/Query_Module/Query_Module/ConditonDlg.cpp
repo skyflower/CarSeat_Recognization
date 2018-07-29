@@ -71,54 +71,82 @@ void CConditonDlg::OnBnClickedOk()
 	//日期开始
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_BEGIN, text, sizeof(text));
-	memcpy(mFilter.mDateBeign, text, wcslen(text));
+	int tmpLength = sizeof(mFilter.mDateBeign);
+	utils::WCharToChar(text, mFilter.mDateBeign, &tmpLength);
+	//memcpy(mFilter.mDateBeign, text, wcslen(text));
 
 	//日期结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_END, text, sizeof(text));
-	memcpy(mFilter.mDateEnd, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mDateEnd);
+	utils::WCharToChar(text, mFilter.mDateEnd, &tmpLength);
+	//memcpy(mFilter.mDateEnd, text, wcslen(text));
 
 
 	//时间开始
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_BEGIN, text, sizeof(text));
-	memcpy(mFilter.mTimeBegin, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mTimeBegin);
+	utils::WCharToChar(text, mFilter.mTimeBegin, &tmpLength);
+
+	//memcpy(mFilter.mTimeBegin, text, wcslen(text));
 
 	//时间结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_END, text, sizeof(text));
-	memcpy(mFilter.mTimeEnd, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mTimeEnd);
+	utils::WCharToChar(text, mFilter.mTimeEnd, &tmpLength);
+
+	//memcpy(mFilter.mTimeEnd, text, wcslen(text));
 
 
 	//产线开始
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_LINE_BEGIN, text, sizeof(text));
-	memcpy(mFilter.mLineBegin, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mLineBegin);
+	utils::WCharToChar(text, mFilter.mLineBegin, &tmpLength);
+
+	//memcpy(mFilter.mLineBegin, text, wcslen(text));
 
 	//产线结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_LINE_END, text, sizeof(text));
-	memcpy(mFilter.mLineEnd, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mLineEnd);
+	utils::WCharToChar(text, mFilter.mLineEnd, &tmpLength);
+
+	//memcpy(mFilter.mLineEnd, text, wcslen(text));
 
 	//条形码开始
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_BARCODE_BEGIN, text, sizeof(text));
-	memcpy(mFilter.mBarcodeBegin, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mBarcodeBegin);
+	utils::WCharToChar(text, mFilter.mBarcodeBegin, &tmpLength);
+
+	//memcpy(mFilter.mBarcodeBegin, text, wcslen(text));
 
 	//条形码结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_BARCODE_END, text, sizeof(text));
-	memcpy(mFilter.mBarcodeEnd, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mBarcodeEnd);
+	utils::WCharToChar(text, mFilter.mBarcodeEnd, &tmpLength);
+
+	//memcpy(mFilter.mBarcodeEnd, text, wcslen(text));
 
 	//座椅类型
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_SEAT_TYPE, text, sizeof(text));
-	memcpy(mFilter.mSeatType, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mSeatType);
+	utils::WCharToChar(text, mFilter.mSeatType, &tmpLength);
+
+	//memcpy(mFilter.mSeatType, text, wcslen(text));
 
 	//识别类型
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_METHOD_TYPE, text, sizeof(text));
-	memcpy(mFilter.mMethodType, text, wcslen(text));
+	tmpLength = sizeof(mFilter.mMethodType);
+	utils::WCharToChar(text, mFilter.mMethodType, &tmpLength);
+
+	//memcpy(mFilter.mMethodType, text, wcslen(text));
 
 	CDialogEx::OnOK();
 }

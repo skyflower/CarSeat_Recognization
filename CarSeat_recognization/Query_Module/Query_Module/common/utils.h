@@ -13,6 +13,11 @@ namespace utils
 
 	char* WcharToChar(wchar_t* wc);
 	wchar_t* CharToWchar(char* c);
+
+	bool WCharToChar(wchar_t* wc, char *bc, int *length);
+
+	bool CharToWChar(char* bc, wchar_t *wc, int *length);
+
 	std::wstring StrToWStr(const std::string str);
 	std::string WStrToStr(const std::wstring wstr);
 

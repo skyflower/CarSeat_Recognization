@@ -14,10 +14,7 @@
 #include <stack>
 #include "QueryDlg.h"
 #include "./common/RecogResultManager.h"
-// add start by xiexinpeng
-#include <string>
-#include "kepserver/OPC.h"
-// add end by xiexinpeng
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -145,37 +142,6 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SendMessage(WM_SIZE, m_nCxScreen * 5 / 7, m_nCyScreen * 5 / 7);
 
-
-
-    // kepserver add start by xiexinpeng	
-    // kepserver
-    COPC Opc;
-	// server name
-	CString Cstr = L"Kepware.KEPServerEX.V5";
-	
-	BSTR opcServer = nullptr;
-	
-	opcServer = Cstr.AllocSysString();
-	
-	Opc.AddServerName(opcServer);
-	
-	if(TRUE == Opc.ConnectServer())
-	{
-		Opc.bOPCConnect=true;
-		CString flag = L"Channel1.Device1.Tag2";
-		Opc.InitialOPC(opcServer, 1, &COleVariant(flag));
-		Opc.PreWrite();	
-		//wirte data demo
-		float test = 500;
-		Opc.WriteData(1, 0, &COleVariant(test));
-	}
-	if (opcServer != nullptr)
-	{
-		::SysFreeString(opcServer);
-	}
-	
-
-	// add end by xiexinpeng
 	wchar_t tmpStr[] = L"K215-黑色-菱形纹理";
 	CString tmpBarcodeStr;
 	tmpBarcodeStr.Format(L"%s", tmpStr);

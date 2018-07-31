@@ -12,9 +12,7 @@ class CKepServerComDlg : public CDialogEx
 // 构造
 public:
 	CKepServerComDlg(CWnd* pParent = NULL);	// 标准构造函数
-	COPC Opc;
-	COleVariant *ReadItem;
-	COleVariant *WriteItem;
+	void DoEvent();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_KEPSERVERCOM_DIALOG };
@@ -41,5 +39,4 @@ public:
 	CString m_ConncetResult;
 	CString m_WriteFlagName;
 	afx_msg void OnBnClickedConnect();
-//	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

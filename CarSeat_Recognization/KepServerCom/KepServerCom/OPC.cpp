@@ -252,6 +252,10 @@ bool COPC::WriteData(long len, long startnum,VARIANT *WriteData)
 	hr = m_ItemMgt->QueryInterface(IID_IOPCSyncIO, (void **)&m_pOPCSync);
 	if (hr != S_OK)
 	{
+		delete[]hTagServer;
+		delete[]TagList;
+		hTagServer = nullptr;
+		TagList = nullptr;
 		return false;
 	}
 	hr  = m_pOPCSync->Write(len, hTagServer, WriteData, &pErrors);

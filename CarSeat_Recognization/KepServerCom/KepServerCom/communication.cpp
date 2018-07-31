@@ -67,9 +67,9 @@ void CDataCtrl::DataControl(COPC* dOpc)
 		{
 			float result;
 			result = ReadData(dOpc);
-			CString str;
-			str.Format(_T("%f"), result);
-			AfxMessageBox(str);
+			//CString str;
+			//str.Format(_T("%f"), result);
+			//AfxMessageBox(str);
 			if (result == 0) 
 			{
 				serverSocket.Send(man_not_do_msg, sizeof(man_not_do_msg));//发送内容给客户端
@@ -109,12 +109,12 @@ int CDataCtrl::ParseXmlData(char* data, float* num)
 	{
 		if (strncmp(rootElement->Value(), "read", strlen("read")) == 0) 
 		{
-			AfxMessageBox(TEXT("读数据请求"));
+			//AfxMessageBox(TEXT("读数据请求"));
 			return 0;
 		} 
 		else if ((strncmp(rootElement->Value(), "write", strlen("write")) == 0))
 		{
-			AfxMessageBox(TEXT("写数据请求"));
+			//AfxMessageBox(TEXT("写数据请求"));
 			const char* value = rootElement->GetText();
 			*num = atoi(value);
 
@@ -144,6 +144,6 @@ float CDataCtrl::ReadData(COPC* dOpc)
 {
 	dOpc->ReadData(1, 0);
 	float data = dOpc->ItemData[0];
-
+	
 	return data;
 }

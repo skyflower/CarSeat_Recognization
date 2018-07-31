@@ -10,9 +10,13 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-
+bool pServerConnected = false;
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
+typedef struct OpcData {
+	CString ServerName;
+	CString ReadTag;
+	CString WriteTag;
+}OpcData_t;
 
 class CAboutDlg : public CDialogEx
 {
@@ -164,60 +168,79 @@ HCURSOR CKepServerComDlg::OnQueryDragIcon()
 
 UINT MyThreadProc(LPVOID pParam)
 {
-	//CKepServerComDlg* pObject = (CKepServerComDlg*)pParam;
-	COPC *dOpc = (COPC*)pParam;
-	CDataCtrl DataCtrl;
-	//CString str;
-	//str.Format(_T("%d"), pObject->Opc.bOPCConnect);
-	//AfxMessageBox(str);
-	//DataCtrl.DataControl(&(pObject->Opc));
-	DataCtrl.DataControl(dOpc);
-	//delete[] pObject->ReadItem;
-	//delete[] pObject->WriteItem;
-
-	return 0;   // thread completed successfully  
-}
-
-
-void CKepServerComDlg::OnBnClickedConnect()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	UpdateData(true);
+	OpcData_t* pOD = (OpcData_t*)pParam;
 	// server name
-	CString Cstr = m_ServerName;
+	CString Cstr = pOD->ServerName;
 	//wchar_t* opcServer = nullptr;
 	BSTR opcServer = nullptr;
 	//opcServer = new wchar_t[20];
 	opcServer = Cstr.AllocSysString();
+	COPC Opc;
 	Opc.AddServerName(opcServer);
 
 	if (TRUE == Opc.ConnectServer())
 	{
 		Opc.bOPCConnect = true;
-		CString read_flag = m_ReadFlagName;
-		CString write_flag = m_WriteFlagName;
-		ReadItem = new COleVariant[1];
-		WriteItem = new COleVariant[1];
+		pServerConnected = true;
+		CString read_flag = pOD->ReadTag;
+		CString write_flag = pOD->WriteTag;
+		COleVariant *ReadItem = new COleVariant[1];
+		COleVariant *WriteItem = new COleVariant[1];
 		ReadItem[0] = COleVariant(read_flag);
 		WriteItem[0] = COleVariant(write_flag);
 		Opc.InitialOPC(opcServer, 1, 1, ReadItem, WriteItem);
 		Opc.PreRead();
 		Opc.PreWrite();
+		CDataCtrl CD;
+		CD.DataControl(&Opc);
+		delete[] ReadItem;
+		delete[] WriteItem;
+	}
+
+	return 0;   // thread completed successfully  
+}
+
+void CKepServerComDlg::DoEvent()
+{
+	MSG msg;
+	if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  //取消息，检索应用程序的消息队列，PM_REMOVE取过之后从消息队列中移除  
+	{
+		//发消息  
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
+	}
+}
+
+void CKepServerComDlg::OnBnClickedConnect()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(true);
+	OpcData_t *OD = new OpcData_t;
+	OD->ServerName = m_ServerName;
+	OD->ReadTag = m_ReadFlagName;
+	OD->WriteTag = m_WriteFlagName;
+	CWinThread* pThread = AfxBeginThread(MyThreadProc, (LPVOID)OD);
+	Sleep(200);
+	if (pServerConnected)
+	{
 		m_ConncetResult = L"Success";
 		UpdateData(false);
-		/*非多线程*/
-		//CDataCtrl DataCtrl;
-		//DataCtrl.DataControl(&Opc);
-		/*多线程*/
-		COPC* pOpc = new COPC;
-		pOpc = &Opc;
-		AfxBeginThread(MyThreadProc, (LPVOID)pOpc);
-		//delete[] ReadItem;
-		//delete[] WriteItem;
+		DWORD dwRet;
+		DoEvent();
+		do
+		{
+			dwRet = ::MsgWaitForMultipleObjects(1, &pThread->m_hThread, FALSE, INFINITE, QS_ALLINPUT);
+			if (dwRet != WAIT_OBJECT_0)
+			{
+				DoEvent();
+			}
+		} while ((dwRet != WAIT_OBJECT_0) && (dwRet != WAIT_FAILED));
+		delete OD;
 	}
 	else 
 	{
 		m_ConncetResult = L"Failed";
 		UpdateData(false);
 	}
+
 }

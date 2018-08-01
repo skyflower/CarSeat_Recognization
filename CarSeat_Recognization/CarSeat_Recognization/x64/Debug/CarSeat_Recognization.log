@@ -1,0 +1,29 @@
+﻿  KepServerSocket.cpp
+  ParamManager.cpp
+  CarSeat_RecognizationDlg.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\carseat_recognizationdlg.cpp(187): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\carseat_recognizationdlg.cpp(424): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\carseat_recognizationdlg.cpp(355): warning C4101: “msg”: 未引用的局部变量
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\carseat_recognizationdlg.cpp(477): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\carseat_recognizationdlg.cpp(481): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\carseat_recognizationdlg.cpp(816): warning C4244: “初始化”: 从“INT_PTR”转换到“int”，可能丢失数据
+  正在生成代码...
+  正在编译...
+  QueryDlg.cpp
+  NetworkTask.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(52): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(326): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(335): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  LoginDlg.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\logindlg.cpp(93): warning C4800: “BOOL”: 将值强制为布尔值“true”或“false”(性能警告)
+  InputDlg.cpp
+  CarSeat_Recognization.cpp
+  CameraParameterDlg.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\cameraparameterdlg.cpp(35): warning C4244: “=”: 从“double”转换到“UINT”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\cameraparameterdlg.cpp(36): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\cameraparameterdlg.cpp(69): warning C4244: “=”: 从“double”转换到“UINT”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\cameraparameterdlg.cpp(70): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\cameraparameterdlg.cpp(86): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  正在生成代码...
+  CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Debug\CarSeat_Recognization.exe
+  CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Debug\CarSeat_Recognization.pdb (Partial PDB)

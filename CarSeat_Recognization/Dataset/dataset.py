@@ -3,7 +3,7 @@
 from distutils.log import warn as printf
 import os
 
-DB_NAME = 'carSeat'
+DB_NAME = 'carseat'
 DB_EXC = None
 
 
@@ -13,15 +13,15 @@ def setup():
 
 
 # 创建数据库和连接
-def connect(db):
+def connect(db_type):
     """
-
+    创建数据库，数据库名为carseat
     :param db: 数据库类型，默认sqlite
     :return: 数据库的connection对象
     """
     global DB_EXC
-    dbDir = db
-    if db == 'sqlite':
+    dbDir = db_type
+    if db_type == 'sqlite':
         try:
             import sqlite3
         except ImportError:
@@ -45,79 +45,138 @@ def drop(con, name):
 
 def create(con, sql, name):
     """
-    通过执行sql语句创建数据库，如果数据库已存在这删掉数据库重新创建
+    通过执行sql语句创建表单name，如果数据库已存在名为name的表单这删掉数据库重新创建
     :param con: con
     :param sql: 执行语句
-    :param name:将要创建的数据库的名字
+    :param name:将要创建的表的名字
     """
     try:
         con.execute(sql)
     except (DB_EXC.OperationalError, DB_EXC.ProgrammingError):
         drop(con, name)
-        create(con, sql)
+        con.execute(sql)
 
 
-def create_user(con):
-    sql = "create table user_table (user text primary not null ,password text,priority integer not null )"
-    create(con, sql, "user")
+def create_user_table(con):
+    """
+    创建user_table表单
+    :param con:
+    :return:
+    """
+    sql = "create table user_table (user text PRIMARY KEY NOT NULL ,password text,priority integer NOT NULL )"
+    create(con, sql, "user_table")
+    print("Create user_table succeed!")
 
 
 def create_carseat_table(con):
-    sql = """create table carSeat_table(barcode text primary not null,
+    """
+    创建carseat_table表单
+    :param con:
+    :return:
+    """
+    sql = """create table carseat_table(barcode text PRIMARY KEY NOT NULL ,
+                                      name text NOT NULL ,
                                       time text,
                                       type integer ,
                                       material integer,
                                        color integer ,
                                        correct integer ,
                                        mode integer ,
-                                       cameraCode text,
+                                       cameracode text,
                                        line integer ,
                                        priority integer ,
                                        path text)"""
-    create(con, sql, "carSeat_table")
+    create(con, sql, "carseat_table")
+    print("Create table carseat_table succeed!")
 
 
-def insert(con, dataname, data):
+def insert(con, sql, data):
     """
-
+    插入向表单插入数据，每次可以插入多个数据，数据由data数组提供
     :param con: connection对象
-    :param dataname: 插入的表格名字
-    :param data: 插入的数据一般是包含元组的数据，例如[('a','b'),('c','d')]
+    :param sql:执行的语句
+    :param data: 插入的数据一般是包含元组的数组，例如[('a','b'),('c','d')]
     :return: null
     """
-    statement = "INSERT INTO %s VALUES(?,?,?,?)" % dataname
-    con.executemany(statement, data)
+    con.executemany(sql, data)
     con.commit()
 
 
 def insert_carseat_table(con, data):
-    # 确定data的关键字不能为空
-    # TODO
-    insert(con, "carset_table", data)
-    return
+    """
+    carseat_table设计如下
+    --------------------------------------------------------------------------------------
+    条形码  |图像名字|时间|座椅类型|座椅材质|颜色  |识别结果是否一致|识别模式|相机编码  | 产线|权限要求 |图像路径
+    --------------------------------------------------------------------------------------
+    barcode| name  |time| type |materia|color|    correct  |  mode |cameracod|line|priority| path
+    --------------------------------------------------------------------------------------
+
+    :param con:
+    :param data:
+    :return:
+    """
+    sql = "INSERT INTO %s VALUES(?,?,?,?,?,?,?,?,?,?,?,?)" % "carseat_table"
+    insert(con, sql, data)
 
 
 def insert_user_table(con, data):
-    # 确定data关键字不能为空
-    # TODO
-    insert(con, "user", data)
+    """
+    user_table设计如下
+    -------------------------
+    用户名| mode |权限等级 |
+    -------------------------
+    user |passwd|Priority|
+    -------------------------
+    :param con:
+    :param data:
+    :return:
+    """
+    sql = "INSERT INTO %s VALUES(?,?,?)" % "user_table"
+    insert(con, sql, data)
 
 
 def update(con, sql):
-    # TODO,维护user表格中权限修改以及密码变更的功能
-    return
+    con.execute(sql)
+    con.commit()
 
 
-def delete(con):
-    # TODO,服务器图像删除后，需要删除表单中的数据
-    return
+def delete(con, sql):
+    con.execute(sql)
+    con.commit()
 
 
-def select(con, sql):
+def select(con, table_name):
+    """
+
+    :param con: connection对象
+    :param sql: 查询语句
+    :return: 符合条件的返回结果，包含元组的数组
+    """
+    sql = "select * from %s" % table_name
     cur = con.cursor()
     cur.execute(sql)
-    result = cur.fatchall()
+    result = cur.fetchall()
     return result
+
+
+def select_user_table(con):
+    data_user = select(con, "user_table")
+    return data_user
+
+
+def select_carseat_table(con):
+    data_carseat = select(con, "carseat_table")
+    return data_carseat
+
+
+def init(con):
+    """
+    初始化，创建carseat_table和user表单
+    :param con:
+    :return:
+    """
+    create_carseat_table(con)
+    create_user_table(con)
 
 
 def main():
@@ -126,31 +185,33 @@ def main():
     if not con:
         printf('ERROR: %r not supported or unreachable, exit' % db)
         return
-    cur = con.cursor()
+    init(con)
+    # TODO :增删查改逻辑部分
 
-    # printf('\n*** Create users table')
-    # create(cur)
-    #
-    # printf('\n*** Insert names into table')
-    # insert(cur, db)
-    # dbDump(cur)
-    #
-    # printf('\n*** Move users to a random group')
-    # fr, to, num = update(cur)
-    # printf('\t(%d users moved) from (%d) to (%d)' % (num, fr, to))
-    # dbDump(cur)
-    #
-    # printf('\n*** Randomly delete group')
-    # rm, num = delete(cur)
-    # printf('\t(group #%d; %d users removed)' % (rm, num))
-    # dbDump(cur)
-    #
-    # printf('\n*** Drop users table')
-    # drop(cur)
-    # printf('\n*** Close cxns')
-    # cur.close()
-    # cxn.commit()
-    # cxn.close()
+    # 向user_table插入数据
+    user_data = [("张三", "123", 0), ("李四", "345", 1), ("王五", "456", 2), ("maybe", "789", 3), ("GTMACE", "134", 3)]
+    insert_user_table(con, user_data)
+
+    # 向carseat_table插入数据
+    carseat_data = [
+        ("101", "image1.jpg", "20180802", 1, 1, 2, 0, 0, "L1", 2,1, "/home/yqw/CarsetPicture/date/image1.jpg"),
+        ("102", "image2.jpg", "20180802", 1, 1, 2, 0, 0, "L1", 2,2, "/home/yqw/CarsetPicture/date/image2.jpg"),
+        ("103", "image3.jpg", "20180803", 1, 1, 2, 0, 0, "L1", 2,1, "/home/yqw/CarsetPicture/date/image3.jpg"),
+        ("104", "image4.jpg", "20180804", 1, 1, 2, 0, 0, "L1", 2,1, "/home/yqw/CarsetPicture/date/image4.jpg"),
+        ("105", "image5.jpg", "20180805", 1, 1, 2, 0, 0, "L1", 2,2, "/home/yqw/CarsetPicture/date/image5.jpg")]
+    insert_carseat_table(con,carseat_data)
+
+    # 查询user_table
+    data_user=select_user_table(con)
+    print("user_table全部数据如下：")
+    for data in data_user:
+        print(data)
+
+    # 查询carseat_table
+    data_carseat=select_carseat_table(con)
+    print("carseat_table全部数据如下: ")
+    for data in data_carseat:
+        print(data)
 
 
 if __name__ == '__main__':

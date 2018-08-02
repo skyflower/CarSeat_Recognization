@@ -2,28 +2,25 @@
 
 from distutils.log import warn as printf
 import os
-from random import randrange as rand
 
-COLSIZ = 10
-FIELDS = ('login', 'userid', 'projid')
-RDBMSs = {'s': 'sqlite', 'm': 'mysql', 'g': 'gadfly'}
-DBNAME = 'dataset'
-DBUSER = 'root'
+DB_NAME = 'carSeat'
 DB_EXC = None
-NAMELEN = 16
-
-tformat = lambda s: str(s).title().ljust(COLSIZ)
-cformat = lambda s: s.upper().ljust(COLSIZ)
 
 
+# 定义数据库名字
 def setup():
     return 'sqlite'
 
 
+# 创建数据库和连接
 def connect(db):
-    global DB_EXC
-    dbDir = '%s_%s' % (db, DBNAME)
+    """
 
+    :param db: 数据库类型，默认sqlite
+    :return: 数据库的connection对象
+    """
+    global DB_EXC
+    dbDir = db
     if db == 'sqlite':
         try:
             import sqlite3
@@ -32,108 +29,128 @@ def connect(db):
                 from pysqlite2 import dbapi2 as sqlite3
             except ImportError:
                 return None
-
         DB_EXC = sqlite3
         if not os.path.isdir(dbDir):
             os.mkdir(dbDir)
-        cxn = sqlite3.connect(os.path.join(dbDir, DBNAME))
-
-
+        con = sqlite3.connect(os.path.join(dbDir, DB_NAME))
     else:
         return None
-    return cxn
+    return con
 
 
-def create(cur, sql, name):
+def drop(con, name):
+    con.execute('DROP TABLE %s' % name)
+    con.commit()
+
+
+def create(con, sql, name):
+    """
+    通过执行sql语句创建数据库，如果数据库已存在这删掉数据库重新创建
+    :param con: con
+    :param sql: 执行语句
+    :param name:将要创建的数据库的名字
+    """
     try:
-        cur.execute(sql)
+        con.execute(sql)
     except (DB_EXC.OperationalError, DB_EXC.ProgrammingError):
-        drop(cur, name)
-        create(cur, sql)
+        drop(con, name)
+        create(con, sql)
 
 
-def drop(cur, name):
-    cur.execute('DROP TABLE %s' % name)
+def create_user(con):
+    sql = "create table user_table (user text primary not null ,password text,priority integer not null )"
+    create(con, sql, "user")
 
 
-NAMES = (
-    ('aaron', 8312), ('angela', 7603), ('dave', 7306),
-    ('davina', 7902), ('elliot', 7911), ('ernie', 7410),
-    ('jess', 7912), ('jim', 7512), ('larry', 7311),
-    ('leslie', 7808), ('melissa', 8602), ('pat', 7711),
-    ('serena', 7003), ('stan', 7607), ('faye', 6812),
-    ('amy', 7209), ('mona', 7404), ('jennifer', 7608),
-)
+def create_carseat_table(con):
+    sql = """create table carSeat_table(barcode text primary not null,
+                                      time text,
+                                      type integer ,
+                                      material integer,
+                                       color integer ,
+                                       correct integer ,
+                                       mode integer ,
+                                       cameraCode text,
+                                       line integer ,
+                                       priority integer ,
+                                       path text)"""
+    create(con, sql, "carSeat_table")
 
 
-def randName():
-    pick = set(NAMES)
-    while pick:
-        yield pick.pop()
+def insert(con, dataname, data):
+    """
+
+    :param con: connection对象
+    :param dataname: 插入的表格名字
+    :param data: 插入的数据一般是包含元组的数据，例如[('a','b'),('c','d')]
+    :return: null
+    """
+    statement = "INSERT INTO %s VALUES(?,?,?,?)" % dataname
+    con.executemany(statement, data)
+    con.commit()
 
 
-def insert(cur, db):
-    if db == 'sqlite':
-        cur.execute("INSERT INTO users VALUES(?, ?, ?)",
-                        [(who, uid, rand(1, 5)) for who, uid in randName()])
+def insert_carseat_table(con, data):
+    # 确定data的关键字不能为空
+    # TODO
+    insert(con, "carset_table", data)
+    return
 
 
-
-getRC = lambda cur: cur.rowcount if hasattr(cur, 'rowcount') else -1
-
-
-def update(cur):
-    fr = rand(1, 5)
-    to = rand(1, 5)
-    cur.execute(
-        "UPDATE users SET projid=%d WHERE projid=%d" % (to, fr))
-    return fr, to, getRC(cur)
+def insert_user_table(con, data):
+    # 确定data关键字不能为空
+    # TODO
+    insert(con, "user", data)
 
 
-def delete(cur):
-    rm = rand(1, 5)
-    cur.execute('DELETE FROM users WHERE projid=%d' % rm)
-    return rm, getRC(cur)
+def update(con, sql):
+    # TODO,维护user表格中权限修改以及密码变更的功能
+    return
 
 
-def dbDump(cur):
-    cur.execute('SELECT * FROM users')
-    printf('\n%s' % ''.join(map(cformat, FIELDS)))
-    for data in cur.fetchall():
-        printf(''.join(map(tformat, data)))
+def delete(con):
+    # TODO,服务器图像删除后，需要删除表单中的数据
+    return
+
+
+def select(con, sql):
+    cur = con.cursor()
+    cur.execute(sql)
+    result = cur.fatchall()
+    return result
 
 
 def main():
     db = setup()
-    cxn = connect(db)
-    if not cxn:
+    con = connect(db)
+    if not con:
         printf('ERROR: %r not supported or unreachable, exit' % db)
         return
-    cur = cxn.cursor()
+    cur = con.cursor()
 
-    printf('\n*** Create users table')
-    create(cur)
-
-    printf('\n*** Insert names into table')
-    insert(cur, db)
-    dbDump(cur)
-
-    printf('\n*** Move users to a random group')
-    fr, to, num = update(cur)
-    printf('\t(%d users moved) from (%d) to (%d)' % (num, fr, to))
-    dbDump(cur)
-
-    printf('\n*** Randomly delete group')
-    rm, num = delete(cur)
-    printf('\t(group #%d; %d users removed)' % (rm, num))
-    dbDump(cur)
-
-    printf('\n*** Drop users table')
-    drop(cur)
-    printf('\n*** Close cxns')
-    cur.close()
-    cxn.commit()
-    cxn.close()
+    # printf('\n*** Create users table')
+    # create(cur)
+    #
+    # printf('\n*** Insert names into table')
+    # insert(cur, db)
+    # dbDump(cur)
+    #
+    # printf('\n*** Move users to a random group')
+    # fr, to, num = update(cur)
+    # printf('\t(%d users moved) from (%d) to (%d)' % (num, fr, to))
+    # dbDump(cur)
+    #
+    # printf('\n*** Randomly delete group')
+    # rm, num = delete(cur)
+    # printf('\t(group #%d; %d users removed)' % (rm, num))
+    # dbDump(cur)
+    #
+    # printf('\n*** Drop users table')
+    # drop(cur)
+    # printf('\n*** Close cxns')
+    # cur.close()
+    # cxn.commit()
+    # cxn.close()
 
 
 if __name__ == '__main__':

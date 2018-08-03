@@ -6,6 +6,7 @@
 *.pch
 
 *.db
+*.pch.codeanalysisast
 *.opendb
 *.ipch
 *.obj
@@ -17,4 +18,6 @@
 *.jpg
 *.codeanalysisast
 *.codeanalysis
+*.VC.db
 CarSeat_recognization/Recognization_module/python
+*.xml

@@ -30,7 +30,7 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 	m_pParamManager = nullptr;
 	m_pLog = nullptr;
-	m_pNetworkTask = nullptr;
+	//m_pNetworkTask = nullptr;
 	m_pClassify = nullptr;
 	m_pLabelManager = nullptr;
 	_tsetlocale(LC_ALL, _T("chs"));
@@ -155,18 +155,18 @@ void CCarSeat_RecognizationApp::initSystem()
 {
 	m_pParamManager = CParamManager::GetInstance();
 	m_pLog = CLog::GetInstance();
-	m_pNetworkTask = CNetworkTask::GetInstance();
-	if (m_pNetworkTask != nullptr)
-	{
-		m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
-	}
+	//m_pNetworkTask = CNetworkTask::GetInstance();
+	//if (m_pNetworkTask != nullptr)
+	//{
+	//	m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
+	//}
 	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
 	m_pClassify->initPython("label_image_command_line", "seatClassify");
-	m_pNetworkTask->SetImageClassify(m_pClassify);
+	//m_pNetworkTask->SetImageClassify(m_pClassify);
 
 	if (m_pClassify != nullptr)
 	{
-		m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
+		//m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
 	}
 
 	m_pLabelManager = new CLabelManager;
@@ -176,7 +176,7 @@ void CCarSeat_RecognizationApp::initSystem()
 
 void CCarSeat_RecognizationApp::DeInitSystem()
 {
-	if (m_pClassifyThread.joinable())
+	/*if (m_pClassifyThread.joinable())
 	{
 		m_pClassify->terminate();
 		m_pClassifyThread.join();
@@ -190,13 +190,14 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		msg.serverPort = -1;
 		m_pNetworkTask->SendMessageTo(&msg);
 		m_NetworkThread.join();
-	}
+	}*/
 
-	if (m_pNetworkTask != nullptr)
+	/*if (m_pNetworkTask != nullptr)
 	{
 		delete m_pNetworkTask;
 		m_pNetworkTask = nullptr;
-	}
+	}*/
+
 	if (m_pClassify != nullptr)
 	{
 		delete m_pClassify;

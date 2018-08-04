@@ -79,11 +79,19 @@ private:
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);
 	
+	/*
+	初始化相机模块
+	*/
 	void initCameraModule();
 
 	SIZE adjustRecSize(SIZE imageSize, SIZE recSize);
 
+	/*
+	调整对话框控件位置,包括照片显示以及静态文本框的位置调整等
+	*/
 	void adjustControlLocate(int width, int height);
+
+
 
 
 	void testXML();

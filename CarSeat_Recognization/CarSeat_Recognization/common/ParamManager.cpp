@@ -25,6 +25,8 @@ m_nKepServerPort(-1)
 	Init();
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
 	memset(m_szLineName, 0, sizeof(m_szLineName));
+	
+	memset(m_szCameraName, 0, sizeof(m_szCameraName));
 }
 
 
@@ -218,6 +220,11 @@ const char * CParamManager::GetLineName() const
 	return m_szLineName;
 }
 
+const char *CParamManager::GetCameraName() const
+{
+	return m_szCameraName;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -297,6 +304,9 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
+		//m_szCameraName
+
+
 		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
 		{
 			m_szGraphFile = std::string(tmpStr);
@@ -309,14 +319,22 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
-		if (utils::getValueByName(content, "imagePath", m_szImagePath) == true)
+		if (utils::getValueByName(content, "imagePath", m_szImagePath) != true)
 		{
 			//////
+			WriteError("init config.txt imagePath error");
 		}
-		if (utils::getValueByName(content, "lineName", m_szLineName) == true)
+		if (utils::getValueByName(content, "lineName", m_szLineName) == false)
 		{
 			//////
+			WriteError("init config.txt lineName error");
 		}
+		if (utils::getValueByName(content, "cameraName", m_szCameraName) == false)
+		{
+			//////
+			WriteError("init config.txt cameraName error");
+		}
+		WriteInfo("cameraName = %s", m_szCameraName);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 

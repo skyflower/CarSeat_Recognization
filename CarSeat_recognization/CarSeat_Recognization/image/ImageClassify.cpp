@@ -172,6 +172,11 @@ std::wstring CImageClassify::compute(const char *filePath)
 	int ok = PyArg_ParseTuple(presult, "sf", &buffer, &reValue);
 
 #endif // PYTHON_TENSORFLOW
+
+	if (buffer == nullptr)
+	{
+		return std::wstring();
+	}
 	
 	std::string tmpBuffer(buffer);
 

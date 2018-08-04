@@ -51,6 +51,13 @@ bool  CCameraManager::EnumCamera()
         return false;
     }
 
+#ifdef _DEBUG
+	testPrint();
+#endif // _DEBUG
+
+
+	
+
     // ch:将值加入到信息列表框中并显示出来 | en:Add value to the information list box and display
     unsigned int i;
     int nIp1, nIp2, nIp3, nIp4;
@@ -144,4 +151,68 @@ MV_CC_DEVICE_INFO * CCameraManager::GetCamera(int index)
 		return nullptr;
 	}
 	return m_stDevList.pDeviceInfo[index];
+}
+
+int CCameraManager::GetCameraIndexByName(const char * name)
+{
+	if (m_stDevList.nDeviceNum <= 0)
+	{
+		return -1;
+	}
+	char tmpMac[20] = { 0 };
+	char tmpName[20] = { 0 };
+	memset(tmpName, 0, sizeof(tmpName));
+
+	for (int i = 0; (i < strlen(name)) && (i < sizeof(tmpName)); ++i)
+	{
+		tmpName[i] = tolower(name[i]);
+	}
+	tmpName[sizeof(tmpName) - 1] = '\0';
+	
+	for (int i = 0; i < m_stDevList.nDeviceNum; ++i)
+	{
+		memset(tmpMac, 0, sizeof(tmpMac));
+		sprintf_s(tmpMac, sizeof(tmpMac), "%x%x", \
+			m_stDevList.pDeviceInfo[i]->nMacAddrHigh, \
+			m_stDevList.pDeviceInfo[i]->nMacAddrLow);
+		tmpMac[sizeof(tmpMac) - 1] = '\0';
+		int length = strlen(tmpMac);
+		for (int j = 0; j < length; ++j)
+		{
+			tmpMac[j] = tolower(tmpMac[j]);
+		}
+		if (strncmp(tmpName, tmpMac, length) == 0)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+MV_CC_DEVICE_INFO * CCameraManager::GetCamera(const char * name)
+{
+	int index = GetCameraIndexByName(name);
+	if (index == -1)
+	{
+		return nullptr;
+	}
+	return GetCamera(index);
+}
+
+void CCameraManager::testPrint()
+{
+	//m_stDevList;
+	for (int i = 0; i < m_stDevList.nDeviceNum; ++i)
+	{
+		WriteInfo("index = %d, Ver = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMajorVer, m_stDevList.pDeviceInfo[i]->nMinorVer);
+		WriteInfo("index = %d, MAC = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMacAddrHigh, m_stDevList.pDeviceInfo[i]->nMacAddrLow);
+		WriteInfo("index = %d, DeviceVer = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chDeviceVersion);
+		WriteInfo("index = %d, ManufacturerName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chManufacturerName);
+		WriteInfo("index = %d, ManufacturerSpecificInfo = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chManufacturerSpecificInfo);
+		WriteInfo("index = %d, ModelName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chModelName);
+		WriteInfo("index = %d, SerialNumber = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chSerialNumber);
+		WriteInfo("index = %d, UserDefinedName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chUserDefinedName);
+		WriteInfo("index = %d, CurrentIp = %u", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp);
+
+	}
 }

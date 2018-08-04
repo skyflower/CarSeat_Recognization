@@ -35,10 +35,11 @@ public:
 	unsigned int GetBarcodeIp();
 	unsigned int GetBarcodePort();
 
-	const char*GetGraphFile() const;
-	const char*GetLabelFile() const;
-	const char*GetImageDirectory() const;
-	const char*GetLineName() const;
+	const char* GetGraphFile() const;
+	const char* GetLabelFile() const;
+	const char* GetImageDirectory() const;
+	const char* GetLineName() const;
+	const char* GetCameraName() const;
 
 	std::wstring GetLocalName() { return m_strLocalName; }
 
@@ -84,6 +85,9 @@ private:
 
 	//产线名称编号
 	char m_szLineName[20];
+
+	//相机名字或者序列号等
+	char m_szCameraName[100];
 
 	// 本机名
 	std::wstring m_strLocalName;

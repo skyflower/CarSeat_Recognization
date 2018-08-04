@@ -160,7 +160,10 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	
 	initCameraModule();
 
+#ifdef  _DEBUG
 	testXML();
+#endif //  _DEBUG
+
 
 	return TRUE;  //
 }
@@ -241,26 +244,39 @@ void CCarSeat_RecognizationDlg::run()
 	std::wstring reType;
 	while (m_bThreadStatus)
 	{
+
+		/*
+		
+		
+		*/
+
+
 		// 和kepServer模块的心跳包
 		m_pKepServer->HeartBlood();
 
 		imagepath = std::wstring();
-		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
+		std::wstring tmpBarcode = L".....";// m_pRFIDReader->readBarcode();
 		if (tmpBarcode.size() != 0)
 		{
-			imagepath = m_pLineCamera->SaveJpg();
-			if (imagepath.size() == 0)
+			if (m_pLineCamera == nullptr)
 			{
 				initCameraModule();
-				OnStartCamera();
-
-				if (m_pLineCamera != nullptr)
+			}
+			if (m_pLineCamera != nullptr)
+			{
+				imagepath = m_pLineCamera->SaveJpg();
+				if (imagepath.size() == 0)
 				{
+					initCameraModule();
+					OnStartCamera();
+
+					
 					CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
 					if (status == CCamera::CameraStatus::CAMERA_GRAB)
 					{
 						imagepath = m_pLineCamera->SaveJpg();
 					}
+					
 				}
 			}
 		}
@@ -425,7 +441,9 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount());
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
-			m_nCameraIndex = 0;
+			const char *tmpName = m_pParamManager->GetCameraName();
+			TRACE1("CameraName = %s", tmpName);
+			m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 		}
 	}
 	if (m_pLineCamera == nullptr)
@@ -625,7 +643,10 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 			AfxMessageBox(L"no Camera connect software");
 			return;
 		}
-		m_nCameraIndex = 0;
+		//m_nCameraIndex = 0;
+		const char *tmpName = m_pParamManager->GetCameraName();
+		TRACE1("CameraName = %s", tmpName);
+		m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 	}
 	if ((m_pLineCamera == nullptr) && (m_nCameraIndex != -1))
 	{
@@ -755,6 +776,11 @@ void CCarSeat_RecognizationDlg::OnClose()
 	{
 		delete m_pRecogManager;
 		m_pRecogManager = nullptr;
+	}
+	if (m_pKepServer != nullptr)
+	{
+		delete m_pKepServer;
+		m_pKepServer = nullptr;
 	}
 	CDHtmlDialog::OnClose();
 }
@@ -922,10 +948,12 @@ void CCarSeat_RecognizationDlg::OnUpdateMenuQueryBarcode(CCmdUI *pCmdUI)
 void CCarSeat_RecognizationDlg::OnChooseCamera()
 {
 	// TODO: 在此添加命令处理程序代码
+
 }
 
 
 void CCarSeat_RecognizationDlg::OnUpdateChooseCamera(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
+
 }

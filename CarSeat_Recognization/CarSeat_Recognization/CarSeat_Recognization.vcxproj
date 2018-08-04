@@ -220,9 +220,6 @@
     <ClInclude Include="image\TypeIDManager.h" />
     <ClInclude Include="InputDlg.h" />
     <ClInclude Include="KepServerSocket.h" />
-    <ClInclude Include="kepserver\OPC.h" />
-    <ClInclude Include="kepserver\opccomn.h" />
-    <ClInclude Include="kepserver\opcda.h" />
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="QueryDlg.h" />
@@ -254,9 +251,6 @@
     <ClCompile Include="image\TypeIDManager.cpp" />
     <ClCompile Include="InputDlg.cpp" />
     <ClCompile Include="KepServerSocket.cpp" />
-    <ClCompile Include="kepserver\OPC.cpp" />
-    <ClCompile Include="kepserver\opccomn_i.c" />
-    <ClCompile Include="kepserver\opcda_i.c" />
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="QueryDlg.cpp" />

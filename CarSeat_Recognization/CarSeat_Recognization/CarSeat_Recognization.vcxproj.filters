@@ -25,9 +25,6 @@
     <Filter Include="image">
       <UniqueIdentifier>{f72a318f-8c95-431d-b945-a89c0784cd58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="kepserver">
-      <UniqueIdentifier>{bb3e75b3-2e6d-4bae-9f06-b076f4503a8f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="camera">
       <UniqueIdentifier>{5252815d-b4cf-40a2-a33b-a90ae54fc3b4}</UniqueIdentifier>
     </Filter>
@@ -89,15 +86,6 @@
     </ClInclude>
     <ClInclude Include="image\ImageClassify.h">
       <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="kepserver\OPC.h">
-      <Filter>kepserver</Filter>
-    </ClInclude>
-    <ClInclude Include="kepserver\opccomn.h">
-      <Filter>kepserver</Filter>
-    </ClInclude>
-    <ClInclude Include="kepserver\opcda.h">
-      <Filter>kepserver</Filter>
     </ClInclude>
     <ClInclude Include="common\md5.h">
       <Filter>common</Filter>
@@ -187,15 +175,6 @@
     </ClCompile>
     <ClCompile Include="image\ImageClassify.cpp">
       <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="kepserver\OPC.cpp">
-      <Filter>kepserver</Filter>
-    </ClCompile>
-    <ClCompile Include="kepserver\opccomn_i.c">
-      <Filter>kepserver</Filter>
-    </ClCompile>
-    <ClCompile Include="kepserver\opcda_i.c">
-      <Filter>kepserver</Filter>
     </ClCompile>
     <ClCompile Include="common\md5.cpp">
       <Filter>common</Filter>

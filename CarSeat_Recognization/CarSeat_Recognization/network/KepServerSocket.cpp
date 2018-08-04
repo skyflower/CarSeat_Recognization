@@ -1,6 +1,6 @@
 #include "KepServerSocket.h"
-#include "./common/Log.h"
-#include "./xml/tinyxml.h"
+#include "../common/Log.h"
+#include "../xml/tinyxml.h"
 #include <ctime>
 
 

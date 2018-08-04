@@ -117,8 +117,8 @@
     <ClInclude Include="common\RecogResultManager.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="KepServerSocket.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="network\KepServerSocket.h">
+      <Filter>network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -206,8 +206,8 @@
     <ClCompile Include="common\RecogResultManager.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="KepServerSocket.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="network\KepServerSocket.cpp">
+      <Filter>network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

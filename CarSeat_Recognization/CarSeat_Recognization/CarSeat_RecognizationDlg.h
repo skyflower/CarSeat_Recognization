@@ -10,7 +10,7 @@
 #include "./Camera/LineCamera.h"
 #include "./common/RFIDReader.h"
 #include "./common/RecogResultManager.h"
-#include "KepServerSocket.h"
+#include "./network/KepServerSocket.h"
 
 
 // CCarSeat_RecognizationDlg ¶Ô»°¿ò
@@ -125,4 +125,6 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnMenuQueryBarcode();
 	afx_msg void OnUpdateMenuQueryBarcode(CCmdUI *pCmdUI);
+	afx_msg void OnChooseCamera();
+	afx_msg void OnUpdateChooseCamera(CCmdUI *pCmdUI);
 };

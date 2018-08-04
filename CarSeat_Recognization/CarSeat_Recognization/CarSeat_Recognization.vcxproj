@@ -219,8 +219,8 @@
     <ClInclude Include="image\PatternManager.h" />
     <ClInclude Include="image\TypeIDManager.h" />
     <ClInclude Include="InputDlg.h" />
-    <ClInclude Include="KepServerSocket.h" />
     <ClInclude Include="LoginDlg.h" />
+    <ClInclude Include="network\KepServerSocket.h" />
     <ClInclude Include="network\NetworkTask.h" />
     <ClInclude Include="QueryDlg.h" />
     <ClInclude Include="Resource.h" />
@@ -250,8 +250,8 @@
     <ClCompile Include="image\PatternManager.cpp" />
     <ClCompile Include="image\TypeIDManager.cpp" />
     <ClCompile Include="InputDlg.cpp" />
-    <ClCompile Include="KepServerSocket.cpp" />
     <ClCompile Include="LoginDlg.cpp" />
+    <ClCompile Include="network\KepServerSocket.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
     <ClCompile Include="QueryDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

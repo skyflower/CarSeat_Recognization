@@ -47,4 +47,5 @@ private:
 	CComboBox m_TypeCombo;
 public:
 	afx_msg void OnSelchangeComboType();
+	afx_msg void OnStnClickedPatternImage();
 };

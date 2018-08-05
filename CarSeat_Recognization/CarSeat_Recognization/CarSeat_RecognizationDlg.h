@@ -71,7 +71,10 @@ private:
 	
 	CImageClassify *m_pClassify;
 	CLabelManager *m_pLabelManager;
+
+	std::mutex m_LineCameraMutex;
 	CLineCamera *m_pLineCamera;
+
 	int m_nCameraIndex;
 	CCameraManager *m_pCameraManager;
 
@@ -79,8 +82,6 @@ private:
 	CRecogResultManager *m_pRecogManager;
 	CKepServerSocket *m_pKepServer;
 
-	//std::thread *m_pUIThread;
-	
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);
 	
@@ -100,12 +101,6 @@ private:
 
 
 	void testXML();
-
-
-	/*
-	获取条形码函数接口
-	*/
-
 
 
 public:

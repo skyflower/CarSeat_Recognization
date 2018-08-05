@@ -31,6 +31,7 @@ cameraName=C42F90ff3ceb
 graphFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_graph.pb
 labelFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_labels.txt
 
+//
 imagePath=C:\carseat\imageDir
 patternImagePath=D:\Cache\GithubCache\CarSeat_Recognization\patternImage
 

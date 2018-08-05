@@ -55,6 +55,7 @@ void CInputDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CInputDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_COMBO_TYPE, &CInputDlg::OnSelchangeComboType)
+	ON_STN_CLICKED(IDC_PATTERN_IMAGE, &CInputDlg::OnStnClickedPatternImage)
 END_MESSAGE_MAP()
 
 
@@ -87,9 +88,13 @@ BOOL CInputDlg::OnInitDialog()
 			pCombo->AddString(iter->c_str());
 		}
 	}
+	m_StTestImage.ModifyStyle(0xF, SS_BITMAP);//设置静态控件的样式，使得它可以使用位图
+	m_StPatternImage.ModifyStyle(0xF, SS_BITMAP);
 	if (m_StTestImage.GetSafeHwnd() != NULL)
 	{
-		m_StTestImage.SetBitmap((HBITMAP)(*m_pTestImage));
+		HBITMAP hbitMap = (HBITMAP)(*m_pTestImage);
+		m_StTestImage.SetBitmap(hbitMap);
+		m_StTestImage.ShowWindow(TRUE);
 	}
 	
 
@@ -219,4 +224,10 @@ void CInputDlg::OnSelchangeComboType()
 	//m_pPatternImage->Load(tmpWPatternDir.c_str());
 	//m_StPatternImage.SetBitmap((HBITMAP)(*m_pPatternImage));
 
+}
+
+
+void CInputDlg::OnStnClickedPatternImage()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }

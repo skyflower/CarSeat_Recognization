@@ -169,7 +169,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		m_pImageRec = new CImage();
 	}
 	
-	initCameraModule();
+	//initCameraModule();
 
 #ifdef  _DEBUG
 	testXML();
@@ -228,6 +228,9 @@ void CCarSeat_RecognizationDlg::run()
 {
 	//std::wstring preImagePath;
 	//std::wstring barcode;
+	//Sleep(2000);
+	std::unique_lock<std::mutex> lineCameraLock(m_LineCameraMutex);
+
 	m_pNetworkTask = CNetworkTask::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
 	if ((m_pNetworkTask == nullptr) || (m_pParamManager == nullptr))
@@ -236,18 +239,7 @@ void CCarSeat_RecognizationDlg::run()
 	}
 	const char* tmpImageDir = m_pParamManager->GetImageDirectory();
 	//char *tmpPointer = const_cast<char*>(tmpImageDir);
-	wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
-
-	if (tmpWPath != nullptr)
-	{
-		if (m_pLineCamera != nullptr)
-		{
-			m_pLineCamera->SetImageSaveDirectory(tmpWPath);
-			m_pLineCamera->StartGrabbing();
-		}
-		delete[]tmpWPath;
-		tmpWPath = nullptr;
-	}
+	
 	if (m_pParamManager != nullptr)
 	{
 		unsigned int tmpKepServerIp = m_pParamManager->GetKepServerIp();
@@ -289,9 +281,25 @@ void CCarSeat_RecognizationDlg::run()
 			if (m_pLineCamera == nullptr)
 			{
 				initCameraModule();
+				if (m_pLineCamera != nullptr)
+				{
+					wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
+
+					if (tmpWPath != nullptr)
+					{
+						if (m_pLineCamera != nullptr)
+						{
+							m_pLineCamera->SetImageSaveDirectory(tmpWPath);
+							m_pLineCamera->StartGrabbing();
+						}
+						delete[]tmpWPath;
+						tmpWPath = nullptr;
+					}
+				}
 			}
 			if (m_pLineCamera != nullptr)
 			{
+
 				imagepath = m_pLineCamera->SaveJpg();
 				if (imagepath.size() == 0)
 				{
@@ -325,7 +333,7 @@ void CCarSeat_RecognizationDlg::run()
 				CheckAndUpdate(barcode, type);
 			}
 		}*/
-		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(200);
+		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(500);
 		std::this_thread::sleep_for(a);
 
 		
@@ -408,27 +416,29 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 
 	std::wstring tmpWPath = utils::StrToWStr(tmpPath);
 
-	if (m_pImageRec != nullptr)
-	{
-		//LPCTSTR;
-		if (_waccess_s(tmpWPath.c_str(), 0x04) == 0)
-		{
-			m_pImageRec->Destroy();
-			HRESULT ret = m_pImageRec->Load(tmpWPath.c_str());
-			if (ret != S_OK)
-			{
-				return;
-			}
-			if (m_stImageRec.GetSafeHwnd() != NULL)
-			{
-				m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
-			}
+	//if (m_pImageRec != nullptr)
+	//{
+	//	//LPCTSTR;
+	//	m_pParamManager->GetImageDirectory();
+	//	if (_waccess_s(tmpWPath.c_str(), 0x04) == 0)
+	//	{
+	//		m_pImageRec->Destroy();
+	//		HRESULT ret = m_pImageRec->Load(tmpWPath.c_str());
+	//		if (ret != S_OK)
+	//		{
+	//			return;
+	//		}
+	//		if (m_stImageRec.GetSafeHwnd() != NULL)
+	//		{
+	//			m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
+	//		}
 
-		}
-		//m_pImageRec->Load(tmpWPath.c_str());
-		//m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
-		//m_pImageRec->Load()
-	}
+	//	}
+	//	//m_pImageRec->Load(tmpWPath.c_str());
+	//	//m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
+	//	//m_pImageRec->Load()
+	//}
+
 	/* CImage::Load(filePath)   */
 	// CStatic.SetBitmap((HBITMAP)CImage))
 	//CImage m_image;
@@ -439,7 +449,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		/*
 		添加报警系统，以及人工输入代码
 		*/
-		//m_nFailCount;
+		m_nFailCount++;
 		tmpResult.m_bIsCorrect = false;
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
@@ -491,11 +501,12 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	
 	float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
 
-	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%2f", m_nSuccessCount, m_nFailCount, ratio);
+	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000)/100);
 	m_RegRatio.SetWindowTextW(result);
 
 	memset(result, 0, sizeof(result));
-	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", barcode, RecogType, reType);
+	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s",	\
+		barcode.c_str(), RecogType.c_str(), reType.c_str());
 	m_barCode.SetWindowTextW(result);
 }
 
@@ -528,7 +539,11 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 		if (m_nCameraIndex != -1)
 		{
 			MV_CC_DEVICE_INFO * pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
-			m_pLineCamera = new CLineCamera(pDevice);
+			if (pDevice != nullptr)
+			{
+				m_pLineCamera = new CLineCamera(pDevice);
+			}
+			
 		}
 	}
 }
@@ -693,7 +708,6 @@ void CCarSeat_RecognizationDlg::OnUsrinput()
 	{
 
 	}
-
 }
 
 
@@ -843,6 +857,12 @@ void CCarSeat_RecognizationDlg::OnClose()
 	if (m_bThreadStatus == true)
 	{
 		m_bThreadStatus = false;
+		std::unique_lock<std::mutex> lineCameraLock(m_LineCameraMutex, std::defer_lock);
+		while (!lineCameraLock.try_lock())
+		{
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
+			std::this_thread::sleep_for(a);
+		}
 		/*if (m_pUIThread->joinable())
 		{
 			m_pUIThread->join();

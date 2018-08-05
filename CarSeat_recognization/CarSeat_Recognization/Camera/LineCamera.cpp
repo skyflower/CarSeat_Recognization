@@ -36,8 +36,10 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
 	, m_nROI_Width(0)
 	, m_nROI_OffsetX(0)
 	, m_nROI_OffsetY(0)
+	, m_hwndDisplay(NULL)
 {
 	//GetCurrentDirectory()
+	
 	memset(m_szImageDir, 0, sizeof(m_szImageDir));
 	StrCpy(m_szImageDir, L".\\");
 }
@@ -316,7 +318,7 @@ bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
 			wmemcpy(m_szImageDir, fileDir, wcslen(fileDir));
 			return true;
 		}
-		swprintf_s(m_szImageDir, sizeof(m_szImageDir), L"%s\\", fileDir);
+		swprintf_s(m_szImageDir, sizeof(m_szImageDir)/sizeof(wchar_t), L"%s\\", fileDir);
 		return true;
 	}
 	if (std::find(fileDir, fileDir + length, L'/') != (fileDir + length))
@@ -326,10 +328,10 @@ bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
 			wmemcpy(m_szImageDir, fileDir, wcslen(fileDir));
 			return true;
 		}
-		swprintf_s(m_szImageDir, sizeof(m_szImageDir), L"%s/", fileDir);
+		swprintf_s(m_szImageDir, sizeof(m_szImageDir) / sizeof(wchar_t), L"%s/", fileDir);
 		return true;
 	}
-	swprintf_s(m_szImageDir, sizeof(m_szImageDir), L"%s\\", fileDir);
+	swprintf_s(m_szImageDir, sizeof(m_szImageDir) / sizeof(wchar_t), L"%s\\", fileDir);
 	return true;
 }
 

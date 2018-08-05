@@ -333,7 +333,7 @@ void CCarSeat_RecognizationDlg::run()
 				CheckAndUpdate(barcode, type);
 			}
 		}*/
-		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(500);
+		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(5000);
 		std::this_thread::sleep_for(a);
 
 		
@@ -412,47 +412,33 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 
 	memcpy(tmpResult.m_szUsrName, cUsrName.c_str(), sizeof(char) * cUsrName.size());	
 
-	memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
-
+	
+	/*
+	计算拍照图片的绝对路径
+	*/
 	std::wstring tmpWPath = utils::StrToWStr(tmpPath);
+	std::string tmpImageDirectory(m_pParamManager->GetImageDirectory());
+	tmpWPath = utils::StrToWStr(tmpImageDirectory) + L"\\" + tmpWPath;
 
-	//if (m_pImageRec != nullptr)
-	//{
-	//	//LPCTSTR;
-	//	m_pParamManager->GetImageDirectory();
-	//	if (_waccess_s(tmpWPath.c_str(), 0x04) == 0)
-	//	{
-	//		m_pImageRec->Destroy();
-	//		HRESULT ret = m_pImageRec->Load(tmpWPath.c_str());
-	//		if (ret != S_OK)
-	//		{
-	//			return;
-	//		}
-	//		if (m_stImageRec.GetSafeHwnd() != NULL)
-	//		{
-	//			m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
-	//		}
+	/*
 
-	//	}
-	//	//m_pImageRec->Load(tmpWPath.c_str());
-	//	//m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
-	//	//m_pImageRec->Load()
-	//}
-
-	/* CImage::Load(filePath)   */
-	// CStatic.SetBitmap((HBITMAP)CImage))
-	//CImage m_image;
+	*/
+	sprintf_s(tmpResult.m_szImagePath, "%s\\%s", tmpImageDirectory.c_str(), tmpPath.c_str());
+	//memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
 
 
-	if (barInternalType != typeInternalType)
+	if (barInternalType != typeInternalType)	// 识别类型不匹配
 	{
 		/*
 		添加报警系统，以及人工输入代码
 		*/
 		m_nFailCount++;
 		tmpResult.m_bIsCorrect = false;
+
+		// 人工输入对话框
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
+		
 		dlg.SetTestImagePath(tmpWPath);
 		INT_PTR msg = dlg.DoModal();
 		
@@ -498,6 +484,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		m_pKepServer->SetCorrect();
 	}
 
+
 	
 	float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
 
@@ -508,6 +495,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s",	\
 		barcode.c_str(), RecogType.c_str(), reType.c_str());
 	m_barCode.SetWindowTextW(result);
+
+	m_pRecogManager->add(tmpResult);
 }
 
 void CCarSeat_RecognizationDlg::initCameraModule()

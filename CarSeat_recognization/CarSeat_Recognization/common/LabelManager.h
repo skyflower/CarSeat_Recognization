@@ -16,9 +16,11 @@ public:
 	
 	std::wstring GetExternalTypeByBarcode(std::wstring barcode);
 	std::wstring GetExternalTypeByClassifyType(std::wstring classifyType);
+	std::wstring GetClassifyTypeByExternal(std::wstring externalType);
 	
 	std::vector<std::wstring> GetBarcode();
-	std::vector<std::wstring> GetInternalType();
+	std::vector<std::wstring> GetExternalType();
+	//std::vector<std::wstring> GetInternalType();
 	std::vector<std::wstring> GetClassifyType();
 
 	const wchar_t *GetLoginUsrName()const;

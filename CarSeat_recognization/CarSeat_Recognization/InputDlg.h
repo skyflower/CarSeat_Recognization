@@ -29,11 +29,17 @@ private:
 	CStatic m_StTestImage;
 	CImage *m_pPatternImage;
 	CImage *m_pTestImage;
+	HDC m_hDC;
+
+	//IPicture 
 
 	wchar_t m_szReType[40];
 
 	CParamManager *m_pParamManager;
 	CLabelManager *m_pLabelManager;
+
+	void displayImage(CImage *pImage, CStatic *pStatic);
+	void testPrint();
 
 public:
 	virtual BOOL OnInitDialog();

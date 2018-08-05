@@ -545,16 +545,32 @@ std::wstring CLineCamera::SaveImage()
                 break;
             }
 
+
+			time_t  time1 = time(NULL);//获取系统时间，单位为秒;
+			struct tm tmpTime;
+			localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
+
+			/*swprintf_s(tmpResult.m_szTime, "%04d-%02d-%02d:%02d-%02d-%02d", \
+				tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
+				tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);*/
+
+
             wchar_t chImageName[IMAGE_NAME_LEN] = {0};
 			memset(chImageName, 0, sizeof(wchar_t) * IMAGE_NAME_LEN);
             if (MV_Image_Bmp == stParam.enImageType)
             {
-                swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.bmp", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
-            }
+                //swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.bmp", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
+				swprintf_s(chImageName, IMAGE_NAME_LEN, L"%04d%02d%02d_%02d%02d%02d.bmp", \
+					tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
+					tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
+			}
             else if (MV_Image_Jpeg == stParam.enImageType)
             {
-                swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.jpg", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
-            }
+                //swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.jpg", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
+				swprintf_s(chImageName, IMAGE_NAME_LEN, L"%04d%02d%02d_%02d%02d%02d.jpg", \
+					tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
+					tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
+			}
 			wchar_t absoluteName[MAX_CHAR_LENGTH] = { 0 };
 			memset(absoluteName, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
 

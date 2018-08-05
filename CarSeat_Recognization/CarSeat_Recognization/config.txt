@@ -32,7 +32,7 @@ graphFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recog
 labelFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_labels.txt
 
 //
-imagePath=C:\carseat\imageDir
+imagePath=D:\Cache\GithubCache\CarSeatImage
 patternImagePath=D:\Cache\GithubCache\CarSeat_Recognization\patternImage
 
 kepServerIp=127.0.0.1

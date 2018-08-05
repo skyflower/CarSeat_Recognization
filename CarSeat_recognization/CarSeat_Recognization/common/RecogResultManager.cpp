@@ -35,6 +35,10 @@ void CRecogResultManager::init()
 			return;
 		}
 	}
+	if (content == nullptr)
+	{
+		return;
+	}
 	
 	std::string tmpContent(content);
 	length = tmpContent.size();
@@ -74,7 +78,7 @@ void CRecogResultManager::init()
 /// »ØÐ´µ½Ó²ÅÌ
 bool CRecogResultManager::serialize()
 {
-	if ((m_pRecogResult != nullptr) || (m_pRecogResult->size() == 0))
+	if ((m_pRecogResult == nullptr) || (m_pRecogResult->size() == 0))
 	{
 		return true;
 	}

@@ -62,6 +62,48 @@ END_MESSAGE_MAP()
 // CInputDlg 消息处理程序
 
 
+void CInputDlg::displayImage(CImage * pImage, CStatic * pStatic)
+{
+	if ((pImage == nullptr) || (pStatic == nullptr))
+	{
+		return;
+	}
+	if (pStatic->GetSafeHwnd() != NULL)
+	{
+		//CDC *pDC = pStatic->GetDC();
+		RECT rect;
+		pStatic->GetWindowRect(&rect);
+		ScreenToClient(&rect);
+		//pImage->Draw(pDC->GetSafeHdc(), rect);
+		//pImage->StretchBlt(pDC->GetSafeHdc(), rect, 0);
+		//pStatic->ReleaseDC(pDC);
+
+		pStatic->SetBitmap((HBITMAP)(*pImage));
+		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left,	\
+			rect.bottom - rect.top, TRUE);
+		//pStatic->ShowWindow(TRUE);
+	}
+}
+
+void CInputDlg::testPrint()
+{
+	if (m_StTestImage.GetSafeHwnd() != NULL)
+	{
+		RECT rect;
+		m_StTestImage.GetClientRect(&rect);
+		WriteInfo("m_StTestImage bottom = %d, top = %d", rect.bottom, rect.top);
+		WriteInfo("m_StTestImage left = %d, right = %d", rect.left, rect.right);
+	}
+	if (m_StPatternImage.GetSafeHwnd() != NULL)
+	{
+		RECT rect;
+		m_StPatternImage.GetClientRect(&rect);
+
+		WriteInfo("m_StPatternImage bottom = %d, top = %d", rect.bottom, rect.top);
+		WriteInfo("m_StPatternImage left = %d, right = %d", rect.left, rect.right);
+	}
+}
+
 BOOL CInputDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -79,7 +121,7 @@ BOOL CInputDlg::OnInitDialog()
 	}
 
 	CComboBox *pCombo = ((CComboBox*)GetDlgItem(IDC_COMBO_TYPE));
-	std::vector<std::wstring> pVec = m_pLabelManager->GetBarcode();
+	std::vector<std::wstring> pVec = m_pLabelManager->GetExternalType();
 	if (pVec.size() > 0)
 	{
 		std::vector<std::wstring>::const_iterator iter = pVec.begin();
@@ -90,12 +132,19 @@ BOOL CInputDlg::OnInitDialog()
 	}
 	m_StTestImage.ModifyStyle(0xF, SS_BITMAP);//设置静态控件的样式，使得它可以使用位图
 	m_StPatternImage.ModifyStyle(0xF, SS_BITMAP);
-	if (m_StTestImage.GetSafeHwnd() != NULL)
+
+	//m_hDC;
+	
+
+
+	displayImage(m_pTestImage, &m_StTestImage);
+
+	/*if (m_StTestImage.GetSafeHwnd() != NULL)
 	{
 		HBITMAP hbitMap = (HBITMAP)(*m_pTestImage);
 		m_StTestImage.SetBitmap(hbitMap);
 		m_StTestImage.ShowWindow(TRUE);
-	}
+	}*/
 	
 
 	/*std::vector<std::wstring> *pVector = pManager->GetColorParameter();
@@ -170,10 +219,13 @@ void CInputDlg::SetManagePointer(CParamManager * pParamManager, CLabelManager * 
 
 void CInputDlg::SetTestImagePath(std::wstring path)
 {
+	
 	if (_waccess_s(path.c_str(), 0x04) == 0)
 	{
 		m_pTestImage->Destroy();
-		HRESULT ret = m_pTestImage->Load(path.c_str());
+		HRESULT  ret = S_OK;
+		
+		ret = m_pTestImage->Load(path.c_str());
 		if (ret != S_OK)
 		{
 			return;
@@ -182,7 +234,6 @@ void CInputDlg::SetTestImagePath(std::wstring path)
 		{
 			m_StTestImage.SetBitmap((HBITMAP)(*m_pTestImage));
 		}
-		
 	}
 	
 }
@@ -192,6 +243,11 @@ void CInputDlg::OnSelchangeComboType()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
+#ifdef _DEBUG
+	testPrint();
+#endif // _DEBUG
+
+	
 	int index = m_TypeCombo.GetCurSel();
 
 	//wchar_t selType[256] = { 0 };
@@ -199,11 +255,18 @@ void CInputDlg::OnSelchangeComboType()
 
 	m_TypeCombo.GetLBText(index, m_szReType);
 
+	if (wcslen(m_szReType) == 0)
+	{
+		return;
+	}
+	std::wstring tmpClassifyType = m_pLabelManager->GetClassifyTypeByExternal(std::wstring(m_szReType));
+
+
 	std::string tmpPatternDir(m_pParamManager->GetPatternImagePath());
 
 	std::wstring tmpWPatternDir = utils::StrToWStr(tmpPatternDir);
 
-	tmpWPatternDir = tmpWPatternDir + L"\\" + m_szReType + L".jpg";
+	tmpWPatternDir = tmpWPatternDir + L"\\" + tmpClassifyType + L".jpg";
 
 	if (_waccess_s(tmpWPatternDir.c_str(), 0x04) == 0)
 	{
@@ -213,17 +276,8 @@ void CInputDlg::OnSelchangeComboType()
 		{
 			return;
 		}
-		if (m_StPatternImage.GetSafeHwnd() != NULL)
-		{
-			m_StPatternImage.SetBitmap((HBITMAP)(*m_pPatternImage));
-		}
-
+		displayImage(m_pPatternImage, &m_StPatternImage);
 	}
-
-
-	//m_pPatternImage->Load(tmpWPatternDir.c_str());
-	//m_StPatternImage.SetBitmap((HBITMAP)(*m_pPatternImage));
-
 }
 
 

@@ -17,10 +17,14 @@ public:
 
 	void HeartBlood();
 
+	void resetConnect();
+
+	bool GetSocketStatus();
+
 
 private:
 
-	void resetConnect();
+	//void resetConnect();
 
 	bool SetValue(int value);
 

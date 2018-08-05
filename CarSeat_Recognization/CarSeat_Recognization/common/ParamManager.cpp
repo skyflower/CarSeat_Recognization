@@ -22,11 +22,14 @@ m_nBarcodePort(-1),
 m_nKepServerIp(-1),
 m_nKepServerPort(-1)
 {
-	Init();
+	
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
 	memset(m_szLineName, 0, sizeof(m_szLineName));
-	
 	memset(m_szCameraName, 0, sizeof(m_szCameraName));
+	memset(m_szPatternImagePath, 0, sizeof(m_szPatternImagePath));
+	
+
+	Init();
 }
 
 
@@ -225,6 +228,11 @@ const char *CParamManager::GetCameraName() const
 	return m_szCameraName;
 }
 
+const char * CParamManager::GetPatternImagePath() const
+{
+	return m_szPatternImagePath;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -286,6 +294,14 @@ void CParamManager::Init()
 			m_nServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (utils::getValueByName(content, "kepServerPort", tmpStr) == true)
+		{
+			m_nKepServerPort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
+
 		if (utils::getValueByName(content, "testClientPort", tmpStr) == true)
 		{
 			m_nTestClientPort = atoi(tmpStr);
@@ -294,7 +310,7 @@ void CParamManager::Init()
 
 		if (utils::getValueByName(content, "barcodePort", tmpStr) == true)
 		{
-			m_nKepServerPort = atoi(tmpStr);
+			m_nBarcodePort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
@@ -304,7 +320,6 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
-		//m_szCameraName
 
 
 		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
@@ -334,8 +349,14 @@ void CParamManager::Init()
 			//////
 			WriteError("init config.txt cameraName error");
 		}
-		WriteInfo("cameraName = %s", m_szCameraName);
-		memset(tmpStr, 0, sizeof(tmpStr));
+		//m_szPatternImagePath
+		if (utils::getValueByName(content, "patternImagePath", m_szPatternImagePath) == false)
+		{
+			//////
+			WriteError("init config.txt patternImagePath error");
+		}
+		//WriteInfo("cameraName = %s", m_szCameraName);
+		//memset(tmpStr, 0, sizeof(tmpStr));
 
 
 		if (content != nullptr)

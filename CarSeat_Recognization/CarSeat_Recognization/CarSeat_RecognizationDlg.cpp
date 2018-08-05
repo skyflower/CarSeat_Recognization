@@ -70,7 +70,9 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pLineCamera(nullptr),
 	m_nCxScreen(0),
 	m_nCyScreen(0),
-	m_pRFIDReader(nullptr)
+	m_pRFIDReader(nullptr),
+	m_pKepServer(nullptr)
+	//m_pUIThread(nullptr)
 
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -78,16 +80,16 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	//m_pLabelManager = new CLabelManager();	
 	m_pCameraManager = CCameraManager::GetInstance();
 	m_pRecogManager = CRecogResultManager::GetInstance();
+	m_pParamManager = CParamManager::GetInstance();
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDHtmlDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_IMAGE_PATTERN, m_ImagePattern);
-	DDX_Control(pDX, IDC_IMAGE_REC, m_ImageRec);
+	DDX_Control(pDX, IDC_IMAGE_PATTERN, m_stImagePattern);
+	DDX_Control(pDX, IDC_IMAGE_REC, m_stImageRec);
 	DDX_Control(pDX, IDC_BARCODE, m_barCode);
 	DDX_Control(pDX, IDC_REG_RATIO, m_RegRatio);
-	DDX_Control(pDX, IDC_IMAGE_PATTERN, m_ImagePattern);
 }
 
 
@@ -157,6 +159,15 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	
 	tmpBarcodeStr.Format(L"Success:%d\nFailed:%d\nSuccess Rate:%f", m_nSuccessCount, m_nFailCount, ratio);
 	m_RegRatio.SetWindowTextW(tmpBarcodeStr);
+
+	if (m_pImagePattern == nullptr)
+	{
+		m_pImagePattern = new CImage();
+	}
+	if (m_pImageRec == nullptr)
+	{
+		m_pImageRec = new CImage();
+	}
 	
 	initCameraModule();
 
@@ -164,6 +175,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	testXML();
 #endif //  _DEBUG
 
+	//m_pUIThread = new std::thread(&CCarSeat_RecognizationDlg::run, this);
 
 	return TRUE;  //
 }
@@ -214,8 +226,8 @@ HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 
 void CCarSeat_RecognizationDlg::run()
 {
-	std::wstring preImagePath;
-	std::wstring barcode;
+	//std::wstring preImagePath;
+	//std::wstring barcode;
 	m_pNetworkTask = CNetworkTask::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
 	if ((m_pNetworkTask == nullptr) || (m_pParamManager == nullptr))
@@ -231,13 +243,25 @@ void CCarSeat_RecognizationDlg::run()
 		if (m_pLineCamera != nullptr)
 		{
 			m_pLineCamera->SetImageSaveDirectory(tmpWPath);
+			m_pLineCamera->StartGrabbing();
 		}
 		delete[]tmpWPath;
 		tmpWPath = nullptr;
 	}
 	if (m_pParamManager != nullptr)
 	{
-		m_pKepServer = new CKepServerSocket(m_pParamManager->GetKepServerIp(), m_pParamManager->GetKepServerPort());
+		unsigned int tmpKepServerIp = m_pParamManager->GetKepServerIp();
+		unsigned int tmpKepServerPort = m_pParamManager->GetKepServerPort();
+		try
+		{
+			m_pKepServer = new CKepServerSocket(tmpKepServerIp, tmpKepServerPort);
+			m_pKepServer->resetConnect();
+		}
+		catch (const std::exception&)
+		{
+			WriteError(" kepServer socket init failed");
+		}
+		
 	}
 
 	std::wstring imagepath;
@@ -252,7 +276,11 @@ void CCarSeat_RecognizationDlg::run()
 
 
 		// 和kepServer模块的心跳包
-		m_pKepServer->HeartBlood();
+		if (m_pKepServer != nullptr)
+		{
+			m_pKepServer->HeartBlood();
+		}
+		
 
 		imagepath = std::wstring();
 		std::wstring tmpBarcode = L".....";// m_pRFIDReader->readBarcode();
@@ -270,7 +298,6 @@ void CCarSeat_RecognizationDlg::run()
 					initCameraModule();
 					OnStartCamera();
 
-					
 					CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
 					if (status == CCamera::CameraStatus::CAMERA_GRAB)
 					{
@@ -298,7 +325,8 @@ void CCarSeat_RecognizationDlg::run()
 				CheckAndUpdate(barcode, type);
 			}
 		}*/
-
+		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(200);
+		std::this_thread::sleep_for(a);
 
 		
 
@@ -342,7 +370,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	std::wstring reType;
 
 	wchar_t result[MAX_CHAR_LENGTH] = { 0 };
-	CNetworkTask::message msg;
+	//CNetworkTask::message msg;
 	bool bUsrInput = true;
 	struct RecogResult tmpResult;
 	memset(&tmpResult, 0, sizeof(RecogResult));
@@ -353,12 +381,12 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	std::string cRecogExternalType = utils::WStrToStr(RecogExternalType);
 	memcpy(tmpResult.m_szTypeByRecog, cRecogExternalType.c_str(), sizeof(char) * cRecogExternalType.size());
 
-	strcpy_s(tmpResult.m_szCameraName, "CC-HIKIVIOSON-MV100");
+	strcpy_s(tmpResult.m_szCameraName, (char*)m_pCameraManager->GetCamera(m_nCameraIndex)->SpecialInfo.stGigEInfo.chModelName);
 
 	strcpy_s(tmpResult.m_szLineName, m_pParamManager->GetLineName());
 
 	strcpy_s(tmpResult.m_szRecogMethod, "auto");
-
+	
 	std::string cBarExternalType = utils::WStrToStr(barExternalType);
 	memcpy(tmpResult.m_szTypeByBarcode, cBarExternalType.c_str(), sizeof(char) * cBarExternalType.size());
 
@@ -378,6 +406,33 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 
 	memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
 
+	std::wstring tmpWPath = utils::StrToWStr(tmpPath);
+
+	if (m_pImageRec != nullptr)
+	{
+		//LPCTSTR;
+		if (_waccess_s(tmpWPath.c_str(), 0x04) == 0)
+		{
+			m_pImageRec->Destroy();
+			HRESULT ret = m_pImageRec->Load(tmpWPath.c_str());
+			if (ret != S_OK)
+			{
+				return;
+			}
+			if (m_stImageRec.GetSafeHwnd() != NULL)
+			{
+				m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
+			}
+
+		}
+		//m_pImageRec->Load(tmpWPath.c_str());
+		//m_stImageRec.SetBitmap((HBITMAP)(*m_pImageRec));
+		//m_pImageRec->Load()
+	}
+	/* CImage::Load(filePath)   */
+	// CStatic.SetBitmap((HBITMAP)CImage))
+	//CImage m_image;
+
 
 	if (barInternalType != typeInternalType)
 	{
@@ -388,6 +443,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		tmpResult.m_bIsCorrect = false;
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
+		dlg.SetTestImagePath(tmpWPath);
 		INT_PTR msg = dlg.DoModal();
 		
 		if (msg == IDOK)
@@ -399,12 +455,33 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		////// send message to server
 		////
 		///  not implement
-		m_pKepServer->SetError();
+		if (m_pKepServer != nullptr)
+		{
+			m_pKepServer->SetError();
+		}
+		
 	}
 	else
 	{
 		m_nSuccessCount++;
 		tmpResult.m_bIsCorrect = true;
+		if (m_pImagePattern != nullptr)
+		{
+			//LPCTSTR;
+
+			//std::wstring tmpWPath = utils::StrToWStr(tmpPath);
+			//RecogType;//RecogType
+			std::string tmpPatternDir(m_pParamManager->GetPatternImagePath());
+
+			std::wstring tmpWPatternDir = utils::StrToWStr(tmpPatternDir);
+
+			tmpWPatternDir = tmpWPatternDir + L"\\" + RecogType + L".jpg";
+
+
+			m_pImagePattern->Load(tmpWPatternDir.c_str());
+			m_stImagePattern.SetBitmap((HBITMAP)(*m_pImagePattern));
+			//m_pImageRec->Load()
+		}
 		////// send message to server
 		////
 		///  not implement
@@ -442,7 +519,7 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
 			const char *tmpName = m_pParamManager->GetCameraName();
-			TRACE1("CameraName = %s", tmpName);
+			//TRACE1("CameraName = %s", tmpName);
 			m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 		}
 	}
@@ -645,7 +722,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		}
 		//m_nCameraIndex = 0;
 		const char *tmpName = m_pParamManager->GetCameraName();
-		TRACE1("CameraName = %s", tmpName);
+		//TRACE1("CameraName = %s", tmpName);
 		m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 	}
 	if ((m_pLineCamera == nullptr) && (m_nCameraIndex != -1))
@@ -766,7 +843,14 @@ void CCarSeat_RecognizationDlg::OnClose()
 	if (m_bThreadStatus == true)
 	{
 		m_bThreadStatus = false;
+		/*if (m_pUIThread->joinable())
+		{
+			m_pUIThread->join();
+			delete m_pUIThread;
+			m_pUIThread == nullptr;
+		}*/
 	}
+	
 	if (m_pLineCamera)
 	{
 		delete m_pLineCamera;
@@ -782,6 +866,18 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pKepServer;
 		m_pKepServer = nullptr;
 	}
+	
+	if (m_pImageRec != nullptr)
+	{
+		delete m_pImageRec;
+		m_pImageRec = nullptr;
+	}
+	if (m_pImagePattern != nullptr)
+	{
+		delete m_pImagePattern;
+		m_pImagePattern = nullptr;
+	}
+	
 	CDHtmlDialog::OnClose();
 }
 

@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "KepServerSocket.h"
 #include "../common/Log.h"
 #include "../xml/tinyxml.h"
@@ -7,9 +8,10 @@
 
 CKepServerSocket::CKepServerSocket(unsigned int ip, unsigned int port):
 	m_nIp(ip),
-	m_nPort(port)
+	m_nPort(port),
+	m_nSocket(-1)
 {
-	m_nSocket = initSocket(ip, port);
+	//m_nSocket = initSocket(ip, port);
 }
 
 
@@ -65,7 +67,7 @@ bool CKepServerSocket::SetValue(int value)
 	memset(recvXml, 0, sizeof(recvXml));
 	int length = XmlLength;
 	int i = 0;
-	int ret = false;
+	bool ret = false;
 	while (i < 5)
 	{
 		ret = SendMessageToServer(valueXml, strlen(valueXml), recvXml, length);
@@ -146,6 +148,15 @@ void CKepServerSocket::resetConnect()
 	m_nSocket = initSocket(m_nIp, m_nPort);
 }
 
+bool CKepServerSocket::GetSocketStatus()
+{
+	if (m_nSocket == -1)
+	{
+		return false;
+	}
+	return true;
+}
+
 SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 {
 	WSADATA wsaData;
@@ -154,16 +165,17 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	{
 		err = WSAGetLastError();
 		WriteError("err = %u", err);
-		return 0;
+		return -1;
 	}
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketFD == -1)
 	{
 		WSACleanup();
-		return 0;
+		return -1;
 	}
 
 	sockaddr_in addr;
+	memset(&addr, 0, sizeof(sockaddr));
 
 	//接收时限
 	int nNetTimeout = 1000;
@@ -177,10 +189,10 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	{
 		err = WSAGetLastError();
 		
-		WriteError("connect failed, err = %u", err);
+		WriteError("connect failed, err = %d", err);
 		closesocket(socketFD);
 		WSACleanup();
-		return 0;
+		return -1;
 	}
 	return socketFD;
 }

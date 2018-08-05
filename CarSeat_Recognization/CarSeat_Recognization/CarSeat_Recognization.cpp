@@ -125,11 +125,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	//  而不是启动应用程序的消息泵。
 	
 
-	if (m_UIThread.joinable())
+	/*if (m_UIThread.joinable())
 	{
 		dlg.terminate();
 		m_UIThread.join();
-	}
+	}*/
 
 	DeInitSystem();
 	
@@ -169,7 +169,7 @@ void CCarSeat_RecognizationApp::initSystem()
 		//m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
 	}
 
-	m_pLabelManager = new CLabelManager;
+	m_pLabelManager = new CLabelManager();
 	m_pCameraManager = CCameraManager::GetInstance();
 
 }

@@ -45,8 +45,11 @@ private:
 	int m_nCxScreen;
 	int m_nCyScreen;
 	
-	CStatic m_ImagePattern;
-	CStatic m_ImageRec;
+	CStatic m_stImagePattern;
+	CStatic m_stImageRec;
+
+	CImage *m_pImageRec;
+	CImage *m_pImagePattern;
 
 	CStatic m_barCode;
 	
@@ -75,6 +78,8 @@ private:
 	CRFIDReader *m_pRFIDReader;
 	CRecogResultManager *m_pRecogManager;
 	CKepServerSocket *m_pKepServer;
+
+	//std::thread *m_pUIThread;
 	
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);

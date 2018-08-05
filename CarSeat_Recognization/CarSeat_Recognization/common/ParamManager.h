@@ -40,6 +40,8 @@ public:
 	const char* GetImageDirectory() const;
 	const char* GetLineName() const;
 	const char* GetCameraName() const;
+	const char* GetPatternImagePath() const;
+
 
 	std::wstring GetLocalName() { return m_strLocalName; }
 
@@ -82,6 +84,9 @@ private:
 
 	//拍照图像本地保存路径
 	char m_szImagePath[256];
+
+	//模板图像路径
+	char m_szPatternImagePath[256];
 
 	//产线名称编号
 	char m_szLineName[20];

@@ -8,6 +8,7 @@
 #include "../common/utils.h"
 
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -15,17 +16,23 @@
 
 
 CCameraManager *CCameraManager::m_pInstance = nullptr;
+std::mutex CCameraManager::m_Mutex;
 
 CCameraManager::CCameraManager()
 {
 	memset(&m_stDevList, 0, sizeof(m_stDevList));
+	//m_Mutex = 
 }
 
 CCameraManager * CCameraManager::GetInstance()
 {
 	if (m_pInstance == nullptr)
 	{
-		m_pInstance = new CCameraManager();
+		std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+		if (lock.try_lock())
+		{
+			m_pInstance = new CCameraManager();
+		}
 	}
 	return m_pInstance;
 }
@@ -39,8 +46,12 @@ CCameraManager::~CCameraManager()
 // ch:按下查找设备按钮:枚举 | en:Click Find Device button:Enumeration 
 bool  CCameraManager::EnumCamera()
 {
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return false;
+	}
     CString strMsg;
-
     // ch:初始化设备信息列表 | en:Device Information List Initialization
     memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
 
@@ -59,8 +70,8 @@ bool  CCameraManager::EnumCamera()
 	
 
     // ch:将值加入到信息列表框中并显示出来 | en:Add value to the information list box and display
-    unsigned int i;
-    int nIp1, nIp2, nIp3, nIp4;
+    unsigned int i = 0;
+    int nIp1 = 0, nIp2 = 0, nIp3 = 0, nIp4 = 0;
     for (i = 0; i < m_stDevList.nDeviceNum; i++)
     {
         MV_CC_DEVICE_INFO* pDeviceInfo = m_stDevList.pDeviceInfo[i];
@@ -141,11 +152,21 @@ bool  CCameraManager::EnumCamera()
 
 int CCameraManager::GetCameraCount()
 {
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return 0;
+	}
 	return m_stDevList.nDeviceNum;
 }
 
 MV_CC_DEVICE_INFO * CCameraManager::GetCamera(int index)
 {
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return nullptr;
+	}
 	if (index >= m_stDevList.nDeviceNum)
 	{
 		return nullptr;
@@ -155,6 +176,11 @@ MV_CC_DEVICE_INFO * CCameraManager::GetCamera(int index)
 
 int CCameraManager::GetCameraIndexByName(const char * name)
 {
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return -1;
+	}
 	if (m_stDevList.nDeviceNum <= 0)
 	{
 		return -1;
@@ -191,6 +217,11 @@ int CCameraManager::GetCameraIndexByName(const char * name)
 
 MV_CC_DEVICE_INFO * CCameraManager::GetCamera(const char * name)
 {
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return false;
+	}
 	int index = GetCameraIndexByName(name);
 	if (index == -1)
 	{
@@ -201,8 +232,14 @@ MV_CC_DEVICE_INFO * CCameraManager::GetCamera(const char * name)
 
 void CCameraManager::testPrint()
 {
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return;
+	}
 	//m_stDevList;
-	for (int i = 0; i < m_stDevList.nDeviceNum; ++i)
+	int i = 0;
+	while(i < m_stDevList.nDeviceNum)
 	{
 		WriteInfo("index = %d, Ver = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMajorVer, m_stDevList.pDeviceInfo[i]->nMinorVer);
 		WriteInfo("index = %d, MAC = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMacAddrHigh, m_stDevList.pDeviceInfo[i]->nMacAddrLow);
@@ -213,6 +250,6 @@ void CCameraManager::testPrint()
 		WriteInfo("index = %d, SerialNumber = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chSerialNumber);
 		WriteInfo("index = %d, UserDefinedName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chUserDefinedName);
 		WriteInfo("index = %d, CurrentIp = %u", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp);
-
+		++i;
 	}
 }

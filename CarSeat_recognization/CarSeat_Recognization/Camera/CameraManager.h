@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Camera.h"
 #include <Windows.h>
+#include <mutex>
 
 
 class CCameraManager
@@ -32,6 +33,8 @@ private:
 	CCameraManager();	// Standard constructor
 
 	static CCameraManager *m_pInstance;
+
+	static std::mutex m_Mutex;
 public:
     /*ch:初始化 | en:Initialization*/
     bool EnumCamera();               // ch:查找设备 | en:Find Devices

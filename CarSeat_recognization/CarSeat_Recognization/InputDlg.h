@@ -26,8 +26,12 @@ protected:
 private:
 	
 	CStatic m_StPatternImage;
-
 	CStatic m_StTestImage;
+	CImage *m_pPatternImage;
+	CImage *m_pTestImage;
+
+	wchar_t m_szReType[40];
+
 	CParamManager *m_pParamManager;
 	CLabelManager *m_pLabelManager;
 
@@ -37,6 +41,10 @@ public:
 	std::wstring GetInputType();
 
 	void SetManagePointer(CParamManager *pParamManager, CLabelManager *pLabelManager);
+	void SetTestImagePath(std::wstring path);
+
 private:
 	CComboBox m_TypeCombo;
+public:
+	afx_msg void OnSelchangeComboType();
 };

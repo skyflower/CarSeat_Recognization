@@ -144,7 +144,7 @@ CLog::~CLog()
 	}
 	std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
 	std::this_thread::sleep_for(a);
-	//m_pLog.close();
+	m_pLog.close();
 	if (m_pMessage != nullptr)
 	{
 		delete[]m_pMessage;

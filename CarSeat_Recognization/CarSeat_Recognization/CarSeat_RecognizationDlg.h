@@ -48,7 +48,7 @@ private:
 	CStatic m_stImagePattern;
 	CStatic m_stImageRec;
 
-	CImage *m_pImageRec;
+	//CImage *m_pImageRec;
 	CImage *m_pImagePattern;
 
 	CStatic m_barCode;
@@ -82,6 +82,8 @@ private:
 	CRecogResultManager *m_pRecogManager;
 	CKepServerSocket *m_pKepServer;
 
+	bool m_bBeginJob;
+
 
 	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);
 	
@@ -97,10 +99,14 @@ private:
 	*/
 	void adjustControlLocate(int width, int height);
 
+	void displayImage(CImage * pImage, CStatic * pStatic);
 
 
 
+	// 用于测试xml的解析,
 	void testXML();
+
+	std::wstring testGenerateBarcode();
 
 
 public:
@@ -135,4 +141,5 @@ public:
 	afx_msg void OnUpdateMenuQueryBarcode(CCmdUI *pCmdUI);
 	afx_msg void OnChooseCamera();
 	afx_msg void OnUpdateChooseCamera(CCmdUI *pCmdUI);
+	afx_msg void OnBnClickedButtonBeginJob();
 };

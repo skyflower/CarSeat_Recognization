@@ -17,6 +17,7 @@ CCameraParameterDlg::CCameraParameterDlg(CWnd* pParent /*=NULL*/)
 	, m_uExposureTime(0)
 	, m_fCameraFPS(0)
 	, m_pLineCamera(nullptr)
+	, m_nExposureTimeUpper(0)
 {
 
 }
@@ -47,6 +48,7 @@ void CCameraParameterDlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxUInt(pDX, m_uExposureTime, 0, 2000000);
 	DDX_Text(pDX, IDC_ED_FPS, m_fCameraFPS);
 	DDV_MinMaxFloat(pDX, m_fCameraFPS, 1, 100);
+	DDX_Text(pDX, IDC_ED_EXPOSURE_TIME_UPPER, m_nExposureTimeUpper);
 }
 
 

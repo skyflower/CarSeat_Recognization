@@ -11,7 +11,7 @@ CRecogResultManager::CRecogResultManager():
 	m_bAutoSave(false)
 {
 	memset(m_szName, 0, sizeof(m_szName));
-	strcpy_s(m_szName, "recogResult.csv");
+	strcpy_s(m_szName, "recogResult.txt");
 	init();
 }
 
@@ -60,10 +60,21 @@ void CRecogResultManager::init()
 		{
 			break;
 		}
+		if (end - content - begin < 10)
+		{
+			break;
+		}
 		memset(tmpChar, 0, sizeof(char) * 3 * MAX_CHAR_LENGTH);
 		int i = end - content - begin;
 		memcpy(tmpChar, content + begin, i);
-		tmpChar[i] = ',';
+		if (tmpChar[i - 1] <= 0x20)
+		{
+			tmpChar[i - 1] = ',';
+		}
+		else
+		{
+			tmpChar[i] = ',';
+		}
 		if (parseLine(tmpChar, tmpResult) == true)
 		{
 			//size_t tmpHashValue = m_pHashFunc(tmpResult.m_szBarcode);

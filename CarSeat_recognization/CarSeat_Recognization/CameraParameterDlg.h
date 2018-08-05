@@ -38,4 +38,7 @@ public:
 	afx_msg void OnBnClickedButtonGetParameter();
 	afx_msg void OnBnClickedButtonSetParameter();
 	virtual BOOL OnInitDialog();
+private:
+	// //自动曝光上限
+	UINT m_nExposureTimeUpper;
 };

@@ -124,7 +124,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 	size_t tmpLen = send(m_nSocket, msg, len, 0);// MSG_DONTROUTE);
 	if (tmpLen == SOCKET_ERROR)
 	{
-		WriteError("send Failed, msg = %s, len = %u, Err:", msg, len, WSAGetLastError());
+		WriteError("send Failed, msg = %s, len = %u, Err:%d", msg, len, WSAGetLastError());
 		closesocket(m_nSocket);
 		WSACleanup();
 		return false;

@@ -82,6 +82,7 @@ void CInputDlg::displayImage(CImage * pImage, CStatic * pStatic)
 		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left,	\
 			rect.bottom - rect.top, TRUE);
 		//pStatic->ShowWindow(TRUE);
+		Invalidate();
 	}
 }
 
@@ -90,14 +91,19 @@ void CInputDlg::testPrint()
 	if (m_StTestImage.GetSafeHwnd() != NULL)
 	{
 		RECT rect;
-		m_StTestImage.GetClientRect(&rect);
+		m_StTestImage.GetWindowRect(&rect);
+		ScreenToClient(&rect);
+
+		//m_StTestImage.GetClientRect(&rect);
 		WriteInfo("m_StTestImage bottom = %d, top = %d", rect.bottom, rect.top);
 		WriteInfo("m_StTestImage left = %d, right = %d", rect.left, rect.right);
 	}
 	if (m_StPatternImage.GetSafeHwnd() != NULL)
 	{
 		RECT rect;
-		m_StPatternImage.GetClientRect(&rect);
+		m_StPatternImage.GetWindowRect(&rect);
+		ScreenToClient(&rect);
+		//m_StPatternImage.GetClientRect(&rect);
 
 		WriteInfo("m_StPatternImage bottom = %d, top = %d", rect.bottom, rect.top);
 		WriteInfo("m_StPatternImage left = %d, right = %d", rect.left, rect.right);

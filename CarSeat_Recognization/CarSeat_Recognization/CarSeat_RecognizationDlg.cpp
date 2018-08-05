@@ -71,7 +71,8 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_nCxScreen(0),
 	m_nCyScreen(0),
 	m_pRFIDReader(nullptr),
-	m_pKepServer(nullptr)
+	m_pKepServer(nullptr),
+	m_bBeginJob(false)
 	//m_pUIThread(nullptr)
 
 {
@@ -112,6 +113,7 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_UPDATE_COMMAND_UI(ID_MENU_QUERY_BARCODE, &CCarSeat_RecognizationDlg::OnUpdateMenuQueryBarcode)
 	ON_COMMAND(ID_CHOOSE_CAMERA, &CCarSeat_RecognizationDlg::OnChooseCamera)
 	ON_UPDATE_COMMAND_UI(ID_CHOOSE_CAMERA, &CCarSeat_RecognizationDlg::OnUpdateChooseCamera)
+	ON_BN_CLICKED(IDC_BUTTON_BEGIN_JOB, &CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob)
 END_MESSAGE_MAP()
 
 
@@ -164,10 +166,10 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	{
 		m_pImagePattern = new CImage();
 	}
-	if (m_pImageRec == nullptr)
+	/*if (m_pImageRec == nullptr)
 	{
 		m_pImageRec = new CImage();
-	}
+	}*/
 	
 	//initCameraModule();
 
@@ -265,6 +267,12 @@ void CCarSeat_RecognizationDlg::run()
 		
 		
 		*/
+		if (m_bBeginJob == false)
+		{
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(2000);
+			std::this_thread::sleep_for(a);
+			continue;
+		}
 
 
 		// 和kepServer模块的心跳包
@@ -275,7 +283,7 @@ void CCarSeat_RecognizationDlg::run()
 		
 
 		imagepath = std::wstring();
-		std::wstring tmpBarcode = L".....";// m_pRFIDReader->readBarcode();
+		std::wstring tmpBarcode = testGenerateBarcode();// m_pRFIDReader->readBarcode();
 		if (tmpBarcode.size() != 0)
 		{
 			if (m_pLineCamera == nullptr)
@@ -333,7 +341,7 @@ void CCarSeat_RecognizationDlg::run()
 				CheckAndUpdate(barcode, type);
 			}
 		}*/
-		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(5000);
+		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(200);
 		std::this_thread::sleep_for(a);
 
 		
@@ -473,9 +481,9 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 
 			tmpWPatternDir = tmpWPatternDir + L"\\" + RecogType + L".jpg";
 
-
 			m_pImagePattern->Load(tmpWPatternDir.c_str());
-			m_stImagePattern.SetBitmap((HBITMAP)(*m_pImagePattern));
+			displayImage(m_pImagePattern, &m_stImagePattern);
+			//m_stImagePattern.SetBitmap((HBITMAP)(*m_pImagePattern));
 			//m_pImageRec->Load()
 		}
 		////// send message to server
@@ -686,6 +694,24 @@ void CCarSeat_RecognizationDlg::testXML()
 
 }
 
+std::wstring CCarSeat_RecognizationDlg::testGenerateBarcode()
+{
+	wchar_t tmp[20];
+	memset(tmp, 0, sizeof(tmp));
+	static double x = 0.000012345678;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		x = 3.9999 * x * (1 - x);
+	}
+	double tmpValue = x * pow(10, 8);
+	int hiValue = tmpValue;
+	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
+	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"%08d%08d", hiValue, lowValue);
+
+	return std::wstring(tmp);
+}
+
 void CCarSeat_RecognizationDlg::OnUsrinput()
 {
 	// TODO: 在此添加命令处理程序代码
@@ -876,11 +902,11 @@ void CCarSeat_RecognizationDlg::OnClose()
 		m_pKepServer = nullptr;
 	}
 	
-	if (m_pImageRec != nullptr)
+	/*if (m_pImageRec != nullptr)
 	{
 		delete m_pImageRec;
 		m_pImageRec = nullptr;
-	}
+	}*/
 	if (m_pImagePattern != nullptr)
 	{
 		delete m_pImagePattern;
@@ -1061,4 +1087,44 @@ void CCarSeat_RecognizationDlg::OnUpdateChooseCamera(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 
+}
+
+void CCarSeat_RecognizationDlg::displayImage(CImage * pImage, CStatic * pStatic)
+{
+	if ((pImage == nullptr) || (pStatic == nullptr))
+	{
+		return;
+	}
+	if (pStatic->GetSafeHwnd() != NULL)
+	{
+		//CDC *pDC = pStatic->GetDC();
+		RECT rect;
+		pStatic->GetWindowRect(&rect);
+		ScreenToClient(&rect);
+		//pImage->Draw(pDC->GetSafeHdc(), rect);
+		//pImage->StretchBlt(pDC->GetSafeHdc(), rect, 0);
+		//pStatic->ReleaseDC(pDC);
+
+		pStatic->SetBitmap((HBITMAP)(*pImage));
+		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left, \
+			rect.bottom - rect.top, TRUE);
+		//pStatic->ShowWindow(TRUE);
+		Invalidate();
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (m_bBeginJob == true)
+	{
+		m_bBeginJob = false;
+		GetDlgItem(IDC_BUTTON_BEGIN_JOB)->SetWindowTextW(L"开始作业");
+	}
+	else
+	{
+		m_bBeginJob = true;
+		GetDlgItem(IDC_BUTTON_BEGIN_JOB)->SetWindowTextW(L"终止作业");
+	}
 }

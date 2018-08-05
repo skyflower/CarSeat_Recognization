@@ -145,7 +145,6 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 	INT_PTR nResponse = loginDlg.DoModal();
 	if (nResponse == IDOK)
 	{
-
 		return true;
 	}
 	return false;
@@ -197,6 +196,10 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		delete m_pNetworkTask;
 		m_pNetworkTask = nullptr;
 	}*/
+	if (m_UIThread.joinable())
+	{
+		m_UIThread.join();
+	}
 
 	if (m_pClassify != nullptr)
 	{
@@ -223,4 +226,5 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		delete m_pCameraManager;
 		m_pCameraManager = nullptr;
 	}
+	
 }

@@ -30,6 +30,9 @@ public:
 	bool GetLoginAutoSave();
 	void SetLoginAutoSave(bool autoSave);
 
+	int GetExposureTimeMax();
+	int GetExposureTimeMin();
+
 	/*  not implement，从服务器发过来的xml，更新条形码对照表 */
 	void UpdateBarcode(const char *xmlContent, size_t len);
 
@@ -44,6 +47,9 @@ private:
 
 	wchar_t m_strLoginName[MAX_USR_NAME_AND_PASSWD];
 	wchar_t m_strLoginPasswd[MAX_USR_NAME_AND_PASSWD];
+
+	int m_nExposureTimeMax;
+	int m_nExposureTimeMin;
 	bool m_bLoginAutoSave;
 	
 

@@ -108,6 +108,20 @@ bool CLabelManager::init()
 		}
 	}
 
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "ExposureTimeMax", tmpValue))
+	{
+		m_nExposureTimeMax = atoi(tmpValue);
+	}
+
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "ExposureTimeMin", tmpValue))
+	{
+		m_nExposureTimeMin = atoi(tmpValue);
+	}
+
+
+
 
 	// barcodeTable
 	// classifyType
@@ -177,7 +191,7 @@ bool CLabelManager::serialize()
 		return false;
 	}
 	FILE *fp = nullptr;
-	fopen_s(&fp, "labelConfig.txt.bak", "wb");
+	fopen_s(&fp, "labelConfig.txt", "wb");
 	if (fp == nullptr)
 	{
 		WriteError("Failed labelConfig.txt.bak");
@@ -221,6 +235,11 @@ bool CLabelManager::serialize()
 		wsprintfW(tmpStr, L"%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
 			iter->second.c_str());
 	}
+	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+
+	wsprintfW(tmpStr, L"\nExposureTimeMax=%d\nExposureTimeMin=%d\n", \
+		m_nExposureTimeMax, m_nExposureTimeMin);
 	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
 	memset(tmpStr, 0, sizeof(wchar_t) * Length);
 
@@ -318,6 +337,14 @@ void CLabelManager::SetLoginAutoSave(bool autoSave)
 	}
 	m_bLoginAutoSave = autoSave;
 	m_bSerialize = true;
+}
+int CLabelManager::GetExposureTimeMax()
+{
+	return m_nExposureTimeMax;
+}
+int CLabelManager::GetExposureTimeMin()
+{
+	return m_nExposureTimeMin;
 }
 const wchar_t * CLabelManager::GetLoginUsrName() const
 {

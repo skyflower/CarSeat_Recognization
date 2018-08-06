@@ -239,7 +239,7 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		return;
 	}
-	const char* tmpImageDir = m_pParamManager->GetImageDirectory();
+	//const char* tmpImageDir = m_pParamManager->GetImageDirectory();
 	//char *tmpPointer = const_cast<char*>(tmpImageDir);
 	
 	if (m_pParamManager != nullptr)
@@ -262,6 +262,7 @@ void CCarSeat_RecognizationDlg::run()
 	std::wstring reType;
 	while (m_bThreadStatus)
 	{
+
 
 		/*
 		
@@ -289,25 +290,9 @@ void CCarSeat_RecognizationDlg::run()
 			if (m_pLineCamera == nullptr)
 			{
 				initCameraModule();
-				if (m_pLineCamera != nullptr)
-				{
-					wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
-
-					if (tmpWPath != nullptr)
-					{
-						if (m_pLineCamera != nullptr)
-						{
-							m_pLineCamera->SetImageSaveDirectory(tmpWPath);
-							m_pLineCamera->StartGrabbing();
-						}
-						delete[]tmpWPath;
-						tmpWPath = nullptr;
-					}
-				}
 			}
 			if (m_pLineCamera != nullptr)
 			{
-
 				imagepath = m_pLineCamera->SaveJpg();
 				if (imagepath.size() == 0)
 				{
@@ -539,6 +524,19 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			if (pDevice != nullptr)
 			{
 				m_pLineCamera = new CLineCamera(pDevice);
+				const char* tmpImageDir = m_pParamManager->GetImageDirectory();
+				wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
+
+				if (tmpWPath != nullptr)
+				{
+					if (m_pLineCamera != nullptr)
+					{
+						m_pLineCamera->SetImageSaveDirectory(tmpWPath);
+						m_pLineCamera->StartGrabbing();
+					}
+					delete[]tmpWPath;
+					tmpWPath = nullptr;
+				}
 			}
 			
 		}
@@ -798,12 +796,40 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 				break;
 			}
 		}
-		
-		if (m_pLineCamera->SetFrameRate(20.0) == false)
+
+
+		if (m_pLineCamera->SetExposureMode(MV_EXPOSURE_MODE_TIMED) == true)
 		{
-			TRACE0("SetFrameRate Failed\n");
-			WriteError("SetFrameRate Failed");
+			TRACE0("Set exposure mode timed Failed\n");
+			WriteError("Set exposure mode time Failed");
 		}
+
+		if (m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_CONTINUOUS) == true)
+		{
+			TRACE0("Set auto exposure time mode Failed\n");
+			WriteError("Set auto exposure time mode Failed");
+		}
+
+		int tmpMax = m_pLabelManager->GetExposureTimeMax();
+		int tmpMin = m_pLabelManager->GetExposureTimeMin();
+		if (m_pLineCamera->SetExposureTime(tmpMax, tmpMin) == true)
+		{
+			TRACE2("Set exposureTime Max = %d,Min = %d Failed\n", tmpMax, tmpMin);
+			WriteError("Set exposureTime Max = %d,Min = %d Failed", tmpMax, tmpMin);
+		}
+
+		if (m_pLineCamera->SetPixelFormat(0x02180014) == true)
+		{
+			TRACE0("Set PixelFormat Failed\n");
+			WriteError("Set PixelFormat Failed");
+		}
+		
+		if (m_pLineCamera->SetBalanceWhile(MV_BALANCEWHITE_AUTO_CONTINUOUS) == false)
+		{
+			TRACE0("set BALANCE WHITE AUTO CONTINUOUS Failed\n");
+			WriteError("set BALANCE WHITE AUTO CONTINUOUS Failed");
+		}
+
 		if (m_pLineCamera->SetGain(0) == false)
 		{
 			TRACE0("SetGain Failed\n");
@@ -887,7 +913,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 		std::unique_lock<std::mutex> lineCameraLock(m_LineCameraMutex, std::defer_lock);
 		while (!lineCameraLock.try_lock())
 		{
-			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 			std::this_thread::sleep_for(a);
 		}
 		/*if (m_pUIThread->joinable())
@@ -1007,7 +1033,7 @@ void CCarSeat_RecognizationDlg::OnExposureTimeTest()
 		if (status == CCamera::CameraStatus::CAMERA_GRAB)
 		{
 			
-			m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_OFF);
+			/*m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_OFF);
 			double timeMax, timeMin;
 			m_pLineCamera->GetExposureTimeRange(&timeMax, &timeMin);
 			m_pLineCamera->SetImageSaveDirectory(L"C:\\Users\\Administrator\\Desktop\\CodeStudy\\hikvision\\");
@@ -1020,7 +1046,7 @@ void CCarSeat_RecognizationDlg::OnExposureTimeTest()
 			{
 				m_pLineCamera->SetExposureTime(timeMin + i * timeStep);
 				std::wstring path = m_pLineCamera->SaveJpg();
-			}
+			}*/
 		}
 	}
 }

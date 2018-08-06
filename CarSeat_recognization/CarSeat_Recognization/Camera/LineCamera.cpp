@@ -19,7 +19,8 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
 	, m_pDevice(pDevice)
     //, m_bStartGrabbing(false)
     , m_nTriggerMode(MV_TRIGGER_MODE_OFF)
-    , m_dExposureTime(0)
+    , m_dExposureTimeMax(1500000)
+	, m_dExposureTimeMin(500000)
     , m_dExposureGain(0)
     , m_dFrameRate(0)
     //, m_bSoftWareTriggerCheck(FALSE)
@@ -92,6 +93,7 @@ int CLineCamera::OpenDevice(void)
     }
 
 	m_status = CCamera::CameraStatus::CAMERA_OPEN;
+	m_pcMyCamera->RegisterExceptionCallBack(ReconnectDevice, this);
     return MV_OK;
 }
 
@@ -181,13 +183,18 @@ bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 }
 
 // ch:获取曝光时间 | en:Get Exposure Time
-double CLineCamera::GetExposureTime()
+double CLineCamera::GetExposureTimeMax()
 {
-    return m_dExposureTime;
+    return m_dExposureTimeMax;
+}
+
+double CLineCamera::GetExposureTimeMin()
+{
+	return m_dExposureTimeMin;
 }
 
 // ch:设置曝光时间 | en:Set Exposure Time
-bool CLineCamera::SetExposureTime(double time)
+bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
 {
     // ch:调节这两个曝光模式，才能让曝光时间生效
     // en:Adjust these two exposure mode to allow exposure time effective
@@ -197,17 +204,25 @@ bool CLineCamera::SetExposureTime(double time)
         return false;
     }
 
-    nRet = m_pcMyCamera->SetEnumValue("ExposureAuto", MV_EXPOSURE_AUTO_MODE_OFF);
+    nRet = m_pcMyCamera->SetEnumValue("ExposureAuto", MV_EXPOSURE_AUTO_MODE_CONTINUOUS);
 	if (nRet != MV_OK)
 	{
 		return false;
 	}
-    nRet = m_pcMyCamera->SetFloatValue("ExposureTime", time);
+
+    nRet = m_pcMyCamera->SetFloatValue("AutoExposureTimeLowerLimit", timeMin);
     if (MV_OK != nRet)
     {
         return false;
     }
-	m_dExposureTime = time;
+
+	nRet = m_pcMyCamera->SetFloatValue("AutoExposureTimeUpperLimit", timeMax);
+	if (MV_OK != nRet)
+	{
+		return false;
+	}
+	m_dExposureTimeMax = timeMax;
+	m_dExposureTimeMin = timeMin;
     return true;
 }
 
@@ -280,6 +295,18 @@ bool CLineCamera::SetTriggerSource(MV_CAM_TRIGGER_SOURCE source)
     }
 	m_nTriggerSource = source;
     return true;
+}
+
+bool CLineCamera::SetExposureMode(MV_CAM_EXPOSURE_MODE mode)
+{
+	int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", mode);
+	if (MV_OK != nRet)
+	{
+		WriteError("Set ExposureMode Fail");
+		return false;
+	}
+	m_nExposureMode = mode;
+	return true;
 }
 
 bool CLineCamera::GetExposureTimeRange(double * timeMax, double * timeMin)
@@ -360,12 +387,19 @@ MV_CAM_BALANCEWHITE_AUTO CLineCamera::GetBalanceWhile()
 	return MV_BALANCEWHITE_AUTO_UNKNOWN;
 }
 
+bool CLineCamera::SetPixelFormat(int value)
+{
+	int nRet = m_pcMyCamera->SetEnumValue("PixelFormat", value);
+	if (MV_OK != nRet)
+	{
+		return -1;
+	}
+	return true;
+}
+
 bool CLineCamera::GetConnectStatus()
 {
 	
-	//MV_CC_IsDeviceAccessible(m_pDevice, 0);
-
-
 	return false;
 }
 
@@ -650,16 +684,16 @@ double CLineCamera::GetFrameRateByCamera()
 	return fFloatValue;
 }
 
-double CLineCamera::GetExposureTimeByCamera()
-{
-	float  fFloatValue = 0.0;
-	int nRet = m_pcMyCamera->GetFloatValue("ExposureTime", &fFloatValue);
-	if (MV_OK != nRet)
-	{
-		return -1;
-	}
-	return fFloatValue;
-}
+//double CLineCamera::GetExposureTimeByCamera()
+//{
+//	float  fFloatValue = 0.0;
+//	int nRet = m_pcMyCamera->GetFloatValue("ExposureTime", &fFloatValue);
+//	if (MV_OK != nRet)
+//	{
+//		return -1;
+//	}
+//	return fFloatValue;
+//}
 
 MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
 {
@@ -676,7 +710,7 @@ MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
 double CLineCamera::GetExposureTimeMaxByCamera()
 {
 	float tmpValue = 0;
-	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeLowerLimit", &tmpValue);
+	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeUpperLimit", &tmpValue);
 	if (nRet != MV_OK)
 	{
 		return -1;
@@ -687,7 +721,7 @@ double CLineCamera::GetExposureTimeMaxByCamera()
 double CLineCamera::GetExposureTimeMinByCamera()
 {
 	float tmpValue = 0;
-	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeUpperLimit", &tmpValue);
+	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeLowerLimit", &tmpValue);
 	if (nRet != MV_OK)
 	{
 		return -1;
@@ -882,11 +916,11 @@ void CLineCamera::GetParameter()
         WriteError("Get Trigger Mode Fail");
     }
 	
-	m_dExposureTime = GetExposureTimeByCamera();
+	/*m_dExposureTime = GetExposureTimeByCamera();
     if (m_dExposureTime == -1)
     {
 		WriteError("Get Exposure Time Fail");
-    }
+    }*/
 
 	m_dExposureGain = GetGainByCamera();
     if (m_dExposureGain == -1)
@@ -986,4 +1020,47 @@ std::wstring CLineCamera::SaveJpg()
         return path;
     }
     return path;
+}
+
+
+
+void __stdcall CLineCamera::ReconnectDevice(unsigned int nMsgType, void* pUser)
+{
+	if (nMsgType == MV_EXCEPTION_DEV_DISCONNECT)
+	{
+		CLineCamera* pThis = (CLineCamera*)pUser;
+
+		//pThis->EnableWindowWhenClose();
+		//pThis->m_ctrlOpenButton.EnableWindow(TRUE);
+		if ((pThis->m_status == CCamera::CameraStatus::CAMERA_OPEN)	\
+			|| (pThis->m_status == CCamera::CameraStatus::CAMERA_GRAB))
+		{
+			pThis->CloseDevice();
+
+			BOOL bConnected = FALSE;
+			while (1)
+			{
+				int nRet = MV_OK;
+				nRet = pThis->m_pcMyCamera->Open(pThis->m_pDevice);
+				if (MV_OK == nRet)
+				{
+					pThis->m_pcMyCamera->RegisterExceptionCallBack(ReconnectDevice, pUser);
+					bConnected = TRUE;
+					//pThis->EnableWindowWhenOpenNotStart();
+					break;
+				}
+				else
+				{
+					Sleep(100);
+				}
+			}
+
+			if (bConnected && (pThis->m_status == CCamera::CameraStatus::CAMERA_OPEN))
+			{
+				pThis->m_pcMyCamera->Display(pThis->m_hwndDisplay);
+				pThis->m_pcMyCamera->StartGrabbing();
+				//pThis->EnableWindowWhenStart();
+			}
+		}
+	}
 }

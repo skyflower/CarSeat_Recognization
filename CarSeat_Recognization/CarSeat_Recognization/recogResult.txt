@@ -1,3 +1,14 @@
+0030615975382333,2018-08-06:23-08-34,,,红色-d2-孔形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_230834.jpg
+0114972239570915,2018-08-06:23-08-30,,,红色-d2-皮革,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_230830.jpg
+9981647953983162,2018-08-06:23-08-26,,,白色-k2-皮革,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_230826.jpg
+7478115386490577,2018-08-06:23-08-21,,,红色-d2-孔形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_230821.jpg
+1939989926266768,2018-08-06:23-06-57,,,红色-d2-皮革,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_230657.jpg
+0114972239570915,2018-08-06:22-10-32,,,红色-d2-孔形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_221032.jpg
+9981647953983162,2018-08-06:22-09-02,,,红色-d2-孔形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_220902.jpg
+7478115386490577,2018-08-06:22-08-56,,,红色-d2-菱形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_220856.jpg
+1939989926266768,2018-08-06:22-08-49,,,红色-d2-皮革,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_220849.jpg
+7478115386490577,2018-08-06:21-08-22,,,,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_210822.jpg
+1939989926266768,2018-08-06:21-08-12,,,,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180806_210812.jpg
 9981647953983162,2018-08-05:22-11-01,,,红色-d2-菱形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180805_221101.jpg
 7478115386490577,2018-08-05:22-10-50,,,红色-d2-孔形纹理,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180805_221050.jpg
 7478115386490577,2018-08-05:21-50-38,,,白色-d2-皮革,0,auto,MV-CE100-30GC,Line01,root,D:\Cache\GithubCache\CarSeatImage\20180805_215038.jpg

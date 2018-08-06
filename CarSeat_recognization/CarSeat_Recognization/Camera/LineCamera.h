@@ -31,7 +31,10 @@ private:
 
     /*ch:参数设置获取 | en:Get Parameter Setting*/
           // ch:曝光时间 | en:Exposure Time
-    double  m_dExposureTime;	//曝光时间
+
+    //double  m_dExposureTimeMax;	//自动曝光时间上限
+	//double  m_dExposureTimeMin;	//自动曝光时间下限
+
     double  m_dExposureGain; // 增益
     double  m_dFrameRate;  // fps 
 
@@ -64,21 +67,32 @@ public:
     /*ch:设置、获取参数操作 | en:Set and get parameters operation*/
     bool SetTriggerMode(MV_CAM_TRIGGER_MODE mode);                // ch:设置触发模式 | en:Set Trigger Mode
 	MV_CAM_TRIGGER_MODE GetTriggerMode();
-    double GetExposureTime();               // ch:设置曝光时间 | en:Set Exposure Time
-    bool SetExposureTime(double time); 
+    double GetExposureTimeMax();               // ch:设置曝光时间 | en:Set Exposure Time
+	
+	double GetExposureTimeMin();
+    bool SetExposureTime(double timeMax, double timeMin); 
+
     double GetGain();                       // ch:设置增益 | en:Set Gain
     bool SetGain(int gain);
     double GetFrameRate();                  // ch:设置帧率 | en:Set Frame Rate
     bool SetFrameRate(double rate);
 	MV_CAM_TRIGGER_SOURCE GetTriggerSource(void);              // ch:设置触发源 | en:Set Trigger Source
     bool SetTriggerSource(MV_CAM_TRIGGER_SOURCE source);
+
+	bool SetExposureMode(MV_CAM_EXPOSURE_MODE mode);
+
 	bool GetExposureTimeRange(double *timeMax, double *timeMin);
+
 	bool SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode);
+
 	bool SetImageSaveDirectory(const wchar_t* fileDir);
+
 	const wchar_t *GetImageSaveDirectory();
 
 	bool SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile);
 	MV_CAM_BALANCEWHITE_AUTO GetBalanceWhile();
+
+	bool SetPixelFormat(int value);
 
 
 	/*DeviceConnectionStatus	IEnumeration	"0：Active
@@ -100,7 +114,7 @@ private:
 	MV_CAM_TRIGGER_MODE GetTriggerModeByCamera();
 	double GetGainByCamera();
 	double GetFrameRateByCamera();
-	double GetExposureTimeByCamera();
+	//double GetExposureTimeByCamera();
 	MV_CAM_TRIGGER_SOURCE GetTriggerSourceByCamera(void);
 	double GetExposureTimeMaxByCamera();
 	double GetExposureTimeMinByCamera();
@@ -109,6 +123,8 @@ private:
 	int GetHeightMaxByCamera();
 	bool GetROIParameterByCamera(int *width, int *height, int *offsetX, int *offsetY);
 
+
+	static void __stdcall ReconnectDevice(unsigned int nMsgType, void* pUser);
 
 	/*ch:参数设置获取 | en:Parameters Get and Set*/
 	void GetParameter();       // ch:获取参数 | en:Get Parameter
@@ -120,6 +136,7 @@ private:
 	MV_CAM_TRIGGER_MODE   m_nTriggerMode;                       // ch:触发模式 | en:Trigger Mode
 	MV_CAM_TRIGGER_SOURCE   m_nTriggerSource;                     // ch:触发源 | en:Trigger Source
     MV_SAVE_IAMGE_TYPE   m_nSaveImageType;      // ch:保存图像格式 | en:Save Image Type
+	MV_CAM_EXPOSURE_MODE m_nExposureMode;
 
     /*ch:设备相关 | en:Device Related*/
     CCamera*      m_pcMyCamera;               // ch:CMyCamera封装了常用接口 | en:CMyCamera packed commonly used interface

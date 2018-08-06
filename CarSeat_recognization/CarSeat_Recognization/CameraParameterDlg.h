@@ -28,7 +28,7 @@ private:
 	// //增益db
 	double m_dGainDB;
 	// //设置曝光时间
-	UINT m_uExposureTime;
+	UINT m_uExposureTimeLower;
 	// //帧率
 	float m_fCameraFPS;
 
@@ -40,5 +40,5 @@ public:
 	virtual BOOL OnInitDialog();
 private:
 	// //自动曝光上限
-	UINT m_nExposureTimeUpper;
+	UINT m_uExposureTimeUpper;
 };

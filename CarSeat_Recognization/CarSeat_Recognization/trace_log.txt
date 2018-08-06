@@ -1,10 +1,10 @@
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xAC1E9621, ServerIp = 0xC0A801B1
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = cmd, text = (null)
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = hostGreetings, text = (null)
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = supportedVersions, text = (null)
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = version, text = V1.0
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = readerMode, text = Run
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = readerType, text = SIMATIC_RF640R
-Info	[CCarSeat_RecognizationDlg::testXML,595]value = id, text = 100000129
+Info	[CCarSeat_RecognizationDlg::testXML,691]value = cmd, text = (null)
+Info	[CCarSeat_RecognizationDlg::testXML,691]value = supportedVersions, text = (null)
+Info	[CCarSeat_RecognizationDlg::testXML,691]value = version, text = V1.0
+Info	[CCarSeat_RecognizationDlg::testXML,691]value = readerMode, text = Run
+Info	[CCarSeat_RecognizationDlg::testXML,691]value = readerType, text = SIMATIC_RF640R
+Info	[CCarSeat_RecognizationDlg::testXML,691]value = id, text = 100000129
+Error	[CKepServerSocket::initSocket,192]connect failed, err = 10061

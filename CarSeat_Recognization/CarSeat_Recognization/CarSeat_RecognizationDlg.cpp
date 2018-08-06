@@ -574,23 +574,35 @@ void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
 	int yStep = (clientRecRect.bottom - clientRecRect.top) / 5;
 	int xStep = (clientRecRect.right - clientRecRect.left) / 5;
 
+	//条形码静态框
 	CWnd * pWnd = GetDlgItem(IDC_BARCODE);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(0, 20, xStep, yStep, TRUE);
+		pWnd->MoveWindow(0, 21, xStep, yStep, TRUE);
 	}
+
+	// 成功失败以及失败率等，静态框
 	pWnd = GetDlgItem(IDC_REG_RATIO);
 	if (pWnd != nullptr)
 	{
 		pWnd->MoveWindow(0, 50 + yStep, xStep, yStep, TRUE);
 	}
 
+	//开始按钮
+	pWnd = GetDlgItem(IDC_BUTTON_BEGIN_JOB);
+	if (pWnd != nullptr)
+	{
+		pWnd->MoveWindow(0, 4 * yStep, xStep, yStep, TRUE);
+	}
+
+	// 模板图像
 	pWnd = GetDlgItem(IDC_IMAGE_PATTERN);
 	if (pWnd != nullptr)
 	{
 		pWnd->MoveWindow(xStep, 20, 2 * xStep, 4 * yStep, TRUE);
 	}
 
+	//相机视频
 	pWnd = GetDlgItem(IDC_IMAGE_REC);
 	if (pWnd != nullptr)
 	{

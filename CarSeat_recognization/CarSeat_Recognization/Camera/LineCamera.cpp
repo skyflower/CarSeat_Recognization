@@ -173,7 +173,10 @@ bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 		return false;
 	}
 	
-    int nRet = m_pcMyCamera->SetEnumValue("TriggerMode", m_nTriggerMode);
+    //int nRet = m_pcMyCamera->SetEnumValue("TriggerMode", m_nTriggerMode);
+	unsigned int enMode = MV_TRIGGER_MODE_OFF; //打开
+	int nRet = MV_CC_SetTriggerMode(m_pcMyCamera->GetHandle(), enMode);
+
     if (MV_OK != nRet)
     {
         return false;
@@ -198,7 +201,20 @@ bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
 {
     // ch:调节这两个曝光模式，才能让曝光时间生效
     // en:Adjust these two exposure mode to allow exposure time effective
-    int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", MV_EXPOSURE_MODE_TIMED);
+	//unsigned int value = timeMin;
+	//int nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), value);
+	//if (MV_OK != nRet)
+	//{
+	//	return false;
+	//}
+	//value = timeMax;
+	////nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), timeMin);
+	//nRet = MV_CC_SetAutoExposureTimeUpper(m_pcMyCamera->GetHandle(), value);
+	//if (MV_OK != nRet)
+	//{
+	//	return false;
+	//}
+    /*int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", MV_EXPOSURE_MODE_TIMED);
     if (MV_OK != nRet)
     {
         return false;
@@ -208,15 +224,15 @@ bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
 	if (nRet != MV_OK)
 	{
 		return false;
-	}
+	}*/
 
-    nRet = m_pcMyCamera->SetFloatValue("AutoExposureTimeLowerLimit", timeMin);
+    int nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeLowerLimit", timeMin);
     if (MV_OK != nRet)
     {
         return false;
     }
 
-	nRet = m_pcMyCamera->SetFloatValue("AutoExposureTimeUpperLimit", timeMax);
+	nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeUpperLimit", timeMax);
 	if (MV_OK != nRet)
 	{
 		return false;
@@ -297,17 +313,19 @@ bool CLineCamera::SetTriggerSource(MV_CAM_TRIGGER_SOURCE source)
     return true;
 }
 
-bool CLineCamera::SetExposureMode(MV_CAM_EXPOSURE_MODE mode)
-{
-	int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", mode);
-	if (MV_OK != nRet)
-	{
-		WriteError("Set ExposureMode Fail");
-		return false;
-	}
-	m_nExposureMode = mode;
-	return true;
-}
+//bool CLineCamera::SetExposureMode(MV_CAM_EXPOSURE_AUTO_MODE mode)
+//{
+//	//m_pcMyCamera->MV_CC_SetExposureAutoMode()
+//	int nRet = MV_CC_SetExposureAutoMode(m_pcMyCamera->GetHandle(), mode);
+//	//int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", mode);
+//	if (MV_OK != nRet)
+//	{
+//		WriteError("Set ExposureMode Fail");
+//		return false;
+//	}
+//	m_nExposureMode = mode;
+//	return true;
+//}
 
 bool CLineCamera::GetExposureTimeRange(double * timeMax, double * timeMin)
 {
@@ -319,12 +337,26 @@ bool CLineCamera::GetExposureTimeRange(double * timeMax, double * timeMin)
 bool CLineCamera::SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode)
 {
 
-	int nRet = m_pcMyCamera->SetEnumValue("ExposureAuto", mode);
+	/*int nRet = m_pcMyCamera->SetEnumValue("ExposureAuto", mode);
 	if (MV_OK != nRet)
 	{
 		WriteError("Set Software Trigger Fail");
 		return false;
+	}*/
+	int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", MV_EXPOSURE_MODE_TIMED);
+	if (MV_OK != nRet)
+	{
+		return nRet;
 	}
+
+	nRet = MV_CC_SetExposureAutoMode(m_pcMyCamera->GetHandle(), mode);
+	//int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", mode);
+	if (MV_OK != nRet)
+	{
+		WriteError("Set ExposureMode Fail");
+		return false;
+	}
+	//m_nExposureMode = mode;
 	m_nExposureAutoMode = mode;
 	return true;
 }
@@ -389,7 +421,10 @@ MV_CAM_BALANCEWHITE_AUTO CLineCamera::GetBalanceWhile()
 
 bool CLineCamera::SetPixelFormat(int value)
 {
-	int nRet = m_pcMyCamera->SetEnumValue("PixelFormat", value);
+	//int nRet = m_pcMyCamera->SetEnumValue("PixelFormat", value);
+	//unsigned int enValue = PixelType_Gvsp_RGB16_Packed;
+	int nRet = MV_CC_SetPixelFormat(m_pcMyCamera->GetHandle(), value);
+
 	if (MV_OK != nRet)
 	{
 		return -1;

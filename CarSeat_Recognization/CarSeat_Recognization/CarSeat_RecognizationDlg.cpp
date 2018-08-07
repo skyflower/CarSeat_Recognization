@@ -114,6 +114,8 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_CHOOSE_CAMERA, &CCarSeat_RecognizationDlg::OnChooseCamera)
 	ON_UPDATE_COMMAND_UI(ID_CHOOSE_CAMERA, &CCarSeat_RecognizationDlg::OnUpdateChooseCamera)
 	ON_BN_CLICKED(IDC_BUTTON_BEGIN_JOB, &CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob)
+	ON_COMMAND(ID_MENU_START_GRAB, &CCarSeat_RecognizationDlg::OnMenuStartGrab)
+	ON_COMMAND(ID_MENU_STOP_GRAB, &CCarSeat_RecognizationDlg::OnMenuStopGrab)
 END_MESSAGE_MAP()
 
 
@@ -713,6 +715,11 @@ std::wstring CCarSeat_RecognizationDlg::testGenerateBarcode()
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;
 
+	int tmpInt = rand() % 1000;
+
+	x = x + (tmpInt + 2031) / 7777;
+	x = x - (int)x;
+
 	for (int i = 0; i < 10; ++i)
 	{
 		x = 3.9999 * x * (1 - x);
@@ -776,6 +783,19 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 			return;
 		}
 		m_pLineCamera = new CLineCamera(pDevice);
+		const char* tmpImageDir = m_pParamManager->GetImageDirectory();
+		wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
+
+		if (tmpWPath != nullptr)
+		{
+			if (m_pLineCamera != nullptr)
+			{
+				m_pLineCamera->SetImageSaveDirectory(tmpWPath);
+				//m_pLineCamera->StartGrabbing();
+			}
+			delete[]tmpWPath;
+			tmpWPath = nullptr;
+		}
 	}
 	if (m_pLineCamera == nullptr)
 	{
@@ -801,27 +821,27 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		}
 
 
-		if (m_pLineCamera->SetExposureMode(MV_EXPOSURE_MODE_TIMED) == true)
+		if (m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_CONTINUOUS) != true)
 		{
 			TRACE0("Set exposure mode timed Failed\n");
 			WriteError("Set exposure mode time Failed");
 		}
 
-		if (m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_CONTINUOUS) == true)
+		/*if (m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_CONTINUOUS) == true)
 		{
 			TRACE0("Set auto exposure time mode Failed\n");
 			WriteError("Set auto exposure time mode Failed");
-		}
+		}*/
 
 		int tmpMax = m_pLabelManager->GetExposureTimeMax();
 		int tmpMin = m_pLabelManager->GetExposureTimeMin();
-		if (m_pLineCamera->SetExposureTime(tmpMax, tmpMin) == true)
+		if (m_pLineCamera->SetExposureTime(tmpMax, tmpMin) != true)
 		{
 			TRACE2("Set exposureTime Max = %d,Min = %d Failed\n", tmpMax, tmpMin);
 			WriteError("Set exposureTime Max = %d,Min = %d Failed", tmpMax, tmpMin);
 		}
 
-		if (m_pLineCamera->SetPixelFormat(0x02180014) == true)
+		if (m_pLineCamera->SetPixelFormat(PixelType_Gvsp_RGB16_Packed) != true)
 		{
 			TRACE0("Set PixelFormat Failed\n");
 			WriteError("Set PixelFormat Failed");
@@ -1167,5 +1187,25 @@ void CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob()
 	{
 		m_bBeginJob = true;
 		GetDlgItem(IDC_BUTTON_BEGIN_JOB)->SetWindowTextW(L"终止作业");
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnMenuStartGrab()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (m_pLineCamera->GetCameraStatus() == CCamera::CameraStatus::CAMERA_OPEN)
+	{
+		m_pLineCamera->StartGrabbing();
+	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnMenuStopGrab()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (m_pLineCamera->GetCameraStatus() == CCamera::CameraStatus::CAMERA_GRAB)
+	{
+		m_pLineCamera->StopGrabbing();
 	}
 }

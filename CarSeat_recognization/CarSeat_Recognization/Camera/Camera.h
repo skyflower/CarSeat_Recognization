@@ -29,6 +29,8 @@ public:
 
     static int EnumDevices(MV_CC_DEVICE_INFO_LIST* pstDevList);
 
+	void *GetHandle();
+
     // ch:打开设备 | en:Open Device
     int     Open(MV_CC_DEVICE_INFO* pstDeviceInfo);
 

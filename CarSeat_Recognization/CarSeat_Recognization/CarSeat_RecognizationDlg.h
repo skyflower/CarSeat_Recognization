@@ -142,4 +142,6 @@ public:
 	afx_msg void OnChooseCamera();
 	afx_msg void OnUpdateChooseCamera(CCmdUI *pCmdUI);
 	afx_msg void OnBnClickedButtonBeginJob();
+	afx_msg void OnMenuStartGrab();
+	afx_msg void OnMenuStopGrab();
 };

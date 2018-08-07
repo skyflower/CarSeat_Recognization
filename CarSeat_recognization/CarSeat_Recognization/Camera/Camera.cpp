@@ -4,7 +4,12 @@
 
 CCamera::CCamera()
 {
-    m_hDevHandle        = NULL;
+    m_hDevHandle = NULL; 
+	m_pBufForSaveImage = nullptr;
+	m_nBufSizeForSaveImage = 0;
+
+	m_pBufForDriver = nullptr;
+	m_nBufSizeForDriver = 0;
 }
 
 CCamera::~CCamera()
@@ -25,6 +30,11 @@ int CCamera::EnumDevices(MV_CC_DEVICE_INFO_LIST* pstDevList)
     }
 
     return MV_OK;
+}
+
+void * CCamera::GetHandle()
+{
+	return m_hDevHandle;
 }
 
 // ch:打开设备 | en:Open Device
@@ -122,6 +132,9 @@ bool CCamera::SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile)
 {
 	unsigned int nValue = balanceWhile; //一次白平衡模式
 	int nRet = MV_CC_SetBalanceWhiteAuto(m_hDevHandle, nValue);
+	//unsigned int nValue = MV_BALANCEWHITE_AUTO_ONCE; //一次白平衡模式
+	//nRet = MV_CC_SetBalanceWhiteAuto(m_handle, nValue);
+
 	if (MV_OK != nRet)
 	{
 		//printf("error: SetBalanceWhiteAuto fail [%x]\n", nRet);

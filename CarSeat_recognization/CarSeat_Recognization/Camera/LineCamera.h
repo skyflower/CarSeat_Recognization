@@ -79,7 +79,7 @@ public:
 	MV_CAM_TRIGGER_SOURCE GetTriggerSource(void);              // ch:…Ë÷√¥•∑¢‘¥ | en:Set Trigger Source
     bool SetTriggerSource(MV_CAM_TRIGGER_SOURCE source);
 
-	bool SetExposureMode(MV_CAM_EXPOSURE_MODE mode);
+	//bool SetExposureMode(MV_CAM_EXPOSURE_AUTO_MODE mode);
 
 	bool GetExposureTimeRange(double *timeMax, double *timeMin);
 

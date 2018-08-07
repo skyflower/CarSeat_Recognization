@@ -27,12 +27,12 @@ CKepServerSocket::~CKepServerSocket()
 
 bool CKepServerSocket::SetError()
 {
-	return SetValue(-1);
+	return SetValue(1);
 }
 
 bool CKepServerSocket::SetWarning()
 {
-	return SetValue(1);
+	return SetValue(-1);
 }
 
 bool CKepServerSocket::SetCorrect()

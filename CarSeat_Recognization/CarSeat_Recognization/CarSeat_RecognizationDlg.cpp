@@ -419,6 +419,10 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	sprintf_s(tmpResult.m_szImagePath, "%s\\%s", tmpImageDirectory.c_str(), tmpPath.c_str());
 	//memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
 
+	memset(result, 0, sizeof(result));
+	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", \
+		barcode.c_str(), RecogType.c_str(), reType.c_str());
+	m_barCode.SetWindowTextW(result);
 
 	if (barInternalType != typeInternalType)	// 识别类型不匹配
 	{
@@ -427,6 +431,11 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		*/
 		m_nFailCount++;
 		tmpResult.m_bIsCorrect = false;
+		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
+
+		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
+		m_RegRatio.SetWindowTextW(result);
+
 
 		// 人工输入对话框
 		CInputDlg dlg;
@@ -454,6 +463,12 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	{
 		m_nSuccessCount++;
 		tmpResult.m_bIsCorrect = true;
+
+		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
+
+		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
+		m_RegRatio.SetWindowTextW(result);
+
 		if (m_pImagePattern != nullptr)
 		{
 			//LPCTSTR;
@@ -476,18 +491,6 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		///  not implement
 		m_pKepServer->SetCorrect();
 	}
-
-
-	
-	float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
-
-	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000)/100);
-	m_RegRatio.SetWindowTextW(result);
-
-	memset(result, 0, sizeof(result));
-	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s",	\
-		barcode.c_str(), RecogType.c_str(), reType.c_str());
-	m_barCode.SetWindowTextW(result);
 
 	m_pRecogManager->add(tmpResult);
 }

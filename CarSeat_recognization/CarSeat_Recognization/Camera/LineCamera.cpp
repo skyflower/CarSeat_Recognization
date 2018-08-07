@@ -120,7 +120,7 @@ int CLineCamera::CloseDevice(void)
 
     if (m_pBufForSaveImage)
     {
-        free(m_pBufForSaveImage);
+        delete [] m_pBufForSaveImage;
         m_pBufForSaveImage = NULL;
     }
     m_nBufSizeForSaveImage  = 0;
@@ -1041,10 +1041,11 @@ void __stdcall CLineCamera::ReconnectDevice(unsigned int nMsgType, void* pUser)
 			while (1)
 			{
 				int nRet = MV_OK;
-				nRet = pThis->m_pcMyCamera->Open(pThis->m_pDevice);
+				nRet = pThis->OpenDevice();
+				//nRet = pThis->m_pcMyCamera->Open(pThis->m_pDevice);
 				if (MV_OK == nRet)
 				{
-					pThis->m_pcMyCamera->RegisterExceptionCallBack(ReconnectDevice, pUser);
+					//pThis->m_pcMyCamera->RegisterExceptionCallBack(ReconnectDevice, pUser);
 					bConnected = TRUE;
 					//pThis->EnableWindowWhenOpenNotStart();
 					break;

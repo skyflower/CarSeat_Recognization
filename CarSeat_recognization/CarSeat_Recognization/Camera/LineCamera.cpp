@@ -19,8 +19,8 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
 	, m_pDevice(pDevice)
     //, m_bStartGrabbing(false)
     , m_nTriggerMode(MV_TRIGGER_MODE_OFF)
-    , m_dExposureTimeMax(1500000)
-	, m_dExposureTimeMin(500000)
+    , m_nExposureTimeMax(1500000)
+	, m_nExposureTimeMin(500000)
     , m_dExposureGain(0)
     , m_dFrameRate(0)
     //, m_bSoftWareTriggerCheck(FALSE)
@@ -188,12 +188,12 @@ bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 // ch:获取曝光时间 | en:Get Exposure Time
 double CLineCamera::GetExposureTimeMax()
 {
-    return m_dExposureTimeMax;
+    return m_nExposureTimeMax;
 }
 
 double CLineCamera::GetExposureTimeMin()
 {
-	return m_dExposureTimeMin;
+	return m_nExposureTimeMin;
 }
 
 // ch:设置曝光时间 | en:Set Exposure Time
@@ -201,19 +201,21 @@ bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
 {
     // ch:调节这两个曝光模式，才能让曝光时间生效
     // en:Adjust these two exposure mode to allow exposure time effective
-	//unsigned int value = timeMin;
-	//int nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), value);
-	//if (MV_OK != nRet)
-	//{
-	//	return false;
-	//}
-	//value = timeMax;
-	////nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), timeMin);
-	//nRet = MV_CC_SetAutoExposureTimeUpper(m_pcMyCamera->GetHandle(), value);
-	//if (MV_OK != nRet)
-	//{
-	//	return false;
-	//}
+	unsigned int value = timeMin;
+	int nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), value);
+	if (MV_OK != nRet)
+	{
+		TRACE0("MV_CC_SetAutoExposureTimeLower failed\n");
+		//return false;
+	}
+	value = timeMax;
+	//nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), timeMin);
+	nRet = MV_CC_SetAutoExposureTimeUpper(m_pcMyCamera->GetHandle(), value);
+	if (MV_OK != nRet)
+	{
+		TRACE0("MV_CC_SetAutoExposureTimeUpper failed\n");
+		//return false;
+	}
     /*int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", MV_EXPOSURE_MODE_TIMED);
     if (MV_OK != nRet)
     {
@@ -226,19 +228,22 @@ bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
 		return false;
 	}*/
 
-    int nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeLowerLimit", timeMin);
+    nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeLowerLimit", timeMin);
     if (MV_OK != nRet)
     {
-        return false;
+		TRACE0("set AutoExposureTimeLowerLimit failed\n");
+        //return false;
     }
 
 	nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeUpperLimit", timeMax);
 	if (MV_OK != nRet)
 	{
+		TRACE0("set AutoExposureTimeUpperLimit failed\n");
 		return false;
 	}
-	m_dExposureTimeMax = timeMax;
-	m_dExposureTimeMin = timeMin;
+	
+	m_nExposureTimeMax = timeMax;
+	m_nExposureTimeMin = timeMin;
     return true;
 }
 
@@ -329,8 +334,8 @@ bool CLineCamera::SetTriggerSource(MV_CAM_TRIGGER_SOURCE source)
 
 bool CLineCamera::GetExposureTimeRange(double * timeMax, double * timeMin)
 {
-	*timeMax = m_dExposureTimeMax;
-	*timeMin = m_dExposureTimeMin;
+	*timeMax = m_nExposureTimeMax;
+	*timeMin = m_nExposureTimeMin;
 	return true;
 }
 
@@ -974,13 +979,13 @@ void CLineCamera::GetParameter()
     {
 		WriteError("Get Trigger Source Fail");
     }
-	m_dExposureTimeMax = GetExposureTimeMaxByCamera();
-	if (m_dExposureTimeMax == -1)
+	m_nExposureTimeMax = GetExposureTimeMaxByCamera();
+	if (m_nExposureTimeMax == -1)
 	{
 		WriteError("Get Exposure Time Max Fail");
 	}
-	m_dExposureTimeMin = GetExposureTimeMinByCamera();
-	if (m_dExposureTimeMin == -1)
+	m_nExposureTimeMin = GetExposureTimeMinByCamera();
+	if (m_nExposureTimeMin == -1)
 	{
 		WriteError("Get Exposure Time Min Fail");
 	}

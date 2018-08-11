@@ -61,6 +61,8 @@ CKepServerComDlg::CKepServerComDlg(CWnd* pParent /*=NULL*/)
 	, m_WriteFlagName(_T("Channel1.Device1.Tag2"))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	
+	pServerConnected = false;
 }
 
 void CKepServerComDlg::DoDataExchange(CDataExchange* pDX)
@@ -80,6 +82,7 @@ BEGIN_MESSAGE_MAP(CKepServerComDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CONNECT, &CKepServerComDlg::OnBnClickedConnect)
 //	ON_WM_TIMER()
 //ON_WM_TIMER()
+ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -166,7 +169,7 @@ HCURSOR CKepServerComDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-UINT MyThreadProc(LPVOID pParam)
+void  CKepServerComDlg::MyThreadProc(CKepServerComDlg*pThis, LPVOID pParam)
 {
 	OpcData_t* pOD = (OpcData_t*)pParam;
 	// server name
@@ -181,7 +184,7 @@ UINT MyThreadProc(LPVOID pParam)
 	if (TRUE == Opc.ConnectServer())
 	{
 		Opc.bOPCConnect = true;
-		pServerConnected = true;
+		pThis->pServerConnected = true;
 		CString read_flag = pOD->ReadTag;
 		CString write_flag = pOD->WriteTag;
 		COleVariant *ReadItem = new COleVariant[1];
@@ -191,13 +194,13 @@ UINT MyThreadProc(LPVOID pParam)
 		Opc.InitialOPC(opcServer, 1, 1, ReadItem, WriteItem);
 		Opc.PreRead();
 		Opc.PreWrite();
-		CDataCtrl CD;
-		CD.DataControl(&Opc);
+		
+		pThis->CD.DataControl(&Opc);
 		delete[] ReadItem;
 		delete[] WriteItem;
 	}
 
-	return 0;   // thread completed successfully  
+	//return 0;   // thread completed successfully  
 }
 
 void CKepServerComDlg::DoEvent()
@@ -214,33 +217,57 @@ void CKepServerComDlg::DoEvent()
 void CKepServerComDlg::OnBnClickedConnect()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	if (StrCmpW(m_ConncetResult, L"Success") == 0)
+	{
+		return;
+	}
 	UpdateData(true);
 	OpcData_t *OD = new OpcData_t;
 	OD->ServerName = m_ServerName;
 	OD->ReadTag = m_ReadFlagName;
 	OD->WriteTag = m_WriteFlagName;
-	CWinThread* pThread = AfxBeginThread(MyThreadProc, (LPVOID)OD);
+	m_pThread = std::thread(&CKepServerComDlg::MyThreadProc, this, (LPVOID)OD);
 	Sleep(200);
 	if (pServerConnected)
 	{
 		m_ConncetResult = L"Success";
 		UpdateData(false);
-		DWORD dwRet;
+		/*if (m_pThread.joinable())
+		{
+			m_pThread.join();
+		}*/
+		/*DWORD dwRet;
 		DoEvent();
 		do
 		{
-			dwRet = ::MsgWaitForMultipleObjects(1, &pThread->m_hThread, FALSE, INFINITE, QS_ALLINPUT);
+			dwRet = ::MsgWaitForMultipleObjects(1, &m_pThread->m_hThread, FALSE, INFINITE, QS_ALLINPUT);
 			if (dwRet != WAIT_OBJECT_0)
 			{
 				DoEvent();
 			}
 		} while ((dwRet != WAIT_OBJECT_0) && (dwRet != WAIT_FAILED));
-		delete OD;
+		*/
 	}
 	else 
 	{
 		m_ConncetResult = L"Failed";
 		UpdateData(false);
 	}
+	delete OD;
+	OD = nullptr;
+}
 
+
+void CKepServerComDlg::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	//TerminateThread(m_pThread->m_hThread);
+	if (m_pThread.joinable())
+	{
+		CD.exit();
+		m_pThread.join();
+	}
+
+	CDialogEx::OnClose();
 }

@@ -22,7 +22,7 @@ CQueryDlg::CQueryDlg(CWnd* pParent /*=NULL*/)
 
 CQueryDlg::~CQueryDlg()
 {
-
+	m_Image.Destroy();
 }
 
 void CQueryDlg::DoDataExchange(CDataExchange* pDX)
@@ -86,6 +86,8 @@ void CQueryDlg::OnBnClickedButtonQuery()
 		//wchar_t *tmpWchar = utils::CharToWchar(const_cast<char*>(p->m_szImagePath));
 		if (wcslen(wRecog.m_szImagePath) != 0)
 		{
+			
+			m_Image.Destroy();
 			HRESULT ret = m_Image.Load(wRecog.m_szImagePath);
 			if (ret != 0)
 			{
@@ -93,11 +95,53 @@ void CQueryDlg::OnBnClickedButtonQuery()
 			}
 			else
 			{
-				m_ImageDisplay.SetBitmap((HBITMAP)m_Image);
+				//HBITMAP hbitmap = (HBITMAP)::LoadBitmapW(AfxGetInstanceHandle(), wRecog.m_szImagePath);
+				//HBITMAP hbitmap = (HBITMAP)::LoadImageW(AfxGetInstanceHandle(), wRecog.m_szImagePath, IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR | LR_LOADFROMFILE);
+				//m_ImageDisplay.SetBitmap(hbitmap);
+				//m_ImageDisplay.ShowWindow(TRUE);
+				displayImage(&m_Image, &m_ImageDisplay);
+				/*CDC *pDC = this->GetDC();
+				RECT rect;
+				rect.left = 0;
+				rect.top = 100;
+				rect.right = rect.bottom = 500;
+				m_Image.Draw(pDC->GetSafeHdc(), rect);
+				this->ReleaseDC(pDC);*/
 			}
-
-			//delete[]tmpWchar;
-			//tmpWchar = nullptr;
 		}
+	}
+}
+
+
+BOOL CQueryDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+	m_ImageDisplay.ModifyStyle(0xF, SS_BITMAP);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 异常: OCX 属性页应返回 FALSE
+}
+
+
+void CQueryDlg::displayImage(CImage * pImage, CStatic * pStatic)
+{
+	if ((pImage == nullptr) || (pStatic == nullptr))
+	{
+		return;
+	}
+	if (pStatic->GetSafeHwnd() != NULL)
+	{
+		RECT rect;
+		pStatic->GetWindowRect(&rect);
+		ScreenToClient(&rect);
+
+		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left, \
+			rect.bottom - rect.top, TRUE);
+
+		pStatic->SetBitmap((HBITMAP)(*pImage));
+		
+		Invalidate();
 	}
 }

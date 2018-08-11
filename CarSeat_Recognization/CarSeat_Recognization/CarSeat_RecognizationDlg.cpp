@@ -150,7 +150,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SendMessage(WM_SIZE, m_nCxScreen * 5 / 7, m_nCyScreen * 5 / 7);
 
-	wchar_t tmpStr[] = L"K215-黑色-菱形纹理";
+	wchar_t tmpStr[] = L"条形码:\n条形码结果:\n自动识别结果:";
 	CString tmpBarcodeStr;
 	tmpBarcodeStr.Format(L"%s", tmpStr);
 	m_barCode.SetWindowTextW(tmpBarcodeStr);

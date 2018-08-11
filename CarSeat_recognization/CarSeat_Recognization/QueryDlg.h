@@ -31,6 +31,10 @@ private:
 	CStatic m_ImageDisplay;
 	CString m_szQueryResult;
 	CImage m_Image;
+
+
+	void displayImage(CImage * pImage, CStatic * pStatic);
 public:
 	afx_msg void OnBnClickedButtonQuery();
+	virtual BOOL OnInitDialog();
 };

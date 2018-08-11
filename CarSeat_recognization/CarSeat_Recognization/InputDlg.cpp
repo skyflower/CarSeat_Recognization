@@ -70,18 +70,15 @@ void CInputDlg::displayImage(CImage * pImage, CStatic * pStatic)
 	}
 	if (pStatic->GetSafeHwnd() != NULL)
 	{
-		//CDC *pDC = pStatic->GetDC();
 		RECT rect;
 		pStatic->GetWindowRect(&rect);
 		ScreenToClient(&rect);
-		//pImage->Draw(pDC->GetSafeHdc(), rect);
-		//pImage->StretchBlt(pDC->GetSafeHdc(), rect, 0);
-		//pStatic->ReleaseDC(pDC);
 
 		pStatic->SetBitmap((HBITMAP)(*pImage));
-		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left,	\
+
+		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left, \
 			rect.bottom - rect.top, TRUE);
-		//pStatic->ShowWindow(TRUE);
+		
 		Invalidate();
 	}
 }
@@ -250,7 +247,7 @@ void CInputDlg::OnSelchangeComboType()
 	// TODO: 在此添加控件通知处理程序代码
 
 #ifdef _DEBUG
-	testPrint();
+	//testPrint();
 #endif // _DEBUG
 
 	

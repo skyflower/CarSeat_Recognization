@@ -27,7 +27,9 @@ CKepServerSocket::~CKepServerSocket()
 
 bool CKepServerSocket::SetError()
 {
-	return SetValue(1);
+	static int i = 100;
+	i--;
+	return SetValue(i);
 }
 
 bool CKepServerSocket::SetWarning()
@@ -68,7 +70,7 @@ bool CKepServerSocket::SetValue(int value)
 	int length = XmlLength;
 	int i = 0;
 	bool ret = false;
-	while (i < 5)
+	while (i < 3)
 	{
 		ret = SendMessageToServer(valueXml, strlen(valueXml), recvXml, length);
 		if (ret == true)
@@ -79,6 +81,10 @@ bool CKepServerSocket::SetValue(int value)
 	}
 	if (ret == true)
 	{
+		if (length == 0)
+		{
+			return true;
+		}
 		// 解析服务器返回xml
 		TiXmlDocument lconfigXML;
 		//TiXmlParsingData data;
@@ -108,7 +114,7 @@ bool CKepServerSocket::SetValue(int value)
 		lconfigXML.Clear();
 		return ret;
 	}
-	return false;
+	return true;
 }
 
 bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffer, int &recvLen)
@@ -126,6 +132,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:%d", msg, len, WSAGetLastError());
 		closesocket(m_nSocket);
+		m_nSocket = 0;
 		WSACleanup();
 		return false;
 	}
@@ -137,6 +144,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 		closesocket(m_nSocket);
 		WSACleanup();
 		recvMsgLen = 0;
+		m_nSocket = 0;
 		return false;
 	}
 	recvLen = recvMsgLen;

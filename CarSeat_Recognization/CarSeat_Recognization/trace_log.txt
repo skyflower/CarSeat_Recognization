@@ -1,13 +1,290 @@
-Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FEA794, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A80104, ServerIp = 0xC0A801B1
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xAC1E9621, ServerIp = 0xC0A801B1
 Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FE4F0D, ServerIp = 0xC0A801B1
 Info	[CCarSeat_RecognizationDlg::testXML,694]value = cmd, text = (null)
+Info	[CCarSeat_RecognizationDlg::testXML,694]value = hostGreetings, text = (null)
 Info	[CCarSeat_RecognizationDlg::testXML,694]value = supportedVersions, text = (null)
 Info	[CCarSeat_RecognizationDlg::testXML,694]value = version, text = V1.0
 Info	[CCarSeat_RecognizationDlg::testXML,694]value = readerMode, text = Run
 Info	[CCarSeat_RecognizationDlg::testXML,694]value = readerType, text = SIMATIC_RF640R
 Info	[CCarSeat_RecognizationDlg::testXML,694]value = id, text = 100000129
-Error	[CKepServerSocket::initSocket,192]connect failed, err = 10061
-Error	[CLineCamera::GetParameter,980]Get Exposure Time Max Fail
-Error	[CLineCamera::GetParameter,985]Get Exposure Time Min Fail
-Error	[CCarSeat_RecognizationDlg::OnStartCameraI,841]Set exposureTime Max = 1500000,Min = 500000 Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484166
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484166
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::OpenButton,881]Open Fail, nRet = 2147484163
+Error	[CCarSeat_RecognizationDlg::OnStartCamera2,818]open button Failed
+Error	[CLineCamera::SaveJpg,1059]Save jpg fail
+Error	[CLineCamera::GetParameter,985]Get Exposure Time Max Fail
+Error	[CLineCamera::GetParameter,990]Get Exposure Time Min Fail
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Error	[CKepServerSocket::SendMessageToServer,133]send Failed, msg = <?xml version="1.0" encoding="utf-8"?>			<write>2147483647</write>, len = 66, Err:10053
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Error	[CKepServerSocket::SendMessageToServer,143]recv Failed, Err: 10053
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Error	[CKepServerSocket::SendMessageToServer,143]recv Failed, Err: 10053
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Error	[CKepServerSocket::SendMessageToServer,143]recv Failed, Err: 10053
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2
+Info	[CLineCamera::SaveImage,651]m_szImageDir = D
+Info	[CLineCamera::SaveImage,652]chImageName = 2

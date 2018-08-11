@@ -5,6 +5,7 @@
 #pragma once
 #include "afxwin.h"
 #include "Communication.h"
+#include <thread>
 
 // CKepServerComDlg 对话框
 class CKepServerComDlg : public CDialogEx
@@ -21,6 +22,10 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
+	std::thread m_pThread;
+	bool pServerConnected;
+	CDataCtrl CD;
+	static void MyThreadProc(CKepServerComDlg*pThis, LPVOID pParam);
 
 // 实现
 protected:
@@ -39,4 +44,5 @@ public:
 	CString m_ConncetResult;
 	CString m_WriteFlagName;
 	afx_msg void OnBnClickedConnect();
+	afx_msg void OnClose();
 };

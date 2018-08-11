@@ -113,7 +113,7 @@ def NetworkTask():
                     
                     parser.feed(recvData)
                     root = parser.close()
-                except xml.etree.ElementTree.ParseError, e:
+                except xml.etree.ElementTree.ParseError:
 
                     print(recvData)
                     print("parse Error, data len = %u" % len(recvData))

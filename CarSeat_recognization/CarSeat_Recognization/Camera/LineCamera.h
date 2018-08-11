@@ -39,8 +39,8 @@ private:
     double  m_dFrameRate;  // fps 
 
 	CCamera::CameraStatus m_status;
-	double m_dExposureTimeMax;
-	double m_dExposureTimeMin;
+	int m_nExposureTimeMax;
+	int m_nExposureTimeMin;
 
 	int m_nROI_Width;
 	int m_nROI_Height;

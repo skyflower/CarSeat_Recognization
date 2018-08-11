@@ -35,8 +35,8 @@ labelFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recog
 imagePath=D:\Cache\GithubCache\CarSeatImage
 patternImagePath=D:\Cache\GithubCache\CarSeat_Recognization\patternImage
 
-kepServerIp=127.0.0.1
-kepServerPort=37000
+kepServerIp=172.30.150.33
+kepServerPort=47005
 
 
 ##

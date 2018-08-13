@@ -21,3 +21,9 @@
 *.VC.db
 CarSeat_recognization/Recognization_module/python
 *.xml
+CarSeat_Recognization/CarSeat_Recognization/trace_log.txt
+CarSeat_Recognization/KepServerCom/Release/KepServerCom.iobj
+CarSeat_Recognization/KepServerCom/Release/KepServerCom.ipdb
+CarSeat_recognization/x64/Release/CarSeat_Recognization.iobj
+CarSeat_recognization/x64/Release/CarSeat_Recognization.ipdb
+CarSeat_Recognization/Recognization_module/test.py

@@ -154,8 +154,10 @@ void CImageClassify::run()
 
 std::wstring CImageClassify::compute(const char *filePath)
 {
-	char *buffer = NULL;
-	float reValue = 0;
+	char *tmpUpType = NULL;
+	float tmpUpValue = 0;
+	float tmpDownValue = 0;
+	char *tmpDownType = NULL;
 #ifdef PYTHON_TENSORFLOW
 
 	if ((m_pPyFunc == nullptr) || (filePath == nullptr) ||	\
@@ -165,26 +167,36 @@ std::wstring CImageClassify::compute(const char *filePath)
 	}
 	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "sss", filePath, m_szLabel, m_szGraph);
 
-	
 	Py_ssize_t len = 0;
+	if (presult != nullptr)
+	{
+		int ok = PyArg_ParseTuple(presult, "sfsf", &tmpUpType, &tmpUpValue, &tmpDownType, &tmpDownValue);
+	}
+
 	
-
-	int ok = PyArg_ParseTuple(presult, "sf", &buffer, &reValue);
-
 #endif // PYTHON_TENSORFLOW
 
-	if (buffer == nullptr)
+	WriteInfo("File = [%s], UP : type = [%s], value = [%f], DOWN: type = [%s], value = [%f]", filePath, tmpUpType, tmpUpValue, tmpDownType, tmpDownValue);
+
+	if ((tmpUpType == nullptr) || (tmpDownType == nullptr))
+	{
+		return std::wstring();
+	}
+	if (strcmp(tmpUpType, tmpDownType) != 0)
 	{
 		return std::wstring();
 	}
 	
-	std::string tmpBuffer(buffer);
+	std::string tmpBuffer(tmpUpType);
 
-	WriteInfo("File = [%s], type = [%s], value = %f", filePath, buffer, reValue);
-
-	wchar_t *tmpWType = utils::CharToWchar(buffer);
+	
+	wchar_t *tmpWType = utils::CharToWchar(tmpUpType);
 
 	std::wstring wstrBuffer(tmpWType);
+
+	delete tmpWType;
+	tmpWType = nullptr;
+
 	return wstrBuffer;
 }
 

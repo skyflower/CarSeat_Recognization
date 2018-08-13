@@ -121,7 +121,20 @@ void CLog::init()
 	m_nCurValid = 0;
 	m_bFlag = false;
 
-	m_pLog.open("trace_log.txt", std::ios::trunc | std::ios::in | std::ios::out);
+	
+	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
+
+	struct tm tmpTime;
+	localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
+
+	char logFileName[100] = { 0 };
+	memset(logFileName, 0, sizeof(logFileName));
+
+	sprintf_s(logFileName, "Log_%04d%02d%02d_%02d%02d%02d.txt", \
+		tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
+		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
+
+	m_pLog.open(logFileName, std::ios::trunc | std::ios::in | std::ios::out);
 }
 
 void CLog::SetFlag(bool flag)

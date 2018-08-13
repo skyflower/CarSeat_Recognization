@@ -262,6 +262,7 @@ void CCarSeat_RecognizationDlg::run()
 
 	std::wstring imagepath;
 	std::wstring reType;
+	std::string tmpImageDir(m_pParamManager->GetImageDirectory());
 	while (m_bThreadStatus)
 	{
 
@@ -313,7 +314,9 @@ void CCarSeat_RecognizationDlg::run()
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
 			std::string tmpPath = utils::WStrToStr(imagepath);
-			reType = m_pClassify->compute(tmpPath.c_str());
+			//m_pParamManager->GetImageDirectory();
+			std::string tmpImageAbsolutePath = tmpImageDir + "\\" + tmpPath;
+			reType = m_pClassify->compute(tmpImageAbsolutePath.c_str());
 			CheckAndUpdate(tmpBarcode, reType, tmpPath);
 		}
 		

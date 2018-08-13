@@ -28,8 +28,8 @@ lineName=Line01
 cameraName=C42F90ff3ceb
 
 ##
-graphFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_graph.pb
-labelFile=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Recognization_module\output_labels.txt
+graphFile=C:\Users\Administrator\Documents\Downloads\test1-master\carseat\part-classify\output_graph.pb
+labelFile=C:\Users\Administrator\Documents\Downloads\test1-master\carseat\part-classify\output_labels.txt
 
 //
 imagePath=D:\Cache\GithubCache\CarSeatImage

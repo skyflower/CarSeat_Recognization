@@ -160,7 +160,7 @@ void CCarSeat_RecognizationApp::initSystem()
 	//	m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
 	//}
 	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
-	m_pClassify->initPython("label_image_command_line", "seatClassify");
+	m_pClassify->initPython("label_image_command_line_two", "seatClassify");
 	//m_pNetworkTask->SetImageClassify(m_pClassify);
 
 	if (m_pClassify != nullptr)

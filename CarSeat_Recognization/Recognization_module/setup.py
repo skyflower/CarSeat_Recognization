@@ -11,14 +11,21 @@ from Cython.Distutils import build_ext
 
 ## compiler command [python setup.py build_ext]
 
-ext_module = Extension(
-                        "image_classify",
-            ["label_image_command_line.py"],
-            extra_compile_args=["/openmp", "/DEBUG"],
-            extra_link_args=["/DEBUG"],
-            )
+# ext_module = Extension(
+#                         "seatClassify",
+#             ["label_image_command_line_two.py"]
+#             #extra_compile_args=["/openmp", "/DEBUG"],
+#             #extra_link_args=["/DEBUG"],
+#             )
+#
+# setup(
+#     cmdclass = {'build_ext': build_ext},
+#         ext_modules = [ext_module],
+# )
+
+from distutils.core import setup
+from Cython.Build import cythonize
 
 setup(
-    cmdclass = {'build_ext': build_ext},
-        ext_modules = [ext_module],
+    ext_modules = cythonize("label_image_command_line_two.py")
 )

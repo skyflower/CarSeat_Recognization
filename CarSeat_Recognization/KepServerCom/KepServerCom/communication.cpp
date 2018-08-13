@@ -65,9 +65,6 @@ void CDataCtrl::DataControl(COPC* dOpc)
 	float data = 0;
 	char szRecvMsg[256] = { 0 };
 	char szOutMsg[256] = { 0 };
-	//WSANOTINITIALISED;
-	//aSocket.AsyncSelect();
-	//aSocket.CancelBlockingCall();
 	int acceptCount = 0;
 
 	

@@ -5,7 +5,8 @@
 #include "utils.h"
 #include <functional>
 #include "../network/NetworkTask.h"
-
+#include <cstdlib>
+#include <io.h>
 
 CParamManager *CParamManager::m_pInstance = nullptr;
 
@@ -27,9 +28,36 @@ m_nKepServerPort(-1)
 	memset(m_szLineName, 0, sizeof(m_szLineName));
 	memset(m_szCameraName, 0, sizeof(m_szCameraName));
 	memset(m_szPatternImagePath, 0, sizeof(m_szPatternImagePath));
+	memset(m_szCacheImagePath, 0, sizeof(m_szCacheImagePath));
 	
-
 	Init();
+
+
+	/// 建立日期目录存储图像文件
+	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
+	struct tm tmpTime;
+	localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
+
+	char logFileName[100] = { 0 };
+	memset(logFileName, 0, sizeof(logFileName));
+
+	sprintf_s(logFileName, "%s\\%04d%02d%02d", \
+		m_szImagePath, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday);
+
+	memset(m_szImagePath, 0, sizeof(m_szImagePath));
+	memcpy(m_szImagePath, logFileName, strlen(logFileName));
+	//判断目录是否存在，
+	if (_access(m_szImagePath, 0) != 0)
+	{
+		wchar_t *tmpPath = utils::CharToWchar(m_szImagePath);
+		if (tmpPath != nullptr)
+		{
+			_wmkdir(tmpPath);
+			delete tmpPath;
+			tmpPath = nullptr;
+		}
+		
+	}
 }
 
 
@@ -233,6 +261,11 @@ const char * CParamManager::GetPatternImagePath() const
 	return m_szPatternImagePath;
 }
 
+const char * CParamManager::GetCacheImagePath() const
+{
+	return m_szCacheImagePath;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -339,6 +372,13 @@ void CParamManager::Init()
 			//////
 			WriteError("init config.txt imagePath error");
 		}
+		//m_szCacheImagePath
+		if (utils::getValueByName(content, "cacheImagePath", m_szCacheImagePath) != true)
+		{
+			//////
+			WriteError("init config.txt cacheImagePath error");
+		}
+
 		if (utils::getValueByName(content, "lineName", m_szLineName) == false)
 		{
 			//////

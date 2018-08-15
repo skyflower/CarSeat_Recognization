@@ -17,6 +17,7 @@ CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
 
 	memcpy(m_szGraph, graphFile, strlen(graphFile));
 	memcpy(m_szLabel, labelFile, strlen(labelFile));
+	memset(m_szCacheImagePath, 0, sizeof(m_szCacheImagePath));
 
 	m_pReadyImage = new std::list<std::string>;
 	m_pType = new std::unordered_map<size_t, std::wstring>;
@@ -38,9 +39,14 @@ CImageClassify::~CImageClassify()
 }
 
 
-bool CImageClassify::initPython(const char *modulName,const char *functionName)
+bool CImageClassify::initPython(const char *modulName,const char *functionName, const char* cachePath)
 {
 #ifdef PYTHON_TENSORFLOW
+
+	if (cachePath != nullptr)
+	{
+		memcpy(m_szCacheImagePath, cachePath, strlen(cachePath));
+	}
 
 	Py_Initialize();
 	if (!Py_IsInitialized())
@@ -158,6 +164,7 @@ std::wstring CImageClassify::compute(const char *filePath)
 	float tmpUpValue = 0;
 	float tmpDownValue = 0;
 	char *tmpDownType = NULL;
+	
 #ifdef PYTHON_TENSORFLOW
 
 	if ((m_pPyFunc == nullptr) || (filePath == nullptr) ||	\
@@ -165,7 +172,7 @@ std::wstring CImageClassify::compute(const char *filePath)
 	{
 		return std::wstring();
 	}
-	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "sss", filePath, m_szLabel, m_szGraph);
+	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "ssss", filePath, m_szLabel, m_szGraph, m_szCacheImagePath);
 
 	Py_ssize_t len = 0;
 	if (presult != nullptr)

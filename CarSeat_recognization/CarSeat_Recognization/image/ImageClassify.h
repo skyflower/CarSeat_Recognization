@@ -36,7 +36,7 @@ public:
 	CImageClassify(const char*graphFile, const char* labelFile);
 	~CImageClassify();
 
-	bool initPython(const char *modulName,const char *functionName);
+	bool initPython(const char *modulName,const char *functionName, const char*cachePath);
 
 	/*
 	异步计算接口
@@ -83,7 +83,6 @@ private:
 	
 	std::list<std::string> *m_pReadyImage;
 	std::mutex m_Mutex;
-	//std::thread m_pThread;
 	bool m_bRunning;
 
 private:
@@ -93,6 +92,7 @@ private:
 	};
 	char m_szGraph[MAX_CHAR_LENGTH];
 	char m_szLabel[MAX_CHAR_LENGTH];
+	char m_szCacheImagePath[MAX_CHAR_LENGTH];
 };
 
 

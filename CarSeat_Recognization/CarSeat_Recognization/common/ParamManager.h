@@ -42,6 +42,9 @@ public:
 	const char* GetCameraName() const;
 	const char* GetPatternImagePath() const;
 
+	//临时存储识别模块的图像路径
+	const char* GetCacheImagePath() const;
+
 
 	std::wstring GetLocalName() { return m_strLocalName; }
 
@@ -93,6 +96,9 @@ private:
 
 	//相机名字或者序列号等
 	char m_szCameraName[100];
+
+	//识别模块临时存储的图像路径
+	char m_szCacheImagePath[256];
 
 	// 本机名
 	std::wstring m_strLocalName;

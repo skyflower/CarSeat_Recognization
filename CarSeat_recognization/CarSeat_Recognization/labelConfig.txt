@@ -22,7 +22,6 @@ ExposureTimeMax=1500000
 ExposureTimeMin=500000
 
 
-
 LoginUsrName=root
 LoginPasswd=12345678
 LoginInfoAutoSave=0

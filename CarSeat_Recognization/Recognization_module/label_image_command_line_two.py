@@ -25,18 +25,21 @@ input_name = "import/" + input_layer
 output_name = "import/" + output_layer
 label_path = ""
 model_path = ""
+path_save = ""
 global graph
 global sess
 
-def Init(label_file, model_file):
+def Init(label_file, model_file, cachePath):
     global graph
     global labels
     global bInitFlag
     global sess
+    global path_save
     if bInitFlag == False:
         labels = load_labels(label_file)
         graph = load_graph(model_file)
         sess = tf.Session(graph=graph)
+        path_save = cachePath
         bInitFlag = True
 
 def load_graph(model_file):
@@ -113,7 +116,7 @@ def shutter_down(image):
 #    image_path = "D:\\Cache\\GithubCache\\CarSeatImage\\20180805_164224.jpg"
 #    modelPath="C:\\Users\\Administrator\\Documents\\Downloads\\test1-master\\carseat\\part-classify\\output_graph.pb"
 #    labelPath="C:\\Users\\Administrator\\Documents\\Downloads\\test1-master\\carseat\\part-classify\\output_labels.txt"
-def seatClassify(image_path, labelPath, modelPath):
+def seatClassify(image_path, labelPath, modelPath, cachePath):
     global bInitFlag
     global graph
     global input_height
@@ -126,13 +129,14 @@ def seatClassify(image_path, labelPath, modelPath):
     global output_name
     global labels
     global sess
+    global path_save
 
     #PATH_TO_TEST_IMAGES_DIR = r'/home/yqw/CarSeat_Recognization_Picture/test'
     #IMAGES = os.listdir(PATH_TO_TEST_IMAGES_DIR)
     # if len(IMAGES) == 0:
     #     tf.logging.warning('No files found')
     if bInitFlag == False:
-        Init(labelPath, modelPath)
+        Init(labelPath, modelPath, cachePath)
         bInitFlag = True
 
     input_height = 299
@@ -161,7 +165,7 @@ def seatClassify(image_path, labelPath, modelPath):
         #     image_path = os.path.join(PATH_TO_TEST_IMAGES_DIR, image)
     index = image_path.rfind('\\')
     #path_save = image_path[:index]
-    path_save = "D:\\Cache\\GithubCache\\tmpImage"
+    #path_save = "D:\\Cache\\GithubCache\\tmpImage"
     image = image_path[index + 1:]
     #print(image)
 

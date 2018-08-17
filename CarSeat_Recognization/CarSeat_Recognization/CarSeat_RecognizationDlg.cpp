@@ -230,9 +230,6 @@ HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 
 void CCarSeat_RecognizationDlg::run()
 {
-	//std::wstring preImagePath;
-	//std::wstring barcode;
-	//Sleep(2000);
 	std::unique_lock<std::mutex> lineCameraLock(m_LineCameraMutex);
 
 	m_pNetworkTask = CNetworkTask::GetInstance();
@@ -241,8 +238,6 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		return;
 	}
-	//const char* tmpImageDir = m_pParamManager->GetImageDirectory();
-	//char *tmpPointer = const_cast<char*>(tmpImageDir);
 	
 	if (m_pParamManager != nullptr)
 	{
@@ -285,7 +280,9 @@ void CCarSeat_RecognizationDlg::run()
 			m_pKepServer->HeartBlood();
 		}
 		
-
+		/*
+		读取条形码
+		*/
 		imagepath = std::wstring();
 		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
 		if (tmpBarcode.size() != 0)

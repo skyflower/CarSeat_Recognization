@@ -90,5 +90,10 @@ private:
 	char m_szReadType[16];
 	char m_szReadMode[16];
 
+	/*
+	当前条形码
+	*/
+	char m_szCurrentValue;
+
 };
 

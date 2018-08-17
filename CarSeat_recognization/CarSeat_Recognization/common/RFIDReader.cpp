@@ -32,7 +32,26 @@ CRFIDReader::~CRFIDReader()
 std::wstring CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8Î»ÓÐÐ§
-	return std::wstring();
+	
+	wchar_t tmp[20];
+	memset(tmp, 0, sizeof(tmp));
+	static double x = 0.000012345678;
+
+	clock_t tmpInt = clock();
+
+	x = x + (tmpInt + 2031) / 7777;
+	x = x - (int)x;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		x = 3.9999 * x * (1 - x);
+	}
+	double tmpValue = x * pow(10, 8);
+	int hiValue = tmpValue;
+	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
+	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"N%07d%08d", hiValue, lowValue);
+
+	return std::wstring(tmp);
 }
 
 bool CRFIDReader::init()

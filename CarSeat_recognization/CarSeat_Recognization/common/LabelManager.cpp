@@ -39,7 +39,20 @@ CLabelManager::~CLabelManager()
 
 std::wstring CLabelManager::GetInternalTypeByBarcode(std::wstring barcode)
 {
-	return barcode;
+	if (barcode.size() < 5)
+	{
+		return std::wstring();
+	}
+
+	wchar_t tmp[10] = { 0 };
+	memset(tmp, 0, sizeof(tmp));
+
+	for (int i = 0; (i < 3) && (i + 5 < barcode.size()); ++i)
+	{
+		tmp[i] = barcode[i + 5];
+	}
+
+	return std::wstring(tmp);
 }
 
 std::wstring CLabelManager::GetInternalTypeByClassifyType(std::wstring type)
@@ -360,9 +373,15 @@ void CLabelManager::UpdateBarcode(const char *xmlContent, size_t len)
 }
 std::wstring CLabelManager::GetExternalTypeByBarcode(std::wstring barcode)
 {
+	/*
+	截取中间的6-8位作为条形码类型
+	*/
+	
+	std::wstring tmpInternalType = GetInternalTypeByBarcode(barcode);
+
 	if (m_pBarcode != nullptr)
 	{
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->find(barcode);
+		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->find(tmpInternalType);
 		if (iter != m_pBarcode->end())
 		{
 			return iter->second;

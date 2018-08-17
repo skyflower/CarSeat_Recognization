@@ -22,8 +22,13 @@ CRFIDReader::CRFIDReader():
 
 CRFIDReader::~CRFIDReader()
 {
-	if (m_nSocket == -1)
+
+	stopRead(m_nSocket);
+	hostGoodbye(m_nSocket);
+	
+	if (m_nSocket != -1)
 	{
+		
 		closesocket(m_nSocket);
 		WSACleanup();
 	}

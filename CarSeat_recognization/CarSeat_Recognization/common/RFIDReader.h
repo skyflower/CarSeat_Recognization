@@ -5,12 +5,12 @@
 class CRFIDReader
 {
 public:
-	enum class Status
+	/*enum class Status
 	{
 		RFID_INIT,
 		RFID_CONNECT
 		
-	};
+	};*/
 
 	enum class ErrorType
 	{

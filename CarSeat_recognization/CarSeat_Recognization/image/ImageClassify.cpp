@@ -189,20 +189,29 @@ std::wstring CImageClassify::compute(const char *filePath)
 	{
 		return std::wstring();
 	}
-	if ((strlen(tmpUpType) <= 2) || (strlen(tmpDownType) <= 4))
-	{
-		return std::wstring();
-	}
 
-	if (strncmp(tmpUpType, tmpDownType, strlen(tmpUpType) - 2) != 0)
+	/*
+	按照命名方式截取，*_up, *_down，前面的整体类型
+	*/
+	size_t tmpDownLength = strlen(tmpDownType);
+	size_t tmpUpLength = strlen(tmpUpType);
+
+	if ((tmpUpLength <= 3) || (tmpDownLength <= 5))
 	{
-		
 		return std::wstring();
 	}
 	
-	std::string tmpBuffer(tmpUpType);
+	if (strncmp(tmpUpType, tmpDownType, strlen(tmpUpType) - 3) != 0)
+	{
+		return std::wstring();
+	}
+	char tmpResultType[100] = { 0 };
+	memset(tmpResultType, 0, sizeof(tmpResultType));
+	memcpy(tmpResultType, tmpUpType, sizeof(char) * (tmpUpLength - 3));
 
-	wchar_t *tmpWType = utils::CharToWchar(tmpUpType);
+	//std::string tmpBuffer(tmpUpType);
+
+	wchar_t *tmpWType = utils::CharToWchar(tmpResultType);
 
 	std::wstring wstrBuffer(tmpWType);
 

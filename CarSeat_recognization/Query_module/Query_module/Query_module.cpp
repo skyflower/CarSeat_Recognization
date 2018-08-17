@@ -288,7 +288,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 	
 
 
-	char mDateBeign[20];
+	/*char mDateBeign[20];
 	char mDateEnd[20];
 	char mTimeBegin[20];
 	char mTimeEnd[20];
@@ -297,13 +297,14 @@ void CQuery_ModuleApp::OnButtonChoose()
 	char mBarcodeBegin[50];
 	char mBarcodeEnd[50];
 	char mSeatType[50];
-	char mMethodType[20];
+	char mMethodType[20];*/
 
 	char tmpTime[20] = { 0 };
 	memset(tmpTime, 0, sizeof(tmpTime));
 
 	time_t now_time = time(NULL);
-	tm *tmp_now_tm = localtime(&now_time);
+	tm tmp_now_tm;
+	localtime_s(&tmp_now_tm, &now_time);
 
 	
 

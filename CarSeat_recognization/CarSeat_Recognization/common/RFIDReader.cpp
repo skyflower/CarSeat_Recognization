@@ -31,6 +31,7 @@ CRFIDReader::~CRFIDReader()
 
 std::wstring CRFIDReader::readBarcode()
 {
+	//N160310118880001   6-8Î»ÓÐÐ§
 	return std::wstring();
 }
 

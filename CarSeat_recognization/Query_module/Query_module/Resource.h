@@ -25,7 +25,6 @@
 #define IDS_EDIT_MENU                   306
 #define IDR_RIBBON                      307
 #define IDD_DIALOG_CONDITION            310
-#define IDD_DIALOG1                     312
 #define IDD_DIALOG_LOGIN                312
 #define IDC_STATIC_TIME                 1000
 #define IDC_STATIC_LINE                 1001

@@ -287,7 +287,7 @@ void CCarSeat_RecognizationDlg::run()
 		
 
 		imagepath = std::wstring();
-		std::wstring tmpBarcode = testGenerateBarcode();// m_pRFIDReader->readBarcode();
+		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
 		if (tmpBarcode.size() != 0)
 		{
 			if (m_pLineCamera == nullptr)

@@ -377,3 +377,4 @@ void CConditonDlg::OnSelchangeLineBegin()
 		mBarcodeBegin.SetCurSel(sel);
 	}
 }
+

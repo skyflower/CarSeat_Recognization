@@ -1,6 +1,8 @@
 #include "../stdafx.h"
 #include "Log.h"
-
+#include "utils.h"
+#include <cstdlib>
+#include <io.h>
 
 CLog *CLog::m_pInstance = nullptr;
 
@@ -130,8 +132,22 @@ void CLog::init()
 	char logFileName[100] = { 0 };
 	memset(logFileName, 0, sizeof(logFileName));
 
-	sprintf_s(logFileName, "Log_%04d%02d%02d_%02d%02d%02d.txt", \
-		tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
+	char *LogDir = "./Log/";
+
+	if (_access(LogDir, 0) != 0)
+	{
+		wchar_t *tmpPath = utils::CharToWchar(LogDir);
+		if (tmpPath != nullptr)
+		{
+			_wmkdir(tmpPath);
+			delete tmpPath;
+			tmpPath = nullptr;
+		}
+
+	}
+
+	sprintf_s(logFileName, "%sLog_%04d%02d%02d_%02d%02d%02d.txt", \
+		LogDir, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
 		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 
 	m_pLog.open(logFileName, std::ios::trunc | std::ios::in | std::ios::out);

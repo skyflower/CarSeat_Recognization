@@ -189,14 +189,19 @@ std::wstring CImageClassify::compute(const char *filePath)
 	{
 		return std::wstring();
 	}
-	if (strcmp(tmpUpType, tmpDownType) != 0)
+	if ((strlen(tmpUpType) <= 2) || (strlen(tmpDownType) <= 4))
 	{
+		return std::wstring();
+	}
+
+	if (strncmp(tmpUpType, tmpDownType, strlen(tmpUpType) - 2) != 0)
+	{
+		
 		return std::wstring();
 	}
 	
 	std::string tmpBuffer(tmpUpType);
 
-	
 	wchar_t *tmpWType = utils::CharToWchar(tmpUpType);
 
 	std::wstring wstrBuffer(tmpWType);

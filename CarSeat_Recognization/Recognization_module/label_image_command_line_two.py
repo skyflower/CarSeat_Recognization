@@ -170,6 +170,9 @@ def seatClassify(image_path, labelPath, modelPath, cachePath):
     #print(image)
 
     image_read = Image.open(image_path)
+
+    image_read = image_read.resize((624, 832))
+
     img_up = shutter_up(image_read)
     img_down = shutter_down(image_read)
 

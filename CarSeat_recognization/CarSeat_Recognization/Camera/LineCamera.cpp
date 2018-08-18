@@ -374,6 +374,7 @@ bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
 	}
 
 	//memcpy(m_szImageDir, fileDir, strlen(fileDir));
+	memset(m_szImageDir, 0, sizeof(m_szImageDir));
 	size_t length = wcslen(fileDir);
 	if (std::find(fileDir, fileDir + length, L'\\') != (fileDir + length))
 	{
@@ -540,6 +541,7 @@ std::wstring CLineCamera::SaveImage()
 {
     if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
+		WriteError("camera status not grab");
         return std::wstring();
     }
     // ch:获取1张图 | en:get one image
@@ -580,6 +582,7 @@ std::wstring CLineCamera::SaveImage()
 
     while(nImageNum)
     {
+		memset(m_pBufForDriver, 0, sizeof(unsigned char) * m_nBufSizeForDriver);
         nRet = m_pcMyCamera->GetOneFrameTimeout(m_pBufForDriver, &nDataLen, m_nBufSizeForDriver, &stImageInfo, 1000);
         if (nRet == MV_OK)
         {
@@ -612,7 +615,7 @@ std::wstring CLineCamera::SaveImage()
             stParam.nBufferSize = m_nBufSizeForSaveImage;  // ch:存储节点的大小 | en:Buffer node size
             stParam.nJpgQuality     = 99;       // ch:jpg编码，仅在保存Jpg图像时有效。保存BMP时SDK内忽略该参数
                                                 // en:jpg encoding, only valid when saving as Jpg. SDK ignore this parameter when saving as BMP
-
+			memset(m_pBufForSaveImage, 0, sizeof(unsigned char) * m_nBufSizeForSaveImage);
             nRet = m_pcMyCamera->SaveImage(&stParam);
             if(MV_OK != nRet)
             {
@@ -682,6 +685,7 @@ std::wstring CLineCamera::SaveImage()
         }
         else
         {
+			WriteError("GetOneFrameTimeout failed");
             break;
         }
     }
@@ -1068,6 +1072,7 @@ void __stdcall CLineCamera::ReconnectDevice(unsigned int nMsgType, void* pUser)
 {
 	if (nMsgType == MV_EXCEPTION_DEV_DISCONNECT)
 	{
+		WriteInfo("camera reconnect");
 		CLineCamera* pThis = (CLineCamera*)pUser;
 
 		//pThis->EnableWindowWhenClose();

@@ -254,21 +254,19 @@ void CCarSeat_RecognizationDlg::run()
 		}
 		
 	}
+	if (m_pRFIDReader == nullptr)
+	{
+		m_pRFIDReader = new CRFIDReader();
+	}
 
 	std::wstring imagepath;
 	std::wstring reType;
 	std::string tmpImageDir(m_pParamManager->GetImageDirectory());
 	while (m_bThreadStatus)
 	{
-
-
-		/*
-		
-		
-		*/
 		if (m_bBeginJob == false)
 		{
-			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(2000);
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 			std::this_thread::sleep_for(a);
 			continue;
 		}
@@ -279,12 +277,34 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			m_pKepServer->HeartBlood();
 		}
-		
+		if (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK)
+		{
+			size_t rfidIP = m_pParamManager->GetBarcodeIp();
+			size_t rfidPort = m_pParamManager->GetBarcodePort();
+			m_pRFIDReader->initRFID(rfidIP, rfidPort);
+			m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
+
+			std::chrono::duration<int, std::milli> b = std::chrono::milliseconds(100);
+			std::this_thread::sleep_for(b);
+		}
+
 		/*
 		读取条形码
 		*/
 		imagepath = std::wstring();
+
 		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
+		if (m_pParamManager->GetBarcodeTime() < 100)
+		{
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
+			std::this_thread::sleep_for(a);
+		}
+		else
+		{
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(m_pParamManager->GetBarcodeTime());
+			std::this_thread::sleep_for(a);
+		}
+
 		if (tmpBarcode.size() != 0)
 		{
 			if (m_pLineCamera == nullptr)
@@ -328,7 +348,7 @@ void CCarSeat_RecognizationDlg::run()
 				CheckAndUpdate(barcode, type);
 			}
 		}*/
-		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(200);
+		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 		std::this_thread::sleep_for(a);
 
 		
@@ -457,7 +477,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		///  not implement
 		if (m_pKepServer != nullptr)
 		{
-			m_pKepServer->SetError();
+			//m_pKepServer->SetError();
 		}
 		
 	}
@@ -491,7 +511,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		////// send message to server
 		////
 		///  not implement
-		m_pKepServer->SetCorrect();
+
+		//m_pKepServer->SetCorrect();
 	}
 
 	m_pRecogManager->add(tmpResult);
@@ -510,10 +531,12 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			if (m_pCameraManager->EnumCamera() == false)
 			{
 				TRACE0("init camera Failed\n");
+				WriteError("init camera Failed");
 			}
 		}
 		
-		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount());
+		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount()); 
+		WriteInfo("camera count = %u\n", m_pCameraManager->GetCameraCount());
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
 			const char *tmpName = m_pParamManager->GetCameraName();
@@ -546,6 +569,7 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			
 		}
 	}
+	WriteInfo("init CameraModule success");
 }
 
 SIZE CCarSeat_RecognizationDlg::adjustRecSize(SIZE imageSize, SIZE recSize)

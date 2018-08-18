@@ -29,7 +29,7 @@ public:
 	unsigned int GetKepServerPort();
 
 
-	std::vector<std::wstring> *GetFtpParameter();
+	//std::vector<std::wstring> *GetFtpParameter();
 	std::wstring FindCameraByLineID(std::wstring lineID);
 
 	unsigned int GetBarcodeIp();
@@ -44,6 +44,10 @@ public:
 
 	//临时存储识别模块的图像路径
 	const char* GetCacheImagePath() const;
+
+	size_t GetBarcodeTime() const;
+
+	const char* GetBarcodeResetParam() const;
 
 
 	std::wstring GetLocalName() { return m_strLocalName; }
@@ -79,6 +83,12 @@ private:
 	//获取条形码的端口号
 	unsigned int m_nBarcodePort;
 
+	char m_szBarcodeResetParam[100];
+
+
+	//从获取条形码到拍照的延迟时间
+	size_t m_nBarcodeTime;
+
 	// kepServer模块通信ip地址
 	unsigned int m_nKepServerIp;
 
@@ -104,7 +114,7 @@ private:
 	std::wstring m_strLocalName;
 
 	//ftp用户名密码以及图像的存储路径
-	std::vector<std::wstring> *m_pFtp;
+	//std::vector<std::wstring> *m_pFtp;
 
 	//graph
 	std::string m_szGraphFile;

@@ -54,6 +54,7 @@ bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
 		WriteError("icmpSendEcho failed clientIp = 0x%X, ServerIp = 0x%X", clientIp, serverIp);
 		IcmpCloseHandle(IcmpHandle);
 		WSACleanup();
+		IcmpHandle = INVALID_HANDLE_VALUE;
 		return false;
 	}
 	

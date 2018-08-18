@@ -9,7 +9,7 @@
 CKepServerSocket::CKepServerSocket(unsigned int ip, unsigned int port):
 	m_nIp(ip),
 	m_nPort(port),
-	m_nSocket(-1)
+	m_nSocket(0)
 {
 	//m_nSocket = initSocket(ip, port);
 }
@@ -158,7 +158,7 @@ void CKepServerSocket::resetConnect()
 
 bool CKepServerSocket::GetSocketStatus()
 {
-	if (m_nSocket == -1)
+	if (m_nSocket == 0)
 	{
 		return false;
 	}

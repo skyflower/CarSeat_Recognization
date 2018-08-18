@@ -68,7 +68,9 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 
 
 	//初始化参数模块，标签模块，网络模块，识别模块
+	WriteInfo("enter init system");
 	initSystem();
+	WriteInfo("exit init system, success");
 
 	AfxEnableControlContainer();
 
@@ -153,23 +155,30 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 void CCarSeat_RecognizationApp::initSystem()
 {
 	m_pParamManager = CParamManager::GetInstance();
+	//WriteInfo("get CParamManager success");
 	m_pLog = CLog::GetInstance();
 	//m_pNetworkTask = CNetworkTask::GetInstance();
 	//if (m_pNetworkTask != nullptr)
 	//{
 	//	m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
 	//}
+	//WriteInfo("Get plog success");
 	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
+	//WriteInfo("Get m_pClassify success");
 	m_pClassify->initPython("label_image_command_line_two", "seatClassify", m_pParamManager->GetCacheImagePath());
 	//m_pNetworkTask->SetImageClassify(m_pClassify);
-
+	//WriteInfo("Get initPython success");
 	if (m_pClassify != nullptr)
 	{
 		//m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
 	}
+	
 
 	m_pLabelManager = new CLabelManager();
+	//WriteInfo("Get m_pLabelManager success");
 	m_pCameraManager = CCameraManager::GetInstance();
+
+	//WriteInfo("initSystem Success");
 
 }
 

@@ -11,7 +11,7 @@
 CParamManager *CParamManager::m_pInstance = nullptr;
 
 CParamManager::CParamManager() :
-m_pFtp(nullptr),
+//m_pFtp(nullptr),
 m_pLineCamera(nullptr),
 m_nLocalIp(-1),
 m_nServerIp(-1),
@@ -21,7 +21,8 @@ m_nTestServerPort(-1),
 m_nBarcodeIp(-1),
 m_nBarcodePort(-1),
 m_nKepServerIp(-1),
-m_nKepServerPort(-1)
+m_nKepServerPort(-1),
+m_nBarcodeTime(1)
 {
 	
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
@@ -29,6 +30,8 @@ m_nKepServerPort(-1)
 	memset(m_szCameraName, 0, sizeof(m_szCameraName));
 	memset(m_szPatternImagePath, 0, sizeof(m_szPatternImagePath));
 	memset(m_szCacheImagePath, 0, sizeof(m_szCacheImagePath));
+	//m_szBarcodeResetParam
+	memset(m_szBarcodeResetParam, 0, sizeof(m_szBarcodeResetParam));
 	
 	Init();
 
@@ -63,12 +66,12 @@ m_nKepServerPort(-1)
 
 CParamManager::~CParamManager()
 {
-	if (m_pFtp != nullptr)
+	/*if (m_pFtp != nullptr)
 	{
 		m_pFtp->clear();
 		delete m_pFtp;
 		m_pFtp = nullptr;
-	}
+	}*/
 	if (m_pLineCamera != nullptr)
 	{
 		//m_pLineCamera->clear();
@@ -150,6 +153,7 @@ unsigned int CParamManager::__auxLocalIP()
 		memset(buf, 0, sizeof(buf));
 		inet_ntop(AF_INET, &sa->sin_addr.S_un.S_addr, buf, sizeof(buf));
 		TRACE1("IP = 0x%X\n", sa->sin_addr.S_un.S_addr);
+		WriteInfo("IP = 0x%X", sa->sin_addr.S_un.S_addr);
 		int tmpIp = (sa->sin_addr.S_un.S_un_b.s_b1 << 24) | \
 			(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
 			(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
@@ -159,12 +163,15 @@ unsigned int CParamManager::__auxLocalIP()
 			nIp = tmpIp;
 			break;
 		}
+		WriteError("ip reach failed");
 		curr = curr->ai_next;
 	}
 
 	WSACleanup();
 	clock_t endTime = clock();
 	TRACE1("get localIp cost Time = %u", endTime - startTime);
+	WriteInfo("get localIp cost Time = %u", endTime - startTime);
+
 
 	return nIp;
 }
@@ -199,10 +206,10 @@ unsigned int CParamManager::GetKepServerPort()
 	return m_nKepServerPort;
 }
 
-std::vector<std::wstring>* CParamManager::GetFtpParameter()
-{
-	return m_pFtp;
-}
+//std::vector<std::wstring>* CParamManager::GetFtpParameter()
+//{
+//	return m_pFtp;
+//}
 
 
 std::wstring CParamManager::FindCameraByLineID(std::wstring lineID)
@@ -266,6 +273,16 @@ const char * CParamManager::GetCacheImagePath() const
 	return m_szCacheImagePath;
 }
 
+size_t CParamManager::GetBarcodeTime() const
+{
+	return m_nBarcodeTime;
+}
+
+const char * CParamManager::GetBarcodeResetParam() const
+{
+	return m_szBarcodeResetParam;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -280,15 +297,15 @@ void CParamManager::Init()
 		fseek(fp, 0, SEEK_SET);
 		fread_s(content, length, 1, length, fp);
 		
-		if (m_pFtp == nullptr)
+		/*if (m_pFtp == nullptr)
 		{
 			m_pFtp = new std::vector<std::wstring>;
-		}
-		ret = utils::parseVector(content, "ftpLogin", m_pFtp);
+		}*/
+		/*ret = utils::parseVector(content, "ftpLogin", m_pFtp);
 		if(ret == false)
 		{
 			WriteError("ftp Parameter init Failed");
-		}
+		}*/
 		if (m_pLineCamera == nullptr)
 		{
 			m_pLineCamera = new std::unordered_map<std::wstring, std::wstring>;
@@ -347,6 +364,12 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
+		if (utils::getValueByName(content, "barcodeTimeout", tmpStr) == true)
+		{
+			m_nBarcodeTime = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
 		if (utils::getValueByName(content, "testServerPort", tmpStr) == true)
 		{
 			m_nTestServerPort = atoi(tmpStr);
@@ -395,6 +418,14 @@ void CParamManager::Init()
 			//////
 			WriteError("init config.txt patternImagePath error");
 		}
+
+		//m_szPatternImagePath
+		if (utils::getValueByName(content, "barcodeResetParam", m_szBarcodeResetParam) == false)
+		{
+			//////
+			WriteError("init config.txt barcodeResetParam error");
+		}
+
 		//WriteInfo("cameraName = %s", m_szCameraName);
 		//memset(tmpStr, 0, sizeof(tmpStr));
 

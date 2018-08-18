@@ -8,16 +8,17 @@ testClientPort=10909
 testServerPort=10909
 
 
-kepServerName=WinCC
-kepServerLabel=tag
-
-
-## ftp登录需要的用户名和账号，以及存储图像的路径
-ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
+## ftp登录需要的用户名和账号，以及存储图像的路径，没有使用
+##ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
 
 ## 获取条形码的ip地址和端口号
-barcodeIp=192.168.2.253
-barcodePort=18795
+barcodeIp=10.109.78.19
+barcodePort=10001
+barcodeResetParam=0025000000010001
+
+##拿到条形码之后，然后启动相机拍照，这个间隙中的延迟，由于相机曝光时间的关系，需要延迟保证拍摄到的相机照片良好，毫秒为单位
+##这个值不建议小于100，也不建议大于1500
+barcodeTimeout=500
 
 ##产线对应的相机名称mac地址
 lineCamera={"Line01":"001", "Line02":"002", "Line03":"003"}
@@ -45,8 +46,6 @@ kepServerIp=172.30.150.33
 kepServerPort=47005
 
 
-##
-modelImageFile=D:\Cache\image
 
 
 

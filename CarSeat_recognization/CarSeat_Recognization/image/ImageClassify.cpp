@@ -47,34 +47,39 @@ bool CImageClassify::initPython(const char *modulName,const char *functionName, 
 	{
 		memcpy(m_szCacheImagePath, cachePath, strlen(cachePath));
 	}
-
+	//WriteInfo("inter python init");
 	Py_Initialize();
 	if (!Py_IsInitialized())
 	{
 		WriteError("Py Initizlize Failed");
 		return false;
 	}
+	//WriteInfo("exit python init, success");
 	char tmpChar[100] = { 0 };
 	sprintf_s(tmpChar, sizeof(tmpChar), "import %s", modulName);
 	PyRun_SimpleString(tmpChar);
+	//WriteInfo("python import %s", modulName);
 
 	m_pPyName = PyUnicode_FromString(modulName);
 	
 	m_pPyModule = PyImport_Import(m_pPyName);
+
+	//WriteInfo("PyImport_Import import %s", modulName);
 	if (m_pPyModule == nullptr)
 	{
 		WriteError("get moudle handle error");
 		return false;
 	}
+	
 
 	m_pPyDict = PyModule_GetDict(m_pPyModule);
-
+	
 	if (!m_pPyDict)
 	{
 		WriteError("get moudledict handle error");
 		return false;
 	}
-
+	//WriteInfo("PyModule_GetDict success");
 	m_pPyFunc = PyDict_GetItemString(m_pPyDict, functionName);
 
 	if (!m_pPyFunc || !PyCallable_Check(m_pPyFunc))

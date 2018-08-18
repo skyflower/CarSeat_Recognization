@@ -37,6 +37,14 @@ public:
 	*/
 	std::wstring readBarcode();
 
+	ErrorType initRFID(unsigned int rfidIp, int port);
+
+	ErrorType reset(const char* param);
+
+
+
+	// not implement
+	ErrorType isConnect();
 
 
 private:
@@ -45,11 +53,7 @@ private:
 	/*
 	连接rfid通讯
 	*/
-	ErrorType initRFID(unsigned int rfidIp, int port);
-
-
-	// not implement
-	ErrorType isConnect(SOCKET fd);
+	
 
 	ErrorType hostGreetings(SOCKET fd);
 
@@ -76,6 +80,11 @@ private:
 
 	ErrorType __communicate(SOCKET fd, char *buffer, int length);
 
+	/*
+	提取ascii码形式的条形码
+	*/
+	bool parseBarcode(const char* text, char *barcode);
+
 
 	char m_szDefaultIp[16];			// 192.168.0.254
 	char m_szDefaultNetmask[16];	// 255.255.255.0
@@ -93,7 +102,7 @@ private:
 	/*
 	当前条形码
 	*/
-	char m_szCurrentValue;
+	char m_szCurrentValue[50];
 
 };
 

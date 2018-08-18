@@ -12,9 +12,10 @@
 CRFIDReader::CRFIDReader():
 	m_nDefaultPort(10001),
 	m_bDefaultDHCP(false),
-	m_nSocket(-1),
+	m_nSocket(0),
 	m_nSessionID(1000)
 {
+	memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 	init();
 	
 }
@@ -26,11 +27,12 @@ CRFIDReader::~CRFIDReader()
 	stopRead(m_nSocket);
 	hostGoodbye(m_nSocket);
 	
-	if (m_nSocket != -1)
+	if (m_nSocket != 0)
 	{
 		
 		closesocket(m_nSocket);
 		WSACleanup();
+		m_nSocket = 0;
 	}
 }
 
@@ -38,7 +40,7 @@ std::wstring CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8位有效
 	
-	wchar_t tmp[20];
+	/*wchar_t tmp[20];
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;
 
@@ -56,7 +58,146 @@ std::wstring CRFIDReader::readBarcode()
 	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
 	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"N%07d%08d", hiValue, lowValue);
 
-	return std::wstring(tmp);
+	return std::wstring(tmp);*/
+
+	char readXML[] = "<command><readTagData><startAddress>0000</startAddress><dataLength>001E</dataLength></readTagData></command>";
+
+
+	const size_t length = 1000;
+	char *buffer = new char[length];
+	memset(buffer, 0, sizeof(char) * length);
+
+	sprintf_s(buffer, length, "%s", readXML);
+
+	ErrorType ret = __communicate(m_nSocket, buffer, length);
+	if (ret != ErrorType::ERROR_OK)
+	{
+		delete[]buffer;
+		buffer = nullptr;
+		WriteError("communicate err = %d", ret);
+		return std::wstring();
+	}
+	WriteInfo("readData return = [%s]", buffer);
+
+	
+
+	//char *testRecvBuffer = "<reply><resultCode>0000</resultCode><readTagData><returnValue><data>784950484949484949565673495452515600000000000000000000000000</data></returnValue></readTagData></reply>";
+
+	int id = 0;
+	//int resultCode = -1;
+
+	//std::wstring tmpBarcode;
+
+	char resultCode[100] = { 0 };
+	memset(resultCode, 0, sizeof(resultCode));
+
+	char barcodeChar[100] = { 0 };
+	memset(barcodeChar, 0, sizeof(barcodeChar));
+
+	do
+	{
+		/*if ((buffer == nullptr) || (strlen(buffer) == 0))
+		{
+			break;
+		}*/
+
+		TiXmlDocument lconfigXML;
+		lconfigXML.Parse(buffer);
+		if (lconfigXML.Error())
+		{
+			TRACE0("xml Format is invalid\n");
+			WriteError("recvBlood = [%s]", buffer);
+			break;
+		}
+		TiXmlElement *rootElement = lconfigXML.RootElement();
+		if (rootElement == nullptr)
+		{
+			lconfigXML.Clear();
+			break;
+		}
+
+
+		if (rootElement->FirstChildElement() != nullptr)
+		{
+			std::stack<TiXmlElement*> tmpVec;
+			tmpVec.push(rootElement->FirstChildElement());
+			while (tmpVec.size() != 0)
+			{
+				TiXmlElement* tmpNode = tmpVec.top();
+				tmpVec.pop();
+
+				TiXmlElement *tmpSibElement = tmpNode->NextSiblingElement();
+				while(tmpSibElement != nullptr)
+				{
+					tmpVec.push(tmpSibElement);
+					tmpSibElement = tmpSibElement->NextSiblingElement();
+				}
+
+				for (TiXmlElement *child = tmpNode->FirstChildElement();	\
+					child != NULL; child = child->NextSiblingElement())
+				{
+					tmpVec.push(child);
+				}
+
+				if (strncmp("resultCode", tmpNode->Value(), strlen("resultCode")) == 0)
+				{
+					const char *tmpText = tmpNode->GetText();
+					memcpy(resultCode, tmpText, strlen(tmpText));
+				}
+				if (strncmp("data", tmpNode->Value(), strlen("data")) == 0)
+				{
+					const char *tmpText = tmpNode->GetText();
+					memcpy(barcodeChar, tmpText, strlen(tmpText));
+				}
+			}
+		}
+
+		rootElement->Clear();
+		lconfigXML.Clear();
+
+	} while (0);
+	
+	if (buffer != nullptr)
+	{
+		delete[]buffer;
+		buffer = nullptr;
+	}
+
+	if (strncmp(resultCode, "0000", strlen("0000")) != 0)
+	{
+		WriteError("resultCode = %s", resultCode);
+		WriteError("barcode = %s", barcodeChar);
+		return std::wstring();
+	}
+
+	if (strlen(barcodeChar) == 0)
+	{
+		return std::wstring();
+	}
+
+	char tmpValue[256] = { 0 };
+	memset(tmpValue, 0, sizeof(tmpValue));
+	/*
+	从返回消息中解析得到条形码字段
+	*/
+	if (parseBarcode(barcodeChar, tmpValue) == true)
+	{
+		/*
+		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
+		// 如果不一样，则表示读取新数据成功
+		*/
+		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
+		{
+			return std::wstring();
+		}
+		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
+		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
+
+		std::string barcodeStr(tmpValue);
+		return utils::StrToWStr(barcodeStr);
+	}
+
+	return std::wstring();
 }
 
 bool CRFIDReader::init()
@@ -95,6 +236,8 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	m_nSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_nSocket == INVALID_SOCKET)
 	{
+		closesocket(m_nSocket);
+		m_nSocket = 0;
 		WSACleanup();
 		return ErrorType::ERROR_SOCKET_CREATE;
 	}
@@ -120,27 +263,61 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, err = %u", err);
 		closesocket(m_nSocket);
-		m_nSocket = -1;
+		m_nSocket = 0;
 		WSACleanup();
 		return ErrorType::ERROR_SOCKET_CONNECT;
 	}
-
+	WriteInfo("rfid socket connect success");
 	return ErrorType::ERROR_OK;
 }
 
-CRFIDReader::ErrorType CRFIDReader::isConnect(SOCKET fd)
+CRFIDReader::ErrorType CRFIDReader::reset(const char * param)
 {
-	/*struct tcp_info info;
-	int len = sizeof(info);
-	getsockopt(fd, IPPROTO_TCP, TCP_INFO, &info, (socklen_t *)&len);
-	if ((info.tcpi_state == TCP_ESTABLISHED))
+	if (m_nSocket == 0)
 	{
-
+		//initRFID();
+		WriteError("rfid socket not connect");
 	}
-	else
-	{
+	char resetXML[] = "<command><reset><param>%s</param></reset></command>";
 
-	}*/
+
+	const size_t length = 1000;
+	char *buffer = new char[length];
+	memset(buffer, 0, sizeof(char) * length);
+
+	sprintf_s(buffer, length, resetXML, param);
+
+	ErrorType ret = __communicate(m_nSocket, buffer, length);
+	if (ret != ErrorType::ERROR_OK)
+	{
+		delete[]buffer;
+		buffer = nullptr;
+		WriteError("communicate err = %d", ret);
+		return ret;
+	}
+	return ErrorType::ERROR_OK;
+
+	/*int reID = 0;
+	int reCode = -1;
+	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+
+	delete[]buffer;
+	buffer = nullptr;
+
+	if ((reID == m_nSessionID) && (reCode == 0))
+	{
+		return ErrorType::ERROR_OK;
+	}
+	return ret;
+	return ErrorType();*/
+}
+
+CRFIDReader::ErrorType CRFIDReader::isConnect()
+{
+	if (m_nSocket == 0)
+	{
+		return ErrorType::ERROR_SOCKET_CLOSED;
+	}
 	return ErrorType::ERROR_OK;
 }
 
@@ -498,7 +675,7 @@ CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, int length,
 CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int length)
 {
 
-	if (SOCKET_ERROR == send(fd, buffer, strlen(buffer), MSG_WAITALL))
+	if (SOCKET_ERROR == send(fd, buffer, strlen(buffer), 0))
 	{
 		int ret = WSAGetLastError();
 		if (ret == WSAENOTCONN)
@@ -515,7 +692,7 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int 
 	memset(buffer, 0, sizeof(char) * length);
 
 	int recvLen = length;
-	int nret = recv(fd, buffer, recvLen, MSG_WAITALL);
+	int nret = recv(fd, buffer, recvLen, 0);
 	if (nret == 0)
 	{
 		WriteError("rfid server has closed");
@@ -529,4 +706,28 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int 
 		return ErrorType::ERROR_SOCKET_RECV;
 	}
 	return ErrorType::ERROR_OK;
+}
+
+bool CRFIDReader::parseBarcode(const char * text, char * barcode)
+{
+	int i = 0;
+	int k = 0;
+	size_t tmpSize = strlen(text);
+	char tmpText[10] = { 0 };
+	while (i + 2 < tmpSize)
+	{
+		memset(tmpText, 0, sizeof(tmpText));
+		memcpy(tmpText, text + i, sizeof(char) * 2);
+
+		int j = atoi(tmpText);
+		barcode[k++] = j;
+		if (k >= 16)
+		{
+			break;
+		}
+
+		i = i + 2;
+	}
+
+	return true;
 }

@@ -105,6 +105,7 @@ void CLog::run()
 				break;
 			}
 			m_pLog << "[" << buffer.pFunc << "," << buffer.mLine << "]" << buffer.data << "\n";
+			m_pLog.flush();
 		}
 	}
 	m_pLog.close();
@@ -171,9 +172,9 @@ CLog::~CLog()
 		WriteExit("End");
 		m_pThread.join();
 	}
-	std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
-	std::this_thread::sleep_for(a);
-	m_pLog.close();
+	//std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
+	//std::this_thread::sleep_for(a);
+	//m_pLog.close();
 	if (m_pMessage != nullptr)
 	{
 		delete[]m_pMessage;

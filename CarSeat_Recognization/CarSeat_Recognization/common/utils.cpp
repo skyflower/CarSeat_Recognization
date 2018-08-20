@@ -500,17 +500,17 @@ namespace utils
 		{
 			return false;
 		}
-		char *lineEnd = strstr(p, "\n");
-		if (lineEnd == NULL)
+		char *begin = strstr(p, "\"");
+		if (begin == NULL)
 		{
 			return false;
 		}
-		char *begin = strstr(p + 1, "=");
-		if ((begin == NULL) || (begin >= lineEnd))
+		char *end = strstr(begin + 1, "\"");
+		if ((begin == NULL))
 		{
 			return false;
 		}
-		memcpy_s(value, MAX_CHAR_LENGTH, begin + 1, lineEnd - begin - 1);
+		memcpy_s(value, MAX_CHAR_LENGTH, begin + 1, end - begin - 1);
 
 		return true;
 	}

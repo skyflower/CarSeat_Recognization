@@ -252,7 +252,6 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			WriteError(" kepServer socket init failed");
 		}
-		
 	}
 	if (m_pRFIDReader == nullptr)
 	{
@@ -460,6 +459,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 
 
 		// 人工输入对话框
+
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
 		
@@ -472,6 +472,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 			std::string cReType = utils::WStrToStr(reType);
 			memcpy(tmpResult.m_szTypeByUsrInput, cReType.c_str(), sizeof(char) * cReType.size());
 		}
+
 		////// send message to server
 		////
 		///  not implement

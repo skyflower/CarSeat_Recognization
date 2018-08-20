@@ -39,8 +39,8 @@ CRFIDReader::~CRFIDReader()
 std::wstring CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8Î»ÓÐÐ§
-	
-	/*wchar_t tmp[20];
+#if 0
+	wchar_t tmp[20];
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;
 
@@ -58,8 +58,10 @@ std::wstring CRFIDReader::readBarcode()
 	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
 	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"N%07d%08d", hiValue, lowValue);
 
-	return std::wstring(tmp);*/
+	return std::wstring(tmp);
 
+	
+#else
 	char readXML[] = "<command><readTagData><startAddress>0000</startAddress><dataLength>001E</dataLength></readTagData></command>";
 
 
@@ -84,10 +86,6 @@ std::wstring CRFIDReader::readBarcode()
 	//char *testRecvBuffer = "<reply><resultCode>0000</resultCode><readTagData><returnValue><data>784950484949484949565673495452515600000000000000000000000000</data></returnValue></readTagData></reply>";
 
 	int id = 0;
-	//int resultCode = -1;
-
-	//std::wstring tmpBarcode;
-
 	char resultCode[100] = { 0 };
 	memset(resultCode, 0, sizeof(resultCode));
 
@@ -96,10 +94,10 @@ std::wstring CRFIDReader::readBarcode()
 
 	do
 	{
-		/*if ((buffer == nullptr) || (strlen(buffer) == 0))
+		if ((buffer == nullptr) || (strlen(buffer) == 0))
 		{
 			break;
-		}*/
+		}
 
 		TiXmlDocument lconfigXML;
 		lconfigXML.Parse(buffer);
@@ -198,6 +196,7 @@ std::wstring CRFIDReader::readBarcode()
 	}
 
 	return std::wstring();
+#endif // DEBUG_RFID
 }
 
 bool CRFIDReader::init()

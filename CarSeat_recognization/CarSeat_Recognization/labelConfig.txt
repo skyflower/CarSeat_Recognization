@@ -18,12 +18,12 @@ classifyType={"k216_black_pvc_diamond_cloth":"201456",
 "k215_ecru_pvc_buckskin":"301436",
 "k216_black_pvc_leather":"401416"}
 
-ExposureTimeMax=1500000
-ExposureTimeMin=500000
+ExposureTimeMax="1500000"
+ExposureTimeMin="500000"
 
 
-LoginUsrName=root
-LoginPasswd=12345678
-LoginInfoAutoSave=0
+LoginUsrName="root"
+LoginPasswd="12345678"
+LoginInfoAutoSave="0"
 
 

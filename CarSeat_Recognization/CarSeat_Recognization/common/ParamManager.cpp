@@ -44,8 +44,11 @@ m_nBarcodeTime(1)
 	char logFileName[100] = { 0 };
 	memset(logFileName, 0, sizeof(logFileName));
 
-	sprintf_s(logFileName, "%s\\%04d%02d%02d", \
-		m_szImagePath, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday);
+
+	memset(logFileName, 0, sizeof(logFileName));
+
+	sprintf_s(logFileName, "%s\\%04d%02d%02d", m_szImagePath, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday);
+
 
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
 	memcpy(m_szImagePath, logFileName, strlen(logFileName));

@@ -664,12 +664,19 @@ std::wstring CLineCamera::SaveImage()
 			{
 				return std::wstring();
 			}
-			FILE* fp = nullptr;
-			fopen_s(&fp, tmpFileName, "wb");
+			WriteInfo("image file Name = [%s]", tmpFileName);
 
-			
+			//HANDLE imageFileHandle = CreateFile(absoluteName, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+
+
+			FILE* fp = nullptr;
+			errno_t errRet;
+			errRet = fopen_s(&fp, tmpFileName, "wb");
+
+			WriteInfo("errRet = %d", errRet);
             if (NULL == fp)
             {
+
                 WriteError("write image failed, maybe you have no privilege");
 				delete[]tmpFileName;
 				tmpFileName = nullptr;

@@ -84,7 +84,7 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 		time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,		\
 		time.tm_hour, time.tm_min, time.tm_sec);
 
-	std::string tmpPCName = utils::WStrToStr(m_pParamManager->GetLocalName());
+	std::string tmpPCName = m_pParamManager->GetLocalName();
 	
 	_snprintf_s(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
 		"success", tmpPCName.c_str(), timeStr);

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include "utils.h"
 
 /*
 
@@ -23,18 +24,18 @@ public:
 	unsigned int GetServerIP();
 	unsigned int GetServerPort();
 	
-	const std::vector<std::wstring> *GetFtpParameter()const;
-	const std::vector<std::wstring> *GetMethodType()const;
-	const std::vector<std::wstring> *GetSeatType()const;
-	const std::vector<std::wstring> *GetLineNo()const;
+	const std::vector<std::string> *GetFtpParameter()const;
+	const std::vector<std::string> *GetMethodType()const;
+	const std::vector<std::string> *GetSeatType()const;
+	const std::vector<std::string> *GetLineNo()const;
 
 
-	std::wstring GetLocalName() { return m_strLocalName; }
-	std::wstring GetLoginUserName() { return m_strUsrName; }
-	std::wstring GetLoginPasswd() { return m_strPasswd; }
+	std::string GetLocalName() { return m_strLocalName; }
+	std::string GetLoginUserName() { return m_strUsrName; }
+	std::string GetLoginPasswd() { return m_strPasswd; }
 
-	bool SetLoginUserName(std::wstring tmpUserName);
-	bool SetLoginPasswd(std::wstring tmpPasswd);
+	bool SetLoginUserName(std::string tmpUserName);
+	bool SetLoginPasswd(std::string tmpPasswd);
 
 
 private:
@@ -47,6 +48,8 @@ private:
 	
 
 	unsigned int __auxLocalIP();
+
+	char m_szConfigFile[MAX_CHAR_LENGTH];
 
 	//自动保存标志
 	bool mAutoSaveFlag;
@@ -61,21 +64,21 @@ private:
 	size_t m_nLocalIp;
 
 	// 本机名
-	std::wstring m_strLocalName;
+	std::string m_strLocalName;
 
-	std::wstring m_strUsrName;
-	std::wstring m_strPasswd;
+	std::string m_strUsrName;
+	std::string m_strPasswd;
 
 	//ftp用户名密码以及图像的存储路径
-	std::vector<std::wstring> *m_pFtp;
+	std::vector<std::string> *m_pFtp;
 
 	//产线编号
-	std::vector<std::wstring> *m_pLineVec;
+	std::vector<std::string> *m_pLineVec;
 
 	//methodType
-	std::vector<std::wstring> *m_pMethodType;
+	std::vector<std::string> *m_pMethodType;
 
 	//seatType
-	std::vector<std::wstring> *m_pSeatType;
+	std::vector<std::string> *m_pSeatType;
 };
 

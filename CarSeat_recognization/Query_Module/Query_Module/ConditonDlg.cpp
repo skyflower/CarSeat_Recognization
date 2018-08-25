@@ -164,13 +164,14 @@ BOOL CConditonDlg::OnInitDialog()
 		return TRUE;
 	}
 
-	const std::vector<std::wstring> *p = pParamManager->GetMethodType();
+	const std::vector<std::string> *p = pParamManager->GetMethodType();
 	if (p != nullptr)
 	{
 		mMethodType.ResetContent();
 		for (auto &k : *p)
 		{
-			mMethodType.AddString(k.c_str());
+			std::wstring tmpStr = utils::StrToWStr(k);
+			mMethodType.AddString(tmpStr.c_str());
 		}
 	}
 
@@ -180,7 +181,8 @@ BOOL CConditonDlg::OnInitDialog()
 		mSeatType.ResetContent();
 		for (auto &k : *p)
 		{
-			mSeatType.AddString(k.c_str());
+			std::wstring tmpStr = utils::StrToWStr(k);
+			mSeatType.AddString(tmpStr.c_str());
 		}
 	}
 
@@ -191,8 +193,9 @@ BOOL CConditonDlg::OnInitDialog()
 		mLineEnd.ResetContent();
 		for (auto &k : *p)
 		{
-			mLineBegin.AddString(k.c_str());
-			mLineEnd.AddString(k.c_str());
+			std::wstring tmpStr = utils::StrToWStr(k);
+			mLineBegin.AddString(tmpStr.c_str());
+			mLineEnd.AddString(tmpStr.c_str());
 		}
 	}
 	

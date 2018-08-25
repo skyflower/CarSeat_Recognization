@@ -19,6 +19,8 @@ m_pMethodType(nullptr),
 m_pSeatType(nullptr),
 mAutoSaveFlag(false)
 {
+	memset(m_szConfigFile, 0, sizeof(m_szConfigFile));
+	strcat_s(m_szConfigFile, sizeof(m_szConfigFile), "./queryConfig.txt");
 	Init();
 }
 
@@ -106,8 +108,8 @@ unsigned int CParamManager::__auxLocalIP()
 	}
 
 	{
-		std::string tmpLocalName(buf);
-		m_strLocalName = utils::StrToWStr(tmpLocalName);
+		//std::string tmpLocalName(buf);
+		m_strLocalName = std::string(buf);// utils::StrToWStr(tmpLocalName);
 	}
 	
 	if ((ret = getaddrinfo(buf, NULL, &hints, &res)) != 0)
@@ -154,38 +156,38 @@ unsigned int CParamManager::GetServerPort()
 	return m_nServerPort;
 }
 
-const std::vector<std::wstring>* CParamManager::GetFtpParameter() const
+const std::vector<std::string>* CParamManager::GetFtpParameter() const
 {
 	return m_pFtp;
-	return nullptr;
+	
 }
 
-const std::vector<std::wstring>* CParamManager::GetMethodType() const
+const std::vector<std::string>* CParamManager::GetMethodType() const
 {
 	return m_pMethodType;
-	return nullptr;
+	
 }
 
-const std::vector<std::wstring>* CParamManager::GetSeatType() const
+const std::vector<std::string>* CParamManager::GetSeatType() const
 {
 	return m_pSeatType;
-	return nullptr;
+	
 }
 
-const std::vector<std::wstring>* CParamManager::GetLineNo() const
+const std::vector<std::string>* CParamManager::GetLineNo() const
 {
 	return m_pLineVec;
-	return nullptr;
+	
 }
 
-bool CParamManager::SetLoginUserName(std::wstring tmpUserName)
+bool CParamManager::SetLoginUserName(std::string tmpUserName)
 {
 	mAutoSaveFlag = true;
 	m_strUsrName = tmpUserName;
 	return true;
 }
 
-bool CParamManager::SetLoginPasswd(std::wstring tmpPasswd)
+bool CParamManager::SetLoginPasswd(std::string tmpPasswd)
 {
 	mAutoSaveFlag = true;
 	m_strPasswd = tmpPasswd;
@@ -196,7 +198,7 @@ bool CParamManager::SetLoginPasswd(std::wstring tmpPasswd)
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
-	fopen_s(&fp, "./queryConfig.txt", "rb");
+	fopen_s(&fp, m_szConfigFile, "rb");
 	bool ret = true;
 	if (fp != nullptr)
 	{
@@ -209,7 +211,7 @@ void CParamManager::Init()
 		
 		if (m_pFtp == nullptr)
 		{
-			m_pFtp = new std::vector<std::wstring>;
+			m_pFtp = new std::vector<std::string>;
 		}
 		ret = utils::parseVector(content, "ftpLogin", m_pFtp);
 		if(ret == false)
@@ -218,7 +220,7 @@ void CParamManager::Init()
 		}
 		if (m_pLineVec == nullptr)
 		{
-			m_pLineVec = new std::vector<std::wstring>;
+			m_pLineVec = new std::vector<std::string>;
 		}
 		utils::parseVector(content, "line", m_pLineVec);
 		if ((m_pLineVec == nullptr) || (m_pLineVec->size() == 0))
@@ -228,7 +230,7 @@ void CParamManager::Init()
 
 		if (m_pMethodType == nullptr)
 		{
-			m_pMethodType = new std::vector<std::wstring>;
+			m_pMethodType = new std::vector<std::string>;
 		}
 		utils::parseVector(content, "methodType", m_pMethodType);
 		if ((m_pMethodType == nullptr) || (m_pMethodType->size() == 0))
@@ -239,7 +241,7 @@ void CParamManager::Init()
 
 		if (m_pSeatType == nullptr)
 		{
-			m_pSeatType = new std::vector<std::wstring>;
+			m_pSeatType = new std::vector<std::string>;
 		}
 		utils::parseVector(content, "seatType", m_pSeatType);
 		if ((m_pSeatType == nullptr) || (m_pSeatType->size() == 0))
@@ -268,7 +270,7 @@ void CParamManager::Init()
 			{
 				//m_strUsrName = std::wstring(tmpStr);
 				std::string tmp(tmpStr);
-				m_strUsrName = utils::StrToWStr(tmp);
+				m_strUsrName = tmp;
 			}
 			
 		}
@@ -279,7 +281,7 @@ void CParamManager::Init()
 			if (strlen(tmpStr) > 0)
 			{
 				std::string tmp(tmpStr);
-				m_strPasswd = utils::StrToWStr(tmp);
+				m_strPasswd = tmp;
 			}
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
@@ -295,6 +297,8 @@ void CParamManager::Init()
 	{
 		m_nLocalIp = tmpLocal;
 	}
+	fclose(fp);
+	fp = nullptr;
 }
 
 void CParamManager::serialization()
@@ -304,92 +308,97 @@ void CParamManager::serialization()
 		return;
 	}
 	FILE *fp = nullptr;
-	fopen_s(&fp, "./queryConfig.txt.bak", "wb");
+	fopen_s(&fp, m_szConfigFile, "wb");
 	if (fp == nullptr)
 	{
 		WriteError("serialization queryConfig.txt Failed");
 		return;
 	}
 	const size_t Length = 2000;
-	wchar_t *tmpStr = new wchar_t[Length];
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	char *tmpStr = new char[Length];
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 	
 
 	if ((m_pLineVec != nullptr) && (m_pLineVec->size() > 0))
 	{
-		StrCatW(tmpStr, L"line={");
+		strcat_s(tmpStr, Length, "line={");
 		size_t tmpLength = m_pLineVec->size();
 		for (size_t i = 0; i < tmpLength - 1; ++i)
 		{
-			wsprintf(tmpStr, L"%s\"%s\",", tmpStr, m_pLineVec->at(i).c_str());
+			sprintf_s(tmpStr, Length, "%s\"%s\",", tmpStr, m_pLineVec->at(i).c_str());
 			//StrCatW(tmpStr, m_pLineVec->at(i).c_str());
 		}
-		wsprintf(tmpStr, L"%s\"%s\"}\n", tmpStr, m_pLineVec->at(tmpLength - 1).c_str());
+		sprintf_s(tmpStr, Length, "%s\"%s\"}\n", tmpStr, m_pLineVec->at(tmpLength - 1).c_str());
 	}
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 
 	if ((m_pSeatType != nullptr) && (m_pSeatType->size() > 0))
 	{
-		StrCatW(tmpStr, L"seatType={");
+		strcat_s(tmpStr, Length, "seatType={");
 		size_t tmpLength = m_pSeatType->size();
 		for (size_t i = 0; i < tmpLength - 1; ++i)
 		{
-			wsprintf(tmpStr, L"%s\"%s\",", tmpStr, m_pSeatType->at(i).c_str());
+			sprintf_s(tmpStr, Length, "%s\"%s\",\n", tmpStr, m_pSeatType->at(i).c_str());
 			//StrCatW(tmpStr, m_pLineVec->at(i).c_str());
 		}
-		wsprintf(tmpStr, L"%s\"%s\"}\n", tmpStr, m_pSeatType->at(tmpLength - 1).c_str());
+		sprintf_s(tmpStr, Length, "%s\"%s\"}\n", tmpStr, m_pSeatType->at(tmpLength - 1).c_str());
 	}
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
-	wsprintf(tmpStr, L"serverip=%d.%d.%d.%d\nserverport=%d\n", \
+	sprintf_s(tmpStr, Length, "serverip=\"%d.%d.%d.%d\"\nserverport=\"%d\"\n", \
 		((m_nServerIp >> 24) & 0xFF), ((m_nServerIp >> 16) & 0xFF), \
 		((m_nServerIp >> 8) & 0xFF), (m_nServerIp & 0xFF), m_nServerPort);
 
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 
 	if ((m_pFtp != nullptr) && (m_pFtp->size() > 0))
 	{
-		StrCatW(tmpStr, L"ftpLogin={");
+		strcat_s(tmpStr, Length, "ftpLogin={");
 		size_t tmpLength = m_pFtp->size();
 		for (size_t i = 0; i < tmpLength - 1; ++i)
 		{
-			wsprintf(tmpStr, L"%s\"%s\",", tmpStr, m_pFtp->at(i).c_str());
+			sprintf_s(tmpStr, Length, "%s\"%s\",", tmpStr, m_pFtp->at(i).c_str());
 			//StrCatW(tmpStr, m_pLineVec->at(i).c_str());
 		}
-		wsprintf(tmpStr, L"%s\"%s\"}\n", tmpStr, m_pFtp->at(tmpLength - 1).c_str());
+		sprintf_s(tmpStr, Length, "%s\"%s\"}\n", tmpStr, m_pFtp->at(tmpLength - 1).c_str());
 	}
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 	if ((m_pMethodType != nullptr) && (m_pMethodType->size() > 0))
 	{
-		StrCatW(tmpStr, L"methodType={");
+		strcat_s(tmpStr, Length, "methodType={");
 		size_t tmpLength = m_pMethodType->size();
 		for (size_t i = 0; i < tmpLength - 1; ++i)
 		{
-			wsprintf(tmpStr, L"%s\"%s\",", tmpStr, m_pMethodType->at(i).c_str());
+			sprintf_s(tmpStr, Length, "%s\"%s\",", tmpStr, m_pMethodType->at(i).c_str());
 			//StrCatW(tmpStr, m_pLineVec->at(i).c_str());
 		}
-		wsprintf(tmpStr, L"%s\"%s\"}\n", tmpStr, m_pMethodType->at(tmpLength - 1).c_str());
+		sprintf_s(tmpStr, Length, "%s\"%s\"}\n", tmpStr, m_pMethodType->at(tmpLength - 1).c_str());
 	}
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 
 
-	wsprintf(tmpStr, L"username=%s\npasswd=%s\n\n", m_strUsrName.c_str(),
+
+
+	sprintf_s(tmpStr, Length, "username=\"%s\"\npasswd=\"%s\"\n", m_strUsrName.c_str(),
 		m_strPasswd.c_str());
 
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
+
+	delete[]tmpStr;
+	tmpStr = nullptr;
 
 	fclose(fp);
-
+	fp = nullptr;
 }
 

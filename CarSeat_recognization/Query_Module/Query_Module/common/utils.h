@@ -27,16 +27,16 @@ namespace utils
 
 
 	// XXX={"AAA", "BBBB", "CCC"}
-	bool parseVector(const char *content, const char*name, std::vector<std::wstring> *pVector);
+	bool parseVector(const char *content, const char*name, std::vector<std::string> *pVector);
 	
 	//
-	bool parseLineSegment(const char *name, size_t, std::vector<std::wstring> *pVec);
+	bool parseLineSegment(const char *name, size_t, std::vector<std::string> *pVec);
 	
 	//XXX=192.168.1.153
 	int parseIp(const char *content, const char *name);
 	
 	// XXX={"AAA":"MMM", "BBB":"NNN", "CCC":"LLL"}
-	int parseMap(const char*content, const char*name, std::unordered_map<std::wstring, std::wstring>*pMap);
+	int parseMap(const char*content, const char*name, std::unordered_map<std::string, std::string>*pMap);
 
 	// XXX=AAA
 	bool getValueByName(const char *content, const char*name, char*value);

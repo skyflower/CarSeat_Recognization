@@ -1,6 +1,4 @@
-﻿
-line={"L1", "L2", "L3", "L4", "L5"}
-
+line={"L1","L2","L3","L4","L5"}
 seatType={"k216 black pvc diamond cloth",
 "k216 ecru pvc diamond cloth",
 "k215 ecru pvc leather",
@@ -10,19 +8,9 @@ seatType={"k216 black pvc diamond cloth",
 "d2 black pvc line cloth",
 "k215 ecru pvc buckskin",
 "k216 black pvc leather"}
-
-
-## 服务器通信的ip地址和端口号
 serverip="192.168.1.177"
 serverport="8080"
-
-
-## ftp登录需要的用户名和账号，以及存储图像的路径
-ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
-
-
-methodType={"auto", "manual"}
-
-username=""
-passwd=""
-
+ftpLogin={"siyuanxu","yuan","/home/ftpImage/files"}
+methodType={"auto","manual"}
+username="1111111"
+passwd="1111111"

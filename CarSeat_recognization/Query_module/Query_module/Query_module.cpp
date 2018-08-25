@@ -477,15 +477,20 @@ void CQuery_ModuleApp::OnButtonLogin()
 	判断用户名是否正确，
 	
 	*/
-	m_pParamManager->SetLoginUserName(std::wstring(mUsrName));
-	m_pParamManager->SetLoginPasswd(std::wstring(mPasswd));
+	std::wstring tmp = std::wstring(mUsrName);
+
+	m_pParamManager->SetLoginUserName(utils::WStrToStr(tmp));
+
+	tmp = std::wstring(mPasswd);
+
+	m_pParamManager->SetLoginPasswd(utils::WStrToStr(mPasswd));
 }
 
 
 void CQuery_ModuleApp::OnUpdateButtonChoose(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
-	std::wstring tmpUserName = m_pParamManager->GetLoginUserName();
+	std::string tmpUserName = m_pParamManager->GetLoginUserName();
 	if ((tmpUserName.size() == 0) ||(wcslen(mUsrName) == 0))
 	{
 		pCmdUI->Enable(FALSE);
@@ -496,7 +501,7 @@ void CQuery_ModuleApp::OnUpdateButtonChoose(CCmdUI *pCmdUI)
 void CQuery_ModuleApp::OnUpdateButtonBarcode(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
-	std::wstring tmpUserName = m_pParamManager->GetLoginUserName();
+	std::string tmpUserName = m_pParamManager->GetLoginUserName();
 	if ((tmpUserName.size() == 0) || (wcslen(mUsrName) == 0))
 	{
 		pCmdUI->Enable(FALSE);

@@ -1,0 +1,4 @@
+serverip="255.255.255.255"
+serverport="-1"
+username="12432543a'f's'g"
+passwd="asfsdgdfg"

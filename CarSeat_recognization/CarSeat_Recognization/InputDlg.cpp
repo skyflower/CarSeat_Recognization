@@ -6,6 +6,7 @@
 #include "InputDlg.h"
 #include "afxdialogex.h"
 #include "./common/ParamManager.h"
+#include <io.h>
 
 
 // CInputDlg 对话框
@@ -124,13 +125,14 @@ BOOL CInputDlg::OnInitDialog()
 	}
 
 	CComboBox *pCombo = ((CComboBox*)GetDlgItem(IDC_COMBO_TYPE));
-	std::vector<std::wstring> pVec = m_pLabelManager->GetExternalType();
+	std::vector<std::string> pVec = m_pLabelManager->GetExternalType();
 	if (pVec.size() > 0)
 	{
-		std::vector<std::wstring>::const_iterator iter = pVec.begin();
+		std::vector<std::string>::const_iterator iter = pVec.begin();
 		for (; iter != pVec.end(); ++iter)
 		{
-			pCombo->AddString(iter->c_str());
+			std::wstring tmpStr = utils::StrToWStr(*iter);
+			pCombo->AddString(tmpStr.c_str());
 		}
 	}
 	m_StTestImage.ModifyStyle(0xF, SS_BITMAP);//设置静态控件的样式，使得它可以使用位图
@@ -188,9 +190,9 @@ BOOL CInputDlg::OnInitDialog()
 				  // 异常: OCX 属性页应返回 FALSE
 }
 
-std::wstring CInputDlg::GetInputType()
+std::string CInputDlg::GetInputType()
 {
-	return std::wstring(m_szReType);
+	return std::string(m_szReType);
 	//CComboBox *pCombo = ((CComboBox*)GetDlgItem(IDC_COMBO_TYPE));
 	//if ((pCombo != NULL) && (pCombo->GetCount() > 0))
 	//{
@@ -220,15 +222,17 @@ void CInputDlg::SetManagePointer(CParamManager * pParamManager, CLabelManager * 
 	
 }
 
-void CInputDlg::SetTestImagePath(std::wstring path)
+void CInputDlg::SetTestImagePath(std::string path)
 {
 	
-	if (_waccess_s(path.c_str(), 0x04) == 0)
+	if (_access(path.c_str(), 0x04) == 0)
 	{
 		m_pTestImage->Destroy();
 		HRESULT  ret = S_OK;
+
+		std::wstring tmpPath = utils::StrToWStr(path);
 		
-		ret = m_pTestImage->Load(path.c_str());
+		ret = m_pTestImage->Load(tmpPath.c_str());
 		if (ret != S_OK)
 		{
 			return;
@@ -253,28 +257,37 @@ void CInputDlg::OnSelchangeComboType()
 	
 	int index = m_TypeCombo.GetCurSel();
 
-	//wchar_t selType[256] = { 0 };
-	memset(m_szReType, 0, sizeof(m_szReType));
+	wchar_t selType[256] = { 0 };
+	memset(selType, 0, sizeof(selType));
 
-	m_TypeCombo.GetLBText(index, m_szReType);
+	m_TypeCombo.GetLBText(index, selType);
 
-	if (wcslen(m_szReType) == 0)
+	if (wcslen(selType) == 0)
 	{
 		return;
 	}
-	std::wstring tmpClassifyType = m_pLabelManager->GetClassifyTypeByExternal(std::wstring(m_szReType));
+	char *tmpPointer = utils::WcharToChar(selType);
+	memset(m_szReType, 0, sizeof(m_szReType));
+	memcpy(m_szReType, tmpPointer, strlen(tmpPointer));
+
+	delete[]tmpPointer;
+	tmpPointer = nullptr;
+
+	std::string tmpClassifyType = m_pLabelManager->GetClassifyTypeByExternal(std::string(m_szReType));
 
 
 	std::string tmpPatternDir(m_pParamManager->GetPatternImagePath());
 
-	std::wstring tmpWPatternDir = utils::StrToWStr(tmpPatternDir);
+	//std::wstring tmpWPatternDir = utils::StrToWStr(tmpPatternDir);
 
-	tmpWPatternDir = tmpWPatternDir + L"\\" + tmpClassifyType + L".jpg";
+	tmpPatternDir = tmpPatternDir + "\\" + tmpClassifyType + ".jpg";
+	
 
-	if (_waccess_s(tmpWPatternDir.c_str(), 0x04) == 0)
+	if (_access_s(tmpPatternDir.c_str(), 0x04) == 0)
 	{
 		m_pPatternImage->Destroy();
-		HRESULT ret = m_pPatternImage->Load(tmpWPatternDir.c_str());
+		std::wstring tmpPatternPath = utils::StrToWStr(tmpPatternDir);
+		HRESULT ret = m_pPatternImage->Load(tmpPatternPath.c_str());
 		if (ret != S_OK)
 		{
 			return;

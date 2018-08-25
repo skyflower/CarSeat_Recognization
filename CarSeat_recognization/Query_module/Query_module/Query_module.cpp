@@ -287,18 +287,6 @@ void CQuery_ModuleApp::OnButtonChoose()
 	WriteInfo("seatType = [%s], methodType = [%s]", filter.mSeatType, filter.mMethodType);
 	
 
-
-	/*char mDateBeign[20];
-	char mDateEnd[20];
-	char mTimeBegin[20];
-	char mTimeEnd[20];
-	char mLineBegin[20];
-	char mLineEnd[20];
-	char mBarcodeBegin[50];
-	char mBarcodeEnd[50];
-	char mSeatType[50];
-	char mMethodType[20];*/
-
 	char tmpTime[20] = { 0 };
 	memset(tmpTime, 0, sizeof(tmpTime));
 
@@ -312,14 +300,19 @@ void CQuery_ModuleApp::OnButtonChoose()
 	将查询条件以及用户名和密码发送到服务器端
 	*/
 	char queryXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
-		<search>																	\
-		<ip=\"%s\" usr=\"%s\" passwd=\"%s\" time=\"%s\"/>					\
-		<timePolicy control=\"%d\" startTime=\"%s\" endTime=\"%s\"/>				\
+		<search>													\
+		<ip=\"%s\" usr=\"%s\" passwd=\"%s\" time=\"%s\"/>			\
+		%s													\
+		</search>";
+
+
+	/*<timePolicy control = \"%d\" startTime=\"%s\" endTime=\"%s\"/>				\
 		<linePolicy control=\"%d\" startLine=\"%s\" endLine=\"%s\"/>				\
 		<barcodePolicy control=\"%d\" startBarcode=\"%s\" endBarcode=\"%s\"/>		\
 		<typePolicy control=\"%d\" type=\"%s\"/>										\
-		<methodPolicy control=\"%d\" method=\"%s\"/>							\
-		</search>";
+		<methodPolicy control=\"%d\" method=\"%s\"/>		*/					\
+
+
 
 	const size_t length = 1000;
 	char *tmpXml = new char[length];
@@ -331,8 +324,115 @@ void CQuery_ModuleApp::OnButtonChoose()
 	}
 	memset(tmpXml, 0, sizeof(char) * length);
 
+	char *tmpChar = new char[length];
+	if (tmpChar == nullptr)
+	{
+		WriteError("malloc %d memory failed", length);
+		AfxMessageBox(L"malloc 1000 memory faield");
+		delete tmpXml;
+		tmpXml = nullptr;
+		return;
+	}
+	memset(tmpChar, 0, sizeof(char) * length);
 
 
+
+
+	time_t tmpTime_t = time(NULL);
+	struct tm nowTime;
+	localtime_s(&nowTime, &tmpTime_t);
+
+	//sprintf_s(tmpTime, "%04d%02d%02d-%02d%02d%02d", )
+
+	sprintf_s(tmpTime, "%04d%02d%02d-%02d%02d%02d", \
+		nowTime.tm_year + 1900, nowTime.tm_mon + 1, nowTime.tm_mday, \
+		nowTime.tm_hour, nowTime.tm_min, nowTime.tm_sec);
+
+	char ipStr[20] = { 0 };
+	memset(ipStr, 0, sizeof(ipStr));
+	unsigned int ip = m_pParamManager->GetLocalIP();
+
+	sprintf_s(ipStr, "%d.%d.%d.%d", (ip >> 24), ((ip >> 16) & 0xFF), ((ip >> 8) & 0xFF), (ip & 0xFF));
+
+
+	// 时间选择策略
+	const int policyLength = 200;
+	char timePolicy[policyLength] = { 0 };
+	memset(timePolicy, 0, sizeof(timePolicy));
+	int timePolicyControl = 1;
+	if ((strlen(filter.mTimeBegin) == 0) && (strlen(filter.mTimeEnd) == 0))
+	{
+		timePolicyControl = 0;
+	}
+
+	sprintf_s(timePolicy, "<timePolicy control = \"%d\" startTime=\"%s\" endTime=\"%s\"/>",
+		timePolicyControl, filter.mTimeBegin, filter.mTimeEnd);
+
+
+	//产线选择策略
+	char linePolicy[policyLength] = { 0 };
+	memset(linePolicy, 0, sizeof(linePolicy));
+	int linePolicyControl = 1;
+	if ((strlen(filter.mLineBegin) == 0) && (strlen(filter.mLineEnd) == 0))
+	{
+		linePolicyControl = 0;
+	}
+	sprintf_s(linePolicy, "<linePolicy control=\"%d\" startLine=\"%s\" endLine=\"%s\"/>",
+		linePolicyControl, filter.mLineBegin, filter.mLineEnd);
+
+
+
+	// 格式化条形码策略
+	char barcodePolicy[policyLength] = { 0 };
+	memset(barcodePolicy, 0, sizeof(barcodePolicy));
+	int barcodePolicyControl = 1;
+	if ((strlen(filter.mBarcodeBegin) == 0) && (strlen(filter.mBarcodeEnd) == 0))
+	{
+		barcodePolicyControl = 0;
+	}
+	sprintf_s(barcodePolicy, "<barcodePolicy control=\"%d\" startBarcode=\"%s\" endBarcode=\"%s\"/>",
+		barcodePolicyControl, filter.mBarcodeBegin, filter.mBarcodeEnd);
+
+
+	// 座椅类型策略
+	char typePolicy[policyLength] = { 0 };
+	memset(typePolicy, 0, sizeof(typePolicy));
+	int typePolicyControl = 1;
+	if ((strlen(filter.mSeatType) == 0))
+	{
+		typePolicyControl = 0;
+	}
+	sprintf_s(typePolicy, "<typePolicy control=\"%d\" type=\"%s\"/>",
+		typePolicyControl, filter.mSeatType);
+
+
+	// 识别类型策略，目前只支持自动识别
+	char methodPolicy[policyLength] = { 0 };
+	memset(methodPolicy, 0, sizeof(methodPolicy));
+	int methodPolicyControl = 1;
+	//if ((strlen(filter.mSeatType) == 0))
+	//{
+	//	methodPolicyControl = 0;
+	//}
+	sprintf_s(methodPolicy, "<methodPolicy control=\"%d\" method=\"auto\"/>", methodPolicyControl);
+
+
+	sprintf_s(tmpChar, sizeof(char) * length, "%s\n%s\n%s\n%s\n%s\n", timePolicy, barcodePolicy, linePolicy, typePolicy, methodPolicy);
+
+	//sprintf_s(tmpChar, "%s\n%s\n%s\n%s\n%s\n", timePolicy, barcodePolicy, linePolicy, typePolicy, methodPolicy);
+
+	sprintf_s(tmpXml, sizeof(char) * length, queryXml, ipStr, m_pParamManager->GetLoginUserName(), m_pParamManager->GetLoginPasswd(), tmpTime, tmpChar);
+
+
+
+	/*
+	将过滤xml发送到服务器端
+	*/
+
+
+
+	delete []tmpChar;
+	tmpChar = nullptr;
 
 	delete[]tmpXml;
 	tmpXml = nullptr;

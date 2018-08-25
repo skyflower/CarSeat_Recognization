@@ -91,7 +91,7 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 		time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,		\
 		time.tm_hour, time.tm_min, time.tm_sec);
 
-	std::string tmpPCName = utils::WStrToStr(m_pParamManager->GetLocalName());
+	std::string tmpPCName = m_pParamManager->GetLocalName();
 	
 	_snprintf_s(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
 		"success", tmpPCName.c_str(), timeStr);
@@ -218,13 +218,13 @@ void CNetworkTask::run()
 
 		if (tmpBarcode.size() != 0)
 		{
-			std::wstring path = TakeImage(0);
+			std::string path = TakeImage(0);
 
 			//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
-			__ImageClassify(path);
+			//__ImageClassify(path);
 
-			m_szBarCode = tmpBarcode;
-			m_szImagePath = path;
+			//m_szBarCode = tmpBarcode;
+			//m_szImagePath = path;
 
 		}
 
@@ -362,13 +362,13 @@ std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
 
 //  
 
-std::wstring CNetworkTask::TakeImage(std::wstring lineID)
+std::string CNetworkTask::TakeImage(std::string lineID)
 {
-	std::wstring CameraID = m_pParamManager->FindCameraByLineID(lineID);
+	std::string CameraID = m_pParamManager->FindCameraByLineID(lineID);
 	CCameraManager *pManager = CCameraManager::GetInstance();
 	if (pManager->GetCameraCount() == 0)
 	{
-		return std::wstring();
+		return std::string();
 	}
 	
 	//std::wstring path = m_Camera.takePhoto(CameraID);

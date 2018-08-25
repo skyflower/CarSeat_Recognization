@@ -537,12 +537,12 @@ SIZE CLineCamera::GetImageSize()
 }
 
 // ch:保存图片 | en:Save Image
-std::wstring CLineCamera::SaveImage()
+std::string CLineCamera::SaveImage()
 {
     if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
 		WriteError("camera status not grab");
-        return std::wstring();
+        return std::string();
     }
     // ch:获取1张图 | en:get one image
     unsigned int nRecvBufSize = 0;
@@ -557,7 +557,7 @@ std::wstring CLineCamera::SaveImage()
         if (nRet != MV_OK)
         {
             WriteError("failed in get PayloadSize, nRet = %d", nRet);
-            return std::wstring();
+            return std::string();
         }
         // ch:一帧数据大小
         // en:One frame size
@@ -566,7 +566,7 @@ std::wstring CLineCamera::SaveImage()
         if (NULL == m_pBufForDriver)
         {
 			WriteError("malloc m_pBufForDriver failed, run out of memory");
-            return std::wstring();
+            return std::string();
         }
 		memset(m_pBufForDriver, 0, sizeof(unsigned char) * m_nBufSizeForDriver);
     }
@@ -578,7 +578,7 @@ std::wstring CLineCamera::SaveImage()
     unsigned int nImageNum = 1;
     unsigned int nDataLen = 0;
 
-	std::wstring imagePath;
+	std::string imagePath;
 
     while(nImageNum)
     {
@@ -632,24 +632,24 @@ std::wstring CLineCamera::SaveImage()
 				tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);*/
 
 
-            wchar_t chImageName[IMAGE_NAME_LEN] = {0};
-			memset(chImageName, 0, sizeof(wchar_t) * IMAGE_NAME_LEN);
+            char chImageName[IMAGE_NAME_LEN] = {0};
+			memset(chImageName, 0, sizeof(char) * IMAGE_NAME_LEN);
             if (MV_Image_Bmp == stParam.enImageType)
             {
                 //swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.bmp", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
-				swprintf_s(chImageName, IMAGE_NAME_LEN, L"%04d%02d%02d_%02d%02d%02d.bmp", \
+				sprintf_s(chImageName, IMAGE_NAME_LEN, "%04d%02d%02d_%02d%02d%02d.bmp", \
 					tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
 					tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 			}
             else if (MV_Image_Jpeg == stParam.enImageType)
             {
                 //swprintf_s(chImageName, IMAGE_NAME_LEN, L"Image_w%d_h%d_fn%03d.jpg", stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
-				swprintf_s(chImageName, IMAGE_NAME_LEN, L"%04d%02d%02d_%02d%02d%02d.jpg", \
+				sprintf_s(chImageName, IMAGE_NAME_LEN, "%04d%02d%02d_%02d%02d%02d.jpg", \
 					tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
 					tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 			}
-			wchar_t absoluteName[MAX_CHAR_LENGTH] = { 0 };
-			memset(absoluteName, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
+			char absoluteName[MAX_CHAR_LENGTH] = { 0 };
+			memset(absoluteName, 0, sizeof(char) * MAX_CHAR_LENGTH);
 
 			WriteInfo("m_szImageDir = %s", m_szImageDir);
 			WriteInfo("chImageName = %s", chImageName);
@@ -657,38 +657,38 @@ std::wstring CLineCamera::SaveImage()
 			TRACE1("m_szImageDir = %s\n", m_szImageDir);
 			TRACE1("chImageName = %s\n", chImageName);
 			
-			swprintf_s(absoluteName, MAX_CHAR_LENGTH, L"%s%s", m_szImageDir, chImageName);
+			sprintf_s(absoluteName, MAX_CHAR_LENGTH, "%s%s", m_szImageDir, chImageName);
 			
-			char *tmpFileName = utils::WcharToChar(absoluteName);
+			/*char *tmpFileName = utils::WcharToChar(absoluteName);
 			if (tmpFileName == nullptr)
 			{
-				return std::wstring();
+				return std::string();
 			}
-			WriteInfo("image file Name = [%s]", tmpFileName);
+			WriteInfo("image file Name = [%s]", tmpFileName);*/
 
 			//HANDLE imageFileHandle = CreateFile(absoluteName, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
 
 
 			FILE* fp = nullptr;
 			errno_t errRet;
-			errRet = fopen_s(&fp, tmpFileName, "wb");
+			errRet = fopen_s(&fp, absoluteName, "wb");
 
 			WriteInfo("errRet = %d", errRet);
             if (NULL == fp)
             {
 
                 WriteError("write image failed, maybe you have no privilege");
-				delete[]tmpFileName;
-				tmpFileName = nullptr;
-				return std::wstring();
+				//delete[]tmpFileName;
+				//tmpFileName = nullptr;
+				return std::string();
             }
             fwrite(m_pBufForSaveImage, 1, stParam.nImageLen, fp);
             fclose(fp);
 			fp = nullptr;
 
-			imagePath = std::wstring(chImageName);
-			delete[]tmpFileName;
-			tmpFileName = nullptr;
+			imagePath = std::string(absoluteName);
+			//delete[]tmpFileName;
+			//tmpFileName = nullptr;
         }
         else
         {
@@ -1046,10 +1046,10 @@ void CLineCamera::SoftwareOnce()
 }
 
 // ch:按下保存bmp图片按钮 | en:Click Save BMP button
-std::wstring CLineCamera::SaveBmp()
+std::string CLineCamera::SaveBmp()
 {
     m_nSaveImageType = MV_Image_Bmp;
-    std::wstring path = SaveImage();
+    std::string path = SaveImage();
     if (path.size() == 0)
     {
         WriteError("Save bmp fail");
@@ -1061,10 +1061,10 @@ std::wstring CLineCamera::SaveBmp()
 }
 
 // ch:按下保存jpg图片按钮 | en:Click Save JPG button
-std::wstring CLineCamera::SaveJpg()
+std::string CLineCamera::SaveJpg()
 {
     m_nSaveImageType = MV_Image_Jpeg;
-	std::wstring path = SaveImage();
+	std::string path = SaveImage();
     if (path.size() == 0)
     {
         WriteError("Save jpg fail");

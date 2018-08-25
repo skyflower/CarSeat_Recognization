@@ -30,7 +30,7 @@ public:
 
 
 	//std::vector<std::wstring> *GetFtpParameter();
-	std::wstring FindCameraByLineID(std::wstring lineID);
+	std::string FindCameraByLineID(std::string lineID);
 
 	unsigned int GetBarcodeIp();
 	unsigned int GetBarcodePort();
@@ -50,7 +50,7 @@ public:
 	const char* GetBarcodeResetParam() const;
 
 
-	std::wstring GetLocalName() { return m_strLocalName; }
+	std::string GetLocalName() { return m_strLocalName; }
 
 
 private:
@@ -111,7 +111,7 @@ private:
 	char m_szCacheImagePath[256];
 
 	// 本机名
-	std::wstring m_strLocalName;
+	std::string m_strLocalName;
 
 	//ftp用户名密码以及图像的存储路径
 	//std::vector<std::wstring> *m_pFtp;
@@ -122,6 +122,6 @@ private:
 	std::string m_szLabelFile;
 
 	//产线和相机的对应关系
-	std::unordered_map<std::wstring, std::wstring> *m_pLineCamera;
+	std::unordered_map<std::string, std::string> *m_pLineCamera;
 };
 

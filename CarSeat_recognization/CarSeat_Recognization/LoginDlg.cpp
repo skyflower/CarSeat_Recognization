@@ -32,8 +32,8 @@ void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Check(pDX, IDC_CHECK_SAVE_USRNAME_PASSWD, m_bAutoSaveFlag);
-	DDX_Text(pDX, IDC_EDIT_PASSWD, m_strUsrName);
-	DDX_Text(pDX, IDC_EDIT_USRNAME, m_strPasswd);
+	DDX_Text(pDX, IDC_EDIT_PASSWD, m_strPasswd);
+	DDX_Text(pDX, IDC_EDIT_USRNAME, m_strUsrName);
 }
 
 BOOL CLoginDlg::GetAutoSaveFlag()
@@ -84,13 +84,38 @@ void CLoginDlg::OnBnClickedOk()
 	{
 		return;
 	}
-	m_pLabelManager->SetLoginPasswd(m_strPasswd.GetBuffer());
+
+	wchar_t *tmpPointer = m_strPasswd.GetBuffer();
+
+	if (tmpPointer != nullptr)
+	{
+		char *tmpPasswd = utils::WcharToChar(tmpPointer);
+		if (tmpPasswd != nullptr)
+		{
+			m_pLabelManager->SetLoginPasswd(tmpPasswd);
+			delete[]tmpPasswd;
+			tmpPasswd = nullptr;
+		}
+	}
 	m_strPasswd.ReleaseBuffer();
 
-	m_pLabelManager->SetLoginUsrName(m_strUsrName.GetBuffer());
+	tmpPointer = m_strUsrName.GetBuffer();
+
+	if (tmpPointer != nullptr)
+	{
+		char *tmpUsrName = utils::WcharToChar(tmpPointer);
+		if (tmpUsrName != nullptr)
+		{
+			m_pLabelManager->SetLoginUsrName(tmpUsrName);
+			delete[]tmpUsrName;
+			tmpUsrName = nullptr;
+		}
+	}
 	m_strUsrName.ReleaseBuffer();
 
-	m_pLabelManager->SetLoginAutoSave(m_bAutoSaveFlag);
+	bool tmpAutoSave = (m_bAutoSaveFlag == TRUE) ? true : false;
+
+	m_pLabelManager->SetLoginAutoSave(tmpAutoSave);
 	
 	CDialogEx::OnOK();
 }
@@ -103,14 +128,36 @@ BOOL CLoginDlg::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	if (m_pLabelManager != nullptr)
 	{
-		
-		m_strUsrName = m_pLabelManager->GetLoginUsrName();
-		m_strPasswd = m_pLabelManager->GetLoginPasswd();
-		m_bAutoSaveFlag = m_pLabelManager->GetLoginAutoSave();
+		const char *tmpPointer = m_pLabelManager->GetLoginUsrName();
+		if (tmpPointer != nullptr)
+		{
+			wchar_t *tmpUsrName = utils::CharToWchar((char*)tmpPointer);
+			if (tmpUsrName != nullptr)
+			{
+				m_strUsrName = CString(tmpUsrName);
+				delete[]tmpUsrName;
+				tmpUsrName = nullptr;
+			}
+
+		}
+
+		tmpPointer = m_pLabelManager->GetLoginPasswd();
+		if (tmpPointer != nullptr)
+		{
+			wchar_t *tmpPasswd = utils::CharToWchar((char*)tmpPointer);
+			if (tmpPasswd != nullptr)
+			{
+				m_strPasswd = CString(tmpPasswd);
+				delete[]tmpPasswd;
+				tmpPasswd = nullptr;
+			}
+		}
+
+		bool tmpAutoSave = m_pLabelManager->GetLoginAutoSave();
+
+		m_bAutoSaveFlag = (tmpAutoSave == true) ? TRUE : FALSE;
 		UpdateData(FALSE); // false 将数值从变量传给控件
 	}
-	
-
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE

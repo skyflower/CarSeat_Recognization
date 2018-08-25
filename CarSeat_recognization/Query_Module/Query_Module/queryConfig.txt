@@ -13,8 +13,8 @@ seatType={"k216 black pvc diamond cloth",
 
 
 ## 服务器通信的ip地址和端口号
-serverip=192.168.1.177
-serverport=8080
+serverip="192.168.1.177"
+serverport="8080"
 
 
 ## ftp登录需要的用户名和账号，以及存储图像的路径
@@ -23,6 +23,6 @@ ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
 
 methodType={"auto", "manual"}
 
-username=
-passwd=
+username=""
+passwd=""
 

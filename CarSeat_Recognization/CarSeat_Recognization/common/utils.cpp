@@ -324,7 +324,7 @@ namespace utils
 
 
 
-	bool parseVector(const char *content, const char * name, std::vector<std::wstring>* pVector)
+	bool parseVector(const char *content, const char * name, std::vector<std::string>* pVector)
 	{
 		if ((content == nullptr) || (name == nullptr) || (pVector == nullptr))
 		{
@@ -349,7 +349,7 @@ namespace utils
 		return true;
 	}
 
-	bool parseLineSegment(const char * pContent, size_t length, std::vector<std::wstring>* pData)
+	bool parseLineSegment(const char * pContent, size_t length, std::vector<std::string>* pData)
 	{
 		if ((pContent == nullptr) || (length < 1) || (pData == nullptr))
 		{
@@ -376,18 +376,9 @@ namespace utils
 			{
 				memset(tmpStr, 0, sizeof(tmpStr));
 				memcpy(tmpStr, begin + 1, sizeof(char)*(end - begin - 1));
-				wchar_t *wchar = utils::CharToWchar(tmpStr);
-				if (wchar == nullptr)
-				{
-					continue;
-				}
-				std::wstring wStr(wchar);
-				pData->push_back(wStr);
-				if (wchar != nullptr)
-				{
-					delete[]wchar;
-					wchar = nullptr;
-				}
+				
+				pData->push_back(std::string(tmpStr));
+				
 			}
 		}
 		return true;
@@ -424,7 +415,7 @@ namespace utils
 		return tmpServerIp;
 	}
 
-	int parseMap(const char * content, const char * name, std::unordered_map<std::wstring, std::wstring>* pMap)
+	int parseMap(const char * content, const char * name, std::unordered_map<std::string, std::string>* pMap)
 	{
 		if ((content == nullptr) || (name == nullptr) || (pMap == nullptr))
 		{
@@ -458,7 +449,7 @@ namespace utils
 			memcpy(tmpStr, first + 1, tmpLength);
 			TRACE1("tmpStr = [%s]\n", tmpStr);
 			std::string keyChar(tmpStr);
-			std::wstring keyWChar = utils::StrToWStr(keyChar);
+			//std::wstring keyWChar = utils::StrToWStr(keyChar);
 
 			p = second + 1;
 
@@ -477,9 +468,9 @@ namespace utils
 			memcpy(tmpStr, first + 1, tmpLength);
 			TRACE1("tmpStr = [%s]\n", tmpStr);
 			std::string valueChar(tmpStr);
-			std::wstring valueWChar = utils::StrToWStr(valueChar);
+			//std::wstring valueWChar = utils::StrToWStr(valueChar);
 
-			pMap->insert(std::make_pair(keyWChar, valueWChar));
+			pMap->insert(std::make_pair(keyChar, valueChar));
 
 			p = second + 1;
 

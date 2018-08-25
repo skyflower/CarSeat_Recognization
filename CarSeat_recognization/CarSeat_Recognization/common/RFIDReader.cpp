@@ -36,7 +36,7 @@ CRFIDReader::~CRFIDReader()
 	}
 }
 
-std::wstring CRFIDReader::readBarcode()
+std::string CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8Î»ÓÐÐ§
 #if 0
@@ -77,7 +77,7 @@ std::wstring CRFIDReader::readBarcode()
 		delete[]buffer;
 		buffer = nullptr;
 		WriteError("communicate err = %d", ret);
-		return std::wstring();
+		return std::string();
 	}
 	WriteInfo("readData return = [%s]", buffer);
 
@@ -165,12 +165,12 @@ std::wstring CRFIDReader::readBarcode()
 	{
 		WriteError("resultCode = %s", resultCode);
 		WriteError("barcode = %s", barcodeChar);
-		return std::wstring();
+		return std::string();
 	}
 
 	if (strlen(barcodeChar) == 0)
 	{
-		return std::wstring();
+		return std::string();
 	}
 
 	char tmpValue[256] = { 0 };
@@ -186,16 +186,16 @@ std::wstring CRFIDReader::readBarcode()
 		*/
 		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
 		{
-			return std::wstring();
+			return std::string();
 		}
 		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
 
 		std::string barcodeStr(tmpValue);
-		return utils::StrToWStr(barcodeStr);
+		return barcodeStr;
 	}
 
-	return std::wstring();
+	return std::string();
 #endif // DEBUG_RFID
 }
 

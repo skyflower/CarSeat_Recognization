@@ -43,7 +43,7 @@ public:
 	*/
 	void pushImage(const char*filePath);
 
-	std::wstring GetImageType(const char*filePath);
+	std::string GetImageType(const char*filePath);
 
 
 	//  终止线程
@@ -55,7 +55,7 @@ public:
 	/*
 	同步计算接口
 	*/
-	std::wstring compute(const char *filePath);
+	std::string compute(const char *filePath);
 	
 private:
 
@@ -79,7 +79,7 @@ private:
 	std::hash<const char*> m_pHashFunc;
 
 	// 
-	std::unordered_map<size_t, std::wstring> *m_pType;
+	std::unordered_map<size_t, std::string> *m_pType;
 	
 	std::list<std::string> *m_pReadyImage;
 	std::mutex m_Mutex;

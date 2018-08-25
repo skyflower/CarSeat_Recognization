@@ -137,8 +137,8 @@ unsigned int CParamManager::__auxLocalIP()
 	}
 
 	{
-		std::string tmpLocalName(buf);
-		m_strLocalName = utils::StrToWStr(tmpLocalName);
+		//std::string tmpLocalName(buf);
+		m_strLocalName = std::string(buf);// utils::StrToWStr(tmpLocalName);
 	}
 	
 	if ((ret = getaddrinfo(buf, NULL, &hints, &res)) != 0)
@@ -215,19 +215,19 @@ unsigned int CParamManager::GetKepServerPort()
 //}
 
 
-std::wstring CParamManager::FindCameraByLineID(std::wstring lineID)
+std::string CParamManager::FindCameraByLineID(std::string lineID)
 {
 	if (m_pLineCamera != nullptr)
 	{
-		std::unordered_map < std::wstring, std::wstring>::const_iterator iter = \
+		std::unordered_map < std::string, std::string>::const_iterator iter = \
 			m_pLineCamera->find(lineID);
 		if (iter == m_pLineCamera->end())
 		{
-			return std::wstring();
+			return std::string();
 		}
 		return iter->second;
 	}
-	return std::wstring();
+	return std::string();
 }
 
 unsigned int CParamManager::GetBarcodeIp()
@@ -311,7 +311,7 @@ void CParamManager::Init()
 		}*/
 		if (m_pLineCamera == nullptr)
 		{
-			m_pLineCamera = new std::unordered_map<std::wstring, std::wstring>;
+			m_pLineCamera = new std::unordered_map<std::string, std::string>;
 		}
 		utils::parseMap(content, "lineCamera", m_pLineCamera);
 		if ((m_pLineCamera == nullptr) || (m_pLineCamera->size() == 0))

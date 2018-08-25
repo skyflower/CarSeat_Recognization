@@ -20,7 +20,7 @@ CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
 	memset(m_szCacheImagePath, 0, sizeof(m_szCacheImagePath));
 
 	m_pReadyImage = new std::list<std::string>;
-	m_pType = new std::unordered_map<size_t, std::wstring>;
+	m_pType = new std::unordered_map<size_t, std::string>;
 }
 
 CImageClassify::~CImageClassify()
@@ -107,19 +107,19 @@ void CImageClassify::pushImage(const char * filePath)
 	}
 }
 
-std::wstring CImageClassify::GetImageType(const char * filePath)
+std::string CImageClassify::GetImageType(const char * filePath)
 {
 	size_t tmpHashValue = hashValue(filePath);
 	if ((m_pType != nullptr) && (m_pType->size() > 0))
 	{
-		std::unordered_map<size_t, std::wstring>::const_iterator iter = m_pType->find(tmpHashValue);
+		std::unordered_map<size_t, std::string>::const_iterator iter = m_pType->find(tmpHashValue);
 		if (iter == m_pType->end())
 		{
-			return std::wstring();
+			return std::string();
 		}
 		return iter->second;
 	}
-	return std::wstring();
+	return std::string();
 }
 
 bool CImageClassify::terminate()
@@ -146,10 +146,10 @@ void CImageClassify::run()
 			m_Mutex.unlock();
 			if (strlen(tmpPath) > 0)
 			{
-				std::wstring tmpType = compute(tmpPath);
+				std::string tmpType = compute(tmpPath);
 				if (m_pType == nullptr)
 				{
-					m_pType = new std::unordered_map<size_t, std::wstring>;
+					m_pType = new std::unordered_map<size_t, std::string>;
 				}
 				size_t tmpHashValue = hashValue(tmpPath);
 				m_pType->insert(std::make_pair(tmpHashValue, tmpType));
@@ -163,7 +163,7 @@ void CImageClassify::run()
 	}
 }
 
-std::wstring CImageClassify::compute(const char *filePath)
+std::string CImageClassify::compute(const char *filePath)
 {
 	char *tmpUpType = NULL;
 	float tmpUpValue = 0;
@@ -192,7 +192,7 @@ std::wstring CImageClassify::compute(const char *filePath)
 
 	if ((tmpUpType == nullptr) || (tmpDownType == nullptr))
 	{
-		return std::wstring();
+		return std::string();
 	}
 
 	/*
@@ -203,12 +203,12 @@ std::wstring CImageClassify::compute(const char *filePath)
 
 	if ((tmpUpLength <= 3) || (tmpDownLength <= 5))
 	{
-		return std::wstring();
+		return std::string();
 	}
 	
 	if (strncmp(tmpUpType, tmpDownType, strlen(tmpUpType) - 3) != 0)
 	{
-		return std::wstring();
+		return std::string();
 	}
 	char tmpResultType[100] = { 0 };
 	memset(tmpResultType, 0, sizeof(tmpResultType));
@@ -216,14 +216,14 @@ std::wstring CImageClassify::compute(const char *filePath)
 
 	//std::string tmpBuffer(tmpUpType);
 
-	wchar_t *tmpWType = utils::CharToWchar(tmpResultType);
+	//wchar_t *tmpWType = utils::CharToWchar(tmpResultType);
 
-	std::wstring wstrBuffer(tmpWType);
+	std::string strBuffer(tmpResultType);
 
-	delete tmpWType;
-	tmpWType = nullptr;
+	//delete tmpWType;
+	//tmpWType = nullptr;
 
-	return wstrBuffer;
+	return strBuffer;
 }
 
 void CImageClassify::destory()

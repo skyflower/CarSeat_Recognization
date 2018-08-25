@@ -33,7 +33,7 @@ private:
 
 	//IPicture 
 
-	wchar_t m_szReType[40];
+	char m_szReType[40];
 
 	CParamManager *m_pParamManager;
 	CLabelManager *m_pLabelManager;
@@ -44,10 +44,10 @@ private:
 public:
 	virtual BOOL OnInitDialog();
 
-	std::wstring GetInputType();
+	std::string GetInputType();
 
 	void SetManagePointer(CParamManager *pParamManager, CLabelManager *pLabelManager);
-	void SetTestImagePath(std::wstring path);
+	void SetTestImagePath(std::string path);
 
 private:
 	CComboBox m_TypeCombo;

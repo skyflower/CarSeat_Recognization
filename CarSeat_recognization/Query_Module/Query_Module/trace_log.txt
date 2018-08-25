@@ -1,0 +1,8 @@
+Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xC0A801B1
+Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xC0A80104, ServerIp = 0xC0A801B1
+Info	[CQuery_ModuleApp::OnButtonChoose,283]date = [begin = 2018/8/13],[end = 2018/8/24]
+Info	[CQuery_ModuleApp::OnButtonChoose,284]time = [begin = 20:45:21],[end = 20:45:21]
+Info	[CQuery_ModuleApp::OnButtonChoose,285]line = [begin = L5],[end = L4]
+Info	[CQuery_ModuleApp::OnButtonChoose,286]barcode = [begin = ],[end = ]
+Info	[CQuery_ModuleApp::OnButtonChoose,287]seatType = [k215 ecru pvc leather], methodType = [auto]

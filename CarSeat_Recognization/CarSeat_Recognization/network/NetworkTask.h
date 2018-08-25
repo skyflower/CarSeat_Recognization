@@ -78,7 +78,7 @@ private:
 
 	return:  返回照片路径
 	*/
-	std::wstring TakeImage(std::wstring lineID);
+	std::string TakeImage(std::string lineID);
 
 	/*
 	function: 将图像发送到识别模块中

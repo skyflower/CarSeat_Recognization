@@ -14,6 +14,9 @@ CLabelManager::CLabelManager()
 	memset(m_strLoginName, 0, sizeof(m_strLoginName));
 	memset(m_strLoginPasswd, 0, sizeof(m_strLoginPasswd));
 	m_bLoginAutoSave = false;
+	memset(m_configFile, 0, sizeof(m_configFile));
+	strcpy_s(m_configFile, "labelConfig.txt");
+
 	
 	if (m_bInitFlag == false)
 	{
@@ -25,6 +28,10 @@ CLabelManager::CLabelManager()
 
 CLabelManager::~CLabelManager()
 {
+	if (m_bSerialize == true)
+	{
+		serialize();
+	}
 	if (m_pBarcode != nullptr)
 	{
 		delete m_pBarcode;
@@ -37,14 +44,14 @@ CLabelManager::~CLabelManager()
 	}
 }
 
-std::wstring CLabelManager::GetInternalTypeByBarcode(std::wstring barcode)
+std::string CLabelManager::GetInternalTypeByBarcode(std::string barcode)
 {
 	if (barcode.size() < 5)
 	{
-		return std::wstring();
+		return std::string();
 	}
 
-	wchar_t tmp[10] = { 0 };
+	char tmp[10] = { 0 };
 	memset(tmp, 0, sizeof(tmp));
 
 	for (int i = 0; (i < 3) && (i + 5 < barcode.size()); ++i)
@@ -52,14 +59,14 @@ std::wstring CLabelManager::GetInternalTypeByBarcode(std::wstring barcode)
 		tmp[i] = barcode[i + 5];
 	}
 
-	return std::wstring(tmp);
+	return std::string(tmp);
 }
 
-std::wstring CLabelManager::GetInternalTypeByClassifyType(std::wstring type)
+std::string CLabelManager::GetInternalTypeByClassifyType(std::string type)
 {
 	if (m_pClassifyType != nullptr)
 	{
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pClassifyType->begin();
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->begin();
 		for (; iter != m_pClassifyType->end(); ++iter)
 		{
 			if (iter->second == type)
@@ -68,14 +75,14 @@ std::wstring CLabelManager::GetInternalTypeByClassifyType(std::wstring type)
 			}
 		}
 	}
-	return std::wstring();
+	return std::string();
 }
 
 bool CLabelManager::init()
 {
 	size_t nSize = 0;
 	char *content = nullptr;
-	utils::readFile("labelConfig.txt", content, nSize);
+	utils::readFile(m_configFile, content, nSize);
 	if ((content == nullptr) || (nSize == 0))
 	{
 		return false;
@@ -86,36 +93,23 @@ bool CLabelManager::init()
 
 	if (true == utils::getValueByName(content, "LoginUsrName", tmpValue))
 	{
-		wchar_t *tmp = utils::CharToWchar(tmpValue);
-		if (tmp != nullptr)
-		{
-			wmemcpy(m_strLoginName, tmp, wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-		}
-		
+		memcpy(m_strLoginName, tmpValue, strlen(tmpValue));
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "LoginPasswd", tmpValue))
 	{
-		wchar_t *tmp = utils::CharToWchar(tmpValue);
-		if (tmp != nullptr)
-		{
-			wmemcpy(m_strLoginPasswd, tmp, wcslen(tmp));
-			delete[]tmp;
-			tmp = nullptr;
-		}
+		memcpy(m_strLoginPasswd, tmpValue, strlen(tmpValue));
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "LoginInfoAutoSave", tmpValue))
 	{
-		if (tmpValue[0] == L'1')
+		if (tmpValue[0] == '1')
 		{
 			m_bLoginAutoSave = true;
 		}
-		else
+		else if(tmpValue[0] == '0')
 		{
 			m_bLoginAutoSave = false;
 		}
@@ -141,15 +135,15 @@ bool CLabelManager::init()
 
 	if (m_pBarcode == nullptr)
 	{
-		m_pBarcode = new std::unordered_map<std::wstring, std::wstring>;
+		m_pBarcode = new std::unordered_map<std::string, std::string>;
 	}
 	if (m_pClassifyType == nullptr)
 	{
-		m_pClassifyType = new std::unordered_map<std::wstring, std::wstring>;
+		m_pClassifyType = new std::unordered_map<std::string, std::string>;
 	}
 
 	char *str[] = { "barcodeTable", "classifyType" };
-	std::unordered_map<std::wstring, std::wstring> *p[2];
+	std::unordered_map<std::string, std::string> *p[2];
 	p[0] = m_pBarcode;
 	p[1] = m_pClassifyType;
 
@@ -204,7 +198,7 @@ bool CLabelManager::serialize()
 		return false;
 	}
 	FILE *fp = nullptr;
-	fopen_s(&fp, "labelConfig.txt", "wb");
+	fopen_s(&fp, m_configFile, "wb");
 	if (fp == nullptr)
 	{
 		WriteError("Failed labelConfig.txt.bak");
@@ -212,67 +206,72 @@ bool CLabelManager::serialize()
 	}
 
 	const size_t Length = 2000;
-	wchar_t *tmpStr = new wchar_t[Length];
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	char *tmpStr = new char[Length];
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 	if ((m_pBarcode != nullptr) && (m_pBarcode->size() > 0))
 	{
-		lstrcatW(tmpStr, L"barcodeTable={");
+		strcat_s(tmpStr, Length, "barcodeTable={");
+		//strcat_s(tmpStr, Length, "")
 		size_t tmpSize = m_pBarcode->size();
 		int i = 0;
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->begin();
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pBarcode->begin();
 		for (; i < tmpSize - 1; ++i)
 		{
-			wsprintfW(tmpStr, L"%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
+			sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
 				iter->second.c_str());
 			++iter;
 		}
-		wsprintfW(tmpStr, L"%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
+		sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
 			iter->second.c_str());
 	}
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
+
 
 	if ((m_pClassifyType != nullptr) && (m_pClassifyType->size() > 0))
 	{
-		lstrcatW(tmpStr, L"classifyType={");
+		strcat_s(tmpStr, Length, "classifyType={");
 		size_t tmpSize = m_pClassifyType->size();
 		int i = 0;
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pClassifyType->begin();
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->begin();
 		for (; i < tmpSize - 1; ++i)
 		{
-			wsprintfW(tmpStr, L"%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
+			sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
 				iter->second.c_str());
 			++iter;
 		}
-		wsprintfW(tmpStr, L"%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
+		sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
 			iter->second.c_str());
 	}
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
-	wsprintfW(tmpStr, L"\nExposureTimeMax=%d\nExposureTimeMin=%d\n", \
+	sprintf_s(tmpStr, Length, "\nExposureTimeMax=\"%d\"\nExposureTimeMin=\"%d\"\n", \
 		m_nExposureTimeMax, m_nExposureTimeMin);
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(wchar_t) * Length);
+
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
 
 
-	wsprintfW(tmpStr, L"\nLoginUsrName=%s\nLoginPasswd=%s\nLoginInfoAutoSave=%d\n", \
+	sprintf_s(tmpStr, Length, "\nLoginUsrName=\"%s\"\nLoginPasswd=\"%s\"\nLoginInfoAutoSave=\"%d\"\n", \
 		m_strLoginName, m_strLoginPasswd, (m_bLoginAutoSave == true ? 1 : 0));
-	fwrite(tmpStr, sizeof(wchar_t), wcslen(tmpStr), fp);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
 	//memset(tmpStr, 0, sizeof(wchar_t) * Length);
 
+	delete[]tmpStr;
+	tmpStr = nullptr;
 
 	return true;
 }
 
 
-std::vector<std::wstring> CLabelManager::GetBarcode()
+std::vector<std::string> CLabelManager::GetBarcode()
 {
-	std::vector<std::wstring> pVec;
+	std::vector<std::string> pVec;
 	if (m_pBarcode != nullptr)
 	{
-		std::unordered_map < std::wstring, std::wstring>::const_iterator iter = m_pBarcode->begin();
+		std::unordered_map < std::string, std::string>::const_iterator iter = m_pBarcode->begin();
 		for (; iter != m_pBarcode->end(); ++iter)
 		{
 			pVec.push_back(iter->first);
@@ -281,12 +280,12 @@ std::vector<std::wstring> CLabelManager::GetBarcode()
 	return pVec;
 }
 
-std::vector<std::wstring> CLabelManager::GetExternalType()
+std::vector<std::string> CLabelManager::GetExternalType()
 {
-	std::vector<std::wstring> pVec;
+	std::vector<std::string> pVec;
 	if (m_pBarcode != nullptr)
 	{
-		std::unordered_map < std::wstring, std::wstring>::const_iterator iter = m_pBarcode->begin();
+		std::unordered_map < std::string, std::string>::const_iterator iter = m_pBarcode->begin();
 		for (; iter != m_pBarcode->end(); ++iter)
 		{
 			pVec.push_back(iter->second);
@@ -296,19 +295,19 @@ std::vector<std::wstring> CLabelManager::GetExternalType()
 }
 
 
-//std::vector<std::wstring> CLabelManager::GetInternalType()
+//std::vector<std::string> CLabelManager::GetInternalType()
 //{
-//	std::vector<std::wstring> pVec;
+//	std::vector<std::string> pVec;
 //	return pVec;
 //}
 
 
-std::vector<std::wstring> CLabelManager::GetClassifyType()
+std::vector<std::string> CLabelManager::GetClassifyType()
 {
-	std::vector<std::wstring> pVec;
+	std::vector<std::string> pVec;
 	if (m_pClassifyType != nullptr)
 	{
-		std::unordered_map < std::wstring, std::wstring>::const_iterator iter = m_pClassifyType->begin();
+		std::unordered_map < std::string, std::string>::const_iterator iter = m_pClassifyType->begin();
 		for (; iter != m_pClassifyType->end(); ++iter)
 		{
 			pVec.push_back(iter->first);
@@ -316,25 +315,25 @@ std::vector<std::wstring> CLabelManager::GetClassifyType()
 	}
 	return pVec;
 }
-bool CLabelManager::SetLoginUsrName(const wchar_t * name)
+bool CLabelManager::SetLoginUsrName(const char * name)
 {
-	if ((name == nullptr) || (wcslen(name) > MAX_USR_NAME_AND_PASSWD))
+	if ((name == nullptr) || (strlen(name) > MAX_USR_NAME_AND_PASSWD))
 	{
 		return false;
 	}
 	memset(m_strLoginName, 0, sizeof(m_strLoginName));
-	wmemcpy(m_strLoginName, name, wcslen(name));
+	memcpy(m_strLoginName, name, strlen(name));
 	m_bSerialize = true;
 	return true;
 }
-bool CLabelManager::SetLoginPasswd(const wchar_t * passwd)
+bool CLabelManager::SetLoginPasswd(const char * passwd)
 {
-	if ((passwd == nullptr) || (wcslen(passwd) > MAX_USR_NAME_AND_PASSWD))
+	if ((passwd == nullptr) || (strlen(passwd) > MAX_USR_NAME_AND_PASSWD))
 	{
 		return false;
 	}
 	memset(m_strLoginPasswd, 0, sizeof(m_strLoginPasswd));
-	wmemcpy(m_strLoginPasswd, passwd, wcslen(passwd));
+	memcpy(m_strLoginPasswd, passwd, strlen(passwd));
 	m_bSerialize = true;
 	return true;
 }
@@ -359,11 +358,11 @@ int CLabelManager::GetExposureTimeMin()
 {
 	return m_nExposureTimeMin;
 }
-const wchar_t * CLabelManager::GetLoginUsrName() const
+const char * CLabelManager::GetLoginUsrName() const
 {
 	return m_strLoginName;
 }
-const wchar_t * CLabelManager::GetLoginPasswd() const
+const char * CLabelManager::GetLoginPasswd() const
 {
 	return m_strLoginPasswd;
 }
@@ -371,30 +370,30 @@ void CLabelManager::UpdateBarcode(const char *xmlContent, size_t len)
 {
 
 }
-std::wstring CLabelManager::GetExternalTypeByBarcode(std::wstring barcode)
+std::string CLabelManager::GetExternalTypeByBarcode(std::string barcode)
 {
 	/*
 	截取中间的6-8位作为条形码类型
 	*/
 	
-	std::wstring tmpInternalType = GetInternalTypeByBarcode(barcode);
+	std::string tmpInternalType = GetInternalTypeByBarcode(barcode);
 
 	if (m_pBarcode != nullptr)
 	{
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->find(tmpInternalType);
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pBarcode->find(tmpInternalType);
 		if (iter != m_pBarcode->end())
 		{
 			return iter->second;
 		}
 	}
-	return std::wstring();
+	return std::string();
 }
-std::wstring CLabelManager::GetExternalTypeByClassifyType(std::wstring classifyType)
+std::string CLabelManager::GetExternalTypeByClassifyType(std::string classifyType)
 {
-	std::wstring internalType;
+	std::string internalType;
 	if (m_pClassifyType != nullptr)
 	{
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pClassifyType->find(classifyType);
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->find(classifyType);
 		if (iter != m_pClassifyType->end())
 		{
 			internalType = iter->second;
@@ -406,18 +405,18 @@ std::wstring CLabelManager::GetExternalTypeByClassifyType(std::wstring classifyT
 	}
 	if (m_pBarcode != nullptr)
 	{
-		std::unordered_map<std::wstring, std::wstring>::const_iterator iter = m_pBarcode->find(internalType);
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pBarcode->find(internalType);
 		if (iter != m_pBarcode->end())
 		{
 			return iter->second;
 		}
 	}
-	return std::wstring();
+	return std::string();
 }
 
-std::wstring CLabelManager::GetClassifyTypeByExternal(std::wstring externalType)
+std::string CLabelManager::GetClassifyTypeByExternal(std::string externalType)
 {
-	std::wstring barcode;
+	std::string barcode;
 	if (m_pBarcode != nullptr)
 	{
 		
@@ -440,5 +439,5 @@ std::wstring CLabelManager::GetClassifyTypeByExternal(std::wstring externalType)
 			}
 		}
 	}
-	return std::wstring();
+	return std::string();
 }

@@ -258,8 +258,8 @@ void CCarSeat_RecognizationDlg::run()
 		m_pRFIDReader = new CRFIDReader();
 	}
 
-	std::wstring imagepath;
-	std::wstring reType;
+	std::string imagepath;
+	std::string reType;
 	std::string tmpImageDir(m_pParamManager->GetImageDirectory());
 	while (m_bThreadStatus)
 	{
@@ -290,9 +290,9 @@ void CCarSeat_RecognizationDlg::run()
 		/*
 		读取条形码
 		*/
-		imagepath = std::wstring();
+		imagepath = std::string();
 
-		std::wstring tmpBarcode = m_pRFIDReader->readBarcode();
+		std::string tmpBarcode = m_pRFIDReader->readBarcode();
 		if (m_pParamManager->GetBarcodeTime() < 100)
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
@@ -329,11 +329,11 @@ void CCarSeat_RecognizationDlg::run()
 		}
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
-			std::string tmpPath = utils::WStrToStr(imagepath);
+			//std::string tmpPath = utils::WStrToStr(imagepath);
 			//m_pParamManager->GetImageDirectory();
-			std::string tmpImageAbsolutePath = tmpImageDir + "\\" + tmpPath;
+			std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
 			reType = m_pClassify->compute(tmpImageAbsolutePath.c_str());
-			CheckAndUpdate(tmpBarcode, reType, tmpPath);
+			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
 		
 		/*std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
@@ -378,18 +378,18 @@ bool CCarSeat_RecognizationDlg::SetLabelManager(CLabelManager * pLabelManager)
 	return true;
 }
 
-void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstring RecogType, std::string tmpPath)
+void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string RecogType, std::string tmpPath)
 {
 	/*
 	先将barcode转换成和type一致的类型，然后比较，然后刷新界面，如果错误，则弹出对话框，人工干预
 	
 	*/
-	std::wstring barInternalType = m_pLabelManager->GetInternalTypeByBarcode(barcode);
-	std::wstring typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(RecogType);
-	std::wstring RecogExternalType = m_pLabelManager->GetExternalTypeByClassifyType(RecogType);
-	std::wstring barExternalType = m_pLabelManager->GetExternalTypeByBarcode(barcode);
+	std::string barInternalType = m_pLabelManager->GetInternalTypeByBarcode(barcode);
+	std::string typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(RecogType);
+	std::string RecogExternalType = m_pLabelManager->GetExternalTypeByClassifyType(RecogType);
+	std::string barExternalType = m_pLabelManager->GetExternalTypeByBarcode(barcode);
 
-	std::wstring reType;
+	std::string reType;
 
 	wchar_t result[MAX_CHAR_LENGTH] = { 0 };
 	//CNetworkTask::message msg;
@@ -397,11 +397,11 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 	struct RecogResult tmpResult;
 	memset(&tmpResult, 0, sizeof(RecogResult));
 
-	std::string cBarcode = utils::WStrToStr(barcode);
-	memcpy(tmpResult.m_szBarcode, cBarcode.c_str(), sizeof(char) * cBarcode.size());
+	//std::string cBarcode = utils::WStrToStr(barcode);
+	memcpy(tmpResult.m_szBarcode, barcode.c_str(), sizeof(char) * barcode.size());
 
-	std::string cRecogExternalType = utils::WStrToStr(RecogExternalType);
-	memcpy(tmpResult.m_szTypeByRecog, cRecogExternalType.c_str(), sizeof(char) * cRecogExternalType.size());
+	//std::string cRecogExternalType = utils::WStrToStr(RecogExternalType);
+	memcpy(tmpResult.m_szTypeByRecog, RecogExternalType.c_str(), sizeof(char) * RecogExternalType.size());
 
 	strcpy_s(tmpResult.m_szCameraName, (char*)m_pCameraManager->GetCamera(m_nCameraIndex)->SpecialInfo.stGigEInfo.chModelName);
 
@@ -409,8 +409,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 
 	strcpy_s(tmpResult.m_szRecogMethod, "auto");
 	
-	std::string cBarExternalType = utils::WStrToStr(barExternalType);
-	memcpy(tmpResult.m_szTypeByBarcode, cBarExternalType.c_str(), sizeof(char) * cBarExternalType.size());
+	//std::string cBarExternalType = utils::WStrToStr(barExternalType);
+	memcpy(tmpResult.m_szTypeByBarcode, barExternalType.c_str(), sizeof(char) * barExternalType.size());
 
 	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
 
@@ -421,18 +421,18 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday,	\
 		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 
-	std::wstring tmpUsrName(m_pLabelManager->GetLoginUsrName());
-	std::string cUsrName = utils::WStrToStr(tmpUsrName);
+	std::string tmpUsrName(m_pLabelManager->GetLoginUsrName());
+	//std::string cUsrName = utils::WStrToStr(tmpUsrName);
 
-	memcpy(tmpResult.m_szUsrName, cUsrName.c_str(), sizeof(char) * cUsrName.size());	
+	memcpy(tmpResult.m_szUsrName, tmpUsrName.c_str(), sizeof(char) * tmpUsrName.size());
 
 	
 	/*
 	计算拍照图片的绝对路径
 	*/
-	std::wstring tmpWPath = utils::StrToWStr(tmpPath);
+	//std::wstring tmpWPath = utils::StrToWStr(tmpPath);
 	std::string tmpImageDirectory(m_pParamManager->GetImageDirectory());
-	tmpWPath = utils::StrToWStr(tmpImageDirectory) + L"\\" + tmpWPath;
+	std::string tmpImagePath = tmpImageDirectory + "\\" + tmpPath;
 
 	/*
 
@@ -463,14 +463,14 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
 		
-		dlg.SetTestImagePath(tmpWPath);
+		dlg.SetTestImagePath(tmpImagePath);
 		INT_PTR msg = dlg.DoModal();
 		
 		if (msg == IDOK)
 		{
 			reType = dlg.GetInputType();
-			std::string cReType = utils::WStrToStr(reType);
-			memcpy(tmpResult.m_szTypeByUsrInput, cReType.c_str(), sizeof(char) * cReType.size());
+			//std::string cReType = utils::WStrToStr(reType);
+			memcpy(tmpResult.m_szTypeByUsrInput, reType.c_str(), sizeof(char) * reType.size());
 		}
 
 		////// send message to server
@@ -496,13 +496,13 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::wstring barcode, std::wstrin
 		{
 			//LPCTSTR;
 
-			//std::wstring tmpWPath = utils::StrToWStr(tmpPath);
+			std::wstring tmpWRecogType = utils::StrToWStr(RecogType);
 			//RecogType;//RecogType
 			std::string tmpPatternDir(m_pParamManager->GetPatternImagePath());
 
 			std::wstring tmpWPatternDir = utils::StrToWStr(tmpPatternDir);
 
-			tmpWPatternDir = tmpWPatternDir + L"\\" + RecogType + L".jpg";
+			tmpWPatternDir = tmpWPatternDir + L"\\" + tmpWRecogType + L".jpg";
 
 			m_pImagePattern->Load(tmpWPatternDir.c_str());
 			displayImage(m_pImagePattern, &m_stImagePattern);
@@ -1011,7 +1011,7 @@ void CCarSeat_RecognizationDlg::OnTakePhoto()
 		CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
 		if (status == CCamera::CameraStatus::CAMERA_GRAB)
 		{
-			std::wstring path = m_pLineCamera->SaveJpg();
+			std::string path = m_pLineCamera->SaveJpg();
 		}
 	}
 }

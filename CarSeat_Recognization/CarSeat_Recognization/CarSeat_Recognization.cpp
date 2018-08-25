@@ -68,9 +68,9 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 
 
 	//初始化参数模块，标签模块，网络模块，识别模块
-	WriteInfo("enter init system");
+	//WriteInfo("enter init system");
 	initSystem();
-	WriteInfo("exit init system, success");
+	//WriteInfo("exit init system, success");
 
 	AfxEnableControlContainer();
 
@@ -147,6 +147,39 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 	INT_PTR nResponse = loginDlg.DoModal();
 	if (nResponse == IDOK)
 	{
+		CString UsrName = loginDlg.GetLoginUsrName();
+		wchar_t *tmpPointer = UsrName.GetBuffer();
+		if (tmpPointer != nullptr)
+		{
+			char *tmpUsrName = utils::WcharToChar(tmpPointer);
+			if (tmpUsrName != nullptr)
+			{
+				m_pLabelManager->SetLoginUsrName(tmpUsrName);
+				delete[]tmpUsrName;
+				tmpUsrName = nullptr;
+			}
+		}
+		UsrName.ReleaseBuffer();
+
+		CString Passwd = loginDlg.GetLoginPasswd();
+		tmpPointer = Passwd.GetBuffer();
+		if (tmpPointer != nullptr)
+		{
+			char *tmpPasswd = utils::WcharToChar(tmpPointer);
+			if (tmpPasswd != nullptr)
+			{
+				m_pLabelManager->SetLoginPasswd(tmpPasswd);
+				delete[]tmpPasswd;
+				tmpPasswd = nullptr;
+			}
+		}
+		Passwd.ReleaseBuffer();
+
+		BOOL tmpAutoSave = loginDlg.GetAutoSaveFlag();
+		bool autoSave = (tmpAutoSave == TRUE) ? true : false;
+		
+		m_pLabelManager->SetLoginAutoSave(autoSave);
+
 		return true;
 	}
 	return false;

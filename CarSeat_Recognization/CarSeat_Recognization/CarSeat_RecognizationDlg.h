@@ -85,7 +85,7 @@ private:
 	bool m_bBeginJob;
 
 
-	void CheckAndUpdate(std::wstring barcode, std::wstring type, std::string tmppath);
+	void CheckAndUpdate(std::string barcode, std::string type, std::string tmppath);
 	
 	/*
 	初始化相机模块

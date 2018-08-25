@@ -106,7 +106,7 @@ public:
 	SIZE GetImageSize();
 
     /*ch:图片保存 | en:Save Image*/
-    std::wstring SaveImage(void);                     // ch:保存图片 | en:Save Image
+    std::string SaveImage(void);                     // ch:保存图片 | en:Save Image
 
    
 /*ch:自定义变量 | en:User Defined Variable*/
@@ -168,8 +168,8 @@ public:
     void SoftwareOnce();       // ch:软触发一次 | en:Software Trigger Execute Once
   
     /*ch:图像保存 | en:Image Save*/
-    std::wstring SaveBmp();            // ch:保存bmp | en:Save bmp
-    std::wstring SaveJpg();            // ch:保存jpg | en:Save jpg
+    std::string SaveBmp();            // ch:保存bmp | en:Save bmp
+    std::string SaveJpg();            // ch:保存jpg | en:Save jpg
   
    
     

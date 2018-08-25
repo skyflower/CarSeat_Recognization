@@ -16,39 +16,39 @@ public:
 	/*
 	条形码转换接口，将其中有效的6-8位提取出来
 	*/
-	std::wstring GetInternalTypeByBarcode(std::wstring barcode);
+	std::string GetInternalTypeByBarcode(std::string barcode);
 
 	/*
 	根据从识别模块拿到的类型，转换成内部类型
 	*/
-	std::wstring GetInternalTypeByClassifyType(std::wstring type);
+	std::string GetInternalTypeByClassifyType(std::string type);
 	
 	/*
 	根据从rfid拿到的条形码转换成外部类型，方便用户查看的类型
 	*/
-	std::wstring GetExternalTypeByBarcode(std::wstring barcode);
+	std::string GetExternalTypeByBarcode(std::string barcode);
 	
 	/*
 	根据识别模块的分类类型，转换成方便用户查看的外部类型
 	*/
-	std::wstring GetExternalTypeByClassifyType(std::wstring classifyType);
+	std::string GetExternalTypeByClassifyType(std::string classifyType);
 	
 	/*
 	根据外部类型抓化成识别模块的分类类型
 	*/
-	std::wstring GetClassifyTypeByExternal(std::wstring externalType);
+	std::string GetClassifyTypeByExternal(std::string externalType);
 	
 
-	std::vector<std::wstring> GetBarcode();
+	std::vector<std::string> GetBarcode();
 	
-	std::vector<std::wstring> GetExternalType();
+	std::vector<std::string> GetExternalType();
 
-	std::vector<std::wstring> GetClassifyType();
+	std::vector<std::string> GetClassifyType();
 
-	const wchar_t *GetLoginUsrName()const;
-	const wchar_t *GetLoginPasswd()const;
-	bool SetLoginUsrName(const wchar_t *name);
-	bool SetLoginPasswd(const wchar_t *passwd);
+	const char *GetLoginUsrName()const;
+	const char *GetLoginPasswd()const;
+	bool SetLoginUsrName(const char *name);
+	bool SetLoginPasswd(const char *passwd);
 	bool GetLoginAutoSave();
 	void SetLoginAutoSave(bool autoSave);
 
@@ -68,8 +68,8 @@ private:
 
 	bool m_bSerialize;
 
-	wchar_t m_strLoginName[MAX_USR_NAME_AND_PASSWD];
-	wchar_t m_strLoginPasswd[MAX_USR_NAME_AND_PASSWD];
+	char m_strLoginName[MAX_USR_NAME_AND_PASSWD];
+	char m_strLoginPasswd[MAX_USR_NAME_AND_PASSWD];
 
 	int m_nExposureTimeMax;
 	int m_nExposureTimeMin;
@@ -78,12 +78,14 @@ private:
 	/*
 	内部类型转换外部类型的条形码对照表,条形码位截取其中有效字段组成
 	*/
-	std::unordered_map<std::wstring, std::wstring> *m_pBarcode;
+	std::unordered_map<std::string, std::string> *m_pBarcode;
 	
 	/*
 	识别模块的类型转化成内部类型的对照表
 	*/
-	std::unordered_map<std::wstring, std::wstring> *m_pClassifyType;
+	std::unordered_map<std::string, std::string> *m_pClassifyType;
+
+	char m_configFile[MAX_CHAR_LENGTH];
 	
 	static bool m_bInitFlag;
 };

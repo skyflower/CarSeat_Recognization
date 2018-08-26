@@ -261,8 +261,28 @@ void CCarSeat_RecognizationDlg::run()
 	std::string imagepath;
 	std::string reType;
 	std::string tmpImageDir(m_pParamManager->GetImageDirectory());
+
+	
 	while (m_bThreadStatus)
 	{
+		// 界面显示与服务器的连接状态
+		CStatic *pLinkStatusControl = (CStatic*)GetDlgItem(IDC_STATIC_LINK_STATUS);
+		if (CNetworkTask::IsReachable(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort()) == true)
+		{
+			if (pLinkStatusControl != nullptr)
+			{
+				pLinkStatusControl->SetWindowTextW(L"网络连接成功");
+			}
+		}
+		else
+		{
+			if (pLinkStatusControl != nullptr)
+			{
+				pLinkStatusControl->SetWindowTextW(L"与服务器连接失败");
+			}
+		}
+
+		// 是否开始识别标志
 		if (m_bBeginJob == false)
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
@@ -270,12 +290,13 @@ void CCarSeat_RecognizationDlg::run()
 			continue;
 		}
 
-
 		// 和kepServer模块的心跳包
 		if (m_pKepServer != nullptr)
 		{
 			m_pKepServer->HeartBlood();
 		}
+
+		// 检测rfid的连接状态
 		if (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK)
 		{
 			size_t rfidIP = m_pParamManager->GetBarcodeIp();
@@ -292,6 +313,7 @@ void CCarSeat_RecognizationDlg::run()
 		*/
 		imagepath = std::string();
 
+		// 读取条形码后需要延迟在取照片
 		std::string tmpBarcode = m_pRFIDReader->readBarcode();
 		if (m_pParamManager->GetBarcodeTime() < 100)
 		{
@@ -303,6 +325,7 @@ void CCarSeat_RecognizationDlg::run()
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(m_pParamManager->GetBarcodeTime());
 			std::this_thread::sleep_for(a);
 		}
+
 
 		if (tmpBarcode.size() != 0)
 		{
@@ -394,7 +417,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	wchar_t result[MAX_CHAR_LENGTH] = { 0 };
 	//CNetworkTask::message msg;
 	bool bUsrInput = true;
-	struct RecogResult tmpResult;
+	RecogResult tmpResult;
 	memset(&tmpResult, 0, sizeof(RecogResult));
 
 	//std::string cBarcode = utils::WStrToStr(barcode);
@@ -636,6 +659,14 @@ void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
 	{
 		pWnd->MoveWindow(3 * xStep, 20, 2 * xStep, 4 * yStep, TRUE);
 	}
+
+	pWnd = GetDlgItem(IDC_STATIC_LINK_STATUS);
+	if (pWnd != nullptr)
+	{
+		pWnd->MoveWindow(0, 3 * yStep, xStep, yStep, TRUE);
+	}
+
+
 	Invalidate();
 
 

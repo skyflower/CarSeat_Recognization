@@ -6,8 +6,9 @@
 #include "utils.h"
 
 
-struct RecogResult
+class RecogResult
 {
+public:
 	char m_szBarcode[32];		//	完整条形码
 	char m_szTime[32];			//	结果形成的时间戳，包含本地日期和时间
 	char m_szTypeByRecog[32];	//	识别结果的外部类型
@@ -20,10 +21,13 @@ struct RecogResult
 	char m_szImagePath[256];	//	照片路径
 
 	bool m_bIsCorrect;			//	识别结果是否一致
+
+
 };
 
-struct RecogResultW
+class RecogResultW
 {
+public:
 	wchar_t m_szBarcode[32];		//	完整条形码
 	wchar_t m_szTime[32];			//	结果形成的时间戳，包含本地日期和时间
 	wchar_t m_szTypeByRecog[32];	//	识别结果的外部类型

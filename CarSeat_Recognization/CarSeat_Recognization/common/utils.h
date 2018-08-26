@@ -26,9 +26,9 @@ namespace utils
 	std::wstring StrToWStr(const std::string str);
 	std::string WStrToStr(const std::wstring wstr);
 
-	bool RecogResultCToW(struct RecogResult &a, struct RecogResultW &b);
+	bool RecogResultCToW(RecogResult &a, RecogResultW &b);
 
-	bool RecogResultWToC(struct RecogResultW &a, struct RecogResult &b);
+	bool RecogResultWToC(RecogResultW &a, RecogResult &b);
 
 	bool delBlankSpace(char *text, size_t len);
 

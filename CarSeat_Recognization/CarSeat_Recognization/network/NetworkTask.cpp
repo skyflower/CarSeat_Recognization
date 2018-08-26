@@ -20,10 +20,10 @@ CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 
 CNetworkTask::CNetworkTask():
-	m_bThreadStatus(true),
-	m_pClassify(nullptr),
-	m_szBarCode(),
-	m_szImagePath()
+	m_bThreadStatus(true)
+	//m_pClassify(nullptr),
+	//m_szBarCode(),
+	//m_szImagePath()
 {
 	m_pParamManager = CParamManager::GetInstance();
 	m_pMsgQueue = new message[CNetworkTask::msg::MAX_MSG_SIZE];
@@ -49,7 +49,7 @@ bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
 
 	if (0 == IcmpSendEcho2Ex(IcmpHandle, NULL, NULL, NULL, \
 		htonl(clientIp), htonl(serverIp), "icmp", strlen("icmp"), \
-		info, reply, sizeof(reply), 100))
+		info, reply, sizeof(reply), (DWORD)100))
 	{
 		WriteError("icmpSendEcho failed clientIp = 0x%X, ServerIp = 0x%X", clientIp, serverIp);
 		IcmpCloseHandle(IcmpHandle);
@@ -164,20 +164,20 @@ void CNetworkTask::SetThreadStatus(bool status)
 	m_bThreadStatus = status;
 }
 
-void CNetworkTask::SetImageClassify(CImageClassify * pClassify)
-{
-	m_pClassify = pClassify;
-}
-
-std::wstring CNetworkTask::GetCurrentImagePath()
-{
-	return m_szImagePath;
-}
-
-std::wstring CNetworkTask::GetCurrentBarcode()
-{
-	return m_szBarCode;
-}
+//void CNetworkTask::SetImageClassify(CImageClassify * pClassify)
+//{
+//	m_pClassify = pClassify;
+//}
+//
+//std::wstring CNetworkTask::GetCurrentImagePath()
+//{
+//	return m_szImagePath;
+//}
+//
+//std::wstring CNetworkTask::GetCurrentBarcode()
+//{
+//	return m_szBarCode;
+//}
 
 void CNetworkTask::run()
 {
@@ -205,7 +205,7 @@ void CNetworkTask::run()
 					break;
 				}
 				size_t recvLength = 0;
-				__sendToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.data, strlen(tmpMsg.data), recvMsg.data, recvLength);
+				//__sendToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.data, strlen(tmpMsg.data), recvMsg.data, recvLength);
 			}
 		}
 		///////////////////////////
@@ -214,19 +214,19 @@ void CNetworkTask::run()
 		unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
 		unsigned int barcodePort = m_pParamManager->GetBarcodePort();
 
-		std::wstring tmpBarcode = getBarcodeByNet(barcodeIp, barcodePort);
+		//std::wstring tmpBarcode = getBarcodeByNet(barcodeIp, barcodePort);
 
-		if (tmpBarcode.size() != 0)
-		{
-			std::string path = TakeImage(0);
+		//if (tmpBarcode.size() != 0)
+		//{
+		//	std::string path = TakeImage(0);
 
-			//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
-			//__ImageClassify(path);
+		//	//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
+		//	//__ImageClassify(path);
 
-			//m_szBarCode = tmpBarcode;
-			//m_szImagePath = path;
+		//	//m_szBarCode = tmpBarcode;
+		//	//m_szImagePath = path;
 
-		}
+		//}
 
 
 //#if (defined _DEBUG) && (defined FTP_TEST)
@@ -325,7 +325,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		return false;
 	}
 
-	size_t tmpLen = send(socketFD, sendMsg, sendMsgLen, 0);// MSG_DONTROUTE);
+	int tmpLen = send(socketFD, sendMsg, sendMsgLen, 0);// MSG_DONTROUTE);
 	if (tmpLen == SOCKET_ERROR)
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
@@ -351,149 +351,149 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 
 	return true;
 }
-
-std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
-{
-	// 添加获取条形码的代码
-	// 暂时为空
-	
-	return std::wstring();
-}
-
-//  
-
-std::string CNetworkTask::TakeImage(std::string lineID)
-{
-	std::string CameraID = m_pParamManager->FindCameraByLineID(lineID);
-	CCameraManager *pManager = CCameraManager::GetInstance();
-	if (pManager->GetCameraCount() == 0)
-	{
-		return std::string();
-	}
-	
-	//std::wstring path = m_Camera.takePhoto(CameraID);
-	return CameraID;
-}
-
-bool CNetworkTask::__ImageClassify(std::wstring & path)
-{
-	if (m_pClassify != nullptr)
-	{
-		std::string tmpPath = utils::WStrToStr(path);
-
-		m_pClassify->pushImage(tmpPath.c_str());
-		return true;
-	}
-	return false;
-}
-
-bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 
-	const wchar_t *fileName)
-{
-	unsigned int localIP = m_pParamManager->GetLocalIP();
-	if ((localIP == 0) || (IsReachable(localIP, serverIp) == false))
-	{
-		WriteError("get LocalIp Failed");
-		return false;
-	}
-	CInternetSession * pInternetSession = NULL;
-	CFtpConnection* pFtpConnection = NULL;
-	//建立连接  
-	pInternetSession = new CInternetSession(AfxGetAppName());
-	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
-	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
-	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
-	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
-	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
-	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
-	//服务器的ip地址
-	CString strADddress;
-	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
-		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
-		(serverIp & 0xFF));
-
-	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
-	if (pFtpConnection == NULL)
-	{
-		WriteError("usr = %s, passwd = %s connect Failed", name, passwd);
-		return false;
-	}
-	//设置服务器的目录  
-	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
-	if (bRetVal == FALSE)
-	{
-		AfxMessageBox(L"目录设置失败");
-		return false;
-	}
-	else
-	{
-		//把本地文件上传到服务器上  
-		pFtpConnection->PutFile(fileName, fileName);
-	}
-	//释放资源  
-	if (NULL != pFtpConnection)
-	{
-		pFtpConnection->Close();
-		delete pFtpConnection;
-		pFtpConnection = NULL;
-	}
-	if (NULL != pInternetSession)
-	{
-		delete pInternetSession;
-		pInternetSession = NULL;
-	}
-	return true;
-}
-
-bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name, 
-	const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName)
-{
-	CInternetSession* pInternetSession = NULL;
-	
-	CFtpConnection* pFtpConnection = NULL;
-	//建立连接
-	pInternetSession = new CInternetSession(AfxGetAppName());
-
-	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
-	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
-	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
-	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
-	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
-	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
-
-
-	//服务器的ip地址
-	//若要设置为服务器的根目录，则使用"\\"就可以了  
-	//创建了一个CFtpConnection对象，之后就可以通过这个对象进行上传文件，下载文件了  
-	CString strADddress;
-	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
-		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
-		(serverIp & 0xFF));
-
-	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
-	//设置服务器的目录
-	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
-	//setsockopt
-	if (bRetVal == FALSE)
-	{
-		AfxMessageBox(L"目录设置失败");
-		return false;
-	}
-	else
-	{
-		pFtpConnection->GetFile(fileName, fileName);
-	}
-	//释放源  
-	if (NULL != pFtpConnection)
-	{
-		pFtpConnection->Close();
-		delete pFtpConnection;
-		pFtpConnection = NULL;
-	}
-	if (NULL != pInternetSession)
-	{
-		delete pInternetSession;
-		pInternetSession = NULL;
-	}
-	return false;
-}
+//
+//std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
+//{
+//	// 添加获取条形码的代码
+//	// 暂时为空
+//	
+//	return std::wstring();
+//}
+//
+////  
+//
+//std::string CNetworkTask::TakeImage(std::string lineID)
+//{
+//	std::string CameraID = m_pParamManager->FindCameraByLineID(lineID);
+//	CCameraManager *pManager = CCameraManager::GetInstance();
+//	if (pManager->GetCameraCount() == 0)
+//	{
+//		return std::string();
+//	}
+//	
+//	//std::wstring path = m_Camera.takePhoto(CameraID);
+//	return CameraID;
+//}
+//
+//bool CNetworkTask::__ImageClassify(std::wstring & path)
+//{
+//	if (m_pClassify != nullptr)
+//	{
+//		std::string tmpPath = utils::WStrToStr(path);
+//
+//		m_pClassify->pushImage(tmpPath.c_str());
+//		return true;
+//	}
+//	return false;
+//}
+//
+//bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 
+//	const wchar_t *fileName)
+//{
+//	unsigned int localIP = m_pParamManager->GetLocalIP();
+//	if ((localIP == 0) || (IsReachable(localIP, serverIp) == false))
+//	{
+//		WriteError("get LocalIp Failed");
+//		return false;
+//	}
+//	CInternetSession * pInternetSession = NULL;
+//	CFtpConnection* pFtpConnection = NULL;
+//	//建立连接  
+//	pInternetSession = new CInternetSession(AfxGetAppName());
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
+//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
+//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
+//	//服务器的ip地址
+//	CString strADddress;
+//	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
+//		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
+//		(serverIp & 0xFF));
+//
+//	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
+//	if (pFtpConnection == NULL)
+//	{
+//		WriteError("usr = %s, passwd = %s connect Failed", name, passwd);
+//		return false;
+//	}
+//	//设置服务器的目录  
+//	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
+//	if (bRetVal == FALSE)
+//	{
+//		AfxMessageBox(L"目录设置失败");
+//		return false;
+//	}
+//	else
+//	{
+//		//把本地文件上传到服务器上  
+//		pFtpConnection->PutFile(fileName, fileName);
+//	}
+//	//释放资源  
+//	if (NULL != pFtpConnection)
+//	{
+//		pFtpConnection->Close();
+//		delete pFtpConnection;
+//		pFtpConnection = NULL;
+//	}
+//	if (NULL != pInternetSession)
+//	{
+//		delete pInternetSession;
+//		pInternetSession = NULL;
+//	}
+//	return true;
+//}
+//
+//bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name, 
+//	const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName)
+//{
+//	CInternetSession* pInternetSession = NULL;
+//	
+//	CFtpConnection* pFtpConnection = NULL;
+//	//建立连接
+//	pInternetSession = new CInternetSession(AfxGetAppName());
+//
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
+//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
+//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
+//
+//
+//	//服务器的ip地址
+//	//若要设置为服务器的根目录，则使用"\\"就可以了  
+//	//创建了一个CFtpConnection对象，之后就可以通过这个对象进行上传文件，下载文件了  
+//	CString strADddress;
+//	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
+//		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
+//		(serverIp & 0xFF));
+//
+//	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
+//	//设置服务器的目录
+//	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
+//	//setsockopt
+//	if (bRetVal == FALSE)
+//	{
+//		AfxMessageBox(L"目录设置失败");
+//		return false;
+//	}
+//	else
+//	{
+//		pFtpConnection->GetFile(fileName, fileName);
+//	}
+//	//释放源  
+//	if (NULL != pFtpConnection)
+//	{
+//		pFtpConnection->Close();
+//		delete pFtpConnection;
+//		pFtpConnection = NULL;
+//	}
+//	if (NULL != pInternetSession)
+//	{
+//		delete pInternetSession;
+//		pInternetSession = NULL;
+//	}
+//	return false;
+//}

@@ -51,7 +51,7 @@ void CRecogResultManager::init()
 	memset(tmpChar, 0, sizeof(char) * 3 * MAX_CHAR_LENGTH);
 	
 	int begin = 0;
-	struct RecogResult tmpResult;
+	RecogResult tmpResult;
 	while (1)
 	{
 		const char val = '\n';
@@ -94,7 +94,7 @@ bool CRecogResultManager::serialize()
 		return true;
 	}
 	std::fstream fs(m_szName, std::ios::in | std::ios::out);
-	std::list<struct RecogResult>::const_iterator iter = m_pRecogResult->begin();
+	std::list<RecogResult>::const_iterator iter = m_pRecogResult->begin();
 	for (; iter != m_pRecogResult->end(); ++iter)
 	{
 		fs << iter->m_szBarcode << ","	\

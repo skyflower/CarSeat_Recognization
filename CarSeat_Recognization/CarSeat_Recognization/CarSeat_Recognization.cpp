@@ -190,11 +190,12 @@ void CCarSeat_RecognizationApp::initSystem()
 	m_pParamManager = CParamManager::GetInstance();
 	//WriteInfo("get CParamManager success");
 	m_pLog = CLog::GetInstance();
-	//m_pNetworkTask = CNetworkTask::GetInstance();
-	//if (m_pNetworkTask != nullptr)
-	//{
-	//	m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
-	//}
+
+	m_pNetworkTask = CNetworkTask::GetInstance();
+	if (m_pNetworkTask != nullptr)
+	{
+		m_NetworkThread = std::thread(std::bind(&CNetworkTask::run, m_pNetworkTask));
+	}
 	//WriteInfo("Get plog success");
 	m_pClassify = new CImageClassify(m_pParamManager->GetGraphFile(), m_pParamManager->GetLabelFile());
 	//WriteInfo("Get m_pClassify success");
@@ -221,7 +222,7 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 	{
 		m_pClassify->terminate();
 		m_pClassifyThread.join();
-	}
+	}*/
 
 	if (m_NetworkThread.joinable())
 	{
@@ -231,13 +232,13 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		msg.serverPort = -1;
 		m_pNetworkTask->SendMessageTo(&msg);
 		m_NetworkThread.join();
-	}*/
+	}
 
-	/*if (m_pNetworkTask != nullptr)
+	if (m_pNetworkTask != nullptr)
 	{
 		delete m_pNetworkTask;
 		m_pNetworkTask = nullptr;
-	}*/
+	}
 	if (m_UIThread.joinable())
 	{
 		m_UIThread.join();

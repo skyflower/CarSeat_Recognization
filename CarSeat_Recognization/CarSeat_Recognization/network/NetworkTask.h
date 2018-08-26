@@ -6,26 +6,33 @@
 #include "../common/ParamManager.h"
 #include <mutex>
 #include <thread>
+#include <unordered_set>
 #include "../image/ImageClassify.h"
 #include "../Camera/CameraManager.h"
 #include "../Camera/LineCamera.h"
 #include "../Camera/Camera.h"
+#include "../common/RecogResultManager.h"
 
+
+
+/*
+发送历史识别结果到服务器，以及当网络连接失败时，保存历史识别结果，等网络状态号的时候发送到服务器
+
+相关配置文件在config.txt中的sendFailedRecog字段
+
+*/
 
 class CNetworkTask
 {
 public:
-	enum class MessageType
-	{
-		NETWORK,
-		THREAD
-	};
+	
 	struct message
 	{
+		//std::mutex mMutex;
 		unsigned int serverIp;
 		unsigned int serverPort;
 		unsigned int mLine;
-		char data[2000];
+		RecogResult mRecogResult;
 	};
 	CNetworkTask();
 	~CNetworkTask();
@@ -33,28 +40,33 @@ public:
 	bool heartBlood(unsigned int serverIp, unsigned int port);
 
 	void SendMessageTo(message* msg);
+	
 
 	bool GetThreadStatus();
 	void SetThreadStatus(bool status);
 
-	void SetImageClassify(CImageClassify *pClassify);
+	//bool GetLinkStatus();
 
-	std::wstring GetCurrentImagePath();
-	std::wstring GetCurrentBarcode();
+	//void SetImageClassify(CImageClassify *pClassify);
+
+	//std::wstring GetCurrentImagePath();
+	//std::wstring GetCurrentBarcode();
 
 	void run();
 	static CNetworkTask* GetInstance();
-	bool ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
-	bool ftpDownload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
+	//bool ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
+	//bool ftpDownload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
 
-	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
-		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
+	
 
 private:
 	enum msg
 	{
 		MAX_MSG_SIZE = 20
 	};
+
+	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
+		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
 
 	
 
@@ -68,7 +80,8 @@ private:
 	return:
 		获取到的条形码字符串，解析之前的字符串
 	*/
-	std::wstring getBarcodeByNet(unsigned int ip, unsigned int port);
+
+	//std::wstring getBarcodeByNet(unsigned int ip, unsigned int port);
 
 	/*
 	function: 启动相机拍照程序
@@ -78,7 +91,7 @@ private:
 
 	return:  返回照片路径
 	*/
-	std::string TakeImage(std::string lineID);
+	//std::string TakeImage(std::string lineID);
 
 	/*
 	function: 将图像发送到识别模块中
@@ -87,18 +100,21 @@ private:
 		图像路径
 
 	*/
-	bool __ImageClassify(std::wstring &path);
+	//bool __ImageClassify(std::wstring &path);
 	
 
 	std::mutex m_MutexMsg;
 	message *m_pMsgQueue;
 
+	//缓存没有成功发送的历史识别记录
+	std::unordered_set<message> *m_pMsgList;
+
 	size_t m_nMsgSize;
 	int m_nIn;
 	int m_nOut;
 
-	std::wstring m_szBarCode;
-	std::wstring m_szImagePath;
+	//std::wstring m_szBarCode;
+	//std::wstring m_szImagePath;
 
 
 	static CNetworkTask *m_pInstance;
@@ -106,6 +122,8 @@ private:
 	//CCamera m_Camera;
 
 	CParamManager *m_pParamManager;
-	CImageClassify *m_pClassify;
+
+	
+	//CImageClassify *m_pClassify;
 };
 

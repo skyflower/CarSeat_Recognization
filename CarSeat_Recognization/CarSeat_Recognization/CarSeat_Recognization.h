@@ -46,8 +46,8 @@ private:
 // й╣ож
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;
-	//CNetworkTask *m_pNetworkTask;
-	//std::thread m_NetworkThread;
+	CNetworkTask *m_pNetworkTask;
+	std::thread m_NetworkThread;
 	
 	CImageClassify *m_pClassify;
 	//std::thread m_pClassifyThread;

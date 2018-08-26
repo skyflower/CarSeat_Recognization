@@ -62,7 +62,7 @@ namespace utils
 		return tmpStr;
 	}
 
-	bool RecogResultCToW(struct RecogResult & a, struct RecogResultW & b)
+	bool RecogResultCToW(RecogResult & a, RecogResultW & b)
 	{
 		bool flag = false;
 		do

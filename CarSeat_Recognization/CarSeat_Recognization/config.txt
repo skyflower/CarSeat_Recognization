@@ -2,6 +2,7 @@
 ## 服务器通信的ip地址和端口号
 serverip="192.168.1.177"
 serverport="8080"
+serverImagePort="44004"
 
 
 testClientPort="10909"
@@ -40,6 +41,9 @@ imagePath="D:\Cache\GithubCache\CarSeatImage"
 ##识别模块临时存储切割文件的目录
 cacheImagePath="D:\Cache\GithubCache\CarSeatImage\Cache"
 patternImagePath="D:\Cache\GithubCache\CarSeat_Recognization\patternImage"
+
+##缓存发送失败的结果以及图像路径
+sendFailedRecog="D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\CarSeat_Recognization\sendFailedCache.txt"
 
 ###kepServer通信ip地址以及端口号
 kepServerIp="172.30.150.33"

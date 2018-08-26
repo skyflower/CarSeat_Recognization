@@ -49,6 +49,9 @@ public:
 
 	const char* GetBarcodeResetParam() const;
 
+	const char* GetSendFailedCache() const;
+
+	int GetServerImagePort() const;
 
 	std::string GetLocalName() { return m_strLocalName; }
 
@@ -67,6 +70,9 @@ private:
 
 	// serverport 服务器通信端口号
 	int m_nServerPort;
+
+	//发送图像数据的端口号
+	int m_nServerImagePort;
 
 	// 本机和服务器通信的Ip
 	unsigned int m_nLocalIp;
@@ -100,6 +106,9 @@ private:
 
 	//模板图像路径
 	char m_szPatternImagePath[256];
+
+	//传送失败的文件路径
+	char m_szSendFailedCache[256];
 
 	//产线名称编号
 	char m_szLineName[20];

@@ -318,8 +318,6 @@ void CParamManager::serialization()
 	char *tmpStr = new char[Length];
 	memset(tmpStr, 0, sizeof(char) * Length);
 
-	
-
 	if ((m_pLineVec != nullptr) && (m_pLineVec->size() > 0))
 	{
 		strcat_s(tmpStr, Length, "line={");

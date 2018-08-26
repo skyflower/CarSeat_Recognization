@@ -32,6 +32,7 @@ m_nBarcodeTime(1)
 	memset(m_szCacheImagePath, 0, sizeof(m_szCacheImagePath));
 	//m_szBarcodeResetParam
 	memset(m_szBarcodeResetParam, 0, sizeof(m_szBarcodeResetParam));
+	memset(m_szSendFailedCache, 0, sizeof(m_szSendFailedCache));
 	
 	Init();
 
@@ -286,6 +287,16 @@ const char * CParamManager::GetBarcodeResetParam() const
 	return m_szBarcodeResetParam;
 }
 
+const char * CParamManager::GetSendFailedCache() const
+{
+	return m_szSendFailedCache;
+}
+
+int CParamManager::GetServerImagePort() const
+{
+	return m_nServerImagePort;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -348,6 +359,12 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
+		if (utils::getValueByName(content, "serverImagePort", tmpStr) == true)
+		{
+			m_nServerImagePort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
 		if (utils::getValueByName(content, "kepServerPort", tmpStr) == true)
 		{
 			m_nKepServerPort = atoi(tmpStr);
@@ -379,6 +396,8 @@ void CParamManager::Init()
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 
+		
+
 
 
 		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
@@ -386,6 +405,12 @@ void CParamManager::Init()
 			m_szGraphFile = std::string(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (utils::getValueByName(content, "sendFailedRecog", m_szSendFailedCache) != true)
+		{
+			//m_szGraphFile = std::string(tmpStr);
+			WriteError("init config.txt sendFailedRecog Failed");
+		}
 
 		if (utils::getValueByName(content, "labelFile", tmpStr) == true)
 		{

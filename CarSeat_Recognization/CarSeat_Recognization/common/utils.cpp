@@ -3,6 +3,7 @@
 
 
 
+
 namespace utils
 {
 
@@ -62,7 +63,8 @@ namespace utils
 		return tmpStr;
 	}
 
-	bool RecogResultCToW(RecogResult & a, RecogResultW & b)
+	// bool RecogResultCToW(RecogResultA & a, RecogResultW & b)
+	bool RecogResultCToW(RecogResult<char> &a, RecogResult<wchar_t> &b)
 	{
 		bool flag = false;
 		do
@@ -157,7 +159,8 @@ namespace utils
 		return flag;
 	}
 
-	bool RecogResultWToC(RecogResultW & a, RecogResult & b)
+	//bool RecogResultWToC(RecogResultW & a, RecogResultA & b)
+	bool RecogResultWToC(RecogResult<wchar_t> &a, RecogResult<char> &b)
 	{
 		bool flag = false;
 		do

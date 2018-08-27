@@ -6,6 +6,7 @@
 #include "../common/ParamManager.h"
 #include <mutex>
 #include <thread>
+#include <fstream>
 #include <unordered_set>
 #include "../image/ImageClassify.h"
 #include "../Camera/CameraManager.h"
@@ -31,8 +32,8 @@ public:
 		//std::mutex mMutex;
 		unsigned int serverIp;
 		unsigned int serverPort;
-		unsigned int mLine;
-		RecogResult mRecogResult;
+		unsigned int imagePort;
+		RecogResultA mRecogResult;
 	};
 	CNetworkTask();
 	~CNetworkTask();
@@ -68,6 +69,10 @@ private:
 	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
 		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
 
+	bool __sendRecogToServer(unsigned int serverIp, int textPort, int imagePort, RecogResultA *recog);
+
+
+	bool initCacheFile();
 	
 
 	/*
@@ -108,6 +113,11 @@ private:
 
 	//缓存没有成功发送的历史识别记录
 	std::unordered_set<message> *m_pMsgList;
+
+
+	char m_szCacheFile[MAX_CHAR_LENGTH];
+
+	std::fstream m_pLog;
 
 	size_t m_nMsgSize;
 	int m_nIn;

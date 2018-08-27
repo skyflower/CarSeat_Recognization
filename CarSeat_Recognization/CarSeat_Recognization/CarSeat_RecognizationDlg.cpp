@@ -417,8 +417,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	wchar_t result[MAX_CHAR_LENGTH] = { 0 };
 	//CNetworkTask::message msg;
 	bool bUsrInput = true;
-	RecogResult tmpResult;
-	memset(&tmpResult, 0, sizeof(RecogResult));
+	RecogResultA tmpResult;
+	memset(&tmpResult, 0, sizeof(RecogResultA));
 
 	//std::string cBarcode = utils::WStrToStr(barcode);
 	memcpy(tmpResult.m_szBarcode, barcode.c_str(), sizeof(char) * barcode.size());

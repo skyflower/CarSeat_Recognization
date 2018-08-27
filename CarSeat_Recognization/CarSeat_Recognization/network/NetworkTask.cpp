@@ -29,6 +29,27 @@ CNetworkTask::CNetworkTask():
 	m_pMsgQueue = new message[CNetworkTask::msg::MAX_MSG_SIZE];
 	m_nMsgSize = 0;
 	m_nIn = m_nOut = 0;
+
+	//设置临时保存文件
+	memset(m_szCacheFile, 0, sizeof(m_szCacheFile));
+	const char *tmpCacheFile = m_pParamManager->GetSendFailedCache();
+	memcpy(m_szCacheFile, tmpCacheFile, strlen(tmpCacheFile));
+
+	wchar_t *tmpWCacheFile = utils::CharToWchar((char*)tmpCacheFile);
+
+	if (tmpWCacheFile != nullptr)
+	{
+		if (_waccess_s(tmpWCacheFile, 0x00) == 0)
+		{
+			m_pLog.open(m_szCacheFile, std::ios::ate | std::ios::out | std::ios::in);
+		}
+		else
+		{
+			m_pLog.open(m_szCacheFile, std::ios::app | std::ios::out | std::ios::in);
+		}
+		delete[]tmpWCacheFile;
+		tmpWCacheFile = nullptr;
+	}
 }
 
 
@@ -198,21 +219,23 @@ void CNetworkTask::run()
 			if (lock.try_lock())
 			{
 				memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
-				m_nOut--;
+				m_nOut = (m_nOut + 1) % MAX_MSG_SIZE;
 				m_nMsgSize--;
 				if ((tmpMsg.serverIp == -1) && (tmpMsg.serverPort == -1))
 				{
 					break;
 				}
 				size_t recvLength = 0;
+				lock.release();
+
 				//__sendToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.data, strlen(tmpMsg.data), recvMsg.data, recvLength);
 			}
 		}
 		///////////////////////////
 		//  add code
 
-		unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
-		unsigned int barcodePort = m_pParamManager->GetBarcodePort();
+		//unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
+		//unsigned int barcodePort = m_pParamManager->GetBarcodePort();
 
 		//std::wstring tmpBarcode = getBarcodeByNet(barcodeIp, barcodePort);
 
@@ -350,6 +373,19 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	WSACleanup();
 
 	return true;
+}
+bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int imagePort, RecogResultA * recog)
+{
+	
+	return false;
+}
+bool CNetworkTask::initCacheFile()
+{
+	m_pLog.seekg(0);
+	std::stringstream ss;
+
+
+	return false;
 }
 //
 //std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)

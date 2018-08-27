@@ -59,7 +59,7 @@ void CQueryDlg::OnBnClickedButtonQuery()
 		m_szQueryBarcode.ReleaseBuffer();
 		char *value = utils::WcharToChar(tmp);
 
-		const RecogResult *p = m_pRecogManager->findByBarcode(value);
+		const RecogResultA *p = m_pRecogManager->findByBarcode(value);
 
 		delete[]value;
 		value = nullptr;
@@ -70,7 +70,7 @@ void CQueryDlg::OnBnClickedButtonQuery()
 			return;
 		}
 
-		RecogResult cRecog = *p;
+		RecogResultA cRecog = *p;
 		RecogResultW wRecog;
 		if (utils::RecogResultCToW(cRecog, wRecog) == false)
 		{

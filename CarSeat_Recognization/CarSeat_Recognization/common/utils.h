@@ -17,6 +17,10 @@
 #define MAX_CHAR_LENGTH 256
 #define MAX_USR_NAME_AND_PASSWD	80
 
+//class RecogResultA;
+//class RecogResultW;
+template<typename type>
+class RecogResult;
 
 namespace utils
 {
@@ -25,10 +29,9 @@ namespace utils
 	wchar_t* CharToWchar(char* c);
 	std::wstring StrToWStr(const std::string str);
 	std::string WStrToStr(const std::wstring wstr);
-
-	bool RecogResultCToW(RecogResult &a, RecogResultW &b);
-
-	bool RecogResultWToC(RecogResultW &a, RecogResult &b);
+	//RecogResult;
+	bool RecogResultCToW(RecogResult<char> &a, RecogResult<wchar_t> &b);
+	bool RecogResultWToC(RecogResult<wchar_t> &a, RecogResult<char> &b);
 
 	bool delBlankSpace(char *text, size_t len);
 

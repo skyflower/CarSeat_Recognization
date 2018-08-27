@@ -19,7 +19,7 @@ void CRecogResultManager::init()
 {
 	if (m_pRecogResult == nullptr)
 	{
-		m_pRecogResult = new std::list<RecogResult>;
+		m_pRecogResult = new std::list<RecogResultA>;
 	}
 	/*
 	初始化本地文件，对于日期时间超过一个月以上的识别结果不予初始化,not implement
@@ -51,7 +51,7 @@ void CRecogResultManager::init()
 	memset(tmpChar, 0, sizeof(char) * 3 * MAX_CHAR_LENGTH);
 	
 	int begin = 0;
-	RecogResult tmpResult;
+	RecogResultA tmpResult;
 	while (1)
 	{
 		const char val = '\n';
@@ -94,7 +94,7 @@ bool CRecogResultManager::serialize()
 		return true;
 	}
 	std::fstream fs(m_szName, std::ios::in | std::ios::out);
-	std::list<RecogResult>::const_iterator iter = m_pRecogResult->begin();
+	std::list<RecogResultA>::const_iterator iter = m_pRecogResult->begin();
 	for (; iter != m_pRecogResult->end(); ++iter)
 	{
 		fs << iter->m_szBarcode << ","	\
@@ -113,117 +113,13 @@ bool CRecogResultManager::serialize()
 	return true;
 }
 
-bool CRecogResultManager::parseLine(char * line, RecogResult & a)
+bool CRecogResultManager::parseLine(char * line, RecogResultA & a)
 {
-	if (line == nullptr)
-	{
-		return false;
-	}
-	
-	memset(&a, 0, sizeof(a));
-	do
-	{
-		char quote = ',';
-		char *begin = line;
-		char *end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szBarcode, begin, (end - begin));
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szTime, begin, end - begin);
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szTypeByRecog, begin, end - begin);
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szTypeByBarcode, begin, end - begin);
-		begin = end + 1;
-
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		if (end - begin > 0)
-		{
-			memcpy(a.m_szTypeByUsrInput, begin, end - begin);
-		}
-		begin = end + 1;
-
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		char tmp[10] = { 0 };
-		memset(tmp, 0, sizeof(tmp));
-		memcpy(tmp, begin, end - begin);
-		//int i = atoi(tmp);
-		if (atoi(tmp) == 0)
-		{
-			a.m_bIsCorrect = false;
-		}
-		else
-		{
-			a.m_bIsCorrect = true;
-		}
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szRecogMethod, begin, end - begin);
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szCameraName, begin, end - begin);
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szLineName, begin, end - begin);
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szUsrName, begin, end - begin);
-		begin = end + 1;
-		end = strchr(begin, quote);
-		if (end == NULL)
-		{
-			break;
-		}
-		memcpy(a.m_szImagePath, begin, end - begin);
-		begin = end + 1;
-		
-	} while (0);
-	return true;
+	bool value = RecogResultA::TextToRecog(a, line);
+	return value;
 }
 
-void CRecogResultManager::output(RecogResult & a)
+void CRecogResultManager::output(RecogResultA & a)
 {
 	char tmp[MAX_CHAR_LENGTH] = { 0 };
 	memset(tmp, 0, sizeof(tmp));
@@ -255,7 +151,7 @@ CRecogResultManager* CRecogResultManager::GetInstance()
 	return m_pInstance;
 }
 
-const RecogResult * CRecogResultManager::findByBarcode(const char * barcode) const
+const RecogResultA * CRecogResultManager::findByBarcode(const char * barcode) const
 {
 	if ((m_pRecogResult == nullptr) || (barcode == nullptr))
 	{
@@ -263,7 +159,7 @@ const RecogResult * CRecogResultManager::findByBarcode(const char * barcode) con
 	}
 	//size_t tmpValue = m_pHashFunc(barcode);
 
-	std::list<RecogResult>::const_iterator iter = m_pRecogResult->cbegin();
+	std::list<RecogResultA>::const_iterator iter = m_pRecogResult->cbegin();
 	size_t tmpLen = strlen(barcode);
 	while (iter != m_pRecogResult->cend())
 	{
@@ -281,14 +177,14 @@ const RecogResult * CRecogResultManager::findByBarcode(const char * barcode) con
 	{
 		return nullptr;
 	}
-	return (const RecogResult*)(&(*iter));
+	return (const RecogResultA*)(&(*iter));
 }
 
-bool CRecogResultManager::add(const RecogResult & a)
+bool CRecogResultManager::add(const RecogResultA & a)
 {
 	if (m_pRecogResult == nullptr)
 	{
-		m_pRecogResult = new std::list<RecogResult>;
+		m_pRecogResult = new std::list<RecogResultA>;
 	}
 	//size_t tmpValue = m_pHashFunc(a.m_szBarcode);
 	m_pRecogResult->push_front(a);

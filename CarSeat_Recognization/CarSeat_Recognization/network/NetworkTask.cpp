@@ -20,7 +20,8 @@ CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 
 CNetworkTask::CNetworkTask():
-	m_bThreadStatus(true)
+	m_bThreadStatus(true),
+	m_pMsgList(nullptr)
 	//m_pClassify(nullptr),
 	//m_szBarCode(),
 	//m_szImagePath()
@@ -59,6 +60,11 @@ CNetworkTask::~CNetworkTask()
 	{
 		delete[]m_pMsgQueue;
 		m_pMsgQueue = nullptr;
+	}
+	if (m_pMsgList != nullptr)
+	{
+		delete m_pMsgList;
+		m_pMsgList = nullptr;
 	}
 }
 
@@ -381,8 +387,18 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 }
 bool CNetworkTask::initCacheFile()
 {
-	m_pLog.seekg(0);
-	std::stringstream ss;
+	m_pLog.seekg(0, std::ios::end);
+
+	size_t fileLength = m_pLog.tellg();
+	char *content = new char[fileLength + 1];
+	if (content == nullptr)
+	{
+		return false;
+	}
+	memset(content, 0, sizeof(char) * (fileLength + 1));
+
+	m_pLog.read(content, fileLength);
+
 
 
 	return false;

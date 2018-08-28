@@ -39,8 +39,8 @@ CRFIDReader::~CRFIDReader()
 std::string CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8Î»ÓÐÐ§
-#if 0
-	wchar_t tmp[20];
+#if 1
+	char tmp[20];
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;
 
@@ -56,9 +56,9 @@ std::string CRFIDReader::readBarcode()
 	double tmpValue = x * pow(10, 8);
 	int hiValue = tmpValue;
 	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
-	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"N%07d%08d", hiValue, lowValue);
+	sprintf_s(tmp, sizeof(tmp) / sizeof(char), "N%07d%08d", hiValue, lowValue);
 
-	return std::wstring(tmp);
+	return std::string(tmp);
 
 	
 #else

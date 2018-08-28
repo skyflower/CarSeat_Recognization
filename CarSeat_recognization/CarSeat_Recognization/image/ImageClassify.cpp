@@ -175,7 +175,7 @@ std::string CImageClassify::compute(const char *filePath)
 	if ((m_pPyFunc == nullptr) || (filePath == nullptr) ||	\
 		(strlen(m_szGraph) == 0) || (strlen(m_szGraph) == 0))
 	{
-		return std::wstring();
+		return std::string();
 	}
 	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "ssss", filePath, m_szLabel, m_szGraph, m_szCacheImagePath);
 

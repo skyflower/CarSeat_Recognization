@@ -112,7 +112,7 @@ private:
 	message *m_pMsgQueue;
 
 	//缓存没有成功发送的历史识别记录
-	std::unordered_set<message> *m_pMsgList;
+	std::vector<message> *m_pMsgList;
 
 
 	char m_szCacheFile[MAX_CHAR_LENGTH];

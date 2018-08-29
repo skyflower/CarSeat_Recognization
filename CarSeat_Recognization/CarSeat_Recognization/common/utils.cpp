@@ -13,6 +13,7 @@ namespace utils
 		{
 			return nullptr;
 		}
+		
 		int len = WideCharToMultiByte(CP_ACP, 0, wc, wcslen(wc), NULL, 0, NULL, NULL);
 		char *m_char = new char[len + 1];
 		memset(m_char, 0, sizeof(char) * (len + 1));
@@ -268,32 +269,15 @@ namespace utils
 				text[i] = text[j];
 				++i;
 				++j;
-				continue;
 			}
 			else if (text[j] <= 0x20)
 			{
-				if ((j > 0) && (text[j - 1] <= 0x20))
-				{
-					++j;
-					continue;
-				}
-				else if (j == 0)
-				{
-					++j;
-					continue;
-				}
-				else if ((j > 0) && (text[j - 1] > 0x20))
-				{
-					text[i] = ' ';
-					++i;
-					++j;
-					continue;
-				}
+				++j;
 			}
 		}
-		if (j < len)
+		if (i < len)
 		{
-			memset(text + j, 0, sizeof(char) * (len - j));
+			memset(text + i, 0, sizeof(char) * (len - i));
 		}
 		return true;
 	}
@@ -379,6 +363,7 @@ namespace utils
 			{
 				memset(tmpStr, 0, sizeof(tmpStr));
 				memcpy(tmpStr, begin + 1, sizeof(char)*(end - begin - 1));
+				utils::delBlankSpace(tmpStr, strlen(tmpStr));
 				
 				pData->push_back(std::string(tmpStr));
 				
@@ -398,15 +383,17 @@ namespace utils
 		{
 			return 0;
 		}
-		const char *quote = strchr(p, '=');
+		const char *quote = strchr(p, '"');
 		if (quote == nullptr)
 		{
 			return 0;
 		}
-		const char *endline = strchr(quote + 1, '\n');
+		const char *endline = strchr(quote + 1, '"');
 		char str[100];
 		memset(str, 0, sizeof(str));
 		memcpy(str, quote + 1, endline - quote - 1);
+		utils::delBlankSpace(str, strlen(str));
+
 		TRACE1("ServerIp = %s", str);
 		unsigned int one = 0;
 		unsigned int two = 0;
@@ -418,7 +405,7 @@ namespace utils
 		return tmpServerIp;
 	}
 
-	int parseMap(const char * content, const char * name, std::unordered_map<std::string, std::string>* pMap)
+	size_t parseMap(const char * content, const char * name, std::unordered_map<std::string, std::string>* pMap)
 	{
 		if ((content == nullptr) || (name == nullptr) || (pMap == nullptr))
 		{
@@ -450,6 +437,8 @@ namespace utils
 			memset(tmpStr, 0, sizeof(tmpStr));
 			size_t tmpLength = second - first - 1;
 			memcpy(tmpStr, first + 1, tmpLength);
+			utils::delBlankSpace(tmpStr, strlen(tmpStr));
+
 			TRACE1("tmpStr = [%s]\n", tmpStr);
 			std::string keyChar(tmpStr);
 			//std::wstring keyWChar = utils::StrToWStr(keyChar);
@@ -469,6 +458,7 @@ namespace utils
 			memset(tmpStr, 0, sizeof(tmpStr));
 			tmpLength = second - first - 1;
 			memcpy(tmpStr, first + 1, tmpLength);
+			utils::delBlankSpace(tmpStr, strlen(tmpStr));
 			TRACE1("tmpStr = [%s]\n", tmpStr);
 			std::string valueChar(tmpStr);
 			//std::wstring valueWChar = utils::StrToWStr(valueChar);
@@ -505,6 +495,7 @@ namespace utils
 			return false;
 		}
 		memcpy_s(value, MAX_CHAR_LENGTH, begin + 1, end - begin - 1);
+		utils::delBlankSpace(value, strlen(value));
 
 		return true;
 	}

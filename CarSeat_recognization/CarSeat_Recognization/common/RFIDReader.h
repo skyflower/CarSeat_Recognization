@@ -76,7 +76,7 @@ private:
 	*/
 	ErrorType resetReader(SOCKET fd, char *resetType);
 
-	ErrorType parseReplyPackage(char *buffer, int length, int &id, int &resultCode);
+	ErrorType parseReplyPackage(char *buffer, size_t length, int &id, int &resultCode);
 
 	ErrorType __communicate(SOCKET fd, char *buffer, int length);
 

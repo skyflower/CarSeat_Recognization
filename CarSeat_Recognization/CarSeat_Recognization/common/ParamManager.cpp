@@ -53,6 +53,8 @@ m_nBarcodeTime(1)
 
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
 	memcpy(m_szImagePath, logFileName, strlen(logFileName));
+
+	
 	//ÅÐ¶ÏÄ¿Â¼ÊÇ·ñ´æÔÚ£¬
 	if (_access(m_szImagePath, 0) != 0)
 	{

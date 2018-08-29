@@ -93,18 +93,23 @@ bool CLabelManager::init()
 
 	if (true == utils::getValueByName(content, "LoginUsrName", tmpValue))
 	{
+		
 		memcpy(m_strLoginName, tmpValue, strlen(tmpValue));
+		
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "LoginPasswd", tmpValue))
 	{
+		
 		memcpy(m_strLoginPasswd, tmpValue, strlen(tmpValue));
+		
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "LoginInfoAutoSave", tmpValue))
 	{
+		
 		if (tmpValue[0] == '1')
 		{
 			m_bLoginAutoSave = true;
@@ -118,12 +123,15 @@ bool CLabelManager::init()
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "ExposureTimeMax", tmpValue))
 	{
+		
 		m_nExposureTimeMax = atoi(tmpValue);
+		
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "ExposureTimeMin", tmpValue))
 	{
+		
 		m_nExposureTimeMin = atoi(tmpValue);
 	}
 

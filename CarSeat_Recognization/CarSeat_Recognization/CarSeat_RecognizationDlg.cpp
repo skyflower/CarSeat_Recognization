@@ -158,7 +158,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	float ratio = 0.0;
 	if (m_nFailCount + m_nSuccessCount != 0)
 	{
-		ratio = double(m_nSuccessCount) / double(m_nFailCount + m_nSuccessCount);
+		ratio = float(m_nSuccessCount) / float(m_nFailCount + m_nSuccessCount);
 	}
 	
 	tmpBarcodeStr.Format(L"Success:%d\nFailed:%d\nSuccess Rate:%f", m_nSuccessCount, m_nFailCount, ratio);
@@ -299,8 +299,8 @@ void CCarSeat_RecognizationDlg::run()
 		// 检测rfid的连接状态
 		if (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK)
 		{
-			size_t rfidIP = m_pParamManager->GetBarcodeIp();
-			size_t rfidPort = m_pParamManager->GetBarcodePort();
+			unsigned int rfidIP = m_pParamManager->GetBarcodeIp();
+			unsigned int rfidPort = m_pParamManager->GetBarcodePort();
 			m_pRFIDReader->initRFID(rfidIP, rfidPort);
 			m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
 
@@ -465,7 +465,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 	memset(result, 0, sizeof(result));
 	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", \
-		barcode.c_str(), RecogType.c_str(), reType.c_str());
+		utils::StrToWStr(barcode).c_str(), utils::StrToWStr(RecogType).c_str(), utils::StrToWStr(reType).c_str());
 	m_barCode.SetWindowTextW(result);
 
 	if (barInternalType != typeInternalType)	// 识别类型不匹配
@@ -475,7 +475,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		*/
 		m_nFailCount++;
 		tmpResult.m_bIsCorrect = false;
-		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
+		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
 
 		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
 		m_RegRatio.SetWindowTextW(result);
@@ -510,7 +510,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		m_nSuccessCount++;
 		tmpResult.m_bIsCorrect = true;
 
-		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001);
+		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
 
 		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
 		m_RegRatio.SetWindowTextW(result);
@@ -577,18 +577,15 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			{
 				m_pLineCamera = new CLineCamera(pDevice);
 				const char* tmpImageDir = m_pParamManager->GetImageDirectory();
-				wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
+				//wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
 
-				if (tmpWPath != nullptr)
+				
+				if (m_pLineCamera != nullptr)
 				{
-					if (m_pLineCamera != nullptr)
-					{
-						m_pLineCamera->SetImageSaveDirectory(tmpWPath);
-						m_pLineCamera->StartGrabbing();
-					}
-					delete[]tmpWPath;
-					tmpWPath = nullptr;
+					m_pLineCamera->SetImageSaveDirectory(tmpImageDir);
+					m_pLineCamera->StartGrabbing();
 				}
+					
 			}
 			
 		}
@@ -607,11 +604,11 @@ SIZE CCarSeat_RecognizationDlg::adjustRecSize(SIZE imageSize, SIZE recSize)
 	SIZE result = recSize;
 	if (ratio > tmpRatio)
 	{
-		result.cy = recSize.cx / ratio;
+		result.cy = static_cast<long>(recSize.cx / ratio);
 	}
 	else
 	{
-		result.cx = recSize.cy * ratio;
+		result.cx = static_cast<long>(recSize.cy * ratio);
 	}
 	return result;
 }
@@ -781,8 +778,8 @@ std::wstring CCarSeat_RecognizationDlg::testGenerateBarcode()
 		x = 3.9999 * x * (1 - x);
 	}
 	double tmpValue = x * pow(10, 8);
-	int hiValue = tmpValue;
-	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
+	int hiValue = static_cast<int>(tmpValue);
+	int  lowValue = static_cast<int>((tmpValue - int(tmpValue)) * pow(10, 8));
 	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"%08d%08d", hiValue, lowValue);
 
 	return std::wstring(tmp);
@@ -840,18 +837,15 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		}
 		m_pLineCamera = new CLineCamera(pDevice);
 		const char* tmpImageDir = m_pParamManager->GetImageDirectory();
-		wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
+		//wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
 
-		if (tmpWPath != nullptr)
+		
+		if (m_pLineCamera != nullptr)
 		{
-			if (m_pLineCamera != nullptr)
-			{
-				m_pLineCamera->SetImageSaveDirectory(tmpWPath);
-				//m_pLineCamera->StartGrabbing();
-			}
-			delete[]tmpWPath;
-			tmpWPath = nullptr;
+			m_pLineCamera->SetImageSaveDirectory(tmpImageDir);
+			//m_pLineCamera->StartGrabbing();
 		}
+			
 	}
 	if (m_pLineCamera == nullptr)
 	{
@@ -1064,7 +1058,7 @@ void CCarSeat_RecognizationDlg::OnUsrLogin()
 {
 	// TODO: 在此添加命令处理程序代码
 	CLoginDlg dlg;
-	int ret = dlg.DoModal();
+	INT_PTR ret = dlg.DoModal();
 	if (ret == IDOK)
 	{
 		// 登录部分代码，更新用户名和密码

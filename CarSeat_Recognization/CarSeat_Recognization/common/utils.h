@@ -48,7 +48,7 @@ namespace utils
 	int parseIp(const char *content, const char *name);
 	
 	// XXX={"AAA":"MMM", "BBB":"NNN", "CCC":"LLL"}
-	int parseMap(const char*content, const char*name, std::unordered_map<std::string, std::string>*pMap);
+	size_t parseMap(const char*content, const char*name, std::unordered_map<std::string, std::string>*pMap);
 
 	// XXX=AAA
 	bool getValueByName(const char *content, const char*name, char*value);

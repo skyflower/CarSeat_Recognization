@@ -162,16 +162,22 @@ int CCameraManager::GetCameraCount()
 
 MV_CC_DEVICE_INFO * CCameraManager::GetCamera(int index)
 {
+	if (index < 0)
+	{
+		return nullptr;
+	}
+	unsigned int tmpIndex = index;
 	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
 	if (lock.try_lock() == false)
 	{
 		return nullptr;
 	}
-	if (index >= m_stDevList.nDeviceNum)
+	
+	if (tmpIndex >= m_stDevList.nDeviceNum)
 	{
 		return nullptr;
 	}
-	return m_stDevList.pDeviceInfo[index];
+	return m_stDevList.pDeviceInfo[tmpIndex];
 }
 
 int CCameraManager::GetCameraIndexByName(const char * name)
@@ -195,15 +201,15 @@ int CCameraManager::GetCameraIndexByName(const char * name)
 	}
 	tmpName[sizeof(tmpName) - 1] = '\0';
 	
-	for (int i = 0; i < m_stDevList.nDeviceNum; ++i)
+	for (unsigned int i = 0; i < m_stDevList.nDeviceNum; ++i)
 	{
 		memset(tmpMac, 0, sizeof(tmpMac));
 		sprintf_s(tmpMac, sizeof(tmpMac), "%x%x", \
 			m_stDevList.pDeviceInfo[i]->nMacAddrHigh, \
 			m_stDevList.pDeviceInfo[i]->nMacAddrLow);
 		tmpMac[sizeof(tmpMac) - 1] = '\0';
-		int length = strlen(tmpMac);
-		for (int j = 0; j < length; ++j)
+		size_t length = strlen(tmpMac);
+		for (size_t j = 0; j < length; ++j)
 		{
 			tmpMac[j] = tolower(tmpMac[j]);
 		}
@@ -238,7 +244,7 @@ void CCameraManager::testPrint()
 		return;
 	}
 	//m_stDevList;
-	int i = 0;
+	unsigned int i = 0;
 	while(i < m_stDevList.nDeviceNum)
 	{
 		WriteInfo("index = %d, Ver = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMajorVer, m_stDevList.pDeviceInfo[i]->nMinorVer);

@@ -42,7 +42,7 @@ CLineCamera::CLineCamera(MV_CC_DEVICE_INFO *pDevice):m_pcMyCamera(NULL)
 	//GetCurrentDirectory()
 	
 	memset(m_szImageDir, 0, sizeof(m_szImageDir));
-	StrCpy(m_szImageDir, L".\\");
+	strcpy_s(m_szImageDir, sizeof(m_szImageDir), ".\\");
 }
 
 CLineCamera::~CLineCamera()
@@ -186,18 +186,18 @@ bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 }
 
 // ch:获取曝光时间 | en:Get Exposure Time
-double CLineCamera::GetExposureTimeMax()
+int CLineCamera::GetExposureTimeMax()
 {
     return m_nExposureTimeMax;
 }
 
-double CLineCamera::GetExposureTimeMin()
+int CLineCamera::GetExposureTimeMin()
 {
 	return m_nExposureTimeMin;
 }
 
 // ch:设置曝光时间 | en:Set Exposure Time
-bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
+bool CLineCamera::SetExposureTime(unsigned int timeMax, unsigned int timeMin)
 {
     // ch:调节这两个曝光模式，才能让曝光时间生效
     // en:Adjust these two exposure mode to allow exposure time effective
@@ -227,15 +227,16 @@ bool CLineCamera::SetExposureTime(double timeMax, double timeMin)
 	{
 		return false;
 	}*/
-
-    nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeLowerLimit", timeMin);
+	value = timeMin;
+    nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeLowerLimit", value);
     if (MV_OK != nRet)
     {
 		TRACE0("set AutoExposureTimeLowerLimit failed\n");
         //return false;
     }
-
-	nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeUpperLimit", timeMax);
+	
+	value = timeMax;
+	nRet = m_pcMyCamera->SetIntValue("AutoExposureTimeUpperLimit", value);
 	if (MV_OK != nRet)
 	{
 		TRACE0("set AutoExposureTimeUpperLimit failed\n");
@@ -254,7 +255,7 @@ double CLineCamera::GetGain()
 }
 
 // ch:设置增益 | en:Set Gain
-bool CLineCamera::SetGain(int gain)
+bool CLineCamera::SetGain(float gain)
 {
     // ch:设置增益前先把自动增益关闭，失败无需返回
     //en:Set Gain after Auto Gain is turned off, this failure does not need to return
@@ -287,8 +288,9 @@ bool CLineCamera::SetFrameRate(double rate)
     {
         return false;
     }
+	float tmpRate = rate;
 
-	nRet = m_pcMyCamera->SetFloatValue("AcquisitionFrameRate", rate);
+	nRet = m_pcMyCamera->SetFloatValue("AcquisitionFrameRate", tmpRate);
 	if (nRet != MV_OK)
 	{
 		return false;
@@ -351,7 +353,7 @@ bool CLineCamera::SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode)
 	int nRet = m_pcMyCamera->SetEnumValue("ExposureMode", MV_EXPOSURE_MODE_TIMED);
 	if (MV_OK != nRet)
 	{
-		return nRet;
+		return false;
 	}
 
 	nRet = MV_CC_SetExposureAutoMode(m_pcMyCamera->GetHandle(), mode);
@@ -366,7 +368,7 @@ bool CLineCamera::SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode)
 	return true;
 }
 
-bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
+bool CLineCamera::SetImageSaveDirectory(const char * fileDir)
 {
 	if (fileDir == nullptr)
 	{
@@ -375,32 +377,32 @@ bool CLineCamera::SetImageSaveDirectory(const wchar_t * fileDir)
 
 	//memcpy(m_szImageDir, fileDir, strlen(fileDir));
 	memset(m_szImageDir, 0, sizeof(m_szImageDir));
-	size_t length = wcslen(fileDir);
-	if (std::find(fileDir, fileDir + length, L'\\') != (fileDir + length))
+	size_t length = strlen(fileDir);
+	if (std::find(fileDir, fileDir + length, '\\') != (fileDir + length))
 	{
-		if (fileDir[length - 1] == L'\\')
+		if (fileDir[length - 1] == '\\')
 		{
-			wmemcpy(m_szImageDir, fileDir, wcslen(fileDir));
+			memcpy(m_szImageDir, fileDir, strlen(fileDir));
 			return true;
 		}
-		swprintf_s(m_szImageDir, sizeof(m_szImageDir)/sizeof(wchar_t), L"%s\\", fileDir);
+		sprintf_s(m_szImageDir, sizeof(m_szImageDir)/sizeof(char), "%s\\", fileDir);
 		return true;
 	}
-	if (std::find(fileDir, fileDir + length, L'/') != (fileDir + length))
+	if (std::find(fileDir, fileDir + length, '/') != (fileDir + length))
 	{
-		if (fileDir[length - 1] == L'/')
+		if (fileDir[length - 1] == '/')
 		{
-			wmemcpy(m_szImageDir, fileDir, wcslen(fileDir));
+			memcpy(m_szImageDir, fileDir, strlen(fileDir));
 			return true;
 		}
-		swprintf_s(m_szImageDir, sizeof(m_szImageDir) / sizeof(wchar_t), L"%s/", fileDir);
+		sprintf_s(m_szImageDir, sizeof(m_szImageDir) / sizeof(char), "%s/", fileDir);
 		return true;
 	}
-	swprintf_s(m_szImageDir, sizeof(m_szImageDir) / sizeof(wchar_t), L"%s\\", fileDir);
+	sprintf_s(m_szImageDir, sizeof(m_szImageDir) / sizeof(char), "%s\\", fileDir);
 	return true;
 }
 
-const wchar_t * CLineCamera::GetImageSaveDirectory()
+const char * CLineCamera::GetImageSaveDirectory()
 {
 	return m_szImageDir;
 }
@@ -433,7 +435,7 @@ bool CLineCamera::SetPixelFormat(int value)
 
 	if (MV_OK != nRet)
 	{
-		return -1;
+		return false;
 	}
 	return true;
 }
@@ -758,10 +760,10 @@ MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
 	return nEnumValue;
 }
 
-double CLineCamera::GetExposureTimeMaxByCamera()
+int CLineCamera::GetExposureTimeMaxByCamera()
 {
-	float tmpValue = 0;
-	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeUpperLimit", &tmpValue);
+	unsigned int tmpValue = 0;
+	int nRet = m_pcMyCamera->GetIntValue("AutoExposureTimeUpperLimit", &tmpValue);
 	if (nRet != MV_OK)
 	{
 		return -1;
@@ -769,10 +771,10 @@ double CLineCamera::GetExposureTimeMaxByCamera()
 	return tmpValue;
 }
 
-double CLineCamera::GetExposureTimeMinByCamera()
+int CLineCamera::GetExposureTimeMinByCamera()
 {
-	float tmpValue = 0;
-	int nRet = m_pcMyCamera->GetFloatValue("AutoExposureTimeLowerLimit", &tmpValue);
+	unsigned int tmpValue = 0;
+	int nRet = m_pcMyCamera->GetIntValue("AutoExposureTimeLowerLimit", &tmpValue);
 	if (nRet != MV_OK)
 	{
 		return -1;

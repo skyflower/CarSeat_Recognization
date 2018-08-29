@@ -50,7 +50,7 @@ private:
 	MV_CAM_EXPOSURE_AUTO_MODE m_nExposureAutoMode;
 	int m_nWidthMax;
 	int m_nHeightMax;
-	wchar_t m_szImageDir[MAX_CHAR_LENGTH];
+	char m_szImageDir[MAX_CHAR_LENGTH];
 
 	//MV_CAM_BALANCEWHITE_AUTO m_nBalanceWhile;
 
@@ -67,13 +67,13 @@ public:
     /*ch:设置、获取参数操作 | en:Set and get parameters operation*/
     bool SetTriggerMode(MV_CAM_TRIGGER_MODE mode);                // ch:设置触发模式 | en:Set Trigger Mode
 	MV_CAM_TRIGGER_MODE GetTriggerMode();
-    double GetExposureTimeMax();               // ch:设置曝光时间 | en:Set Exposure Time
+    int GetExposureTimeMax();               // ch:设置曝光时间 | en:Set Exposure Time
 	
-	double GetExposureTimeMin();
-    bool SetExposureTime(double timeMax, double timeMin); 
+	int GetExposureTimeMin();
+    bool SetExposureTime(unsigned int timeMax, unsigned int timeMin);
 
     double GetGain();                       // ch:设置增益 | en:Set Gain
-    bool SetGain(int gain);
+    bool SetGain(float gain);
     double GetFrameRate();                  // ch:设置帧率 | en:Set Frame Rate
     bool SetFrameRate(double rate);
 	MV_CAM_TRIGGER_SOURCE GetTriggerSource(void);              // ch:设置触发源 | en:Set Trigger Source
@@ -85,9 +85,9 @@ public:
 
 	bool SetExposureTimeAutoMode(MV_CAM_EXPOSURE_AUTO_MODE mode);
 
-	bool SetImageSaveDirectory(const wchar_t* fileDir);
+	bool SetImageSaveDirectory(const char* fileDir);
 
-	const wchar_t *GetImageSaveDirectory();
+	const char *GetImageSaveDirectory();
 
 	bool SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile);
 	MV_CAM_BALANCEWHITE_AUTO GetBalanceWhile();
@@ -116,8 +116,8 @@ private:
 	double GetFrameRateByCamera();
 	//double GetExposureTimeByCamera();
 	MV_CAM_TRIGGER_SOURCE GetTriggerSourceByCamera(void);
-	double GetExposureTimeMaxByCamera();
-	double GetExposureTimeMinByCamera();
+	int GetExposureTimeMaxByCamera();
+	int GetExposureTimeMinByCamera();
 	MV_CAM_EXPOSURE_AUTO_MODE GetExposureAutoModeByCamera();
 	int GetWidthMaxByCamera();
 	int GetHeightMaxByCamera();

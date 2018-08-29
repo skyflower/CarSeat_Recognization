@@ -39,7 +39,7 @@ CRFIDReader::~CRFIDReader()
 std::string CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8Î»ÓÐÐ§
-#if 1
+#if 0
 	char tmp[20];
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;
@@ -602,7 +602,7 @@ CRFIDReader::ErrorType CRFIDReader::resetReader(SOCKET fd, char *resetType)
 	return ret;
 }
 
-CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, int length, int & id, int & resultCode)
+CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, size_t length, int & id, int & resultCode)
 {
 	id = 0;
 	resultCode = -1;

@@ -123,6 +123,7 @@ END_MESSAGE_MAP()
 BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 {
 	CDHtmlDialog::OnInitDialog();
+	//AfxSocketInit();
 
 	// IDM_ABOUTBOX
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
@@ -262,25 +263,13 @@ void CCarSeat_RecognizationDlg::run()
 	std::string reType;
 	std::string tmpImageDir(m_pParamManager->GetImageDirectory());
 
+	//clock_t pingBeginTime = clock();
+
 	
 	while (m_bThreadStatus)
 	{
-		// 界面显示与服务器的连接状态
-		CStatic *pLinkStatusControl = (CStatic*)GetDlgItem(IDC_STATIC_LINK_STATUS);
-		if (CNetworkTask::IsReachable(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort()) == true)
-		{
-			if (pLinkStatusControl != nullptr)
-			{
-				pLinkStatusControl->SetWindowTextW(L"网络连接成功");
-			}
-		}
-		else
-		{
-			if (pLinkStatusControl != nullptr)
-			{
-				pLinkStatusControl->SetWindowTextW(L"与服务器连接失败");
-			}
-		}
+		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+		
 
 		// 是否开始识别标志
 		if (m_bBeginJob == false)
@@ -359,24 +348,9 @@ void CCarSeat_RecognizationDlg::run()
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
 		
-		/*std::wstring currentImage = m_pNetworkTask->GetCurrentImagePath();
-		if (preImagePath != currentImage)
-		{
-			barcode = m_pNetworkTask->GetCurrentBarcode();
-			std::string szCurImage = utils::WStrToStr(currentImage);
-			std::wstring type = m_pClassify->GetImageType(szCurImage.c_str());
-			if (type.size() != 0)
-			{
-				CheckAndUpdate(barcode, type);
-			}
-		}*/
+		
 		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 		std::this_thread::sleep_for(a);
-
-		
-
-		////// not implement send to server
-		//
 
 	}
 }
@@ -559,8 +533,8 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			}
 		}
 		
-		TRACE1("camera count = %u\n", m_pCameraManager->GetCameraCount()); 
-		WriteInfo("camera count = %u\n", m_pCameraManager->GetCameraCount());
+		TRACE1("camera count = %d\n", m_pCameraManager->GetCameraCount()); 
+		WriteInfo("camera count = %d", m_pCameraManager->GetCameraCount());
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
 			const char *tmpName = m_pParamManager->GetCameraName();
@@ -584,10 +558,8 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 				{
 					m_pLineCamera->SetImageSaveDirectory(tmpImageDir);
 					m_pLineCamera->StartGrabbing();
-				}
-					
+				}		
 			}
-			
 		}
 	}
 	WriteInfo("init CameraModule success");
@@ -783,6 +755,36 @@ std::wstring CCarSeat_RecognizationDlg::testGenerateBarcode()
 	swprintf_s(tmp, sizeof(tmp) / sizeof(wchar_t), L"%08d%08d", hiValue, lowValue);
 
 	return std::wstring(tmp);
+}
+
+bool CCarSeat_RecognizationDlg::heartBloodServer(unsigned int ip, unsigned int port)
+{
+	static clock_t pingBeginTime = clock();
+	clock_t pingEndTime = clock();
+	bool flag = false;
+	if (pingEndTime - pingBeginTime > 10 * CLOCKS_PER_SEC)
+	{
+		// 界面显示与服务器的连接状态
+		CStatic *pLinkStatusControl = (CStatic*)GetDlgItem(IDC_STATIC_LINK_STATUS);
+		if (CNetworkTask::IsReachable(m_pParamManager->GetServerIP(), m_pParamManager->GetLocalIP()) == true)
+		{
+			if (pLinkStatusControl != nullptr)
+			{
+				pLinkStatusControl->SetWindowTextW(L"网络连接成功");
+			}
+			flag = true;
+		}
+		else
+		{
+			if (pLinkStatusControl != nullptr)
+			{
+				pLinkStatusControl->SetWindowTextW(L"与服务器连接失败");
+			}
+		}
+		pingBeginTime = pingEndTime;
+		flag = false;
+	}
+	return flag;
 }
 
 void CCarSeat_RecognizationDlg::OnUsrinput()

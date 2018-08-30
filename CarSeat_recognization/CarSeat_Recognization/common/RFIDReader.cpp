@@ -242,6 +242,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	}
 
 	sockaddr_in addr;
+	memset(&addr, 0, sizeof(sockaddr_in));
 
 	//接收时限
 	int value = 1000;
@@ -249,7 +250,6 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 
 	value = 1;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&value, sizeof(int));
-
 
 
 	addr.sin_family = AF_INET;
@@ -260,7 +260,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	{
 		err = WSAGetLastError();
 		TRACE1("connect failed,err = %u\n", err);
-		WriteError("connect failed, err = %u", err);
+		WriteError("connect failed, ip = 0x%X, port = %u, err = %u", serverIp, port, err);
 		closesocket(m_nSocket);
 		m_nSocket = 0;
 		WSACleanup();
@@ -274,7 +274,6 @@ CRFIDReader::ErrorType CRFIDReader::reset(const char * param)
 {
 	if (m_nSocket == 0)
 	{
-		//initRFID();
 		WriteError("rfid socket not connect");
 	}
 	char resetXML[] = "<command><reset><param>%s</param></reset></command>";

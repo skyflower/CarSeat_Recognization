@@ -108,6 +108,8 @@ private:
 
 	std::wstring testGenerateBarcode();
 
+	bool heartBloodServer(unsigned int ip, unsigned int port);
+
 
 public:
 	afx_msg void OnUsrinput();

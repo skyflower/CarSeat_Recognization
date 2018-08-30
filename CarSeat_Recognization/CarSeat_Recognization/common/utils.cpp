@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "utils.h"
+#include <io.h>
 
 
 
@@ -498,6 +499,36 @@ namespace utils
 		utils::delBlankSpace(value, strlen(value));
 
 		return true;
+	}
+
+	bool mkdir(const char* dir)
+	{
+		utils::delBlankSpace(const_cast<char*>(dir), strlen(dir));
+
+		do
+		{
+			if (_access(dir, 6) == 0)
+			{
+				break;
+			}
+			mkdir(dir);
+
+			if (_access(dir, 6) == 0)
+			{
+				break;
+			}
+			wchar_t *wDir = utils::CharToWchar(const_cast<char*>(dir));
+			if (wDir == nullptr)
+			{
+				break;
+			}
+
+			_waccess_s(wDir, 6);
+
+			delete[]wDir;
+			wDir = nullptr;
+		} while (0);
+		return false;
 	}
 
 

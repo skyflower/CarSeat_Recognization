@@ -37,6 +37,8 @@ namespace utils
 
 	bool readFile(char *file, char *&content, size_t &FileSize);
 
+	bool mkdir(const char* dir);
+
 
 	// XXX={"AAA", "BBBB", "CCC"}
 	bool parseVector(const char *content, const char*name, std::vector<std::string> *pVector);

@@ -544,7 +544,8 @@ std::string CLineCamera::SaveImage()
     if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
 		WriteError("camera status not grab");
-        return std::string();
+		StartGrabbing();
+        //return std::string();
     }
     // ch:ªÒ»°1’≈Õº | en:get one image
     unsigned int nRecvBufSize = 0;
@@ -652,9 +653,10 @@ std::string CLineCamera::SaveImage()
 			}
 			char absoluteName[MAX_CHAR_LENGTH] = { 0 };
 			memset(absoluteName, 0, sizeof(char) * MAX_CHAR_LENGTH);
+			WSAEWOULDBLOCK;
 
-			WriteInfo("m_szImageDir = %s", m_szImageDir);
-			WriteInfo("chImageName = %s", chImageName);
+			//WriteInfo("m_szImageDir = %s", m_szImageDir);
+			//WriteInfo("chImageName = %s", chImageName);
 
 			TRACE1("m_szImageDir = %s\n", m_szImageDir);
 			TRACE1("chImageName = %s\n", chImageName);
@@ -665,8 +667,8 @@ std::string CLineCamera::SaveImage()
 			if (tmpFileName == nullptr)
 			{
 				return std::string();
-			}
-			WriteInfo("image file Name = [%s]", tmpFileName);*/
+			}*/
+			WriteInfo("image file Name = [%s]", absoluteName);
 
 			//HANDLE imageFileHandle = CreateFile(absoluteName, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
 

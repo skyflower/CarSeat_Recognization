@@ -144,14 +144,13 @@ void CLog::init()
 			delete tmpPath;
 			tmpPath = nullptr;
 		}
-
 	}
 
 	sprintf_s(logFileName, "%sLog_%04d%02d%02d_%02d%02d%02d.txt", \
 		LogDir, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
 		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 
-	m_pLog.open(logFileName, std::ios::trunc | std::ios::in | std::ios::out);
+	m_pLog.open(logFileName, std::ios::trunc | std::ios::in | std::ios::out | std::ios::binary);
 }
 
 void CLog::SetFlag(bool flag)

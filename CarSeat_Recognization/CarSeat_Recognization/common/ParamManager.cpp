@@ -42,31 +42,31 @@ m_nBarcodeTime(1)
 	struct tm tmpTime;
 	localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
 
-	char logFileName[100] = { 0 };
-	memset(logFileName, 0, sizeof(logFileName));
-
-
+	char logFileName[256] = { 0 };
 	memset(logFileName, 0, sizeof(logFileName));
 
 	sprintf_s(logFileName, "%s\\%04d%02d%02d", m_szImagePath, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday);
 
 
-	memset(m_szImagePath, 0, sizeof(m_szImagePath));
-	memcpy(m_szImagePath, logFileName, strlen(logFileName));
+	//memset(m_szImagePath, 0, sizeof(m_szImagePath));
+	//memcpy(m_szImagePath, logFileName, strlen(logFileName));
 
 	
-	//判断目录是否存在，
-	if (_access(m_szImagePath, 0) != 0)
+	//创建目录
+	utils::mkdir(logFileName);
+
+	if (_access(logFileName, 0) == 0)
 	{
-		wchar_t *tmpPath = utils::CharToWchar(m_szImagePath);
-		if (tmpPath != nullptr)
-		{
-			_wmkdir(tmpPath);
-			delete tmpPath;
-			tmpPath = nullptr;
-		}
-		
+		WriteError("create directory [%s] success", logFileName);
+		memset(m_szImagePath, 0, sizeof(m_szImagePath));
+		memcpy(m_szImagePath, logFileName, strlen(logFileName));
 	}
+	else
+	{
+		WriteError("create directory [%s] failed", logFileName);
+		WriteInfo("set image directory [%s]", m_szImagePath);
+	}
+
 }
 
 
@@ -164,6 +164,7 @@ unsigned int CParamManager::__auxLocalIP()
 			(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
 			(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
 			(sa->sin_addr.S_un.S_un_b.s_b4);
+
 		if (true == CNetworkTask::IsReachable(tmpIp, m_nServerIp))
 		{
 			nIp = tmpIp;

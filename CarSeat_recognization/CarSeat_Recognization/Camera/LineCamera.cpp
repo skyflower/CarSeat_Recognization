@@ -541,6 +541,16 @@ SIZE CLineCamera::GetImageSize()
 // ch:保存图片 | en:Save Image
 std::string CLineCamera::SaveImage()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		OpenButton();
+		if (m_status != CCamera::CameraStatus::CAMERA_OPEN)
+		{
+			WriteError("camera status not open");
+			return std::string();
+		}
+	}
+
     if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
 		WriteError("camera status not grab");
@@ -553,7 +563,7 @@ std::string CLineCamera::SaveImage()
 
     // ch:仅在第一次保存图像时申请缓存，在 CloseDevice 时释放
     // en:Request buffer only when save image for first time, release after CloseDevice
-    if (NULL == m_pBufForDriver)
+    if ((NULL == m_pBufForDriver) || (m_pcMyCamera != NULL))
     {
         // ch:从相机中获取一帧图像大小 | en:Get size of one frame from camera
         nRet = m_pcMyCamera->GetIntValue("PayloadSize", &nRecvBufSize);
@@ -653,42 +663,49 @@ std::string CLineCamera::SaveImage()
 			}
 			char absoluteName[MAX_CHAR_LENGTH] = { 0 };
 			memset(absoluteName, 0, sizeof(char) * MAX_CHAR_LENGTH);
-			WSAEWOULDBLOCK;
-
-			//WriteInfo("m_szImageDir = %s", m_szImageDir);
-			//WriteInfo("chImageName = %s", chImageName);
-
-			TRACE1("m_szImageDir = %s\n", m_szImageDir);
-			TRACE1("chImageName = %s\n", chImageName);
 			
 			sprintf_s(absoluteName, MAX_CHAR_LENGTH, "%s%s", m_szImageDir, chImageName);
 			
-			/*char *tmpFileName = utils::WcharToChar(absoluteName);
+			wchar_t *tmpFileName = utils::CharToWchar(absoluteName);
 			if (tmpFileName == nullptr)
 			{
 				return std::string();
-			}*/
+			}
 			WriteInfo("image file Name = [%s]", absoluteName);
 
-			//HANDLE imageFileHandle = CreateFile(absoluteName, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+			
+			CFile file;
+			if (TRUE == file.Open(tmpFileName, CFile::modeCreate | CFile::modeWrite))
+			{
+				file.Write(m_pBufForSaveImage, stParam.nImageLen);
+
+				file.Flush();
+
+				file.Close();
+			}
+
+			
+
+			delete[]tmpFileName;
+			tmpFileName = nullptr;
 
 
-			FILE* fp = nullptr;
-			errno_t errRet;
-			errRet = fopen_s(&fp, absoluteName, "wb");
+			//FILE* fp = nullptr;
+			//errno_t errRet;
+			//errRet = fopen_s(&fp, absoluteName, "wb");
 
-			WriteInfo("errRet = %d", errRet);
-            if (NULL == fp)
-            {
+			//WriteInfo("errRet = %d", errRet);
+   //         if (NULL == fp)
+   //         {
 
-                WriteError("write image failed, maybe you have no privilege");
-				//delete[]tmpFileName;
-				//tmpFileName = nullptr;
-				return std::string();
-            }
-            fwrite(m_pBufForSaveImage, 1, stParam.nImageLen, fp);
-            fclose(fp);
-			fp = nullptr;
+   //             WriteError("write image failed, maybe you have no privilege");
+			//	//delete[]tmpFileName;
+			//	//tmpFileName = nullptr;
+			//	return std::string();
+   //         }
+   //         fwrite(m_pBufForSaveImage, 1, stParam.nImageLen, fp);
+   //         fclose(fp);
+			//fp = nullptr;
 
 			imagePath = std::string(absoluteName);
 			//delete[]tmpFileName;
@@ -706,6 +723,10 @@ std::string CLineCamera::SaveImage()
 
 MV_CAM_TRIGGER_MODE CLineCamera::GetTriggerModeByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return MV_TRIGGER_MODE_UNKNOWN;
+	}
 	MV_CAM_TRIGGER_MODE nEnumValue = MV_TRIGGER_MODE_UNKNOWN;
 
 	int nRet = m_pcMyCamera->GetEnumValue("TriggerMode", (unsigned int*)&nEnumValue);
@@ -718,6 +739,10 @@ MV_CAM_TRIGGER_MODE CLineCamera::GetTriggerModeByCamera()
 
 double CLineCamera::GetGainByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return -1;
+	}
 	float  fFloatValue = 0.0;
 	int nRet = m_pcMyCamera->GetFloatValue("ExposureTime", &fFloatValue);
 	if (MV_OK != nRet)
@@ -729,6 +754,10 @@ double CLineCamera::GetGainByCamera()
 
 double CLineCamera::GetFrameRateByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return -1;
+	}
 	float  fFloatValue = 0.0;
 
 	int nRet = m_pcMyCamera->GetFloatValue("ResultingFrameRate", &fFloatValue);
@@ -752,6 +781,10 @@ double CLineCamera::GetFrameRateByCamera()
 
 MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return MV_TRIGGER_SOURCE_UNKNOWN;
+	}
 	MV_CAM_TRIGGER_SOURCE nEnumValue = MV_TRIGGER_SOURCE_UNKNOWN;
 
 	int nRet = m_pcMyCamera->GetEnumValue("TriggerSource", (unsigned int*)&nEnumValue);
@@ -764,6 +797,10 @@ MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSourceByCamera(void)
 
 int CLineCamera::GetExposureTimeMaxByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return -1;
+	}
 	unsigned int tmpValue = 0;
 	int nRet = m_pcMyCamera->GetIntValue("AutoExposureTimeUpperLimit", &tmpValue);
 	if (nRet != MV_OK)
@@ -775,6 +812,10 @@ int CLineCamera::GetExposureTimeMaxByCamera()
 
 int CLineCamera::GetExposureTimeMinByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return -1;
+	}
 	unsigned int tmpValue = 0;
 	int nRet = m_pcMyCamera->GetIntValue("AutoExposureTimeLowerLimit", &tmpValue);
 	if (nRet != MV_OK)
@@ -786,6 +827,10 @@ int CLineCamera::GetExposureTimeMinByCamera()
 
 MV_CAM_EXPOSURE_AUTO_MODE CLineCamera::GetExposureAutoModeByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return MV_EXPOSURE_AUTO_MODE_UNKNOWN;
+	}
 	MV_CAM_EXPOSURE_AUTO_MODE tmpValue = MV_EXPOSURE_AUTO_MODE_UNKNOWN;
 	int nRet = m_pcMyCamera->GetEnumValue("ExposureAuto", (unsigned int*)&tmpValue);
 	if (nRet != MV_OK)
@@ -798,6 +843,10 @@ MV_CAM_EXPOSURE_AUTO_MODE CLineCamera::GetExposureAutoModeByCamera()
 int CLineCamera::GetWidthMaxByCamera()
 {
 	//
+	if (m_pcMyCamera == NULL)
+	{
+		return -1;
+	}
 	unsigned int tmpValue = -1;
 	int nRet = m_pcMyCamera->GetIntValue("WidthMax", &tmpValue);
 	if (nRet != MV_OK)
@@ -809,6 +858,10 @@ int CLineCamera::GetWidthMaxByCamera()
 
 int CLineCamera::GetHeightMaxByCamera()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return -1;
+	}
 	unsigned int tmpValue = -1;
 	int nRet = m_pcMyCamera->GetIntValue("HeightMax", &tmpValue);
 	if (nRet != MV_OK)
@@ -820,6 +873,10 @@ int CLineCamera::GetHeightMaxByCamera()
 
 bool CLineCamera::GetROIParameterByCamera(int * width, int * height, int * offsetX, int * offsetY)
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return false;
+	}
 	*width = *height = *offsetX = *offsetY = -1;
 
 	unsigned int tmpValue = -1;
@@ -1039,6 +1096,10 @@ void CLineCamera::SetDisplayHwnd(HWND hwnd)
 // ch:按下软触发一次按钮 | en:Click Execute button
 void CLineCamera::SoftwareOnce()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		return;
+	}
     if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
         return;
@@ -1052,6 +1113,11 @@ void CLineCamera::SoftwareOnce()
 // ch:按下保存bmp图片按钮 | en:Click Save BMP button
 std::string CLineCamera::SaveBmp()
 {
+	if (m_pcMyCamera == NULL)
+	{
+		WriteError("camera not open");
+		return std::string();
+	}
     m_nSaveImageType = MV_Image_Bmp;
     std::string path = SaveImage();
     if (path.size() == 0)

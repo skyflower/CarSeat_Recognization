@@ -275,6 +275,7 @@ CRFIDReader::ErrorType CRFIDReader::reset(const char * param)
 	if (m_nSocket == 0)
 	{
 		WriteError("rfid socket not connect");
+		return ErrorType::ERROR_SOCKET_INVALID;
 	}
 	char resetXML[] = "<command><reset><param>%s</param></reset></command>";
 

@@ -511,19 +511,14 @@ namespace utils
 			{
 				break;
 			}
-			mkdir(dir);
-
-			if (_access(dir, 6) == 0)
-			{
-				break;
-			}
+			
 			wchar_t *wDir = utils::CharToWchar(const_cast<char*>(dir));
 			if (wDir == nullptr)
 			{
 				break;
 			}
 
-			_waccess_s(wDir, 6);
+			CreateDirectory(wDir, NULL);
 
 			delete[]wDir;
 			wDir = nullptr;

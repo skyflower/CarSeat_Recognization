@@ -48,14 +48,10 @@ m_nBarcodeTime(1)
 	sprintf_s(logFileName, "%s\\%04d%02d%02d", m_szImagePath, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday);
 
 
-	//memset(m_szImagePath, 0, sizeof(m_szImagePath));
-	//memcpy(m_szImagePath, logFileName, strlen(logFileName));
-
-	
 	//´´½¨Ä¿Â¼
 	utils::mkdir(logFileName);
 
-	if (_access(logFileName, 0) == 0)
+	if (PathFileExistsA(logFileName) == TRUE)
 	{
 		WriteError("create directory [%s] success", logFileName);
 		memset(m_szImagePath, 0, sizeof(m_szImagePath));
@@ -398,10 +394,6 @@ void CParamManager::Init()
 			m_nTestServerPort = atoi(tmpStr);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
-
-		
-
-
 
 		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
 		{

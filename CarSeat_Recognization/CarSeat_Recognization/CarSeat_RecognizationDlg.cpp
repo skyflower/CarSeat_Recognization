@@ -291,7 +291,11 @@ void CCarSeat_RecognizationDlg::run()
 			unsigned int rfidIP = m_pParamManager->GetBarcodeIp();
 			unsigned int rfidPort = m_pParamManager->GetBarcodePort();
 			m_pRFIDReader->initRFID(rfidIP, rfidPort);
-			m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
+			if (CRFIDReader::ErrorType::ERROR_SOCKET_INVALID == m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam()))
+			{
+				m_pRFIDReader->initRFID(rfidIP, rfidPort);
+				m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
+			}
 
 			std::chrono::duration<int, std::milli> b = std::chrono::milliseconds(100);
 			std::this_thread::sleep_for(b);

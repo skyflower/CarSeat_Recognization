@@ -22,7 +22,7 @@ CKepServerSocket::~CKepServerSocket()
 		closesocket(m_nSocket);
 		m_nSocket = 0;
 	}
-	WSACleanup();
+	//WSACleanup();
 }
 
 bool CKepServerSocket::SetError()
@@ -133,7 +133,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 		WriteError("send Failed, msg = %s, len = %u, Err:%d", msg, len, WSAGetLastError());
 		closesocket(m_nSocket);
 		m_nSocket = 0;
-		WSACleanup();
+		//WSACleanup();
 		return false;
 	}
 	int recvMsgLen = 0;
@@ -142,7 +142,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 	{
 		WriteError("recv Failed, Err: %u", GetLastError());
 		closesocket(m_nSocket);
-		WSACleanup();
+		//WSACleanup();
 		recvMsgLen = 0;
 		m_nSocket = 0;
 		return false;
@@ -167,18 +167,19 @@ bool CKepServerSocket::GetSocketStatus()
 
 SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 {
-	WSADATA wsaData;
+	/*WSADATA wsaData;
 	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (err != 0)
 	{
 		err = WSAGetLastError();
 		WriteError("err = %u", err);
 		return -1;
-	}
+	}*/
+	int err = 0;
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketFD == -1)
 	{
-		WSACleanup();
+		//WSACleanup();
 		return -1;
 	}
 
@@ -202,7 +203,7 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 		
 		WriteError("connect failed, err = %d", err);
 		closesocket(socketFD);
-		WSACleanup();
+		//WSACleanup();
 		return -1;
 	}
 	return socketFD;

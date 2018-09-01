@@ -75,18 +75,28 @@ int CLineCamera::OpenDevice(void)
 
     if (NULL != m_pcMyCamera)
     {
+		WriteError("camera not open more chan twice;");
         return STATUS_ERROR;
     }
 
     m_pcMyCamera = new CCamera;
     if (NULL == m_pcMyCamera)
     {
+		WriteError("new CCamera FAILED");
         return STATUS_ERROR;
     }
+	if (m_pDevice == NULL)
+	{
+		WriteError("Camera device m_pDevice is null");
+		delete m_pcMyCamera;
+		m_pcMyCamera = NULL;
+		return -1;
+	}
 
     int nRet = m_pcMyCamera->Open(m_pDevice);
     if (MV_OK != nRet)
     {
+		WriteError("my camera open device failed, CAMERA macADDRESS = 0x%X%X", m_pDevice->nMacAddrHigh, m_pDevice->nMacAddrLow);
         delete m_pcMyCamera;
         m_pcMyCamera = NULL;
         return nRet;
@@ -553,7 +563,7 @@ std::string CLineCamera::SaveImage()
 
     if (CCamera::CameraStatus::CAMERA_GRAB != m_status)
     {
-		WriteError("camera status not grab");
+		WriteError("camera status not grab, m_status = %d", m_status);
 		StartGrabbing();
         //return std::string();
     }
@@ -596,7 +606,7 @@ std::string CLineCamera::SaveImage()
     while(nImageNum)
     {
 		memset(m_pBufForDriver, 0, sizeof(unsigned char) * m_nBufSizeForDriver);
-        nRet = m_pcMyCamera->GetOneFrameTimeout(m_pBufForDriver, &nDataLen, m_nBufSizeForDriver, &stImageInfo, 1000);
+        nRet = m_pcMyCamera->GetOneFrameTimeout(m_pBufForDriver, &nDataLen, m_nBufSizeForDriver, &stImageInfo, 2000);
         if (nRet == MV_OK)
         {
             nImageNum--;
@@ -682,6 +692,13 @@ std::string CLineCamera::SaveImage()
 				file.Flush();
 
 				file.Close();
+			}
+			else
+			{
+				delete[]tmpFileName;
+				tmpFileName = nullptr;
+				WriteError("create image file failed");
+				return std::string();
 			}
 
 			
@@ -965,6 +982,7 @@ bool CLineCamera::StartGrabbing()
 {
 	if ((m_status == CCamera::CameraStatus::CAMERA_GRAB) || (m_status != CCamera::CameraStatus::CAMERA_OPEN))
 	{
+		WriteError("camera status is grab or not open, status = %d", m_status);
 		return false;
 	}
 

@@ -34,6 +34,8 @@ public:
 		unsigned int serverPort;
 		unsigned int imagePort;
 		RecogResultA mRecogResult;
+		static bool serialize(message &a, char *line);
+		static bool deserialize(message &a, char *line);
 	};
 	CNetworkTask();
 	~CNetworkTask();

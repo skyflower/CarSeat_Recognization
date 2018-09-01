@@ -111,13 +111,13 @@ unsigned int CParamManager::GetLocalIP()
 unsigned int CParamManager::__auxLocalIP()
 {
 	clock_t startTime = clock();
-	WORD wVersionRequested = MAKEWORD(2, 2);
+	//WORD wVersionRequested = MAKEWORD(2, 2);
 
-	WSADATA wsaData;
+	/*WSADATA wsaData;
 	if (WSAStartup(wVersionRequested, &wsaData) != 0)
 	{
 		return 0;
-	}
+	}*/
 
 	char               buf[100];
 	int                ret = 0;
@@ -170,7 +170,7 @@ unsigned int CParamManager::__auxLocalIP()
 		curr = curr->ai_next;
 	}
 
-	WSACleanup();
+	//WSACleanup();
 	clock_t endTime = clock();
 	TRACE1("get localIp cost Time = %u", endTime - startTime);
 	WriteInfo("get localIp cost Time = %u", endTime - startTime);

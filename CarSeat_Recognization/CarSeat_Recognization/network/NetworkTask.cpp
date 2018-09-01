@@ -40,7 +40,7 @@ CNetworkTask::CNetworkTask():
 
 	if (tmpWCacheFile != nullptr)
 	{
-		if (_waccess_s(tmpWCacheFile, 0x00) == 0)
+		if (PathFileExists(tmpWCacheFile) == TRUE)
 		{
 			m_pLog.open(m_szCacheFile, std::ios::ate | std::ios::out | std::ios::in);
 		}
@@ -80,7 +80,7 @@ bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
 	{
 		WriteError("icmpSendEcho failed clientIp = 0x%X, ServerIp = 0x%X", clientIp, serverIp);
 		IcmpCloseHandle(IcmpHandle);
-		WSACleanup();
+		//WSACleanup();
 		IcmpHandle = INVALID_HANDLE_VALUE;
 		return false;
 	}
@@ -315,7 +315,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		return false;
 	}
 
-	WSADATA wsaData;
+	/*WSADATA wsaData;
 	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (err != 0)
 	{
@@ -323,12 +323,13 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		WriteError("err = %u", err);
 		recvMsgLen = 0;
 		return false;
-	}
+	}*/
+	int err = 0;
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketFD == -1)
 	{
 		TRACE("create socket failed\n");
-		WSACleanup();
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -349,7 +350,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, err = %u", err);
 		closesocket(socketFD);
-		WSACleanup();
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -359,7 +360,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
 		closesocket(socketFD);
-		WSACleanup();
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -368,7 +369,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		WriteError("recv Failed, Err: %u", GetLastError());
 		closesocket(socketFD);
-		WSACleanup();
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -376,7 +377,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	closesocket(socketFD);
 	socketFD = -1;
 
-	WSACleanup();
+	//WSACleanup();
 
 	return true;
 }
@@ -399,9 +400,41 @@ bool CNetworkTask::initCacheFile()
 
 	m_pLog.read(content, fileLength);
 
+	RecogResultA tmpResult;
+	
 
+	const size_t lineLength = 1000;
+	char *line = new char[lineLength];
+	if (line == nullptr)
+	{
+		delete[]content;
+		content = nullptr;
+		return false;
+	}
 
-	return false;
+	int64_t begin = 0;
+	while (1)
+	{
+		memset(line, 0, sizeof(char) * lineLength);
+		char *lineEnd = std::find(content + begin, content + fileLength, '\n');
+		if (lineEnd == content + fileLength)
+		{
+			break;
+		}
+		memcpy(line, content + begin, lineEnd - content - begin);
+		memset(&tmpResult, 0, sizeof(RecogResultA));
+		RecogResultA::TextToRecog(tmpResult, line);
+
+		
+	}
+
+	delete[]line;
+	line = nullptr;
+
+	delete[]content;
+	content = nullptr;
+
+	return true;
 }
 //
 //std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
@@ -549,3 +582,43 @@ bool CNetworkTask::initCacheFile()
 //	}
 //	return false;
 //}
+
+bool CNetworkTask::message::serialize(message & a, char * line)
+{
+	std::stringstream ss;
+	ss << a.serverIp << "," << a.serverPort << "," << a.imagePort << ",";
+
+	constexpr const size_t tmpLength = sizeof(RecogResultA);
+	
+	char tmp[tmpLength];
+	
+	memset(tmp, 0, sizeof(tmp));
+
+	RecogResultA::RecogToText(a.mRecogResult, tmp);
+
+	ss << tmp;
+
+	std::string str = ss.str();
+
+	memcpy(line, str.c_str(), str.size());
+
+	return true;
+}
+
+bool CNetworkTask::message::deserialize(message & a, char * line)
+{
+	/*std::stringstream ss(line);
+	ss >> a.serverIp >> "," >> a.serverPort >> "," >> a.imagePort >> ",";
+
+	constexpr const size_t tmpLength = sizeof(RecogResultA);
+
+	char tmp[tmpLength];
+
+	memset(tmp, 0, sizeof(tmp));
+
+	ss >> tmp;
+
+	RecogResultA::TextToRecog(a.mRecogResult, tmp);*/
+
+	return true;
+}

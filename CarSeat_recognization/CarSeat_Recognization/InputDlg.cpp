@@ -224,13 +224,11 @@ void CInputDlg::SetManagePointer(CParamManager * pParamManager, CLabelManager * 
 
 void CInputDlg::SetTestImagePath(std::string path)
 {
-	
-	if (_access(path.c_str(), 0x04) == 0)
+	std::wstring tmpPath = utils::StrToWStr(path);
+	if (PathFileExists(tmpPath.c_str()) == TRUE)
 	{
 		m_pTestImage->Destroy();
 		HRESULT  ret = S_OK;
-
-		std::wstring tmpPath = utils::StrToWStr(path);
 		
 		ret = m_pTestImage->Load(tmpPath.c_str());
 		if (ret != S_OK)

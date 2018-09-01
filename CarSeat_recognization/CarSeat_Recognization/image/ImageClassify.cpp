@@ -61,6 +61,11 @@ bool CImageClassify::initPython(const char *modulName,const char *functionName, 
 	//WriteInfo("python import %s", modulName);
 
 	m_pPyName = PyUnicode_FromString(modulName);
+	if (m_pPyName == nullptr)
+	{
+		WriteError("moduleName failed, %s", modulName);
+		return false;
+	}
 	
 	m_pPyModule = PyImport_Import(m_pPyName);
 
@@ -84,7 +89,7 @@ bool CImageClassify::initPython(const char *modulName,const char *functionName, 
 
 	if (!m_pPyFunc || !PyCallable_Check(m_pPyFunc))
 	{
-		WriteError("can't find function [add]");
+		WriteError("can't find function [%s]", functionName);
 		
 		return false;
 	}
@@ -173,8 +178,10 @@ std::string CImageClassify::compute(const char *filePath)
 #ifdef PYTHON_TENSORFLOW
 
 	if ((m_pPyFunc == nullptr) || (filePath == nullptr) ||	\
-		(strlen(m_szGraph) == 0) || (strlen(m_szGraph) == 0))
+		(strlen(m_szGraph) == 0) || (strlen(m_szLabel) == 0))
 	{
+		WriteError("error, m_szGraph = %s, m_szLabel = %s, filePath = %s", m_szGraph, m_szLabel, filePath);
+		WriteError("m_szCacheImagePath = %s", m_szCacheImagePath);
 		return std::string();
 	}
 	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "ssss", filePath, m_szLabel, m_szGraph, m_szCacheImagePath);
@@ -183,6 +190,10 @@ std::string CImageClassify::compute(const char *filePath)
 	if (presult != nullptr)
 	{
 		int ok = PyArg_ParseTuple(presult, "sfsf", &tmpUpType, &tmpUpValue, &tmpDownType, &tmpDownValue);
+	}
+	else
+	{
+		WriteError("presult is null");
 	}
 
 	

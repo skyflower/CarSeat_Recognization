@@ -58,17 +58,17 @@ bool RecogResult<type>::RecogToText(RecogResult<type> &a, type *buffer)
 {
 	//std::stringstream fs;
 	std::basic_stringstream<type, std::char_traits<type>, std::allocator<type> > fs;
-	fs << iter->m_szBarcode << ","	\
-		<< iter->m_szTime << ","	\
-		<< iter->m_szTypeByRecog << ",";
-	fs << iter->m_szTypeByBarcode << ","		\
-		<< iter->m_szTypeByUsrInput << ","	\
-		<< iter->m_bIsCorrect << ",";
-	fs << iter->m_szRecogMethod << "," \
-		<< iter->m_szCameraName << "," \
-		<< iter->m_szLineName << ",";
-	fs << iter->m_szUsrName << ","	\
-		<< iter->m_szImagePath << "\n";
+	fs << a.m_szBarcode << ","	\
+		<< a.m_szTime << ","	\
+		<< a.m_szTypeByRecog << ",";
+	fs << a.m_szTypeByBarcode << ","		\
+		<< a.m_szTypeByUsrInput << ","	\
+		<< a.m_bIsCorrect << ",";
+	fs << a.m_szRecogMethod << "," \
+		<< a.m_szCameraName << "," \
+		<< a.m_szLineName << ",";
+	fs << a.m_szUsrName << ","	\
+		<< a.m_szImagePath << "\n";
 	
 	std::basic_string<type> b = fs.str();
 	memcpy(buffer, b.c_str(), sizeof(type) * b.size());
@@ -100,12 +100,13 @@ bool RecogResult<type>::TextToRecog(RecogResult<type> &a, type *buffer)
 	{
 		++length;
 	}
+	bool flag = false;
 
 	do
 	{
 		type *begin = buffer;
 		
-		int tmpLength = length;
+		int64_t tmpLength = length;
 		type *end = std::find(begin, begin + tmpLength, quote);
 		if (end == NULL)
 		{
@@ -217,9 +218,9 @@ bool RecogResult<type>::TextToRecog(RecogResult<type> &a, type *buffer)
 		}
 		memcpy(a.m_szImagePath, begin, (end - begin) * sizeof(type));
 		begin = end + 1;
-
+		return true;
 	} while (0);
-	return true;
+	return flag;
 }
 
 

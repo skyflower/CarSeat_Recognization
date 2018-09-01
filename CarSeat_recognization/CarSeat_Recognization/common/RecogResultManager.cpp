@@ -65,7 +65,7 @@ void CRecogResultManager::init()
 			break;
 		}
 		memset(tmpChar, 0, sizeof(char) * 3 * MAX_CHAR_LENGTH);
-		int i = end - content - begin;
+		int64_t i = end - content - begin;
 		memcpy(tmpChar, content + begin, i);
 		if (tmpChar[i - 1] <= 0x20)
 		{

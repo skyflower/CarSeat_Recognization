@@ -31,7 +31,7 @@ CRFIDReader::~CRFIDReader()
 	{
 		
 		closesocket(m_nSocket);
-		WSACleanup();
+		//WSACleanup();
 		m_nSocket = 0;
 	}
 }
@@ -186,7 +186,7 @@ std::string CRFIDReader::readBarcode()
 		*/
 		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
 		{
-			return std::string();
+			//return std::string();
 		}
 		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
@@ -224,20 +224,21 @@ bool CRFIDReader::init()
 
 CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 {
-	WSADATA wsaData;
-	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	//WSADATA wsaData;
+	/*int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (err != 0)
 	{
 		err = WSAGetLastError();
 		WriteError("err = %u", err);
 		return ErrorType::ERROR_SOCKET_INIT;
-	}
+	}*/
+	int err = 0;
 	m_nSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_nSocket == INVALID_SOCKET)
 	{
 		closesocket(m_nSocket);
 		m_nSocket = 0;
-		WSACleanup();
+		//WSACleanup();
 		return ErrorType::ERROR_SOCKET_CREATE;
 	}
 
@@ -263,7 +264,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 		WriteError("connect failed, ip = 0x%X, port = %u, err = %u", serverIp, port, err);
 		closesocket(m_nSocket);
 		m_nSocket = 0;
-		WSACleanup();
+		//WSACleanup();
 		return ErrorType::ERROR_SOCKET_CONNECT;
 	}
 	WriteInfo("rfid socket connect success");

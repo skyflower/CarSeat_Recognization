@@ -332,6 +332,7 @@ void CCarSeat_RecognizationDlg::run()
 				if (imagepath.size() == 0)
 				{
 					initCameraModule();
+
 					OnStartCamera();
 
 					CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
@@ -347,8 +348,8 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			//std::string tmpPath = utils::WStrToStr(imagepath);
 			//m_pParamManager->GetImageDirectory();
-			std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
-			reType = m_pClassify->compute(tmpImageAbsolutePath.c_str());
+			//std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
+			reType = m_pClassify->compute(imagepath.c_str());
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
 		
@@ -432,14 +433,14 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	计算拍照图片的绝对路径
 	*/
 	//std::wstring tmpWPath = utils::StrToWStr(tmpPath);
-	std::string tmpImageDirectory(m_pParamManager->GetImageDirectory());
-	std::string tmpImagePath = tmpImageDirectory + "\\" + tmpPath;
+	//std::string tmpImageDirectory(m_pParamManager->GetImageDirectory());
+	//std::string tmpImagePath = tmpImageDirectory + "\\" + tmpPath;
 
 	/*
 
 	*/
-	sprintf_s(tmpResult.m_szImagePath, "%s\\%s", tmpImageDirectory.c_str(), tmpPath.c_str());
-	//memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
+	//sprintf_s(tmpResult.m_szImagePath, "%s\\%s", tmpImageDirectory.c_str(), tmpPath.c_str());
+	memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
 
 	memset(result, 0, sizeof(result));
 	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", \
@@ -463,8 +464,9 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 		CInputDlg dlg;
 		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
+		WriteInfo("inputDlg set imagepath = %s", tmpPath.c_str());
 		
-		dlg.SetTestImagePath(tmpImagePath);
+		dlg.SetTestImagePath(tmpPath);
 		INT_PTR msg = dlg.DoModal();
 		
 		if (msg == IDOK)
@@ -542,7 +544,6 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
 			const char *tmpName = m_pParamManager->GetCameraName();
-			//TRACE1("CameraName = %s", tmpName);
 			m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 		}
 	}
@@ -555,12 +556,15 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			{
 				m_pLineCamera = new CLineCamera(pDevice);
 				const char* tmpImageDir = m_pParamManager->GetImageDirectory();
-				//wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
 
-				
+				WriteInfo("create line camera, set image directory = %s", tmpImageDir);
+
 				if (m_pLineCamera != nullptr)
 				{
+					m_pLineCamera->OpenButton();
+					m_pLineCamera->SetDisplayHwnd(GetDlgItem(IDC_IMAGE_REC)->m_hWnd);
 					m_pLineCamera->SetImageSaveDirectory(tmpImageDir);
+
 					m_pLineCamera->StartGrabbing();
 				}		
 			}
@@ -770,7 +774,15 @@ bool CCarSeat_RecognizationDlg::heartBloodServer(unsigned int ip, unsigned int p
 	{
 		// 界面显示与服务器的连接状态
 		CStatic *pLinkStatusControl = (CStatic*)GetDlgItem(IDC_STATIC_LINK_STATUS);
-		if (CNetworkTask::IsReachable(m_pParamManager->GetServerIP(), m_pParamManager->GetLocalIP()) == true)
+		unsigned int tmpServerIp = m_pParamManager->GetServerIP();
+		unsigned int tmpLocalIp = m_pParamManager->GetLocalIP();
+		WriteInfo("tmpServerIp = 0x%X, tmpLocalIp = 0x%X", tmpServerIp, tmpLocalIp);
+		if ((tmpServerIp == 0))
+		{
+			WriteError("serverIp is 0");
+			return false;
+		}
+		if (CNetworkTask::IsReachable(tmpLocalIp, tmpServerIp) == true)
 		{
 			if (pLinkStatusControl != nullptr)
 			{

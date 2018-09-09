@@ -186,7 +186,7 @@ std::string CRFIDReader::readBarcode()
 		*/
 		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
 		{
-			//return std::string();
+			return std::string();
 		}
 		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));

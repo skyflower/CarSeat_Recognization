@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SeatInfo>
+    <barcode>abcdef111dd</barcode>
+    <user>zhangsan</user>
+    <time>2018-07-10-18:00:20</time>
+    <type>1</type>
+    <material>leather</material>
+    <color>black</color>
+    <correct>yes</correct>
+    <mode>auto</mode>
+    <cameraNum>3</cameraNum>
+    <line>L2</line>
+    <pictureName>L1T1M0C2N000001</pictureName>
+</SeatInfo>

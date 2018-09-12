@@ -4,23 +4,23 @@
 #include "./common/LabelManager.h"
 
 
-// CInputDlg ¶Ô»°¿ò
+// CInputDlg å¯¹è¯æ¡†
 
 class CInputDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CInputDlg)
 
 public:
-	CInputDlg(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	CInputDlg(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~CInputDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_INPUT_TYPE };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
 	DECLARE_MESSAGE_MAP()
 private:

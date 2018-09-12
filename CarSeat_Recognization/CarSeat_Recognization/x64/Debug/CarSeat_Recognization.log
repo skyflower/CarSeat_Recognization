@@ -1,0 +1,91 @@
+﻿  NetworkTask.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(79): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(357): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(366): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(610): error C2678: 二进制“>>”: 没有找到接受“std::basic_istream<char,std::char_traits<char>>”类型的左操作数的运算符(或没有可接受的转换)
+  d:\softwareinstall\visualstudio2015\vc\include\istream(482): note: 可能是“std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(std::basic_streambuf<char,std::char_traits<char>> *)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(463): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(void *&)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(445): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(long double &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(427): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(double &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(408): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(float &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(390): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(unsigned __int64 &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(371): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(__int64 &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(352): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(unsigned long &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(334): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(long &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(316): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(unsigned int &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(290): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(int &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(271): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(unsigned short &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(236): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(short &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(217): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(bool &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(210): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(std::ios_base &(__cdecl *)(std::ios_base &))”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(203): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(std::basic_ios<char,std::char_traits<char>> &(__cdecl *)(std::basic_ios<char,std::char_traits<char>> &))”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(197): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::operator >>(std::basic_istream<char,std::char_traits<char>> &(__cdecl *)(std::basic_istream<char,std::char_traits<char>> &))”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdockablepaneadapter.h(29): note: 或  “CArchive &operator >>(CArchive &,CDockablePaneAdapter *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxmousemanager.h(25): note: 或  “CArchive &operator >>(CArchive &,CMouseManager *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxadv.h(166): note: 或  “CArchive &operator >>(CArchive &,CDockState *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxoutlookbarpanebutton.h(30): note: 或  “CArchive &operator >>(CArchive &,CMFCOutlookBarPaneButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcolormenubutton.h(28): note: 或  “CArchive &operator >>(CArchive &,CMFCColorMenuButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdropdowntoolbar.h(123): note: 或  “CArchive &operator >>(CArchive &,CMFCDropDownToolbarButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdropdowntoolbar.h(68): note: 或  “CArchive &operator >>(CArchive &,CMFCDropDownFrame *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdropdowntoolbar.h(33): note: 或  “CArchive &operator >>(CArchive &,CMFCDropDownToolBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbardatetimectrl.h(44): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarDateTimeCtrl *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarsystemmenubutton.h(25): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarSystemMenuButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarspineditboxbutton.h(26): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarSpinEditBoxButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbareditboxbutton.h(29): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarEditBoxButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarfontcombobox.h(127): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarFontSizeComboBox *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarfontcombobox.h(72): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarFontComboBox *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarcomboboxbutton.h(33): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarComboBoxButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarmenubutton.h(40): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarMenuButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxpopupmenu.h(52): note: 或  “CArchive &operator >>(CArchive &,CMFCPopupMenu *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtaskspane.h(208): note: 或  “CArchive &operator >>(CArchive &,CMFCTasksPane *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtaskspane.h(173): note: 或  “CArchive &operator >>(CArchive &,CMFCTasksPaneToolBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtaskspaneframewnd.h(30): note: 或  “CArchive &operator >>(CArchive &,CMFCTasksPaneFrameWnd *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtabbedpane.h(30): note: 或  “CArchive &operator >>(CArchive &,CTabbedPane *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxoutlookbarpane.h(34): note: 或  “CArchive &operator >>(CArchive &,CMFCOutlookBarPane *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcolorbar.h(42): note: 或  “CArchive &operator >>(CArchive &,CMFCColorBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxpopupmenubar.h(35): note: 或  “CArchive &operator >>(CArchive &,CMFCPopupMenuBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxoutlookbar.h(31): note: 或  “CArchive &operator >>(CArchive &,CMFCOutlookBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxpanedialog.h(29): note: 或  “CArchive &operator >>(CArchive &,CPaneDialog *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdockablepane.h(62): note: 或  “CArchive &operator >>(CArchive &,CDockablePane *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxmultipaneframewnd.h(30): note: 或  “CArchive &operator >>(CArchive &,CMultiPaneFrameWnd *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxpaneframewnd.h(54): note: 或  “CArchive &operator >>(CArchive &,CPaneFrameWnd *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxmenubar.h(40): note: 或  “CArchive &operator >>(CArchive &,CMFCMenuBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbar.h(84): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBar *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxtoolbarbutton.h(38): note: 或  “CArchive &operator >>(CArchive &,CMFCToolBarButton *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxole.h(277): note: 或  “CArchive &operator >>(CArchive &,CDocItem *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxusertool.h(27): note: 或  “CArchive &operator >>(CArchive &,CUserTool *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdisp.h(1045): note: 或  “CArchive &operator >>(CArchive &,ATL::COleDateTimeSpan &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdisp.h(1038): note: 或  “CArchive &operator >>(CArchive &,ATL::COleDateTime &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdisp.h(1031): note: 或  “CArchive &operator >>(CArchive &,COleCurrency &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdisp.h(956): note: 或  “CArchive &operator >>(CArchive &,ATL::CComBSTR &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxdisp.h(952): note: 或  “CArchive &operator >>(CArchive &,COleVariant &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxwin.h(252): note: 或  “CArchive &operator >>(CArchive &,RECT &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxwin.h(251): note: 或  “CArchive &operator >>(CArchive &,POINT &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxwin.h(250): note: 或  “CArchive &operator >>(CArchive &,SIZE &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(1408): note: 或  “CArchive &operator >>(CArchive &,CMapStringToString *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(1324): note: 或  “CArchive &operator >>(CArchive &,CMapStringToOb *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(1157): note: 或  “CArchive &operator >>(CArchive &,CMapWordToOb *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(798): note: 或  “CArchive &operator >>(CArchive &,CStringList *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(697): note: 或  “CArchive &operator >>(CArchive &,CObList *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(513): note: 或  “CArchive &operator >>(CArchive &,CStringArray *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(438): note: 或  “CArchive &operator >>(CArchive &,CObArray *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(217): note: 或  “CArchive &operator >>(CArchive &,CDWordArray *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(142): note: 或  “CArchive &operator >>(CArchive &,CWordArray *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afxcoll.h(67): note: 或  “CArchive &operator >>(CArchive &,CByteArray *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afx.h(1642): note: 或  “CArchive &operator >>(CArchive &,const CObject *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afx.h(1641): note: 或  “CArchive &operator >>(CArchive &,CObject *&)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afx.h(1426): note: 或  “CArchive &operator >>(CArchive &,ATL::CTime &)”
+  d:\softwareinstall\visualstudio2015\vc\atlmfc\include\afx.h(1419): note: 或  “CArchive &operator >>(CArchive &,ATL::CTimeSpan &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(1073): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::operator >><std::char_traits<char>>(std::basic_istream<char,std::char_traits<char>> &,signed char *)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(1080): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::operator >><std::char_traits<char>>(std::basic_istream<char,std::char_traits<char>> &,signed char &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(1087): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::operator >><std::char_traits<char>>(std::basic_istream<char,std::char_traits<char>> &,unsigned char *)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(1094): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::operator >><std::char_traits<char>>(std::basic_istream<char,std::char_traits<char>> &,unsigned char &)”
+  d:\softwareinstall\visualstudio2015\vc\include\istream(1104): note: 或  “std::basic_istream<char,std::char_traits<char>> &std::operator >><char,std::char_traits<char>,const char[2]>(std::basic_istream<char,std::char_traits<char>> &&,_Ty (&))”
+          with
+          [
+              _Ty=const char [2]
+          ]
+  d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\network\networktask.cpp(610): note: 尝试匹配参数列表“(std::basic_istream<char,std::char_traits<char>>, const char [2])”时
+  RecogResultManager.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\common\recogresultmanager.cpp(84): warning C4244: “=”: 从“int64_t”转换到“int”，可能丢失数据
+  正在生成代码...

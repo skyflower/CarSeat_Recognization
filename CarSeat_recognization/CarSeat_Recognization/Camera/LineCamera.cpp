@@ -62,11 +62,11 @@ CLineCamera::~CLineCamera()
 
 
 
-// ch:´ò¿ªÉè±¸ | en:Open Device
+// ch:æ‰“å¼€è®¾å¤‡ | en:Open Device
 int CLineCamera::OpenDevice(void)
 {
 
-    // ch:ÓÉÉè±¸ĞÅÏ¢´´½¨Éè±¸ÊµÀı | en:Device instance created by device information
+    // ch:ç”±è®¾å¤‡ä¿¡æ¯åˆ›å»ºè®¾å¤‡å®ä¾‹ | en:Device instance created by device information
     if (NULL == m_pDevice)
     {
         WriteError("Device does not exist");
@@ -107,7 +107,7 @@ int CLineCamera::OpenDevice(void)
     return MV_OK;
 }
 
-// ch:¹Ø±ÕÉè±¸ | en:Close Device
+// ch:å…³é—­è®¾å¤‡ | en:Close Device
 int CLineCamera::CloseDevice(void)
 {   
     if (m_pcMyCamera)
@@ -137,7 +137,7 @@ int CLineCamera::CloseDevice(void)
     return MV_OK;
 }
 
-// ch:»ñÈ¡´¥·¢Ä£Ê½ | en:Get Trigger Mode
+// ch:è·å–è§¦å‘æ¨¡å¼ | en:Get Trigger Mode
 MV_CAM_TRIGGER_MODE CLineCamera::GetTriggerMode()
 {
 	if (m_nTriggerMode != MV_TRIGGER_MODE_UNKNOWN)
@@ -175,7 +175,7 @@ CCamera::CameraStatus CLineCamera::GetCameraStatus()
 	return m_status;
 }
 
-// ch:ÉèÖÃ´¥·¢Ä£Ê½ | en:Set Trigger Mode
+// ch:è®¾ç½®è§¦å‘æ¨¡å¼ | en:Set Trigger Mode
 bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 {
 	if (mode == MV_TRIGGER_MODE_UNKNOWN)
@@ -184,7 +184,7 @@ bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
 	}
 	
     //int nRet = m_pcMyCamera->SetEnumValue("TriggerMode", m_nTriggerMode);
-	unsigned int enMode = MV_TRIGGER_MODE_OFF; //´ò¿ª
+	unsigned int enMode = MV_TRIGGER_MODE_OFF; //æ‰“å¼€
 	int nRet = MV_CC_SetTriggerMode(m_pcMyCamera->GetHandle(), enMode);
 
     if (MV_OK != nRet)
@@ -195,7 +195,7 @@ bool CLineCamera::SetTriggerMode(MV_CAM_TRIGGER_MODE mode)
     return true;
 }
 
-// ch:»ñÈ¡ÆØ¹âÊ±¼ä | en:Get Exposure Time
+// ch:è·å–æ›å…‰æ—¶é—´ | en:Get Exposure Time
 int CLineCamera::GetExposureTimeMax()
 {
     return m_nExposureTimeMax;
@@ -206,10 +206,10 @@ int CLineCamera::GetExposureTimeMin()
 	return m_nExposureTimeMin;
 }
 
-// ch:ÉèÖÃÆØ¹âÊ±¼ä | en:Set Exposure Time
+// ch:è®¾ç½®æ›å…‰æ—¶é—´ | en:Set Exposure Time
 bool CLineCamera::SetExposureTime(unsigned int timeMax, unsigned int timeMin)
 {
-    // ch:µ÷½ÚÕâÁ½¸öÆØ¹âÄ£Ê½£¬²ÅÄÜÈÃÆØ¹âÊ±¼äÉúĞ§
+    // ch:è°ƒèŠ‚è¿™ä¸¤ä¸ªæ›å…‰æ¨¡å¼ï¼Œæ‰èƒ½è®©æ›å…‰æ—¶é—´ç”Ÿæ•ˆ
     // en:Adjust these two exposure mode to allow exposure time effective
 	unsigned int value = timeMin;
 	int nRet = MV_CC_SetAutoExposureTimeLower(m_pcMyCamera->GetHandle(), value);
@@ -258,16 +258,16 @@ bool CLineCamera::SetExposureTime(unsigned int timeMax, unsigned int timeMin)
     return true;
 }
 
-// ch:»ñÈ¡ÔöÒæ | en:Get Gain
+// ch:è·å–å¢ç›Š | en:Get Gain
 double CLineCamera::GetGain()
 {
     return m_dExposureGain;
 }
 
-// ch:ÉèÖÃÔöÒæ | en:Set Gain
+// ch:è®¾ç½®å¢ç›Š | en:Set Gain
 bool CLineCamera::SetGain(float gain)
 {
-    // ch:ÉèÖÃÔöÒæÇ°ÏÈ°Ñ×Ô¶¯ÔöÒæ¹Ø±Õ£¬Ê§°ÜÎŞĞè·µ»Ø
+    // ch:è®¾ç½®å¢ç›Šå‰å…ˆæŠŠè‡ªåŠ¨å¢ç›Šå…³é—­ï¼Œå¤±è´¥æ— éœ€è¿”å›
     //en:Set Gain after Auto Gain is turned off, this failure does not need to return
     int nRet = m_pcMyCamera->SetEnumValue("GainAuto", 0);
 	if (nRet != MV_OK)
@@ -284,13 +284,13 @@ bool CLineCamera::SetGain(float gain)
 	return true;
 }
 
-// ch:»ñÈ¡Ö¡ÂÊ | en:Get Frame Rate
+// ch:è·å–å¸§ç‡ | en:Get Frame Rate
 double CLineCamera::GetFrameRate()
 {
     return m_dFrameRate;
 }
 
-// ch:ÉèÖÃÖ¡ÂÊ | en:Set Frame Rate
+// ch:è®¾ç½®å¸§ç‡ | en:Set Frame Rate
 bool CLineCamera::SetFrameRate(double rate)
 {
     int nRet = m_pcMyCamera->SetBoolValue("AcquisitionFrameRateEnable", true);
@@ -309,13 +309,13 @@ bool CLineCamera::SetFrameRate(double rate)
 	return true;
 }
 
-// ch:»ñÈ¡´¥·¢Ô´ | en:Get Trigger Source
+// ch:è·å–è§¦å‘æº | en:Get Trigger Source
 MV_CAM_TRIGGER_SOURCE CLineCamera::GetTriggerSource()
 {
     return m_nTriggerSource;
 }
 
-// ch:ÉèÖÃ´¥·¢Ô´ | en:Set Trigger Source
+// ch:è®¾ç½®è§¦å‘æº | en:Set Trigger Source
 bool CLineCamera::SetTriggerSource(MV_CAM_TRIGGER_SOURCE source)
 {
     
@@ -419,7 +419,7 @@ const char * CLineCamera::GetImageSaveDirectory()
 
 bool CLineCamera::SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile)
 {
-	//ÉèÖÃ×Ô¶¯°×Æ½ºâÄ£Ê½
+	//è®¾ç½®è‡ªåŠ¨ç™½å¹³è¡¡æ¨¡å¼
 	if (m_pcMyCamera != nullptr)
 	{
 		bool flag = m_pcMyCamera->SetBalanceWhile(balanceWhile);
@@ -548,7 +548,7 @@ SIZE CLineCamera::GetImageSize()
 	return tmpSize;
 }
 
-// ch:±£´æÍ¼Æ¬ | en:Save Image
+// ch:ä¿å­˜å›¾ç‰‡ | en:Save Image
 std::string CLineCamera::SaveImage()
 {
 	if (m_pcMyCamera == NULL)
@@ -567,22 +567,22 @@ std::string CLineCamera::SaveImage()
 		StartGrabbing();
         //return std::string();
     }
-    // ch:»ñÈ¡1ÕÅÍ¼ | en:get one image
+    // ch:è·å–1å¼ å›¾ | en:get one image
     unsigned int nRecvBufSize = 0;
     int nRet = MV_OK;
 
-    // ch:½öÔÚµÚÒ»´Î±£´æÍ¼ÏñÊ±ÉêÇë»º´æ£¬ÔÚ CloseDevice Ê±ÊÍ·Å
+    // ch:ä»…åœ¨ç¬¬ä¸€æ¬¡ä¿å­˜å›¾åƒæ—¶ç”³è¯·ç¼“å­˜ï¼Œåœ¨ CloseDevice æ—¶é‡Šæ”¾
     // en:Request buffer only when save image for first time, release after CloseDevice
     if ((NULL == m_pBufForDriver) || (m_pcMyCamera != NULL))
     {
-        // ch:´ÓÏà»úÖĞ»ñÈ¡Ò»Ö¡Í¼Ïñ´óĞ¡ | en:Get size of one frame from camera
+        // ch:ä»ç›¸æœºä¸­è·å–ä¸€å¸§å›¾åƒå¤§å° | en:Get size of one frame from camera
         nRet = m_pcMyCamera->GetIntValue("PayloadSize", &nRecvBufSize);
         if (nRet != MV_OK)
         {
             WriteError("failed in get PayloadSize, nRet = %d", nRet);
             return std::string();
         }
-        // ch:Ò»Ö¡Êı¾İ´óĞ¡
+        // ch:ä¸€å¸§æ•°æ®å¤§å°
         // en:One frame size
         m_nBufSizeForDriver = nRecvBufSize;  
         m_pBufForDriver = new unsigned char[m_nBufSizeForDriver];
@@ -611,11 +611,11 @@ std::string CLineCamera::SaveImage()
         {
             nImageNum--;
 
-            // ch:½öÔÚµÚÒ»´Î±£´æÍ¼ÏñÊ±ÉêÇë»º´æ£¬ÔÚ CloseDevice Ê±ÊÍ·Å
+            // ch:ä»…åœ¨ç¬¬ä¸€æ¬¡ä¿å­˜å›¾åƒæ—¶ç”³è¯·ç¼“å­˜ï¼Œåœ¨ CloseDevice æ—¶é‡Šæ”¾
             // en:Request buffer only when save image for first time, release after CloseDevice
             if (NULL == m_pBufForSaveImage)
             {
-                // ch:BMPÍ¼Æ¬´óĞ¡£ºwidth * height * 3 + 2048(Ô¤ÁôBMPÍ·´óĞ¡)
+                // ch:BMPå›¾ç‰‡å¤§å°ï¼šwidth * height * 3 + 2048(é¢„ç•™BMPå¤´å¤§å°)
                 // en:// BMP image size: width * height * 3 + 2048 (Reserved BMP header size)
                 m_nBufSizeForSaveImage = stImageInfo.nWidth * stImageInfo.nHeight * 3 + 2048;
 
@@ -626,17 +626,17 @@ std::string CLineCamera::SaveImage()
                 }
 				memset(m_pBufForSaveImage, 0, sizeof(unsigned char) * m_nBufSizeForSaveImage);
             }
-            // ch:ÉèÖÃ¶ÔÓ¦µÄÏà»ú²ÎÊı | en:Set camera parameter
+            // ch:è®¾ç½®å¯¹åº”çš„ç›¸æœºå‚æ•° | en:Set camera parameter
             MV_SAVE_IMAGE_PARAM_EX stParam = {0};
-            stParam.enImageType = m_nSaveImageType; // ch:ĞèÒª±£´æµÄÍ¼ÏñÀàĞÍ | en:Image format to save
-            stParam.enPixelType = stImageInfo.enPixelType;  // ch:Ïà»ú¶ÔÓ¦µÄÏñËØ¸ñÊ½ | en:Camera pixel type
-            stParam.nWidth      = stImageInfo.nWidth;         // ch:Ïà»ú¶ÔÓ¦µÄ¿í | en:Width
-            stParam.nHeight     = stImageInfo.nHeight;          // ch:Ïà»ú¶ÔÓ¦µÄ¸ß | en:Height
+            stParam.enImageType = m_nSaveImageType; // ch:éœ€è¦ä¿å­˜çš„å›¾åƒç±»å‹ | en:Image format to save
+            stParam.enPixelType = stImageInfo.enPixelType;  // ch:ç›¸æœºå¯¹åº”çš„åƒç´ æ ¼å¼ | en:Camera pixel type
+            stParam.nWidth      = stImageInfo.nWidth;         // ch:ç›¸æœºå¯¹åº”çš„å®½ | en:Width
+            stParam.nHeight     = stImageInfo.nHeight;          // ch:ç›¸æœºå¯¹åº”çš„é«˜ | en:Height
             stParam.nDataLen    = stImageInfo.nFrameLen;
             stParam.pData       = m_pBufForDriver;
             stParam.pImageBuffer = m_pBufForSaveImage;
-            stParam.nBufferSize = m_nBufSizeForSaveImage;  // ch:´æ´¢½ÚµãµÄ´óĞ¡ | en:Buffer node size
-            stParam.nJpgQuality     = 99;       // ch:jpg±àÂë£¬½öÔÚ±£´æJpgÍ¼ÏñÊ±ÓĞĞ§¡£±£´æBMPÊ±SDKÄÚºöÂÔ¸Ã²ÎÊı
+            stParam.nBufferSize = m_nBufSizeForSaveImage;  // ch:å­˜å‚¨èŠ‚ç‚¹çš„å¤§å° | en:Buffer node size
+            stParam.nJpgQuality     = 99;       // ch:jpgç¼–ç ï¼Œä»…åœ¨ä¿å­˜Jpgå›¾åƒæ—¶æœ‰æ•ˆã€‚ä¿å­˜BMPæ—¶SDKå†…å¿½ç•¥è¯¥å‚æ•°
                                                 // en:jpg encoding, only valid when saving as Jpg. SDK ignore this parameter when saving as BMP
 			memset(m_pBufForSaveImage, 0, sizeof(unsigned char) * m_nBufSizeForSaveImage);
             nRet = m_pcMyCamera->SaveImage(&stParam);
@@ -646,9 +646,9 @@ std::string CLineCamera::SaveImage()
             }
 
 
-			time_t  time1 = time(NULL);//»ñÈ¡ÏµÍ³Ê±¼ä£¬µ¥Î»ÎªÃë;
+			time_t  time1 = time(NULL);//è·å–ç³»ç»Ÿæ—¶é—´ï¼Œå•ä½ä¸ºç§’;
 			struct tm tmpTime;
-			localtime_s(&tmpTime, &time1);//×ª»»³ÉtmÀàĞÍµÄ½á¹¹Ìå;
+			localtime_s(&tmpTime, &time1);//è½¬æ¢æˆtmç±»å‹çš„ç»“æ„ä½“;
 
 			/*swprintf_s(tmpResult.m_szTime, "%04d-%02d-%02d:%02d-%02d-%02d", \
 				tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
@@ -961,7 +961,7 @@ bool CLineCamera::GetROIParameterByCamera(int * width, int * height, int * offse
 
 
 
-// ch:°´ÏÂ´ò¿ªÉè±¸°´Å¥£º´ò¿ªÉè±¸ | en:Click Open button: Open Device
+// ch:æŒ‰ä¸‹æ‰“å¼€è®¾å¤‡æŒ‰é’®ï¼šæ‰“å¼€è®¾å¤‡ | en:Click Open button: Open Device
 bool CLineCamera::OpenButton()
 {
     int nRet = OpenDevice();
@@ -971,13 +971,13 @@ bool CLineCamera::OpenButton()
         return false;
     }
 
-    GetParameter(); // ch:»ñÈ¡²ÎÊı | en:Get Parameter
+    GetParameter(); // ch:è·å–å‚æ•° | en:Get Parameter
     
     return true;
 }
 
 
-// ch:°´ÏÂ¿ªÊ¼²É¼¯°´Å¥ | en:Click Start button
+// ch:æŒ‰ä¸‹å¼€å§‹é‡‡é›†æŒ‰é’® | en:Click Start button
 bool CLineCamera::StartGrabbing()
 {
 	if ((m_status == CCamera::CameraStatus::CAMERA_GRAB) || (m_status != CCamera::CameraStatus::CAMERA_OPEN))
@@ -1009,7 +1009,7 @@ bool CLineCamera::StartGrabbing()
     return true;
 }
 
-// ch:°´ÏÂ½áÊø²É¼¯°´Å¥ | en:Click Stop button
+// ch:æŒ‰ä¸‹ç»“æŸé‡‡é›†æŒ‰é’® | en:Click Stop button
 void CLineCamera::StopGrabbing()
 {
 	if ((m_status != CCamera::CameraStatus::CAMERA_GRAB) && (m_status != CCamera::CameraStatus::CAMERA_OPEN))
@@ -1037,7 +1037,7 @@ void CLineCamera::StopGrabbing()
     return;
 }
 
-// ch:°´ÏÂ»ñÈ¡²ÎÊı°´Å¥ | en:Click Get Parameter button
+// ch:æŒ‰ä¸‹è·å–å‚æ•°æŒ‰é’® | en:Click Get Parameter button
 void CLineCamera::GetParameter()
 {
 	m_nTriggerMode = GetTriggerModeByCamera();
@@ -1111,7 +1111,7 @@ void CLineCamera::SetDisplayHwnd(HWND hwnd)
 }
 
 
-// ch:°´ÏÂÈí´¥·¢Ò»´Î°´Å¥ | en:Click Execute button
+// ch:æŒ‰ä¸‹è½¯è§¦å‘ä¸€æ¬¡æŒ‰é’® | en:Click Execute button
 void CLineCamera::SoftwareOnce()
 {
 	if (m_pcMyCamera == NULL)
@@ -1128,7 +1128,7 @@ void CLineCamera::SoftwareOnce()
     return;
 }
 
-// ch:°´ÏÂ±£´æbmpÍ¼Æ¬°´Å¥ | en:Click Save BMP button
+// ch:æŒ‰ä¸‹ä¿å­˜bmpå›¾ç‰‡æŒ‰é’® | en:Click Save BMP button
 std::string CLineCamera::SaveBmp()
 {
 	if (m_pcMyCamera == NULL)
@@ -1148,7 +1148,7 @@ std::string CLineCamera::SaveBmp()
     return path;
 }
 
-// ch:°´ÏÂ±£´æjpgÍ¼Æ¬°´Å¥ | en:Click Save JPG button
+// ch:æŒ‰ä¸‹ä¿å­˜jpgå›¾ç‰‡æŒ‰é’® | en:Click Save JPG button
 std::string CLineCamera::SaveJpg()
 {
     m_nSaveImageType = MV_Image_Jpeg;

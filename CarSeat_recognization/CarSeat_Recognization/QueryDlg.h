@@ -4,23 +4,23 @@
 #include <atlimage.h>
 
 
-// CQueryDlg ¶Ô»°¿ò
+// CQueryDlg å¯¹è¯æ¡†
 
 class CQueryDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CQueryDlg)
 
 public:
-	CQueryDlg(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	CQueryDlg(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~CQueryDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_QUERY };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
 	DECLARE_MESSAGE_MAP()
 private:

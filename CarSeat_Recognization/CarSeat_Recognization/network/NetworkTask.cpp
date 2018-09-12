@@ -31,7 +31,7 @@ CNetworkTask::CNetworkTask():
 	m_nMsgSize = 0;
 	m_nIn = m_nOut = 0;
 
-	//ÉèÖÃÁÙÊ±±£´æÎÄ¼þ
+	//è®¾ç½®ä¸´æ—¶ä¿å­˜æ–‡ä»¶
 	memset(m_szCacheFile, 0, sizeof(m_szCacheFile));
 	const char *tmpCacheFile = m_pParamManager->GetSendFailedCache();
 	memcpy(m_szCacheFile, tmpCacheFile, strlen(tmpCacheFile));
@@ -126,14 +126,14 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 	bool ret = false;
 	char recvBlood[200];
 	size_t recvMsgLen = sizeof(recvBlood);
-	// ·¢ËÍÐÄÌø°üÊý¾Ý
+	// å‘é€å¿ƒè·³åŒ…æ•°æ®
 	ret = __sendToServer(serverIp, port, bloodheart, strlen(bloodheart), recvBlood, recvMsgLen);
 	if ((ret == false) || (recvMsgLen == 0))
 	{
 		return false;
 	}
 	
-	// ½âÎö·þÎñÆ÷·µ»Øxml
+	// è§£æžæœåŠ¡å™¨è¿”å›žxml
 	TiXmlDocument lconfigXML;
 	//TiXmlParsingData data;
 	lconfigXML.Parse(recvBlood);
@@ -336,7 +336,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 
 	sockaddr_in addr;
 
-	//½ÓÊÕÊ±ÏÞ
+	//æŽ¥æ”¶æ—¶é™
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
@@ -439,8 +439,8 @@ bool CNetworkTask::initCacheFile()
 //
 //std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
 //{
-//	// Ìí¼Ó»ñÈ¡ÌõÐÎÂëµÄ´úÂë
-//	// ÔÝÊ±Îª¿Õ
+//	// æ·»åŠ èŽ·å–æ¡å½¢ç çš„ä»£ç 
+//	// æš‚æ—¶ä¸ºç©º
 //	
 //	return std::wstring();
 //}
@@ -483,15 +483,15 @@ bool CNetworkTask::initCacheFile()
 //	}
 //	CInternetSession * pInternetSession = NULL;
 //	CFtpConnection* pFtpConnection = NULL;
-//	//½¨Á¢Á¬½Ó  
+//	//å»ºç«‹è¿žæŽ¥  
 //	pInternetSession = new CInternetSession(AfxGetAppName());
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5ÃëµÄÁ¬½Ó³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1ÃëµÄ·¢ËÍ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7ÃëµÄ½ÓÊÕ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1ÃëµÄ·¢ËÍ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7ÃëµÄ½ÓÊÕ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1´ÎÖØÊÔ
-//	//·þÎñÆ÷µÄipµØÖ·
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5ç§’çš„è¿žæŽ¥è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1ç§’çš„å‘é€è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7ç§’çš„æŽ¥æ”¶è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1ç§’çš„å‘é€è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7ç§’çš„æŽ¥æ”¶è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1æ¬¡é‡è¯•
+//	//æœåŠ¡å™¨çš„ipåœ°å€
 //	CString strADddress;
 //	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
 //		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
@@ -503,19 +503,19 @@ bool CNetworkTask::initCacheFile()
 //		WriteError("usr = %s, passwd = %s connect Failed", name, passwd);
 //		return false;
 //	}
-//	//ÉèÖÃ·þÎñÆ÷µÄÄ¿Â¼  
+//	//è®¾ç½®æœåŠ¡å™¨çš„ç›®å½•  
 //	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
 //	if (bRetVal == FALSE)
 //	{
-//		AfxMessageBox(L"Ä¿Â¼ÉèÖÃÊ§°Ü");
+//		AfxMessageBox(L"ç›®å½•è®¾ç½®å¤±è´¥");
 //		return false;
 //	}
 //	else
 //	{
-//		//°Ñ±¾µØÎÄ¼þÉÏ´«µ½·þÎñÆ÷ÉÏ  
+//		//æŠŠæœ¬åœ°æ–‡ä»¶ä¸Šä¼ åˆ°æœåŠ¡å™¨ä¸Š  
 //		pFtpConnection->PutFile(fileName, fileName);
 //	}
-//	//ÊÍ·Å×ÊÔ´  
+//	//é‡Šæ”¾èµ„æº  
 //	if (NULL != pFtpConnection)
 //	{
 //		pFtpConnection->Close();
@@ -536,39 +536,39 @@ bool CNetworkTask::initCacheFile()
 //	CInternetSession* pInternetSession = NULL;
 //	
 //	CFtpConnection* pFtpConnection = NULL;
-//	//½¨Á¢Á¬½Ó
+//	//å»ºç«‹è¿žæŽ¥
 //	pInternetSession = new CInternetSession(AfxGetAppName());
 //
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5ÃëµÄÁ¬½Ó³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1ÃëµÄ·¢ËÍ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7ÃëµÄ½ÓÊÕ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1ÃëµÄ·¢ËÍ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7ÃëµÄ½ÓÊÕ³¬Ê±
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1´ÎÖØÊÔ
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5ç§’çš„è¿žæŽ¥è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1ç§’çš„å‘é€è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7ç§’çš„æŽ¥æ”¶è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1ç§’çš„å‘é€è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7ç§’çš„æŽ¥æ”¶è¶…æ—¶
+//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1æ¬¡é‡è¯•
 //
 //
-//	//·þÎñÆ÷µÄipµØÖ·
-//	//ÈôÒªÉèÖÃÎª·þÎñÆ÷µÄ¸ùÄ¿Â¼£¬ÔòÊ¹ÓÃ"\\"¾Í¿ÉÒÔÁË  
-//	//´´½¨ÁËÒ»¸öCFtpConnection¶ÔÏó£¬Ö®ºó¾Í¿ÉÒÔÍ¨¹ýÕâ¸ö¶ÔÏó½øÐÐÉÏ´«ÎÄ¼þ£¬ÏÂÔØÎÄ¼þÁË  
+//	//æœåŠ¡å™¨çš„ipåœ°å€
+//	//è‹¥è¦è®¾ç½®ä¸ºæœåŠ¡å™¨çš„æ ¹ç›®å½•ï¼Œåˆ™ä½¿ç”¨"\\"å°±å¯ä»¥äº†  
+//	//åˆ›å»ºäº†ä¸€ä¸ªCFtpConnectionå¯¹è±¡ï¼Œä¹‹åŽå°±å¯ä»¥é€šè¿‡è¿™ä¸ªå¯¹è±¡è¿›è¡Œä¸Šä¼ æ–‡ä»¶ï¼Œä¸‹è½½æ–‡ä»¶äº†  
 //	CString strADddress;
 //	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
 //		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
 //		(serverIp & 0xFF));
 //
 //	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
-//	//ÉèÖÃ·þÎñÆ÷µÄÄ¿Â¼
+//	//è®¾ç½®æœåŠ¡å™¨çš„ç›®å½•
 //	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
 //	//setsockopt
 //	if (bRetVal == FALSE)
 //	{
-//		AfxMessageBox(L"Ä¿Â¼ÉèÖÃÊ§°Ü");
+//		AfxMessageBox(L"ç›®å½•è®¾ç½®å¤±è´¥");
 //		return false;
 //	}
 //	else
 //	{
 //		pFtpConnection->GetFile(fileName, fileName);
 //	}
-//	//ÊÍ·ÅÔ´  
+//	//é‡Šæ”¾æº  
 //	if (NULL != pFtpConnection)
 //	{
 //		pFtpConnection->Close();

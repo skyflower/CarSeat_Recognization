@@ -1,5 +1,5 @@
 
-// KepServerComDlg.h : Í·ÎÄ¼ş
+// KepServerComDlg.h : å¤´æ–‡ä»¶
 //
 
 #pragma once
@@ -7,31 +7,31 @@
 #include "Communication.h"
 #include <thread>
 
-// CKepServerComDlg ¶Ô»°¿ò
+// CKepServerComDlg å¯¹è¯æ¡†
 class CKepServerComDlg : public CDialogEx
 {
-// ¹¹Ôì
+// æ„é€ 
 public:
-	CKepServerComDlg(CWnd* pParent = NULL);	// ±ê×¼¹¹Ôìº¯Êı
+	CKepServerComDlg(CWnd* pParent = NULL);	// æ ‡å‡†æ„é€ å‡½æ•°
 	void DoEvent();
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_KEPSERVERCOM_DIALOG };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV æ”¯æŒ
 
 	std::thread m_pThread;
 	bool pServerConnected;
 	CDataCtrl CD;
 	static void MyThreadProc(CKepServerComDlg*pThis, LPVOID pParam);
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	HICON m_hIcon;
 
-	// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
+	// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();

@@ -37,7 +37,7 @@ void * CCamera::GetHandle()
 	return m_hDevHandle;
 }
 
-// ch:´ò¿ªÉè±¸ | en:Open Device
+// ch:æ‰“å¼€è®¾å¤‡ | en:Open Device
 int     CCamera::Open(MV_CC_DEVICE_INFO* pstDeviceInfo)
 {
     if (NULL == pstDeviceInfo)
@@ -68,7 +68,7 @@ int     CCamera::Open(MV_CC_DEVICE_INFO* pstDeviceInfo)
 }
 
 
-// ch:¹Ø±ÕÉè±¸ | en:Close Device
+// ch:å…³é—­è®¾å¤‡ | en:Close Device
 int     CCamera::Close()
 {
     int nRet = MV_OK;
@@ -86,14 +86,14 @@ int     CCamera::Close()
 }
 
 
-// ch:¿ªÆô×¥Í¼ | en:Start Grabbing
+// ch:å¼€å¯æŠ“å›¾ | en:Start Grabbing
 int     CCamera::StartGrabbing()
 {
     return MV_CC_StartGrabbing(m_hDevHandle);
 }
 
 
-// ch:Í£Ö¹×¥Í¼ | en:Stop Grabbing
+// ch:åœæ­¢æŠ“å›¾ | en:Stop Grabbing
 int     CCamera::StopGrabbing()
 {
     return MV_CC_StopGrabbing(m_hDevHandle);
@@ -122,7 +122,7 @@ int     CCamera::GetOneFrameTimeout(unsigned char* pData, unsigned int* pnDataLe
 }
 
 
-// ch:ÉèÖÃÏÔÊ¾´°¿Ú¾ä±ú | en:Set Display Window Handle
+// ch:è®¾ç½®æ˜¾ç¤ºçª—å£å¥æŸ„ | en:Set Display Window Handle
 int     CCamera::Display(void* hWnd)
 {
     return MV_CC_Display(m_hDevHandle, hWnd);
@@ -130,9 +130,9 @@ int     CCamera::Display(void* hWnd)
 
 bool CCamera::SetBalanceWhile(MV_CAM_BALANCEWHITE_AUTO balanceWhile)
 {
-	unsigned int nValue = balanceWhile; //Ò»´Î°×Æ½ºâÄ£Ê½
+	unsigned int nValue = balanceWhile; //ä¸€æ¬¡ç™½å¹³è¡¡æ¨¡å¼
 	int nRet = MV_CC_SetBalanceWhiteAuto(m_hDevHandle, nValue);
-	//unsigned int nValue = MV_BALANCEWHITE_AUTO_ONCE; //Ò»´Î°×Æ½ºâÄ£Ê½
+	//unsigned int nValue = MV_BALANCEWHITE_AUTO_ONCE; //ä¸€æ¬¡ç™½å¹³è¡¡æ¨¡å¼
 	//nRet = MV_CC_SetBalanceWhiteAuto(m_handle, nValue);
 
 	if (MV_OK != nRet)
@@ -166,7 +166,7 @@ int CCamera::SaveImage(MV_SAVE_IMAGE_PARAM_EX* pstParam)
     return MV_CC_SaveImageEx2(m_hDevHandle, pstParam);
 }
 
-// ch:×¢²áÍ¼ÏñÊı¾İ»Øµ÷ | en:Register Image Data CallBack
+// ch:æ³¨å†Œå›¾åƒæ•°æ®å›è°ƒ | en:Register Image Data CallBack
 int CCamera::RegisterImageCallBack(void(__stdcall* cbOutput)(unsigned char * pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, 
                                                                 void* pUser),void* pUser)
 {
@@ -174,14 +174,14 @@ int CCamera::RegisterImageCallBack(void(__stdcall* cbOutput)(unsigned char * pDa
 }
 
 
-// ch:×¢²áÏûÏ¢Òì³£»Øµ÷ | en:Register Message Exception CallBack
+// ch:æ³¨å†Œæ¶ˆæ¯å¼‚å¸¸å›è°ƒ | en:Register Message Exception CallBack
 int     CCamera::RegisterExceptionCallBack(void(__stdcall* cbException)(unsigned int nMsgType, void* pUser),void* pUser)
 {
     return MV_CC_RegisterExceptionCallBack(m_hDevHandle, cbException, pUser);
 }
 
 
-// ch:»ñÈ¡IntĞÍ²ÎÊı£¬Èç WidthºÍHeight£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è·å–Intå‹å‚æ•°ï¼Œå¦‚ Widthå’ŒHeightï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Get Int type parameters, such as Width and Height, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::GetIntValue(IN const char* strKey, OUT unsigned int *pnValue)
 {
@@ -204,7 +204,7 @@ int     CCamera::GetIntValue(IN const char* strKey, OUT unsigned int *pnValue)
 }
 
 
-// ch:ÉèÖÃIntĞÍ²ÎÊı£¬Èç WidthºÍHeight£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è®¾ç½®Intå‹å‚æ•°ï¼Œå¦‚ Widthå’ŒHeightï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Set Int type parameters, such as Width and Height, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::SetIntValue(IN const char* strKey, IN unsigned int nValue)
 {
@@ -217,7 +217,7 @@ int     CCamera::SetIntValue(IN const char* strKey, IN unsigned int nValue)
 }
 
 
-// ch:»ñÈ¡FloatĞÍ²ÎÊı£¬Èç ExposureTimeºÍGain£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è·å–Floatå‹å‚æ•°ï¼Œå¦‚ ExposureTimeå’ŒGainï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Get Float type parameters, such as ExposureTime and Gain, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::GetFloatValue(IN const char* strKey, OUT float *pfValue)
 {
@@ -240,7 +240,7 @@ int     CCamera::GetFloatValue(IN const char* strKey, OUT float *pfValue)
 }
 
 
-// ch:ÉèÖÃFloatĞÍ²ÎÊı£¬Èç ExposureTimeºÍGain£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è®¾ç½®Floatå‹å‚æ•°ï¼Œå¦‚ ExposureTimeå’ŒGainï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Set Float type parameters, such as ExposureTime and Gain, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::SetFloatValue(IN const char* strKey, IN float fValue)
 {
@@ -253,7 +253,7 @@ int     CCamera::SetFloatValue(IN const char* strKey, IN float fValue)
 }
 
 
-// ch:»ñÈ¡EnumĞÍ²ÎÊı£¬Èç PixelFormat£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è·å–Enumå‹å‚æ•°ï¼Œå¦‚ PixelFormatï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Get Enum type parameters, such as PixelFormat, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::GetEnumValue(IN const char* strKey, OUT unsigned int *pnValue)
 {
@@ -276,7 +276,7 @@ int     CCamera::GetEnumValue(IN const char* strKey, OUT unsigned int *pnValue)
 }
 
 
-// ch:ÉèÖÃEnumĞÍ²ÎÊı£¬Èç PixelFormat£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è®¾ç½®Enumå‹å‚æ•°ï¼Œå¦‚ PixelFormatï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Set Enum type parameters, such as PixelFormat, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::SetEnumValue(IN const char* strKey, IN unsigned int nValue)
 {
@@ -289,7 +289,7 @@ int     CCamera::SetEnumValue(IN const char* strKey, IN unsigned int nValue)
 }
 
 
-// ch:»ñÈ¡BoolĞÍ²ÎÊı£¬Èç ReverseX£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è·å–Boolå‹å‚æ•°ï¼Œå¦‚ ReverseXï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Get Bool type parameters, such as ReverseX, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::GetBoolValue(IN const char* strKey, OUT bool *pbValue)
 {
@@ -302,7 +302,7 @@ int     CCamera::GetBoolValue(IN const char* strKey, OUT bool *pbValue)
 }
 
 
-// ch:ÉèÖÃBoolĞÍ²ÎÊı£¬Èç ReverseX£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:è®¾ç½®Boolå‹å‚æ•°ï¼Œå¦‚ ReverseXï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Set Bool type parameters, such as ReverseX, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::SetBoolValue(IN const char* strKey, IN bool bValue)
 {
@@ -315,7 +315,7 @@ int     CCamera::SetBoolValue(IN const char* strKey, IN bool bValue)
 }
 
 
-// ch:»ñÈ¡StringĞÍ²ÎÊı£¬Èç DeviceUserID£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼şUserSetSave
+// ch:è·å–Stringå‹å‚æ•°ï¼Œå¦‚ DeviceUserIDï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶UserSetSave
 // en:Get String type parameters, such as DeviceUserID, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::GetStringValue(IN const char* strKey, IN OUT char* strValue, IN unsigned int nSize)
 {
@@ -338,7 +338,7 @@ int     CCamera::GetStringValue(IN const char* strKey, IN OUT char* strValue, IN
 }
 
 
-// ch:ÉèÖÃStringĞÍ²ÎÊı£¬Èç DeviceUserID£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼şUserSetSave
+// ch:è®¾ç½®Stringå‹å‚æ•°ï¼Œå¦‚ DeviceUserIDï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶UserSetSave
 // en:Set String type parameters, such as DeviceUserID, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::SetStringValue(IN const char* strKey, IN const char* strValue)
 {
@@ -351,7 +351,7 @@ int     CCamera::SetStringValue(IN const char* strKey, IN const char* strValue)
 }
 
 
-// ch:Ö´ĞĞÒ»´ÎCommandĞÍÃüÁî£¬Èç UserSetSave£¬ÏêÏ¸ÄÚÈİ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼ş
+// ch:æ‰§è¡Œä¸€æ¬¡Commandå‹å‘½ä»¤ï¼Œå¦‚ UserSetSaveï¼Œè¯¦ç»†å†…å®¹å‚è€ƒSDKå®‰è£…ç›®å½•ä¸‹çš„ MvCameraNode.xlsx æ–‡ä»¶
 // en:Execute Command once, such as UserSetSave, for details please refer to MvCameraNode.xlsx file under SDK installation directory
 int     CCamera::CommandExecute(IN const char* strKey)
 {

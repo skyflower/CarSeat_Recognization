@@ -1,0 +1,9 @@
+Info	[CCarSeat_RecognizationApp::InitInstance,71]enter init system
+Info	[CParamManager::__auxLocalIP,156]IP = 0x1C9A8C0
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0xFFFFFFFF
+Error	[CParamManager::__auxLocalIP,166]ip reach failed
+Info	[CParamManager::__auxLocalIP,156]IP = 0x150A8C0
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xFFFFFFFF
+Error	[CParamManager::__auxLocalIP,166]ip reach failed
+Info	[CParamManager::__auxLocalIP,173]get localIp cost Time = 769
+Info	[CCarSeat_RecognizationApp::InitInstance,73]exit init system, success

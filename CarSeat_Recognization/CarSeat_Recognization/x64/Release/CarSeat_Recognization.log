@@ -1,0 +1,41 @@
+﻿  CameraParameterDlg.cpp
+CameraParameterDlg.cpp(38): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+CameraParameterDlg.cpp(74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+CameraParameterDlg.cpp(90): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Camera.cpp
+  CameraManager.cpp
+  LineCamera.cpp
+Camera\LineCamera.cpp(301): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+  CarSeat_Recognization.cpp
+  CarSeat_RecognizationDlg.cpp
+  InputDlg.cpp
+  LoginDlg.cpp
+  QueryDlg.cpp
+  LabelManager.cpp
+  Log.cpp
+  ParamManager.cpp
+  RFIDReader.cpp
+common\RFIDReader.cpp(678): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  RecogResultManager.cpp
+common\RecogResultManager.cpp(84): warning C4244: “=”: 从“int64_t”转换到“int”，可能丢失数据
+  utils.cpp
+common\utils.cpp(18): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+common\utils.cpp(22): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+common\utils.cpp(32): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+common\utils.cpp(36): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  COrbFlann.cpp
+  ImageClassify.cpp
+  PatternManager.cpp
+  KepServerSocket.cpp
+network\KepServerSocket.cpp(75): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  NetworkTask.cpp
+network\NetworkTask.cpp(79): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
+network\NetworkTask.cpp(358): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+network\NetworkTask.cpp(367): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码
+  18 of 2236 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    69 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\x64\Release\CarSeat_Recognization.exe
+  CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\x64\Release\CarSeat_Recognization.pdb (Full PDB)

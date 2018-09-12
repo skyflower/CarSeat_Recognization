@@ -442,7 +442,7 @@ namespace utils
 
 		sockaddr_in addr;
 
-		//接收时限
+		//鎺ユ敹鏃堕檺
 		int nNetTimeout = 1000;
 		setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 

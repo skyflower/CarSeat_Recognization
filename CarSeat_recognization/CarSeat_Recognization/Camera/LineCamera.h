@@ -21,21 +21,21 @@ public:
 
 	~CLineCamera();
 
-/*ch:¿Ø¼ş¶ÔÓ¦±äÁ¿ | en:Control corresponding variable*/
+/*ch:æ§ä»¶å¯¹åº”å˜é‡ | en:Control corresponding variable*/
 private:
    
-    /*ch:Í¼Ïñ²É¼¯ | en:Image Acquisition*/
-      // ch:Èí´¥·¢ | en:Software trigger
+    /*ch:å›¾åƒé‡‡é›† | en:Image Acquisition*/
+      // ch:è½¯è§¦å‘ | en:Software trigger
     //BOOL    m_bSoftWareTriggerCheck;
-            // ch:±£´æÎªjpg | en:Save as jpg
+            // ch:ä¿å­˜ä¸ºjpg | en:Save as jpg
 
-    /*ch:²ÎÊıÉèÖÃ»ñÈ¡ | en:Get Parameter Setting*/
-          // ch:ÆØ¹âÊ±¼ä | en:Exposure Time
+    /*ch:å‚æ•°è®¾ç½®è·å– | en:Get Parameter Setting*/
+          // ch:æ›å…‰æ—¶é—´ | en:Exposure Time
 
-    //double  m_dExposureTimeMax;	//×Ô¶¯ÆØ¹âÊ±¼äÉÏÏŞ
-	//double  m_dExposureTimeMin;	//×Ô¶¯ÆØ¹âÊ±¼äÏÂÏŞ
+    //double  m_dExposureTimeMax;	//è‡ªåŠ¨æ›å…‰æ—¶é—´ä¸Šé™
+	//double  m_dExposureTimeMin;	//è‡ªåŠ¨æ›å…‰æ—¶é—´ä¸‹é™
 
-    double  m_dExposureGain; // ÔöÒæ
+    double  m_dExposureGain; // å¢ç›Š
     double  m_dFrameRate;  // fps 
 
 	CCamera::CameraStatus m_status;
@@ -59,24 +59,24 @@ private:
 
     
    
-/*ch:ÄÚ²¿º¯Êı | en:Built-in function*/
+/*ch:å†…éƒ¨å‡½æ•° | en:Built-in function*/
 public:
     
 	CCamera::CameraStatus GetCameraStatus();
    
-    /*ch:ÉèÖÃ¡¢»ñÈ¡²ÎÊı²Ù×÷ | en:Set and get parameters operation*/
-    bool SetTriggerMode(MV_CAM_TRIGGER_MODE mode);                // ch:ÉèÖÃ´¥·¢Ä£Ê½ | en:Set Trigger Mode
+    /*ch:è®¾ç½®ã€è·å–å‚æ•°æ“ä½œ | en:Set and get parameters operation*/
+    bool SetTriggerMode(MV_CAM_TRIGGER_MODE mode);                // ch:è®¾ç½®è§¦å‘æ¨¡å¼ | en:Set Trigger Mode
 	MV_CAM_TRIGGER_MODE GetTriggerMode();
-    int GetExposureTimeMax();               // ch:ÉèÖÃÆØ¹âÊ±¼ä | en:Set Exposure Time
+    int GetExposureTimeMax();               // ch:è®¾ç½®æ›å…‰æ—¶é—´ | en:Set Exposure Time
 	
 	int GetExposureTimeMin();
     bool SetExposureTime(unsigned int timeMax, unsigned int timeMin);
 
-    double GetGain();                       // ch:ÉèÖÃÔöÒæ | en:Set Gain
+    double GetGain();                       // ch:è®¾ç½®å¢ç›Š | en:Set Gain
     bool SetGain(float gain);
-    double GetFrameRate();                  // ch:ÉèÖÃÖ¡ÂÊ | en:Set Frame Rate
+    double GetFrameRate();                  // ch:è®¾ç½®å¸§ç‡ | en:Set Frame Rate
     bool SetFrameRate(double rate);
-	MV_CAM_TRIGGER_SOURCE GetTriggerSource(void);              // ch:ÉèÖÃ´¥·¢Ô´ | en:Set Trigger Source
+	MV_CAM_TRIGGER_SOURCE GetTriggerSource(void);              // ch:è®¾ç½®è§¦å‘æº | en:Set Trigger Source
     bool SetTriggerSource(MV_CAM_TRIGGER_SOURCE source);
 
 	//bool SetExposureMode(MV_CAM_EXPOSURE_AUTO_MODE mode);
@@ -95,8 +95,8 @@ public:
 	bool SetPixelFormat(int value);
 
 
-	/*DeviceConnectionStatus	IEnumeration	"0£ºActive
-		1£ºInactive"	R	Éè±¸Á¬½Ó×´Ì¬*/
+	/*DeviceConnectionStatus	IEnumeration	"0ï¼šActive
+		1ï¼šInactive"	R	è®¾å¤‡è¿æ¥çŠ¶æ€*/
 
 	bool GetConnectStatus();
 
@@ -105,11 +105,11 @@ public:
 
 	SIZE GetImageSize();
 
-    /*ch:Í¼Æ¬±£´æ | en:Save Image*/
-    std::string SaveImage(void);                     // ch:±£´æÍ¼Æ¬ | en:Save Image
+    /*ch:å›¾ç‰‡ä¿å­˜ | en:Save Image*/
+    std::string SaveImage(void);                     // ch:ä¿å­˜å›¾ç‰‡ | en:Save Image
 
    
-/*ch:×Ô¶¨Òå±äÁ¿ | en:User Defined Variable*/
+/*ch:è‡ªå®šä¹‰å˜é‡ | en:User Defined Variable*/
 private:
 	MV_CAM_TRIGGER_MODE GetTriggerModeByCamera();
 	double GetGainByCamera();
@@ -126,50 +126,50 @@ private:
 
 	static void __stdcall ReconnectDevice(unsigned int nMsgType, void* pUser);
 
-	/*ch:²ÎÊıÉèÖÃ»ñÈ¡ | en:Parameters Get and Set*/
-	void GetParameter();       // ch:»ñÈ¡²ÎÊı | en:Get Parameter
+	/*ch:å‚æ•°è®¾ç½®è·å– | en:Parameters Get and Set*/
+	void GetParameter();       // ch:è·å–å‚æ•° | en:Get Parameter
 	
 
-    /*ch:×´Ì¬ | en:Status*/
-    //BOOL  m_bOpenDevice;                        // ch:ÊÇ·ñ´ò¿ªÉè±¸ | en:Whether to open device
-    //BOOL  m_bStartGrabbing;                     // ch:ÊÇ·ñ¿ªÊ¼×¥Í¼ | en:Whether to start grabbing
-	MV_CAM_TRIGGER_MODE   m_nTriggerMode;                       // ch:´¥·¢Ä£Ê½ | en:Trigger Mode
-	MV_CAM_TRIGGER_SOURCE   m_nTriggerSource;                     // ch:´¥·¢Ô´ | en:Trigger Source
-    MV_SAVE_IAMGE_TYPE   m_nSaveImageType;      // ch:±£´æÍ¼Ïñ¸ñÊ½ | en:Save Image Type
+    /*ch:çŠ¶æ€ | en:Status*/
+    //BOOL  m_bOpenDevice;                        // ch:æ˜¯å¦æ‰“å¼€è®¾å¤‡ | en:Whether to open device
+    //BOOL  m_bStartGrabbing;                     // ch:æ˜¯å¦å¼€å§‹æŠ“å›¾ | en:Whether to start grabbing
+	MV_CAM_TRIGGER_MODE   m_nTriggerMode;                       // ch:è§¦å‘æ¨¡å¼ | en:Trigger Mode
+	MV_CAM_TRIGGER_SOURCE   m_nTriggerSource;                     // ch:è§¦å‘æº | en:Trigger Source
+    MV_SAVE_IAMGE_TYPE   m_nSaveImageType;      // ch:ä¿å­˜å›¾åƒæ ¼å¼ | en:Save Image Type
 	MV_CAM_EXPOSURE_MODE m_nExposureMode;
 
-    /*ch:Éè±¸Ïà¹Ø | en:Device Related*/
-    CCamera*      m_pcMyCamera;               // ch:CMyCamera·â×°ÁË³£ÓÃ½Ó¿Ú | en:CMyCamera packed commonly used interface
-    HWND  m_hwndDisplay;                        // ch:ÏÔÊ¾¾ä±ú | en:Display Handle
+    /*ch:è®¾å¤‡ç›¸å…³ | en:Device Related*/
+    CCamera*      m_pcMyCamera;               // ch:CMyCameraå°è£…äº†å¸¸ç”¨æ¥å£ | en:CMyCamera packed commonly used interface
+    HWND  m_hwndDisplay;                        // ch:æ˜¾ç¤ºå¥æŸ„ | en:Display Handle
 	MV_CC_DEVICE_INFO *m_pDevice;
 	
-    unsigned char*  m_pBufForSaveImage;         // ch:ÓÃÓÚ±£´æÍ¼ÏñµÄ»º´æ | en:Buffer to save image
+    unsigned char*  m_pBufForSaveImage;         // ch:ç”¨äºä¿å­˜å›¾åƒçš„ç¼“å­˜ | en:Buffer to save image
     unsigned int    m_nBufSizeForSaveImage;
 
-    unsigned char*  m_pBufForDriver;            // ch:ÓÃÓÚ´ÓÇı¶¯»ñÈ¡Í¼ÏñµÄ»º´æ | en:Buffer to get image from driver
+    unsigned char*  m_pBufForDriver;            // ch:ç”¨äºä»é©±åŠ¨è·å–å›¾åƒçš„ç¼“å­˜ | en:Buffer to get image from driver
     unsigned int    m_nBufSizeForDriver;
 
-/*ch:°´ÏÂ¿Ø¼ş²Ù×÷ | en:Control operation*/
+/*ch:æŒ‰ä¸‹æ§ä»¶æ“ä½œ | en:Control operation*/
 public:
 
-    /*ch:³õÊ¼»¯ | en:Initialization*/
-    //bool EnumButton();               // ch:²éÕÒÉè±¸ | en:Find Devices
-    bool OpenButton();               // ch:´ò¿ªÉè±¸ | en:Open Devices
+    /*ch:åˆå§‹åŒ– | en:Initialization*/
+    //bool EnumButton();               // ch:æŸ¥æ‰¾è®¾å¤‡ | en:Find Devices
+    bool OpenButton();               // ch:æ‰“å¼€è®¾å¤‡ | en:Open Devices
    
-	/*ch:¹Ø±ÕÏú»Ù²Ù×÷ | en:Close and deatroy operation*/
-	int CloseDevice(void);   // ch:¹Ø±ÕÉè±¸ | en:Close Device
+	/*ch:å…³é—­é”€æ¯æ“ä½œ | en:Close and deatroy operation*/
+	int CloseDevice(void);   // ch:å…³é—­è®¾å¤‡ | en:Close Device
 
 
-	/*ch:³õÊ¼»¯Ïà»ú²Ù×÷ | en:Initialization*/
-	int OpenDevice();   // ch:´ò¿ªÏà»ú | en:Open Device
+	/*ch:åˆå§‹åŒ–ç›¸æœºæ“ä½œ | en:Initialization*/
+	int OpenDevice();   // ch:æ‰“å¼€ç›¸æœº | en:Open Device
 
-	bool StartGrabbing();      // ch:¿ªÊ¼²É¼¯ | en:Start Grabbing
-    void StopGrabbing();       // ch:½áÊø²É¼¯ | en:Stop Grabbing
-    void SoftwareOnce();       // ch:Èí´¥·¢Ò»´Î | en:Software Trigger Execute Once
+	bool StartGrabbing();      // ch:å¼€å§‹é‡‡é›† | en:Start Grabbing
+    void StopGrabbing();       // ch:ç»“æŸé‡‡é›† | en:Stop Grabbing
+    void SoftwareOnce();       // ch:è½¯è§¦å‘ä¸€æ¬¡ | en:Software Trigger Execute Once
   
-    /*ch:Í¼Ïñ±£´æ | en:Image Save*/
-    std::string SaveBmp();            // ch:±£´æbmp | en:Save bmp
-    std::string SaveJpg();            // ch:±£´æjpg | en:Save jpg
+    /*ch:å›¾åƒä¿å­˜ | en:Image Save*/
+    std::string SaveBmp();            // ch:ä¿å­˜bmp | en:Save bmp
+    std::string SaveJpg();            // ch:ä¿å­˜jpg | en:Save jpg
   
    
     

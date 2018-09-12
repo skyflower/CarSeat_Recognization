@@ -169,3 +169,16 @@ CarSeat_recognization/x64/Release/CarSeat_Recognization.iobj
 CarSeat_Recognization/CarSeat_Recognization/Log/Log_20180901_082355.txt
 CarSeat_Recognization/x64/Release/20180901162835555.bmp
 CarSeat_recognization/x64/Release/CarSeat_Recognization.iobj
+*.tlog
+*.db
+*.pch
+*.obj
+*.obj
+*.enc
+*.pch
+*.pdb
+*.exe
+*.db
+*.ipch
+*.ipch
+*.pdb

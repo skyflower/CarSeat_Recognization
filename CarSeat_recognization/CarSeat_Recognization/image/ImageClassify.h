@@ -7,7 +7,7 @@
 // Version	: 1.0
 //
 //
-// Description	: python接口
+// Description	: python鎺ュ彛
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef _PYTHON_INTERFACE_H_
@@ -39,21 +39,21 @@ public:
 	bool initPython(const char *modulName,const char *functionName, const char*cachePath);
 
 	/*
-	异步计算接口
+	寮傛璁＄畻鎺ュ彛
 	*/
 	void pushImage(const char*filePath);
 
 	std::string GetImageType(const char*filePath);
 
 
-	//  终止线程
+	//  缁堟绾跨▼
 	bool terminate();
 	
 	void run();
 
 
 	/*
-	同步计算接口
+	鍚屾璁＄畻鎺ュ彛
 	*/
 	std::string compute(const char *filePath);
 	

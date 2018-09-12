@@ -1,23 +1,23 @@
-// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ 
-// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
-// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ 
-// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£  
-// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£  
-// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ 
-// http://go.microsoft.com/fwlink/?LinkId=238214¡£
+// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢ 
+// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
+// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ 
+// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚  
+// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚  
+// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—® 
+// http://go.microsoft.com/fwlink/?LinkId=238214ã€‚
 //
-// °æÈ¨ËùÓĞ(C) Microsoft Corporation
-// ±£ÁôËùÓĞÈ¨Àû¡£
+// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
+// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
 
-// Query_Module.h : Query_Module Ó¦ÓÃ³ÌĞòµÄÖ÷Í·ÎÄ¼ş
+// Query_Module.h : Query_Module åº”ç”¨ç¨‹åºçš„ä¸»å¤´æ–‡ä»¶
 //
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "ÔÚ°üº¬´ËÎÄ¼şÖ®Ç°°üº¬¡°stdafx.h¡±ÒÔÉú³É PCH ÎÄ¼ş"
+	#error "åœ¨åŒ…å«æ­¤æ–‡ä»¶ä¹‹å‰åŒ…å«â€œstdafx.hâ€ä»¥ç”Ÿæˆ PCH æ–‡ä»¶"
 #endif
 
-#include "resource.h"       // Ö÷·ûºÅ
+#include "resource.h"       // ä¸»ç¬¦å·
 #include "ConditonDlg.h"
 #include "./common/ParamManager.h"
 #include "./common/Log.h"
@@ -25,7 +25,7 @@
 #include "./network/NetworkTask.h"
 
 // CQuery_ModuleApp:
-// ÓĞ¹Ø´ËÀàµÄÊµÏÖ£¬Çë²ÎÔÄ Query_Module.cpp
+// æœ‰å…³æ­¤ç±»çš„å®ç°ï¼Œè¯·å‚é˜… Query_Module.cpp
 //
 
 class CQuery_ModuleApp : public CWinAppEx
@@ -34,12 +34,12 @@ public:
 	CQuery_ModuleApp();
 
 
-// ÖØĞ´
+// é‡å†™
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	HMENU  m_hMDIMenu;
 	HACCEL m_hMDIAccel;

@@ -14,18 +14,18 @@ class RecogResult
 public:
 	RecogResult();
 	~RecogResult();
-	type m_szBarcode[32];		//	ÍêÕûÌõĞÎÂë
-	type m_szTime[32];			//	½á¹ûĞÎ³ÉµÄÊ±¼ä´Á£¬°üº¬±¾µØÈÕÆÚºÍÊ±¼ä
-	type m_szTypeByRecog[32];	//	Ê¶±ğ½á¹ûµÄÍâ²¿ÀàĞÍ
-	type m_szTypeByBarcode[32];	//	¸ù¾İÌõĞÎÂëÄÃµ½µÄÍâ²¿ÀàĞÍ
-	type m_szTypeByUsrInput[32];	//µ±Ê¶±ğ´íÎóµÄÊ±ºò£¬²úÏß¹ÜÀíÔ±ÊäÈëµÄÍâ²¿ÀàĞÍ
-	type m_szRecogMethod[8];	//	Ê¶±ğ·½·¨£¬Ä¿Ç°Ö»ÊÇ"auto"
-	type m_szCameraName[20];	//	ÅÄÕÕÏà»úµÄÃû×Ö
-	type m_szLineName[8];		//	²úÏßÃû³Æ
-	type m_szUsrName[20];		//	²úÏß¹ÜÀíÔ±ÓÃ»§Ãû
-	type m_szImagePath[256];	//	ÕÕÆ¬Â·¾¶
+	type m_szBarcode[32];		//	å®Œæ•´æ¡å½¢ç 
+	type m_szTime[32];			//	ç»“æœå½¢æˆçš„æ—¶é—´æˆ³ï¼ŒåŒ…å«æœ¬åœ°æ—¥æœŸå’Œæ—¶é—´
+	type m_szTypeByRecog[32];	//	è¯†åˆ«ç»“æœçš„å¤–éƒ¨ç±»å‹
+	type m_szTypeByBarcode[32];	//	æ ¹æ®æ¡å½¢ç æ‹¿åˆ°çš„å¤–éƒ¨ç±»å‹
+	type m_szTypeByUsrInput[32];	//å½“è¯†åˆ«é”™è¯¯çš„æ—¶å€™ï¼Œäº§çº¿ç®¡ç†å‘˜è¾“å…¥çš„å¤–éƒ¨ç±»å‹
+	type m_szRecogMethod[8];	//	è¯†åˆ«æ–¹æ³•ï¼Œç›®å‰åªæ˜¯"auto"
+	type m_szCameraName[20];	//	æ‹ç…§ç›¸æœºçš„åå­—
+	type m_szLineName[8];		//	äº§çº¿åç§°
+	type m_szUsrName[20];		//	äº§çº¿ç®¡ç†å‘˜ç”¨æˆ·å
+	type m_szImagePath[256];	//	ç…§ç‰‡è·¯å¾„
 
-	bool m_bIsCorrect;			//	Ê¶±ğ½á¹ûÊÇ·ñÒ»ÖÂ
+	bool m_bIsCorrect;			//	è¯†åˆ«ç»“æœæ˜¯å¦ä¸€è‡´
 
 	static bool RecogToText(RecogResult & a, type *buffer);
 	static bool TextToRecog(RecogResult & a, type *buffer);

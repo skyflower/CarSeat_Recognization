@@ -18,7 +18,7 @@ CLog * CLog::GetInstance()
 
 const CLog & CLog::GetReference()
 {
-	// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+	// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 	if (m_pInstance == nullptr)
 	{
 		m_pInstance = new CLog();
@@ -106,10 +106,10 @@ void CLog::run()
 				break;
 			}
 
-			time_t  time1 = time(NULL);//»ñÈ¡ÏµÍ³Ê±¼ä£¬µ¥Î»ÎªÃë;
+			time_t  time1 = time(NULL);//è·å–ç³»ç»Ÿæ—¶é—´ï¼Œå•ä½ä¸ºç§’;
 
 			struct tm tmpTime;
-			localtime_s(&tmpTime, &time1);//×ª»»³ÉtmÀàĞÍµÄ½á¹¹Ìå;
+			localtime_s(&tmpTime, &time1);//è½¬æ¢æˆtmç±»å‹çš„ç»“æ„ä½“;
 
 			memset(currentTime, 0, sizeof(currentTime));
 
@@ -141,10 +141,10 @@ void CLog::init()
 	m_bFlag = false;
 
 	
-	time_t  time1 = time(NULL);//»ñÈ¡ÏµÍ³Ê±¼ä£¬µ¥Î»ÎªÃë;
+	time_t  time1 = time(NULL);//è·å–ç³»ç»Ÿæ—¶é—´ï¼Œå•ä½ä¸ºç§’;
 
 	struct tm tmpTime;
-	localtime_s(&tmpTime, &time1);//×ª»»³ÉtmÀàĞÍµÄ½á¹¹Ìå;
+	localtime_s(&tmpTime, &time1);//è½¬æ¢æˆtmç±»å‹çš„ç»“æ„ä½“;
 
 	char logFileName[100] = { 0 };
 	memset(logFileName, 0, sizeof(logFileName));

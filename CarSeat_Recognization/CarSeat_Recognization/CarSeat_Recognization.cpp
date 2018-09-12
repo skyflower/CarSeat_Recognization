@@ -1,5 +1,5 @@
 
-// CarSeat_Recognization.cpp : ����Ӧ�ó��������Ϊ��
+// CarSeat_Recognization.cpp : 定义应用程序的类行为。
 //
 
 #include "stdafx.h"
@@ -21,12 +21,12 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationApp, CWinApp)
 END_MESSAGE_MAP()
 
 
-// CCarSeat_RecognizationApp ����
+// CCarSeat_RecognizationApp 构造
 
 CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
 	m_pCameraManager(nullptr)
 {
-	// ֧����������������
+	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 	m_pParamManager = nullptr;
 	m_pLog = nullptr;
@@ -34,27 +34,27 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
 	m_pClassify = nullptr;
 	m_pLabelManager = nullptr;
 	_tsetlocale(LC_ALL, _T("chs"));
-	// TODO: �ڴ˴����ӹ�����룬
-	// ��������Ҫ�ĳ�ʼ�������� InitInstance ��
+	// TODO: 在此处添加构造代码，
+	// 将所有重要的初始化放置在 InitInstance 中
 }
 
 
-// Ψһ��һ�� CCarSeat_RecognizationApp ����
+// 唯一的一个 CCarSeat_RecognizationApp 对象
 
 CCarSeat_RecognizationApp theApp;
 
 
-// CCarSeat_RecognizationApp ��ʼ��
+// CCarSeat_RecognizationApp 初始化
 
 BOOL CCarSeat_RecognizationApp::InitInstance()
 {
-	// ���һ�������� Windows XP �ϵ�Ӧ�ó����嵥ָ��Ҫ
-	// ʹ�� ComCtl32.dll �汾 6 ����߰汾�����ÿ��ӻ���ʽ��
-	//����Ҫ InitCommonControlsEx()��  ���򣬽��޷��������ڡ�
+	// 如果一个运行在 Windows XP 上的应用程序清单指定要
+	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
+	//则需要 InitCommonControlsEx()。  否则，将无法创建窗口。
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
-	// ��������Ϊ��������Ҫ��Ӧ�ó�����ʹ�õ�
-	// �����ؼ��ࡣ
+	// 将它设置为包括所有要在应用程序中使用的
+	// 公共控件类。
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
@@ -67,28 +67,28 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	}
 
 
-	//��ʼ������ģ�飬��ǩģ�飬����ģ�飬ʶ��ģ��
+	//初始化参数模块，标签模块，网络模块，识别模块
 	//WriteInfo("enter init system");
 	initSystem();
 	//WriteInfo("exit init system, success");
 
 	AfxEnableControlContainer();
 
-	// ���� shell ���������Է��Ի������
-	// �κ� shell ����ͼ�ؼ��� shell �б���ͼ�ؼ���
+	// 创建 shell 管理器，以防对话框包含
+	// 任何 shell 树视图控件或 shell 列表视图控件。
 	CShellManager *pShellManager = new CShellManager;
 
-	// ���Windows Native���Ӿ����������Ա��� MFC �ؼ�����������
+	// 激活“Windows Native”视觉管理器，以便在 MFC 控件中启用主题
 	CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
 
-	// ��׼��ʼ��
-	// ���δʹ����Щ���ܲ�ϣ����С
-	// ���տ�ִ���ļ��Ĵ�С����Ӧ�Ƴ�����
-	// ����Ҫ���ض���ʼ������
-	// �������ڴ洢���õ�ע�����
-	// TODO: Ӧ�ʵ��޸ĸ��ַ�����
-	// �����޸�Ϊ��˾����֯��
-	SetRegistryKey(_T("Ӧ�ó��������ɵı���Ӧ�ó���"));
+	// 标准初始化
+	// 如果未使用这些功能并希望减小
+	// 最终可执行文件的大小，则应移除下列
+	// 不需要的特定初始化例程
+	// 更改用于存储设置的注册表项
+	// TODO: 应适当修改该字符串，
+	// 例如修改为公司或组织名
+	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	
 	CCarSeat_RecognizationDlg dlg;
@@ -109,11 +109,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	
 	else if (nResponse == -1)
 	{
-		TRACE(traceAppMsg, 0, "����: �Ի��򴴽�ʧ�ܣ�Ӧ�ó���������ֹ��\n");
-		TRACE(traceAppMsg, 0, "����: ������ڶԻ�����ʹ�� MFC �ؼ������޷� #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS��\n");
+		TRACE(traceAppMsg, 0, "警告: 对话框创建失败，应用程序将意外终止。\n");
+		TRACE(traceAppMsg, 0, "警告: 如果您在对话框上使用 MFC 控件，则无法 #define _AFX_NO_MFC_CONTROLS_IN_DIALOGS。\n");
 	}
 
-	// ɾ�����洴���� shell ��������
+	// 删除上面创建的 shell 管理器。
 	if (pShellManager != NULL)
 	{
 		delete pShellManager;
@@ -123,8 +123,8 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	ControlBarCleanUp();
 #endif
 
-	// ���ڶԻ����ѹرգ����Խ����� FALSE �Ա��˳�Ӧ�ó���
-	//  ����������Ӧ�ó������Ϣ�á�
+	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
+	//  而不是启动应用程序的消息泵。
 	
 
 	/*if (m_UIThread.joinable())

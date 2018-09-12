@@ -1,15 +1,15 @@
-// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ 
-// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
-// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ 
-// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£  
-// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£  
-// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ 
-// http://go.microsoft.com/fwlink/?LinkId=238214¡£
+// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢ 
+// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
+// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ 
+// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚  
+// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚  
+// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—® 
+// http://go.microsoft.com/fwlink/?LinkId=238214ã€‚
 //
-// °æÈ¨ËùÓĞ(C) Microsoft Corporation
-// ±£ÁôËùÓĞÈ¨Àû¡£
+// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
+// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
 
-// Query_Module.cpp : ¶¨ÒåÓ¦ÓÃ³ÌĞòµÄÀàĞĞÎª¡£
+// Query_Module.cpp : å®šä¹‰åº”ç”¨ç¨‹åºçš„ç±»è¡Œä¸ºã€‚
 //
 
 #include "stdafx.h"
@@ -42,29 +42,29 @@ BEGIN_MESSAGE_MAP(CQuery_ModuleApp, CWinAppEx)
 END_MESSAGE_MAP()
 
 
-// CQuery_ModuleApp ¹¹Ôì
+// CQuery_ModuleApp æ„é€ 
 
 CQuery_ModuleApp::CQuery_ModuleApp()
 {
-	// Ö§³ÖÖØĞÂÆô¶¯¹ÜÀíÆ÷
+	// æ”¯æŒé‡æ–°å¯åŠ¨ç®¡ç†å™¨
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 #ifdef _MANAGED
-	// Èç¹ûÓ¦ÓÃ³ÌĞòÊÇÀûÓÃ¹«¹²ÓïÑÔÔËĞĞÊ±Ö§³Ö(/clr)¹¹½¨µÄ£¬Ôò: 
-	//     1) ±ØĞëÓĞ´Ë¸½¼ÓÉèÖÃ£¬¡°ÖØĞÂÆô¶¯¹ÜÀíÆ÷¡±Ö§³Ö²ÅÄÜÕı³£¹¤×÷¡£
-	//     2) ÔÚÄúµÄÏîÄ¿ÖĞ£¬Äú±ØĞë°´ÕÕÉú³ÉË³ĞòÏò System.Windows.Forms Ìí¼ÓÒıÓÃ¡£
+	// å¦‚æœåº”ç”¨ç¨‹åºæ˜¯åˆ©ç”¨å…¬å…±è¯­è¨€è¿è¡Œæ—¶æ”¯æŒ(/clr)æ„å»ºçš„ï¼Œåˆ™: 
+	//     1) å¿…é¡»æœ‰æ­¤é™„åŠ è®¾ç½®ï¼Œâ€œé‡æ–°å¯åŠ¨ç®¡ç†å™¨â€æ”¯æŒæ‰èƒ½æ­£å¸¸å·¥ä½œã€‚
+	//     2) åœ¨æ‚¨çš„é¡¹ç›®ä¸­ï¼Œæ‚¨å¿…é¡»æŒ‰ç…§ç”Ÿæˆé¡ºåºå‘ System.Windows.Forms æ·»åŠ å¼•ç”¨ã€‚
 	System::Windows::Forms::Application::SetUnhandledExceptionMode(System::Windows::Forms::UnhandledExceptionMode::ThrowException);
 #endif
 
-	// TODO: ½«ÒÔÏÂÓ¦ÓÃ³ÌĞò ID ×Ö·û´®Ìæ»»ÎªÎ¨Ò»µÄ ID ×Ö·û´®£»½¨ÒéµÄ×Ö·û´®¸ñÊ½
-	//Îª CompanyName.ProductName.SubProduct.VersionInformation
+	// TODO: å°†ä»¥ä¸‹åº”ç”¨ç¨‹åº ID å­—ç¬¦ä¸²æ›¿æ¢ä¸ºå”¯ä¸€çš„ ID å­—ç¬¦ä¸²ï¼›å»ºè®®çš„å­—ç¬¦ä¸²æ ¼å¼
+	//ä¸º CompanyName.ProductName.SubProduct.VersionInformation
 	SetAppID(_T("Query_Module.AppID.NoVersion"));
 
 	m_pLog = CLog::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
 
 
-	// TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôì´úÂë£¬
-	// ½«ËùÓĞÖØÒªµÄ³õÊ¼»¯·ÅÖÃÔÚ InitInstance ÖĞ
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ„é€ ä»£ç ï¼Œ
+	// å°†æ‰€æœ‰é‡è¦çš„åˆå§‹åŒ–æ”¾ç½®åœ¨ InitInstance ä¸­
 	/*CMFCRibbonBar* pRibbon = ((CMDIFrameWndEx*)AfxGetMainWnd())->GetRibbonBar();
 	if (pRibbon != nullptr)
 	{
@@ -81,22 +81,22 @@ CQuery_ModuleApp::CQuery_ModuleApp()
 	}*/
 }
 
-// Î¨Ò»µÄÒ»¸ö CQuery_ModuleApp ¶ÔÏó
+// å”¯ä¸€çš„ä¸€ä¸ª CQuery_ModuleApp å¯¹è±¡
 
 CQuery_ModuleApp theApp;
 
 
-// CQuery_ModuleApp ³õÊ¼»¯
+// CQuery_ModuleApp åˆå§‹åŒ–
 
 BOOL CQuery_ModuleApp::InitInstance()
 {
-	// Èç¹ûÒ»¸öÔËĞĞÔÚ Windows XP ÉÏµÄÓ¦ÓÃ³ÌĞòÇåµ¥Ö¸¶¨Òª
-	// Ê¹ÓÃ ComCtl32.dll °æ±¾ 6 »ò¸ü¸ß°æ±¾À´ÆôÓÃ¿ÉÊÓ»¯·½Ê½£¬
-	//ÔòĞèÒª InitCommonControlsEx()¡£  ·ñÔò£¬½«ÎŞ·¨´´½¨´°¿Ú¡£
+	// å¦‚æœä¸€ä¸ªè¿è¡Œåœ¨ Windows XP ä¸Šçš„åº”ç”¨ç¨‹åºæ¸…å•æŒ‡å®šè¦
+	// ä½¿ç”¨ ComCtl32.dll ç‰ˆæœ¬ 6 æˆ–æ›´é«˜ç‰ˆæœ¬æ¥å¯ç”¨å¯è§†åŒ–æ–¹å¼ï¼Œ
+	//åˆ™éœ€è¦ InitCommonControlsEx()ã€‚  å¦åˆ™ï¼Œå°†æ— æ³•åˆ›å»ºçª—å£ã€‚
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
-	// ½«ËüÉèÖÃÎª°üÀ¨ËùÓĞÒªÔÚÓ¦ÓÃ³ÌĞòÖĞÊ¹ÓÃµÄ
-	// ¹«¹²¿Ø¼şÀà¡£
+	// å°†å®ƒè®¾ç½®ä¸ºåŒ…æ‹¬æ‰€æœ‰è¦åœ¨åº”ç”¨ç¨‹åºä¸­ä½¿ç”¨çš„
+	// å…¬å…±æ§ä»¶ç±»ã€‚
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
@@ -108,7 +108,7 @@ BOOL CQuery_ModuleApp::InitInstance()
 		return FALSE;
 	}
 
-	// ³õÊ¼»¯ OLE ¿â
+	// åˆå§‹åŒ– OLE åº“
 	if (!AfxOleInit())
 	{
 		AfxMessageBox(IDP_OLE_INIT_FAILED);
@@ -119,17 +119,17 @@ BOOL CQuery_ModuleApp::InitInstance()
 
 	EnableTaskbarInteraction();
 
-	// Ê¹ÓÃ RichEdit ¿Ø¼şĞèÒª AfxInitRichEdit2()	
+	// ä½¿ç”¨ RichEdit æ§ä»¶éœ€è¦ AfxInitRichEdit2()	
 	// AfxInitRichEdit2();
 
-	// ±ê×¼³õÊ¼»¯
-	// Èç¹ûÎ´Ê¹ÓÃÕâĞ©¹¦ÄÜ²¢Ï£Íû¼õĞ¡
-	// ×îÖÕ¿ÉÖ´ĞĞÎÄ¼şµÄ´óĞ¡£¬ÔòÓ¦ÒÆ³ıÏÂÁĞ
-	// ²»ĞèÒªµÄÌØ¶¨³õÊ¼»¯Àı³Ì
-	// ¸ü¸ÄÓÃÓÚ´æ´¢ÉèÖÃµÄ×¢²á±íÏî
-	// TODO: Ó¦ÊÊµ±ĞŞ¸Ä¸Ã×Ö·û´®£¬
-	// ÀıÈçĞŞ¸ÄÎª¹«Ë¾»ò×éÖ¯Ãû
-	SetRegistryKey(_T("Ó¦ÓÃ³ÌĞòÏòµ¼Éú³ÉµÄ±¾µØÓ¦ÓÃ³ÌĞò"));
+	// æ ‡å‡†åˆå§‹åŒ–
+	// å¦‚æœæœªä½¿ç”¨è¿™äº›åŠŸèƒ½å¹¶å¸Œæœ›å‡å°
+	// æœ€ç»ˆå¯æ‰§è¡Œæ–‡ä»¶çš„å¤§å°ï¼Œåˆ™åº”ç§»é™¤ä¸‹åˆ—
+	// ä¸éœ€è¦çš„ç‰¹å®šåˆå§‹åŒ–ä¾‹ç¨‹
+	// æ›´æ”¹ç”¨äºå­˜å‚¨è®¾ç½®çš„æ³¨å†Œè¡¨é¡¹
+	// TODO: åº”é€‚å½“ä¿®æ”¹è¯¥å­—ç¬¦ä¸²ï¼Œ
+	// ä¾‹å¦‚ä¿®æ”¹ä¸ºå…¬å¸æˆ–ç»„ç»‡å
+	SetRegistryKey(_T("åº”ç”¨ç¨‹åºå‘å¯¼ç”Ÿæˆçš„æœ¬åœ°åº”ç”¨ç¨‹åº"));
 
 
 	InitContextMenuManager();
@@ -142,18 +142,18 @@ BOOL CQuery_ModuleApp::InitInstance()
 	theApp.GetTooltipManager()->SetTooltipParams(AFX_TOOLTIP_TYPE_ALL,
 		RUNTIME_CLASS(CMFCToolTipCtrl), &ttParams);
 
-	// ÈôÒª´´½¨Ö÷´°¿Ú£¬´Ë´úÂë½«´´½¨ĞÂµÄ¿ò¼Ü´°¿Ú
-	// ¶ÔÏó£¬È»ºó½«ÆäÉèÖÃÎªÓ¦ÓÃ³ÌĞòµÄÖ÷´°¿Ú¶ÔÏó
+	// è‹¥è¦åˆ›å»ºä¸»çª—å£ï¼Œæ­¤ä»£ç å°†åˆ›å»ºæ–°çš„æ¡†æ¶çª—å£
+	// å¯¹è±¡ï¼Œç„¶åå°†å…¶è®¾ç½®ä¸ºåº”ç”¨ç¨‹åºçš„ä¸»çª—å£å¯¹è±¡
 	CMDIFrameWnd* pFrame = new CMainFrame;
 	if (!pFrame)
 		return FALSE;
 	m_pMainWnd = pFrame;
-	// ´´½¨Ö÷ MDI ¿ò¼Ü´°¿Ú
+	// åˆ›å»ºä¸» MDI æ¡†æ¶çª—å£
 	if (!pFrame->LoadFrame(IDR_MAINFRAME))
 		return FALSE;
-	// ÊÔÍ¼¼ÓÔØ¹²Ïí MDI ²Ëµ¥ºÍ¿ì½İ¼ü±í
-	//TODO: Ìí¼Ó¸½¼Ó³ÉÔ±±äÁ¿£¬²¢¼ÓÔØ¶Ô
-	//	Ó¦ÓÃ³ÌĞò¿ÉÄÜĞèÒªµÄ¸½¼Ó²Ëµ¥ÀàĞÍµÄµ÷ÓÃ
+	// è¯•å›¾åŠ è½½å…±äº« MDI èœå•å’Œå¿«æ·é”®è¡¨
+	//TODO: æ·»åŠ é™„åŠ æˆå‘˜å˜é‡ï¼Œå¹¶åŠ è½½å¯¹
+	//	åº”ç”¨ç¨‹åºå¯èƒ½éœ€è¦çš„é™„åŠ èœå•ç±»å‹çš„è°ƒç”¨
 	HINSTANCE hInst = AfxGetResourceHandle();
 	m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
 	m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
@@ -163,7 +163,7 @@ BOOL CQuery_ModuleApp::InitInstance()
 
 
 
-	// Ö÷´°¿ÚÒÑ³õÊ¼»¯£¬Òò´ËÏÔÊ¾Ëü²¢¶ÔÆä½øĞĞ¸üĞÂ
+	// ä¸»çª—å£å·²åˆå§‹åŒ–ï¼Œå› æ­¤æ˜¾ç¤ºå®ƒå¹¶å¯¹å…¶è¿›è¡Œæ›´æ–°
 	pFrame->ShowWindow(m_nCmdShow);
 	pFrame->UpdateWindow();
 
@@ -172,7 +172,7 @@ BOOL CQuery_ModuleApp::InitInstance()
 
 int CQuery_ModuleApp::ExitInstance()
 {
-	//TODO: ´¦Àí¿ÉÄÜÒÑÌí¼ÓµÄ¸½¼Ó×ÊÔ´
+	//TODO: å¤„ç†å¯èƒ½å·²æ·»åŠ çš„é™„åŠ èµ„æº
 	if (m_hMDIMenu != NULL)
 		FreeResource(m_hMDIMenu);
 	if (m_hMDIAccel != NULL)
@@ -196,34 +196,34 @@ int CQuery_ModuleApp::ExitInstance()
 	return CWinAppEx::ExitInstance();
 }
 
-// CQuery_ModuleApp ÏûÏ¢´¦Àí³ÌĞò
+// CQuery_ModuleApp æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 void CQuery_ModuleApp::OnFileNew() 
 {
 	CMainFrame* pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
 	pFrame->LockWindowUpdate();
-	// ´´½¨ĞÂµÄ MDI ×Ó´°¿Ú
+	// åˆ›å»ºæ–°çš„ MDI å­çª—å£
 	pFrame->CreateNewChild(
 		RUNTIME_CLASS(CChildFrame), IDR_Query_ModuleTYPE, m_hMDIMenu, m_hMDIAccel);
 	pFrame->UnlockWindowUpdate();
 }
 
-// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -240,14 +240,14 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
-// ÓÃÓÚÔËĞĞ¶Ô»°¿òµÄÓ¦ÓÃ³ÌĞòÃüÁî
+// ç”¨äºè¿è¡Œå¯¹è¯æ¡†çš„åº”ç”¨ç¨‹åºå‘½ä»¤
 void CQuery_ModuleApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-// CQuery_ModuleApp ×Ô¶¨Òå¼ÓÔØ/±£´æ·½·¨
+// CQuery_ModuleApp è‡ªå®šä¹‰åŠ è½½/ä¿å­˜æ–¹æ³•
 
 void CQuery_ModuleApp::PreLoadState()
 {
@@ -268,10 +268,10 @@ void CQuery_ModuleApp::SaveCustomState()
 }
 
 
-// CQuery_ModuleApp ÏûÏ¢´¦Àí³ÌĞò
+// CQuery_ModuleApp æ¶ˆæ¯å¤„ç†ç¨‹åº
 void CQuery_ModuleApp::OnButtonChoose()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	int ret = mConditionDlg.DoModal();
 
 	if (ret == IDCANCEL)
@@ -297,7 +297,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 	
 
 	/*
-	½«²éÑ¯Ìõ¼şÒÔ¼°ÓÃ»§ÃûºÍÃÜÂë·¢ËÍµ½·şÎñÆ÷¶Ë
+	å°†æŸ¥è¯¢æ¡ä»¶ä»¥åŠç”¨æˆ·åå’Œå¯†ç å‘é€åˆ°æœåŠ¡å™¨ç«¯
 	*/
 	char queryXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
 		<search>													\
@@ -355,7 +355,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 	sprintf_s(ipStr, "%d.%d.%d.%d", (ip >> 24), ((ip >> 16) & 0xFF), ((ip >> 8) & 0xFF), (ip & 0xFF));
 
 
-	// Ê±¼äÑ¡Ôñ²ßÂÔ
+	// æ—¶é—´é€‰æ‹©ç­–ç•¥
 	const int policyLength = 200;
 	char timePolicy[policyLength] = { 0 };
 	memset(timePolicy, 0, sizeof(timePolicy));
@@ -369,7 +369,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 		timePolicyControl, filter.mTimeBegin, filter.mTimeEnd);
 
 
-	//²úÏßÑ¡Ôñ²ßÂÔ
+	//äº§çº¿é€‰æ‹©ç­–ç•¥
 	char linePolicy[policyLength] = { 0 };
 	memset(linePolicy, 0, sizeof(linePolicy));
 	int linePolicyControl = 1;
@@ -382,7 +382,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 
 
 
-	// ¸ñÊ½»¯ÌõĞÎÂë²ßÂÔ
+	// æ ¼å¼åŒ–æ¡å½¢ç ç­–ç•¥
 	char barcodePolicy[policyLength] = { 0 };
 	memset(barcodePolicy, 0, sizeof(barcodePolicy));
 	int barcodePolicyControl = 1;
@@ -394,7 +394,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 		barcodePolicyControl, filter.mBarcodeBegin, filter.mBarcodeEnd);
 
 
-	// ×ùÒÎÀàĞÍ²ßÂÔ
+	// åº§æ¤…ç±»å‹ç­–ç•¥
 	char typePolicy[policyLength] = { 0 };
 	memset(typePolicy, 0, sizeof(typePolicy));
 	int typePolicyControl = 1;
@@ -406,7 +406,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 		typePolicyControl, filter.mSeatType);
 
 
-	// Ê¶±ğÀàĞÍ²ßÂÔ£¬Ä¿Ç°Ö»Ö§³Ö×Ô¶¯Ê¶±ğ
+	// è¯†åˆ«ç±»å‹ç­–ç•¥ï¼Œç›®å‰åªæ”¯æŒè‡ªåŠ¨è¯†åˆ«
 	char methodPolicy[policyLength] = { 0 };
 	memset(methodPolicy, 0, sizeof(methodPolicy));
 	int methodPolicyControl = 1;
@@ -426,7 +426,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 
 
 	/*
-	½«¹ıÂËxml·¢ËÍµ½·şÎñÆ÷¶Ë
+	å°†è¿‡æ»¤xmlå‘é€åˆ°æœåŠ¡å™¨ç«¯
 	*/
 
 
@@ -441,9 +441,9 @@ void CQuery_ModuleApp::OnButtonChoose()
 
 void CQuery_ModuleApp::OnButtonBarcode()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	/*
-	ÌõĞÎÂë¶ÔÕÕ±í
+	æ¡å½¢ç å¯¹ç…§è¡¨
 	*/
 
 }
@@ -451,7 +451,7 @@ void CQuery_ModuleApp::OnButtonBarcode()
 
 void CQuery_ModuleApp::OnButtonLogin()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	CLoginDlg dlg;
 	int ret = dlg.DoModal();
 	if (ret == IDCANCEL)
@@ -462,19 +462,19 @@ void CQuery_ModuleApp::OnButtonLogin()
 	int length = 0;
 	if (dlg.GetLoginUserName(mUsrName, length) == false)
 	{
-		AfxMessageBox(L"»ñÈ¡ÓÃ»§ÃûÊ§°Ü");
+		AfxMessageBox(L"è·å–ç”¨æˆ·åå¤±è´¥");
 		return;
 	}
 	if (dlg.GetLoginPasswd(mPasswd, length) == false)
 	{
-		AfxMessageBox(L"»ñÈ¡ÃÜÂëÊ§°Ü");
+		AfxMessageBox(L"è·å–å¯†ç å¤±è´¥");
 		return;
 	}
 
 	bool tmpSaveFlag = dlg.GetAutoSaveFlag();
 
 	/*
-	ÅĞ¶ÏÓÃ»§ÃûÊÇ·ñÕıÈ·£¬
+	åˆ¤æ–­ç”¨æˆ·åæ˜¯å¦æ­£ç¡®ï¼Œ
 	
 	*/
 	std::wstring tmp = std::wstring(mUsrName);
@@ -489,7 +489,7 @@ void CQuery_ModuleApp::OnButtonLogin()
 
 void CQuery_ModuleApp::OnUpdateButtonChoose(CCmdUI *pCmdUI)
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî¸üĞÂÓÃ»§½çÃæ´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤æ›´æ–°ç”¨æˆ·ç•Œé¢å¤„ç†ç¨‹åºä»£ç 
 	std::string tmpUserName = m_pParamManager->GetLoginUserName();
 	if ((tmpUserName.size() == 0) ||(wcslen(mUsrName) == 0))
 	{
@@ -500,7 +500,7 @@ void CQuery_ModuleApp::OnUpdateButtonChoose(CCmdUI *pCmdUI)
 
 void CQuery_ModuleApp::OnUpdateButtonBarcode(CCmdUI *pCmdUI)
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî¸üĞÂÓÃ»§½çÃæ´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤æ›´æ–°ç”¨æˆ·ç•Œé¢å¤„ç†ç¨‹åºä»£ç 
 	std::string tmpUserName = m_pParamManager->GetLoginUserName();
 	if ((tmpUserName.size() == 0) || (wcslen(mUsrName) == 0))
 	{
@@ -511,6 +511,6 @@ void CQuery_ModuleApp::OnUpdateButtonBarcode(CCmdUI *pCmdUI)
 
 void CQuery_ModuleApp::OnUpdateButtonLogin(CCmdUI *pCmdUI)
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî¸üĞÂÓÃ»§½çÃæ´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤æ›´æ–°ç”¨æˆ·ç•Œé¢å¤„ç†ç¨‹åºä»£ç 
 
 }

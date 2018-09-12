@@ -34,7 +34,7 @@ public:
 
 
 	/*
-	¶ÁÈ¡ÌõĞÎÂë½Ó¿Ú£¬ÆäËûÔİÊ±Ã»ÓĞÊµÏÖ
+	è¯»å–æ¡å½¢ç æ¥å£ï¼Œå…¶ä»–æš‚æ—¶æ²¡æœ‰å®ç°
 	*/
 	std::string readBarcode();
 
@@ -52,7 +52,7 @@ private:
 	bool init();
 
 	/*
-	Á¬½ÓrfidÍ¨Ñ¶
+	è¿æ¥rfidé€šè®¯
 	*/
 	
 
@@ -68,7 +68,7 @@ private:
 
 
 	/*
-	´Ë²Ù×÷»áÔì³ÉºÍrfid¶Ï¿ªÁ¬½Ó
+	æ­¤æ“ä½œä¼šé€ æˆå’Œrfidæ–­å¼€è¿æ¥
 	*/
 	ErrorType setIPConfig(SOCKET fd, char *Ip, char* Netmask, char *Gateway, bool enableDHCP);
 
@@ -82,7 +82,7 @@ private:
 	ErrorType __communicate(SOCKET fd, char *buffer, int length);
 
 	/*
-	ÌáÈ¡asciiÂëĞÎÊ½µÄÌõĞÎÂë
+	æå–asciiç å½¢å¼çš„æ¡å½¢ç 
 	*/
 	bool parseBarcode(const char* text, char *barcode);
 
@@ -91,7 +91,7 @@ private:
 	char m_szDefaultNetmask[16];	// 255.255.255.0
 	unsigned short m_nDefaultPort;	// 10001
 	char m_szDefaultGatewap[16];	// 192.168.0.1
-	bool m_bDefaultDHCP;			////¹Ø
+	bool m_bDefaultDHCP;			////å…³
 
 	SOCKET m_nSocket;
 
@@ -101,7 +101,7 @@ private:
 	char m_szReadMode[16];
 
 	/*
-	µ±Ç°ÌõĞÎÂë
+	å½“å‰æ¡å½¢ç 
 	*/
 	char m_szCurrentValue[50];
 

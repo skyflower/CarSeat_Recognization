@@ -17,9 +17,9 @@
 
 
 /*
-·¢ËÍÀúÊ·Ê¶±ğ½á¹ûµ½·şÎñÆ÷£¬ÒÔ¼°µ±ÍøÂçÁ¬½ÓÊ§°ÜÊ±£¬±£´æÀúÊ·Ê¶±ğ½á¹û£¬µÈÍøÂç×´Ì¬ºÅµÄÊ±ºò·¢ËÍµ½·şÎñÆ÷
+å‘é€å†å²è¯†åˆ«ç»“æœåˆ°æœåŠ¡å™¨ï¼Œä»¥åŠå½“ç½‘ç»œè¿æ¥å¤±è´¥æ—¶ï¼Œä¿å­˜å†å²è¯†åˆ«ç»“æœï¼Œç­‰ç½‘ç»œçŠ¶æ€å·çš„æ—¶å€™å‘é€åˆ°æœåŠ¡å™¨
 
-Ïà¹ØÅäÖÃÎÄ¼şÔÚconfig.txtÖĞµÄsendFailedRecog×Ö¶Î
+ç›¸å…³é…ç½®æ–‡ä»¶åœ¨config.txtä¸­çš„sendFailedRecogå­—æ®µ
 
 */
 
@@ -78,33 +78,33 @@ private:
 	
 
 	/*
-	function: »ñÈ¡ÍøÂçÌõĞÎÂëµÄ½Ó¿Ú,
+	function: è·å–ç½‘ç»œæ¡å½¢ç çš„æ¥å£,
 
 	parameter:
-		ip: Í¨ĞÅip
-		port: Í¨ĞÅ¶Ë¿Ú
+		ip: é€šä¿¡ip
+		port: é€šä¿¡ç«¯å£
 
 	return:
-		»ñÈ¡µ½µÄÌõĞÎÂë×Ö·û´®£¬½âÎöÖ®Ç°µÄ×Ö·û´®
+		è·å–åˆ°çš„æ¡å½¢ç å­—ç¬¦ä¸²ï¼Œè§£æä¹‹å‰çš„å­—ç¬¦ä¸²
 	*/
 
 	//std::wstring getBarcodeByNet(unsigned int ip, unsigned int port);
 
 	/*
-	function: Æô¶¯Ïà»úÅÄÕÕ³ÌĞò
+	function: å¯åŠ¨ç›¸æœºæ‹ç…§ç¨‹åº
 
 	parameter:
-	lineID		²úÏß±àºÅ
+	lineID		äº§çº¿ç¼–å·
 
-	return:  ·µ»ØÕÕÆ¬Â·¾¶
+	return:  è¿”å›ç…§ç‰‡è·¯å¾„
 	*/
 	//std::string TakeImage(std::string lineID);
 
 	/*
-	function: ½«Í¼Ïñ·¢ËÍµ½Ê¶±ğÄ£¿éÖĞ
+	function: å°†å›¾åƒå‘é€åˆ°è¯†åˆ«æ¨¡å—ä¸­
 
 	parameter:
-		Í¼ÏñÂ·¾¶
+		å›¾åƒè·¯å¾„
 
 	*/
 	//bool __ImageClassify(std::wstring &path);
@@ -113,7 +113,7 @@ private:
 	std::mutex m_MutexMsg;
 	message *m_pMsgQueue;
 
-	//»º´æÃ»ÓĞ³É¹¦·¢ËÍµÄÀúÊ·Ê¶±ğ¼ÇÂ¼
+	//ç¼“å­˜æ²¡æœ‰æˆåŠŸå‘é€çš„å†å²è¯†åˆ«è®°å½•
 	std::vector<message> *m_pMsgList;
 
 

@@ -1,4 +1,4 @@
-// CameraParameter.cpp : ÊµÏÖÎÄ¼ş
+// CameraParameter.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 
-// CCameraParameterDlg ¶Ô»°¿ò
+// CCameraParameterDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CCameraParameterDlg, CDialogEx)
 
@@ -59,12 +59,12 @@ BEGIN_MESSAGE_MAP(CCameraParameterDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CCameraParameterDlg ÏûÏ¢´¦Àí³ÌĞò
+// CCameraParameterDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 void CCameraParameterDlg::OnBnClickedButtonGetParameter()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if (m_pLineCamera == nullptr)
 	{
 		return;
@@ -73,18 +73,18 @@ void CCameraParameterDlg::OnBnClickedButtonGetParameter()
 	m_uExposureTimeLower = m_pLineCamera->GetExposureTimeMin();
 	m_fCameraFPS = m_pLineCamera->GetFrameRate();
 	m_dGainDB = m_pLineCamera->GetGain();
-	UpdateData(FALSE); // false ½«ÊıÖµ´Ó±äÁ¿´«¸ø¿Ø¼ş
+	UpdateData(FALSE); // false å°†æ•°å€¼ä»å˜é‡ä¼ ç»™æ§ä»¶
 }
 
 
 void CCameraParameterDlg::OnBnClickedButtonSetParameter()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	if (m_pLineCamera == nullptr)
 	{
 		return;
 	}
-	UpdateData(TRUE); // false ½«ÊıÖµ´Ó¿Ø¼ş´«¸ø±äÁ¿
+	UpdateData(TRUE); // false å°†æ•°å€¼ä»æ§ä»¶ä¼ ç»™å˜é‡
 	m_pLineCamera->SetExposureTime(m_uExposureTimeUpper, m_uExposureTimeLower);
 	m_pLineCamera->SetFrameRate(m_fCameraFPS);
 	m_pLineCamera->SetGain(m_dGainDB);
@@ -95,10 +95,10 @@ BOOL CCameraParameterDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–
 	UpdateData(FALSE);
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-				  // Òì³£: OCX ÊôĞÔÒ³Ó¦·µ»Ø FALSE
+				  // å¼‚å¸¸: OCX å±æ€§é¡µåº”è¿”å› FALSE
 }

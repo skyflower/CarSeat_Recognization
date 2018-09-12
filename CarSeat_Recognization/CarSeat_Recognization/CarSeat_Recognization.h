@@ -1,14 +1,14 @@
 
-// CarSeat_Recognization.h : PROJECT_NAME Ó¦ÓÃ³ÌĞòµÄÖ÷Í·ÎÄ¼ş
+// CarSeat_Recognization.h : PROJECT_NAME åº”ç”¨ç¨‹åºçš„ä¸»å¤´æ–‡ä»¶
 //
 
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "ÔÚ°üº¬´ËÎÄ¼şÖ®Ç°°üº¬¡°stdafx.h¡±ÒÔÉú³É PCH ÎÄ¼ş"
+	#error "åœ¨åŒ…å«æ­¤æ–‡ä»¶ä¹‹å‰åŒ…å«â€œstdafx.hâ€ä»¥ç”Ÿæˆ PCH æ–‡ä»¶"
 #endif
 
-#include "resource.h"		// Ö÷·ûºÅ
+#include "resource.h"		// ä¸»ç¬¦å·
 #include "./common/ParamManager.h"
 #include "./common/Log.h"
 #include "./network/NetworkTask.h"
@@ -19,7 +19,7 @@
 
 
 // CCarSeat_RecognizationApp: 
-// ÓĞ¹Ø´ËÀàµÄÊµÏÖ£¬Çë²ÎÔÄ CarSeat_Recognization.cpp
+// æœ‰å…³æ­¤ç±»çš„å®ç°ï¼Œè¯·å‚é˜… CarSeat_Recognization.cpp
 //
 
 class CCarSeat_RecognizationApp : public CWinApp
@@ -27,7 +27,7 @@ class CCarSeat_RecognizationApp : public CWinApp
 public:
 	CCarSeat_RecognizationApp();
 
-// ÖØĞ´
+// é‡å†™
 public:
 	virtual BOOL InitInstance();
 
@@ -39,11 +39,11 @@ private:
 	void initSystem();
 
 
-	//Ïú»ÙÏµÍ³
+	//é”€æ¯ç³»ç»Ÿ
 	void DeInitSystem();
 
 
-// ÊµÏÖ
+// å®ç°
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;
 	CNetworkTask *m_pNetworkTask;

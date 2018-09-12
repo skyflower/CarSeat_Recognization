@@ -535,41 +535,41 @@ namespace utils
 	{
 		int histBinNum = 255;
 
-		//Éè¶¨È¡Öµ·¶Î§
+		//è®¾å®šå–å€¼èŒƒå›´
 		float range[] = { 0, 255 };
 		const float* histRange = { range };
 
 		bool uniform = true;
 		bool accumulate = false;
 
-		//ÉùÃ÷Èı¸öÍ¨µÀµÄhistÊı×é
+		//å£°æ˜ä¸‰ä¸ªé€šé“çš„histæ•°ç»„
 		cv::Mat red_hist;
 
-		//¼ÆËãÖ±·½Í¼
+		//è®¡ç®—ç›´æ–¹å›¾
 		cv::calcHist(&srcImage, 1, 0, cv::Mat(), red_hist, 1, &histBinNum, &histRange, uniform, accumulate);
 
-		//´´½¨Ö±·½Í¼´°¿Ú
+		//åˆ›å»ºç›´æ–¹å›¾çª—å£
 		int hist_w = 400;
 		int hist_h = 400;
 		int bin_w = cvRound((double)srcImage.cols / histBinNum);
 
 		cv::Mat histImage(srcImage.cols, srcImage.rows, CV_8UC3, cv::Scalar(0, 0, 0));
 
-		//½«Ö±·½Í¼¹éÒ»»¯µ½·¶Î§[0, histImage.rows]
+		//å°†ç›´æ–¹å›¾å½’ä¸€åŒ–åˆ°èŒƒå›´[0, histImage.rows]
 		normalize(red_hist, red_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat());
 
-		//Ñ­»·»æÖÆÖ±·½Í¼
+		//å¾ªç¯ç»˜åˆ¶ç›´æ–¹å›¾
 		for (int i = 1; i < histBinNum; i++)
 		{
 			cv::line(histImage, cv::Point(bin_w*(i - 1), srcImage.rows - cvRound(red_hist.at<float>(i - 1))),
 				cv::Point(bin_w*(i), srcImage.rows - cvRound(red_hist.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
 		}
 
-		cv::namedWindow("Ô­Í¼Ïñ", cv::WINDOW_AUTOSIZE);
-		cv::imshow("Ô­Í¼Ïñ", srcImage);
+		cv::namedWindow("åŸå›¾åƒ", cv::WINDOW_AUTOSIZE);
+		cv::imshow("åŸå›¾åƒ", srcImage);
 
-		cv::namedWindow("Í¼ÏñÖ±·½Í¼", cv::WINDOW_AUTOSIZE);
-		cv::imshow("Í¼ÏñÖ±·½Í¼", histImage);
+		cv::namedWindow("å›¾åƒç›´æ–¹å›¾", cv::WINDOW_AUTOSIZE);
+		cv::imshow("å›¾åƒç›´æ–¹å›¾", histImage);
 
 		cv::waitKey(0);
 	}
@@ -682,7 +682,7 @@ namespace utils
 	{
 		int histBinNum = 255;
 
-		//Éè¶¨È¡Öµ·¶Î§
+		//è®¾å®šå–å€¼èŒƒå›´
 		float range[] = { minPixelValue, maxPixelValue };
 		const float* histRange = { range };
 
@@ -691,7 +691,7 @@ namespace utils
 
 		cv::Mat srcGrayHist;
 
-		//¼ÆËãÖ±·½Í¼
+		//è®¡ç®—ç›´æ–¹å›¾
 		cv::calcHist(&img, 1, 0, cv::Mat(), srcGrayHist, 1, &histBinNum, &histRange, uniform, accumulate);
 
 		double srcAvgValue = 0;

@@ -14,27 +14,27 @@ public:
 	
 
 	/*
-	ÌõĞÎÂë×ª»»½Ó¿Ú£¬½«ÆäÖĞÓĞĞ§µÄ6-8Î»ÌáÈ¡³öÀ´
+	æ¡å½¢ç è½¬æ¢æ¥å£ï¼Œå°†å…¶ä¸­æœ‰æ•ˆçš„6-8ä½æå–å‡ºæ¥
 	*/
 	std::string GetInternalTypeByBarcode(std::string barcode);
 
 	/*
-	¸ù¾İ´ÓÊ¶±ğÄ£¿éÄÃµ½µÄÀàĞÍ£¬×ª»»³ÉÄÚ²¿ÀàĞÍ
+	æ ¹æ®ä»è¯†åˆ«æ¨¡å—æ‹¿åˆ°çš„ç±»å‹ï¼Œè½¬æ¢æˆå†…éƒ¨ç±»å‹
 	*/
 	std::string GetInternalTypeByClassifyType(std::string type);
 	
 	/*
-	¸ù¾İ´ÓrfidÄÃµ½µÄÌõĞÎÂë×ª»»³ÉÍâ²¿ÀàĞÍ£¬·½±ãÓÃ»§²é¿´µÄÀàĞÍ
+	æ ¹æ®ä»rfidæ‹¿åˆ°çš„æ¡å½¢ç è½¬æ¢æˆå¤–éƒ¨ç±»å‹ï¼Œæ–¹ä¾¿ç”¨æˆ·æŸ¥çœ‹çš„ç±»å‹
 	*/
 	std::string GetExternalTypeByBarcode(std::string barcode);
 	
 	/*
-	¸ù¾İÊ¶±ğÄ£¿éµÄ·ÖÀàÀàĞÍ£¬×ª»»³É·½±ãÓÃ»§²é¿´µÄÍâ²¿ÀàĞÍ
+	æ ¹æ®è¯†åˆ«æ¨¡å—çš„åˆ†ç±»ç±»å‹ï¼Œè½¬æ¢æˆæ–¹ä¾¿ç”¨æˆ·æŸ¥çœ‹çš„å¤–éƒ¨ç±»å‹
 	*/
 	std::string GetExternalTypeByClassifyType(std::string classifyType);
 	
 	/*
-	¸ù¾İÍâ²¿ÀàĞÍ×¥»¯³ÉÊ¶±ğÄ£¿éµÄ·ÖÀàÀàĞÍ
+	æ ¹æ®å¤–éƒ¨ç±»å‹æŠ“åŒ–æˆè¯†åˆ«æ¨¡å—çš„åˆ†ç±»ç±»å‹
 	*/
 	std::string GetClassifyTypeByExternal(std::string externalType);
 	
@@ -55,7 +55,7 @@ public:
 	int GetExposureTimeMax();
 	int GetExposureTimeMin();
 
-	/*  not implement£¬´Ó·şÎñÆ÷·¢¹ıÀ´µÄxml£¬¸üĞÂÌõĞÎÂë¶ÔÕÕ±í */
+	/*  not implementï¼Œä»æœåŠ¡å™¨å‘è¿‡æ¥çš„xmlï¼Œæ›´æ–°æ¡å½¢ç å¯¹ç…§è¡¨ */
 	void UpdateBarcode(const char *xmlContent, size_t len);
 
 	
@@ -76,12 +76,12 @@ private:
 	bool m_bLoginAutoSave;
 	
 	/*
-	ÄÚ²¿ÀàĞÍ×ª»»Íâ²¿ÀàĞÍµÄÌõĞÎÂë¶ÔÕÕ±í,ÌõĞÎÂëÎ»½ØÈ¡ÆäÖĞÓĞĞ§×Ö¶Î×é³É
+	å†…éƒ¨ç±»å‹è½¬æ¢å¤–éƒ¨ç±»å‹çš„æ¡å½¢ç å¯¹ç…§è¡¨,æ¡å½¢ç ä½æˆªå–å…¶ä¸­æœ‰æ•ˆå­—æ®µç»„æˆ
 	*/
 	std::unordered_map<std::string, std::string> *m_pBarcode;
 	
 	/*
-	Ê¶±ğÄ£¿éµÄÀàĞÍ×ª»¯³ÉÄÚ²¿ÀàĞÍµÄ¶ÔÕÕ±í
+	è¯†åˆ«æ¨¡å—çš„ç±»å‹è½¬åŒ–æˆå†…éƒ¨ç±»å‹çš„å¯¹ç…§è¡¨
 	*/
 	std::unordered_map<std::string, std::string> *m_pClassifyType;
 

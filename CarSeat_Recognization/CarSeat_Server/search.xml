@@ -1,0 +1,9 @@
+<?xml version=”1.0” encoding=”gbk”?>
+<search>
+<ip=”1.1.1.1” usr=”abc” passwd”” time=”20180710”/>
+<timePolicy control=”0/1” startTime=”20171012.131430” endTime=” 20171212.131430”/>
+<linePolicy control=”0/1” startLine=”1” endLine=”4”/>
+<barcodePolicy control=”0/1” startBarcode=”202150” endBarcode=”222150”/>
+<typePolicy control=”0/1” type=” K215_black_pvc_leather”/>
+<methodPolicy control=”0/1” method=”auto/manual”
+</search>

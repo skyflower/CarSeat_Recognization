@@ -91,18 +91,18 @@ bool CLabelManager::init()
 	char tmpValue[MAX_USR_NAME_AND_PASSWD] = { 0 };
 	memset(tmpValue, 0, sizeof(tmpValue));
 
-	if (true == utils::getValueByName(content, "LoginUsrName", tmpValue))
+	if (true == utils::getValueByName(content, "LoginUsrName", m_strLoginName))
 	{
 		
-		memcpy(m_strLoginName, tmpValue, strlen(tmpValue));
+		//memcpy(m_strLoginName, tmpValue, strlen(tmpValue));
 		
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
-	if (true == utils::getValueByName(content, "LoginPasswd", tmpValue))
+	if (true == utils::getValueByName(content, "LoginPasswd", m_strLoginPasswd))
 	{
 		
-		memcpy(m_strLoginPasswd, tmpValue, strlen(tmpValue));
+		//memcpy(m_strLoginPasswd, tmpValue, strlen(tmpValue));
 		
 	}
 
@@ -381,7 +381,7 @@ void CLabelManager::UpdateBarcode(const char *xmlContent, size_t len)
 std::string CLabelManager::GetExternalTypeByBarcode(std::string barcode)
 {
 	/*
-	½ØÈ¡ÖĞ¼äµÄ6-8Î»×÷ÎªÌõĞÎÂëÀàĞÍ
+	æˆªå–ä¸­é—´çš„6-8ä½ä½œä¸ºæ¡å½¢ç ç±»å‹
 	*/
 	
 	std::string tmpInternalType = GetInternalTypeByBarcode(barcode);

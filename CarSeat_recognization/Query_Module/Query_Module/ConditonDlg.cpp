@@ -1,4 +1,4 @@
-// ConditonDlg.cpp : ÊµÏÖÎÄ¼ş
+// ConditonDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -10,7 +10,7 @@
 #include "./common/utils.h"
 
 
-// CConditonDlg ¶Ô»°¿ò
+// CConditonDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CConditonDlg, CDialogEx)
 
@@ -57,25 +57,25 @@ BEGIN_MESSAGE_MAP(CConditonDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CConditonDlg ÏûÏ¢´¦Àí³ÌĞò
+// CConditonDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 
 void CConditonDlg::OnBnClickedOk()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	memset(&mFilter, 0, sizeof(CConditionFilter));
 
 	wchar_t text[256];
 
-	//ÈÕÆÚ¿ªÊ¼
+	//æ—¥æœŸå¼€å§‹
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_BEGIN, text, sizeof(text));
 	int tmpLength = sizeof(mFilter.mDateBeign);
 	utils::WCharToChar(text, mFilter.mDateBeign, &tmpLength);
 	//memcpy(mFilter.mDateBeign, text, wcslen(text));
 
-	//ÈÕÆÚ½áÊø
+	//æ—¥æœŸç»“æŸ
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mDateEnd);
@@ -83,7 +83,7 @@ void CConditonDlg::OnBnClickedOk()
 	//memcpy(mFilter.mDateEnd, text, wcslen(text));
 
 
-	//Ê±¼ä¿ªÊ¼
+	//æ—¶é—´å¼€å§‹
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_BEGIN, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mTimeBegin);
@@ -91,7 +91,7 @@ void CConditonDlg::OnBnClickedOk()
 
 	//memcpy(mFilter.mTimeBegin, text, wcslen(text));
 
-	//Ê±¼ä½áÊø
+	//æ—¶é—´ç»“æŸ
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mTimeEnd);
@@ -100,7 +100,7 @@ void CConditonDlg::OnBnClickedOk()
 	//memcpy(mFilter.mTimeEnd, text, wcslen(text));
 
 
-	//²úÏß¿ªÊ¼
+	//äº§çº¿å¼€å§‹
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_LINE_BEGIN, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mLineBegin);
@@ -108,7 +108,7 @@ void CConditonDlg::OnBnClickedOk()
 
 	//memcpy(mFilter.mLineBegin, text, wcslen(text));
 
-	//²úÏß½áÊø
+	//äº§çº¿ç»“æŸ
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_LINE_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mLineEnd);
@@ -116,7 +116,7 @@ void CConditonDlg::OnBnClickedOk()
 
 	//memcpy(mFilter.mLineEnd, text, wcslen(text));
 
-	//ÌõĞÎÂë¿ªÊ¼
+	//æ¡å½¢ç å¼€å§‹
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_BARCODE_BEGIN, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mBarcodeBegin);
@@ -124,7 +124,7 @@ void CConditonDlg::OnBnClickedOk()
 
 	//memcpy(mFilter.mBarcodeBegin, text, wcslen(text));
 
-	//ÌõĞÎÂë½áÊø
+	//æ¡å½¢ç ç»“æŸ
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_BARCODE_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mBarcodeEnd);
@@ -132,7 +132,7 @@ void CConditonDlg::OnBnClickedOk()
 
 	//memcpy(mFilter.mBarcodeEnd, text, wcslen(text));
 
-	//×ùÒÎÀàĞÍ
+	//åº§æ¤…ç±»å‹
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_SEAT_TYPE, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mSeatType);
@@ -140,7 +140,7 @@ void CConditonDlg::OnBnClickedOk()
 
 	//memcpy(mFilter.mSeatType, text, wcslen(text));
 
-	//Ê¶±ğÀàĞÍ
+	//è¯†åˆ«ç±»å‹
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_METHOD_TYPE, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mMethodType);
@@ -156,7 +156,7 @@ BOOL CConditonDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–
 	CParamManager *pParamManager = CParamManager::GetInstance();
 	if (pParamManager == nullptr)
 	{
@@ -203,14 +203,14 @@ BOOL CConditonDlg::OnInitDialog()
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-				  // Òì³£: OCX ÊôĞÔÒ³Ó¦·µ»Ø FALSE
+				  // å¼‚å¸¸: OCX å±æ€§é¡µåº”è¿”å› FALSE
 }
 
 
 void CConditonDlg::OnDatetimechangeDateBegin(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 
 	
 	SYSTEMTIME curTime;
@@ -241,7 +241,7 @@ void CConditonDlg::OnDatetimechangeDateBegin(NMHDR *pNMHDR, LRESULT *pResult)
 void CConditonDlg::OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	*pResult = 0;
 
 	SYSTEMTIME curTime;
@@ -270,7 +270,7 @@ void CConditonDlg::OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult)
 void CConditonDlg::OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	*pResult = 0;
 
 	SYSTEMTIME curTime;
@@ -299,7 +299,7 @@ void CConditonDlg::OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult)
 void CConditonDlg::OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	*pResult = 0;
 
 	SYSTEMTIME curTime;
@@ -326,7 +326,7 @@ void CConditonDlg::OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CConditonDlg::OnSetfocusLineEnd()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	const size_t length = 20;
 	wchar_t begin[20] = { 0 };
 	int sel = mBarcodeBegin.GetCurSel();
@@ -346,7 +346,7 @@ void CConditonDlg::OnSetfocusLineEnd()
 
 void CConditonDlg::OnSetfocusLineBegin()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	const size_t length = 20;
 	wchar_t begin[20] = { 0 };
 	mBarcodeBegin.GetWindowTextW(begin, length);
@@ -364,7 +364,7 @@ void CConditonDlg::OnSetfocusLineBegin()
 
 void CConditonDlg::OnSelchangeLineBegin()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	const size_t length = 20;
 	wchar_t begin[20] = { 0 };
 	int sel = mBarcodeBegin.GetCurSel();
@@ -380,4 +380,3 @@ void CConditonDlg::OnSelchangeLineBegin()
 		mBarcodeBegin.SetCurSel(sel);
 	}
 }
-

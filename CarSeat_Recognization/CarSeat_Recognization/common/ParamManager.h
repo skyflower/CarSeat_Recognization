@@ -5,8 +5,8 @@
 
 /*
 
-½âÎö²ÎÊıÎÄ¼şconfig.txt
-´ËÎÄ¼şÖĞµÄ²ÎÊı²»»á¶¯Ì¬¸Ä±ä
+è§£æå‚æ•°æ–‡ä»¶config.txt
+æ­¤æ–‡ä»¶ä¸­çš„å‚æ•°ä¸ä¼šåŠ¨æ€æ”¹å˜
 
 */
 
@@ -42,7 +42,7 @@ public:
 	const char* GetCameraName() const;
 	const char* GetPatternImagePath() const;
 
-	//ÁÙÊ±´æ´¢Ê¶±ğÄ£¿éµÄÍ¼ÏñÂ·¾¶
+	//ä¸´æ—¶å­˜å‚¨è¯†åˆ«æ¨¡å—çš„å›¾åƒè·¯å¾„
 	const char* GetCacheImagePath() const;
 
 	size_t GetBarcodeTime() const;
@@ -65,64 +65,64 @@ private:
 
 	unsigned int __auxLocalIP();
 
-	// serverip£¬ ·şÎñÆ÷Ip
+	// serveripï¼Œ æœåŠ¡å™¨Ip
 	unsigned int m_nServerIp;
 
-	// serverport ·şÎñÆ÷Í¨ĞÅ¶Ë¿ÚºÅ
+	// serverport æœåŠ¡å™¨é€šä¿¡ç«¯å£å·
 	int m_nServerPort;
 
-	//·¢ËÍÍ¼ÏñÊı¾İµÄ¶Ë¿ÚºÅ
+	//å‘é€å›¾åƒæ•°æ®çš„ç«¯å£å·
 	int m_nServerImagePort;
 
-	// ±¾»úºÍ·şÎñÆ÷Í¨ĞÅµÄIp
+	// æœ¬æœºå’ŒæœåŠ¡å™¨é€šä¿¡çš„Ip
 	unsigned int m_nLocalIp;
 
-	// ºÍ·şÎñÆ÷²âÊÔÁ¬Í¨µÄ·şÎñÆ÷¶Ë¿ÚºÅ
+	// å’ŒæœåŠ¡å™¨æµ‹è¯•è¿é€šçš„æœåŠ¡å™¨ç«¯å£å·
 	int m_nTestServerPort;
 
-	// ºÍ·şÎñÆ÷²âÊÔÁ¬Í¨µÄ¿Í»§¶Ë¶Ë¿ÚºÅ
+	// å’ŒæœåŠ¡å™¨æµ‹è¯•è¿é€šçš„å®¢æˆ·ç«¯ç«¯å£å·
 	int m_nTestClientPort;
 
-	// »ñÈ¡ÌõĞÎÂëµÄip
+	// è·å–æ¡å½¢ç çš„ip
 	unsigned int m_nBarcodeIp;
 
-	//»ñÈ¡ÌõĞÎÂëµÄ¶Ë¿ÚºÅ
+	//è·å–æ¡å½¢ç çš„ç«¯å£å·
 	unsigned int m_nBarcodePort;
 
 	char m_szBarcodeResetParam[100];
 
 
-	//´Ó»ñÈ¡ÌõĞÎÂëµ½ÅÄÕÕµÄÑÓ³ÙÊ±¼ä
+	//ä»è·å–æ¡å½¢ç åˆ°æ‹ç…§çš„å»¶è¿Ÿæ—¶é—´
 	size_t m_nBarcodeTime;
 
-	// kepServerÄ£¿éÍ¨ĞÅipµØÖ·
+	// kepServeræ¨¡å—é€šä¿¡ipåœ°å€
 	unsigned int m_nKepServerIp;
 
-	// kepServerÄ£¿éÍ¨ĞÅ¶Ë¿Ú
+	// kepServeræ¨¡å—é€šä¿¡ç«¯å£
 	unsigned int m_nKepServerPort;
 
-	//ÅÄÕÕÍ¼Ïñ±¾µØ±£´æÂ·¾¶
+	//æ‹ç…§å›¾åƒæœ¬åœ°ä¿å­˜è·¯å¾„
 	char m_szImagePath[256];
 
-	//Ä£°åÍ¼ÏñÂ·¾¶
+	//æ¨¡æ¿å›¾åƒè·¯å¾„
 	char m_szPatternImagePath[256];
 
-	//´«ËÍÊ§°ÜµÄÎÄ¼şÂ·¾¶
+	//ä¼ é€å¤±è´¥çš„æ–‡ä»¶è·¯å¾„
 	char m_szSendFailedCache[256];
 
-	//²úÏßÃû³Æ±àºÅ
+	//äº§çº¿åç§°ç¼–å·
 	char m_szLineName[20];
 
-	//Ïà»úÃû×Ö»òÕßĞòÁĞºÅµÈ
+	//ç›¸æœºåå­—æˆ–è€…åºåˆ—å·ç­‰
 	char m_szCameraName[100];
 
-	//Ê¶±ğÄ£¿éÁÙÊ±´æ´¢µÄÍ¼ÏñÂ·¾¶
+	//è¯†åˆ«æ¨¡å—ä¸´æ—¶å­˜å‚¨çš„å›¾åƒè·¯å¾„
 	char m_szCacheImagePath[256];
 
-	// ±¾»úÃû
+	// æœ¬æœºå
 	std::string m_strLocalName;
 
-	//ftpÓÃ»§ÃûÃÜÂëÒÔ¼°Í¼ÏñµÄ´æ´¢Â·¾¶
+	//ftpç”¨æˆ·åå¯†ç ä»¥åŠå›¾åƒçš„å­˜å‚¨è·¯å¾„
 	//std::vector<std::wstring> *m_pFtp;
 
 	//graph
@@ -130,7 +130,7 @@ private:
 
 	std::string m_szLabelFile;
 
-	//²úÏßºÍÏà»úµÄ¶ÔÓ¦¹ØÏµ
+	//äº§çº¿å’Œç›¸æœºçš„å¯¹åº”å…³ç³»
 	std::unordered_map<std::string, std::string> *m_pLineCamera;
 };
 

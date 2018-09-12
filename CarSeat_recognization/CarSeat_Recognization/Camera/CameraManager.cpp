@@ -8,7 +8,6 @@
 #include "../common/utils.h"
 
 
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -43,7 +42,7 @@ CCameraManager::~CCameraManager()
 }
 
 
-// ch:°´ÏÂ²éÕÒÉè±¸°´Å¥:Ã¶¾Ù | en:Click Find Device button:Enumeration 
+// ch:æŒ‰ä¸‹æŸ¥æ‰¾è®¾å¤‡æŒ‰é’®:æšä¸¾ | en:Click Find Device button:Enumeration 
 bool  CCameraManager::EnumCamera()
 {
 	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
@@ -52,10 +51,10 @@ bool  CCameraManager::EnumCamera()
 		return false;
 	}
     CString strMsg;
-    // ch:³õÊ¼»¯Éè±¸ĞÅÏ¢ÁĞ±í | en:Device Information List Initialization
+    // ch:åˆå§‹åŒ–è®¾å¤‡ä¿¡æ¯åˆ—è¡¨ | en:Device Information List Initialization
     memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
 
-    // ch:Ã¶¾Ù×ÓÍøÄÚËùÓĞÉè±¸ | en:Enumerate all devices within subnet
+    // ch:æšä¸¾å­ç½‘å†…æ‰€æœ‰è®¾å¤‡ | en:Enumerate all devices within subnet
     int nRet = CCamera::EnumDevices(&m_stDevList);
     if (MV_OK != nRet)
     {
@@ -69,7 +68,7 @@ bool  CCameraManager::EnumCamera()
 
 	
 
-    // ch:½«Öµ¼ÓÈëµ½ĞÅÏ¢ÁĞ±í¿òÖĞ²¢ÏÔÊ¾³öÀ´ | en:Add value to the information list box and display
+    // ch:å°†å€¼åŠ å…¥åˆ°ä¿¡æ¯åˆ—è¡¨æ¡†ä¸­å¹¶æ˜¾ç¤ºå‡ºæ¥ | en:Add value to the information list box and display
     unsigned int i = 0;
     int nIp1 = 0, nIp2 = 0, nIp3 = 0, nIp4 = 0;
     for (i = 0; i < m_stDevList.nDeviceNum; i++)

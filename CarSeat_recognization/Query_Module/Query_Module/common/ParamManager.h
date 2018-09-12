@@ -6,8 +6,8 @@
 
 /*
 
-½âÎö²ÎÊıÎÄ¼şconfig.txt
-´ËÎÄ¼şÖĞµÄ²ÎÊı²»»á¶¯Ì¬¸Ä±ä
+è§£æå‚æ•°æ–‡ä»¶config.txt
+æ­¤æ–‡ä»¶ä¸­çš„å‚æ•°ä¸ä¼šåŠ¨æ€æ”¹å˜
 
 */
 
@@ -51,28 +51,28 @@ private:
 
 	char m_szConfigFile[MAX_CHAR_LENGTH];
 
-	//×Ô¶¯±£´æ±êÖ¾
+	//è‡ªåŠ¨ä¿å­˜æ ‡å¿—
 	bool mAutoSaveFlag;
 
-	// serverip£¬ ·şÎñÆ÷Ip
+	// serveripï¼Œ æœåŠ¡å™¨Ip
 	size_t m_nServerIp;
 
-	// serverport ·şÎñÆ÷Í¨ĞÅ¶Ë¿ÚºÅ
+	// serverport æœåŠ¡å™¨é€šä¿¡ç«¯å£å·
 	int m_nServerPort;
 
-	// ±¾»úºÍ·şÎñÆ÷Í¨ĞÅµÄIp
+	// æœ¬æœºå’ŒæœåŠ¡å™¨é€šä¿¡çš„Ip
 	size_t m_nLocalIp;
 
-	// ±¾»úÃû
+	// æœ¬æœºå
 	std::string m_strLocalName;
 
 	std::string m_strUsrName;
 	std::string m_strPasswd;
 
-	//ftpÓÃ»§ÃûÃÜÂëÒÔ¼°Í¼ÏñµÄ´æ´¢Â·¾¶
+	//ftpç”¨æˆ·åå¯†ç ä»¥åŠå›¾åƒçš„å­˜å‚¨è·¯å¾„
 	std::vector<std::string> *m_pFtp;
 
-	//²úÏß±àºÅ
+	//äº§çº¿ç¼–å·
 	std::vector<std::string> *m_pLineVec;
 
 	//methodType

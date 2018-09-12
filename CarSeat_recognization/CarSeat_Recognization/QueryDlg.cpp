@@ -1,4 +1,4 @@
-// QueryDlg.cpp : ÊµÏÖÎÄ¼ş
+// QueryDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -8,7 +8,7 @@
 #include "./common/utils.h"
 
 
-// CQueryDlg ¶Ô»°¿ò
+// CQueryDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CQueryDlg, CDialogEx)
 
@@ -41,14 +41,14 @@ BEGIN_MESSAGE_MAP(CQueryDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CQueryDlg ÏûÏ¢´¦Àí³ÌĞò
+// CQueryDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 void CQueryDlg::OnBnClickedButtonQuery()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	//CString tmp;
-	UpdateData(TRUE);	//´Ó¿Õ¼ä´«¸ø±äÁ¿
+	UpdateData(TRUE);	//ä»ç©ºé—´ä¼ ç»™å˜é‡
 	//m_szQueryBarcode
 	if (m_pRecogManager != nullptr)
 	{
@@ -66,7 +66,7 @@ void CQueryDlg::OnBnClickedButtonQuery()
 
 		if (p == nullptr)
 		{
-			AfxMessageBox(L"ÇëÊäÈëÕıÈ·µÄÌõĞÎÂë");
+			AfxMessageBox(L"è¯·è¾“å…¥æ­£ç¡®çš„æ¡å½¢ç ");
 			return;
 		}
 
@@ -77,7 +77,7 @@ void CQueryDlg::OnBnClickedButtonQuery()
 			return;
 		}
 
-		m_szQueryResult.Format(L"Ê±¼ä:%s\nÌõĞÎÂë:%s\nÌõĞÎÂëÀàĞÍ:%s\nÊ¶±ğÀàĞÍ%s\n²úÏß¹ÜÀíÔ±£º%s\n²úÏß±àºÅ:%s",
+		m_szQueryResult.Format(L"æ—¶é—´:%s\næ¡å½¢ç :%s\næ¡å½¢ç ç±»å‹:%s\nè¯†åˆ«ç±»å‹%s\näº§çº¿ç®¡ç†å‘˜ï¼š%s\näº§çº¿ç¼–å·:%s",
 			wRecog.m_szTime, wRecog.m_szBarcode, wRecog.m_szTypeByBarcode, \
 			wRecog.m_szTypeByRecog, wRecog.m_szUsrName, wRecog.m_szLineName);
 
@@ -91,7 +91,7 @@ void CQueryDlg::OnBnClickedButtonQuery()
 			HRESULT ret = m_Image.Load(wRecog.m_szImagePath);
 			if (ret != 0)
 			{
-				AfxMessageBox(L"Í¼ÏñÂ·¾¶²»ÕıÈ·");
+				AfxMessageBox(L"å›¾åƒè·¯å¾„ä¸æ­£ç¡®");
 			}
 			else
 			{
@@ -117,11 +117,11 @@ BOOL CQueryDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–
 	m_ImageDisplay.ModifyStyle(0xF, SS_BITMAP);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-				  // Òì³£: OCX ÊôĞÔÒ³Ó¦·µ»Ø FALSE
+				  // å¼‚å¸¸: OCX å±æ€§é¡µåº”è¿”å› FALSE
 }
 
 

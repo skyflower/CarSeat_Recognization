@@ -1,5 +1,5 @@
 
-// CarSeat_RecognizationDlg.h : Í·ÎÄ¼ş
+// CarSeat_RecognizationDlg.h : å¤´æ–‡ä»¶
 //
 
 #pragma once
@@ -13,27 +13,27 @@
 #include "./network/KepServerSocket.h"
 
 
-// CCarSeat_RecognizationDlg ¶Ô»°¿ò
+// CCarSeat_RecognizationDlg å¯¹è¯æ¡†
 class CCarSeat_RecognizationDlg : public CDHtmlDialog
 {
-// ¹¹Ôì
+// æ„é€ 
 public:
-	CCarSeat_RecognizationDlg(CWnd* pParent = NULL);	// ±ê×¼¹¹Ôìº¯Êı
+	CCarSeat_RecognizationDlg(CWnd* pParent = NULL);	// æ ‡å‡†æ„é€ å‡½æ•°
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_CARSEAT_RECOGNIZATION_DIALOG, IDH = IDR_HTML_CARSEAT_RECOGNIZATION_DIALOG };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV æ”¯æŒ
 
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	HICON m_hIcon;
 
-	// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
+	// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
@@ -53,7 +53,7 @@ private:
 
 	CStatic m_barCode;
 	
-	// ÏÔÊ¾Í³¼Æ½á¹û£¬°üÀ¨³É¹¦´ÎÊı£¬Ê§°Ü´ÎÊı£¬³É¹¦ÂÊ
+	// æ˜¾ç¤ºç»Ÿè®¡ç»“æœï¼ŒåŒ…æ‹¬æˆåŠŸæ¬¡æ•°ï¼Œå¤±è´¥æ¬¡æ•°ï¼ŒæˆåŠŸç‡
 	CStatic m_RegRatio;
 
 	size_t m_nSuccessCount;
@@ -88,14 +88,14 @@ private:
 	void CheckAndUpdate(std::string barcode, std::string type, std::string tmppath);
 	
 	/*
-	³õÊ¼»¯Ïà»úÄ£¿é
+	åˆå§‹åŒ–ç›¸æœºæ¨¡å—
 	*/
 	void initCameraModule();
 
 	SIZE adjustRecSize(SIZE imageSize, SIZE recSize);
 
 	/*
-	µ÷Õû¶Ô»°¿ò¿Ø¼şÎ»ÖÃ,°üÀ¨ÕÕÆ¬ÏÔÊ¾ÒÔ¼°¾²Ì¬ÎÄ±¾¿òµÄÎ»ÖÃµ÷ÕûµÈ
+	è°ƒæ•´å¯¹è¯æ¡†æ§ä»¶ä½ç½®,åŒ…æ‹¬ç…§ç‰‡æ˜¾ç¤ºä»¥åŠé™æ€æ–‡æœ¬æ¡†çš„ä½ç½®è°ƒæ•´ç­‰
 	*/
 	void adjustControlLocate(int width, int height);
 
@@ -103,7 +103,7 @@ private:
 
 
 
-	// ÓÃÓÚ²âÊÔxmlµÄ½âÎö,
+	// ç”¨äºæµ‹è¯•xmlçš„è§£æ,
 	void testXML();
 
 	std::wstring testGenerateBarcode();
@@ -115,7 +115,7 @@ public:
 	afx_msg void OnUsrinput();
 
 	/*
-	ui½çÃæË¢ĞÂÏß³Ì
+	uiç•Œé¢åˆ·æ–°çº¿ç¨‹
 	*/
 	void run();
 

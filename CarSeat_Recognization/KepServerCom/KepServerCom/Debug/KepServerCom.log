@@ -1,0 +1,4 @@
+﻿  communication.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\kepservercom\kepservercom\communication.cpp(177): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+  KepServerCom.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\KepServerCom\Debug\KepServerCom.exe
+  KepServerCom.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\KepServerCom\Debug\KepServerCom.pdb (Partial PDB)

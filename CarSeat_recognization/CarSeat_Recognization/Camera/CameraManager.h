@@ -28,7 +28,7 @@ public:
 	void testPrint();
 
 private:
-    MV_CC_DEVICE_INFO_LIST m_stDevList;         // ch:Éè±¸ĞÅÏ¢ÁĞ±í½á¹¹Ìå±äÁ¿£¬ÓÃÀ´´æ´¢Éè±¸ÁĞ±í
+    MV_CC_DEVICE_INFO_LIST m_stDevList;         // ch:è®¾å¤‡ä¿¡æ¯åˆ—è¡¨ç»“æ„ä½“å˜é‡ï¼Œç”¨æ¥å­˜å‚¨è®¾å¤‡åˆ—è¡¨
                                                
 	CCameraManager();	// Standard constructor
 
@@ -36,7 +36,7 @@ private:
 
 	static std::mutex m_Mutex;
 public:
-    /*ch:³õÊ¼»¯ | en:Initialization*/
-    bool EnumCamera();               // ch:²éÕÒÉè±¸ | en:Find Devices
+    /*ch:åˆå§‹åŒ– | en:Initialization*/
+    bool EnumCamera();               // ch:æŸ¥æ‰¾è®¾å¤‡ | en:Find Devices
     
 };

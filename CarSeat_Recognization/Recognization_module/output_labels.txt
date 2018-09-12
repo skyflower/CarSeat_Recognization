@@ -1,0 +1,9 @@
+d2_black_pvc_leather
+k216_ecru_pvc_diamond_cloth
+k216_black_pvc_diamond_cloth
+d2_black_pvc_hole_cloth
+k216_black_pvc_leather
+k215_ecru_pvc_buckskin
+k215_ecru_pvc_leather
+k215_black_pvc_leather
+d2_black_pvc_line_cloth

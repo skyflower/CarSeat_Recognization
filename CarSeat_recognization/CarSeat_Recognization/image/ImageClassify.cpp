@@ -207,7 +207,7 @@ std::string CImageClassify::compute(const char *filePath)
 	}
 
 	/*
-	°´ÕÕÃüÃû·½Ê½½ØÈ¡£¬*_up, *_down£¬Ç°ÃæµÄÕûÌåÀàĞÍ
+	æŒ‰ç…§å‘½åæ–¹å¼æˆªå–ï¼Œ*_up, *_downï¼Œå‰é¢çš„æ•´ä½“ç±»å‹
 	*/
 	size_t tmpDownLength = strlen(tmpDownType);
 	size_t tmpUpLength = strlen(tmpUpType);

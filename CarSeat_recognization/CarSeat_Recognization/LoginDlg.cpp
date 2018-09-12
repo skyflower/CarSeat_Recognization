@@ -1,4 +1,4 @@
-// LoginDlg.cpp : ÊµÏÖÎÄ¼ş
+// LoginDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -9,7 +9,7 @@
 #include "./common/ParamManager.h"
 
 
-// CLoginDlg ¶Ô»°¿ò
+// CLoginDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CLoginDlg, CDialogEx)
 
@@ -68,7 +68,7 @@ BEGIN_MESSAGE_MAP(CLoginDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CLoginDlg ÏûÏ¢´¦Àí³ÌĞò
+// CLoginDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 bool CLoginDlg::CheckUsrNameAndPasswd()
@@ -78,7 +78,7 @@ bool CLoginDlg::CheckUsrNameAndPasswd()
 
 void CLoginDlg::OnBnClickedOk()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	UpdateData(TRUE);
 	if (CheckUsrNameAndPasswd() == false)
 	{
@@ -125,7 +125,7 @@ BOOL CLoginDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–
 	if (m_pLabelManager != nullptr)
 	{
 		const char *tmpPointer = m_pLabelManager->GetLoginUsrName();
@@ -156,9 +156,9 @@ BOOL CLoginDlg::OnInitDialog()
 		bool tmpAutoSave = m_pLabelManager->GetLoginAutoSave();
 
 		m_bAutoSaveFlag = (tmpAutoSave == true) ? TRUE : FALSE;
-		UpdateData(FALSE); // false ½«ÊıÖµ´Ó±äÁ¿´«¸ø¿Ø¼ş
+		UpdateData(FALSE); // false å°†æ•°å€¼ä»å˜é‡ä¼ ç»™æ§ä»¶
 	}
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-				  // Òì³£: OCX ÊôĞÔÒ³Ó¦·µ»Ø FALSE
+				  // å¼‚å¸¸: OCX å±æ€§é¡µåº”è¿”å› FALSE
 }

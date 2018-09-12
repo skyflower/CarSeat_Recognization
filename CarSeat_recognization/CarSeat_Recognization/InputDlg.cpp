@@ -1,4 +1,4 @@
-// InputDlg.cpp : ÊµÏÖÎÄ¼ş
+// InputDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -9,7 +9,7 @@
 #include <io.h>
 
 
-// CInputDlg ¶Ô»°¿ò
+// CInputDlg å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CInputDlg, CDialogEx)
 
@@ -60,7 +60,7 @@ BEGIN_MESSAGE_MAP(CInputDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CInputDlg ÏûÏ¢´¦Àí³ÌĞò
+// CInputDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 void CInputDlg::displayImage(CImage * pImage, CStatic * pStatic)
@@ -112,7 +112,7 @@ BOOL CInputDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–
 	/*CParamManager *pManager = CParamManager::GetInstance();
 	if (pManager == nullptr)
 	{
@@ -135,7 +135,7 @@ BOOL CInputDlg::OnInitDialog()
 			pCombo->AddString(tmpStr.c_str());
 		}
 	}
-	m_StTestImage.ModifyStyle(0xF, SS_BITMAP);//ÉèÖÃ¾²Ì¬¿Ø¼şµÄÑùÊ½£¬Ê¹µÃËü¿ÉÒÔÊ¹ÓÃÎ»Í¼
+	m_StTestImage.ModifyStyle(0xF, SS_BITMAP);//è®¾ç½®é™æ€æ§ä»¶çš„æ ·å¼ï¼Œä½¿å¾—å®ƒå¯ä»¥ä½¿ç”¨ä½å›¾
 	m_StPatternImage.ModifyStyle(0xF, SS_BITMAP);
 
 	//m_hDC;
@@ -187,7 +187,7 @@ BOOL CInputDlg::OnInitDialog()
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
-				  // Òì³£: OCX ÊôĞÔÒ³Ó¦·µ»Ø FALSE
+				  // å¼‚å¸¸: OCX å±æ€§é¡µåº”è¿”å› FALSE
 }
 
 std::string CInputDlg::GetInputType()
@@ -246,7 +246,7 @@ void CInputDlg::SetTestImagePath(std::string path)
 
 void CInputDlg::OnSelchangeComboType()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 
 #ifdef _DEBUG
 	//testPrint();
@@ -297,5 +297,5 @@ void CInputDlg::OnSelchangeComboType()
 
 void CInputDlg::OnStnClickedPatternImage()
 {
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 }

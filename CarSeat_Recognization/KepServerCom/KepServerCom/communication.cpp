@@ -19,28 +19,28 @@ CDataCtrl::~CDataCtrl()
 
 void CDataCtrl::DataControl(COPC* dOpc)
 {
-	//³õÊ¼»¯Winscok
+	//åˆå§‹åŒ–Winscok
 	if (!AfxSocketInit())
 	{
-		AfxMessageBox(TEXT("³õÊ¼»¯Ê§°Ü"));
+		AfxMessageBox(TEXT("åˆå§‹åŒ–å¤±è´¥"));
 		return;
 	}
 
-	//socket----´´½¨2¸ösocket--------------------------------------------
+	//socket----åˆ›å»º2ä¸ªsocket--------------------------------------------
 	
-	//×îºÃ²»ÒªÊ¹ÓÃaSocket.Create´´½¨£¬ÒòÎªÈİÒ×»á³öÏÖ10048´íÎó
+	//æœ€å¥½ä¸è¦ä½¿ç”¨aSocket.Createåˆ›å»ºï¼Œå› ä¸ºå®¹æ˜“ä¼šå‡ºç°10048é”™è¯¯
 	if (!aSocket.Socket())
 	{
-		AfxMessageBox(TEXT("SOCKET´´½¨Ê§°Ü"));
+		AfxMessageBox(TEXT("SOCKETåˆ›å»ºå¤±è´¥"));
 		return;
 	}
 	int ret = 0;
 	BOOL bOptVal = TRUE;
 	int bOptLen = sizeof(BOOL);
-	//ÉèÖÃSocketµÄÑ¡Ïî, ½â¾ö10048´íÎó±ØĞëµÄ²½Öè
+	//è®¾ç½®Socketçš„é€‰é¡¹, è§£å†³10048é”™è¯¯å¿…é¡»çš„æ­¥éª¤
 	aSocket.SetSockOpt(SO_REUSEADDR, (void *)&bOptVal, bOptLen, SOL_SOCKET);
 
-	DWORD block = 1; // ÆôÓÃ·Ç×èÈûÄ£Ê½
+	DWORD block = 1; // å¯ç”¨éé˜»å¡æ¨¡å¼
 	/*ret = aSocket.IOCtl(FIONBIO, &block);
 	if (ret == 0)
 	{
@@ -48,17 +48,17 @@ void CDataCtrl::DataControl(COPC* dOpc)
 	}*/
 
 
-	//°ó¶¨
+	//ç»‘å®š
 	if (!aSocket.Bind(Dport))
 	{
-		AfxMessageBox(TEXT("SOCKET °ó¶¨Ê§°Ü"));
+		AfxMessageBox(TEXT("SOCKET ç»‘å®šå¤±è´¥"));
 		return;
 	}
 
-	//¼àÌı
+	//ç›‘å¬
 	if (!aSocket.Listen(1))
 	{
-		AfxMessageBox(TEXT("SOCKET ¼àÌıÊ§°Ü"));
+		AfxMessageBox(TEXT("SOCKET ç›‘å¬å¤±è´¥"));
 		return;
 	}
 	int rt = 0;
@@ -70,9 +70,9 @@ void CDataCtrl::DataControl(COPC* dOpc)
 	
 	while(1)
 	{
-		//½ÓÊÕÍâ²¿Á¬½Ó
+		//æ¥æ”¶å¤–éƒ¨è¿æ¥
 		BOOL ret = aSocket.Accept(serverSocket);
-		//AfxMessageBox(TEXT("Á¬½Ó³É¹¦"));
+		//AfxMessageBox(TEXT("è¿æ¥æˆåŠŸ"));
 		if (ret != 0)
 		{
 			serverSocket.IOCtl(FIONBIO, &block);
@@ -87,12 +87,12 @@ void CDataCtrl::DataControl(COPC* dOpc)
 			memset(szRecvMsg, 0, sizeof(szRecvMsg));
 			memset(szOutMsg, 0, sizeof(szOutMsg));
 
-			rt = serverSocket.Receive(szRecvMsg, sizeof(szRecvMsg)); //½ÓÊÕ¿Í»§¶ËÄÚÈİ:×èÈû
+			rt = serverSocket.Receive(szRecvMsg, sizeof(szRecvMsg)); //æ¥æ”¶å®¢æˆ·ç«¯å†…å®¹:é˜»å¡
 			TRACE3("recycleCount = %d, rt = %d, szRecvMsg = %s\n", recycleCount, rt, szRecvMsg);
 			recycleCount++;
 			if (rt == 0)
 			{
-				serverSocket.Close();//¹Ø±Õ
+				serverSocket.Close();//å…³é—­
 				TRACE0("serverSocket closed\n");
 				break;
 			}
@@ -112,11 +112,11 @@ void CDataCtrl::DataControl(COPC* dOpc)
 				//AfxMessageBox(str);
 				if (result == 0)
 				{
-					serverSocket.Send(man_not_do_msg, sizeof(man_not_do_msg));//·¢ËÍÄÚÈİ¸ø¿Í»§¶Ë
+					serverSocket.Send(man_not_do_msg, sizeof(man_not_do_msg));//å‘é€å†…å®¹ç»™å®¢æˆ·ç«¯
 				}
 				else
 				{
-					serverSocket.Send(man_do_msg, sizeof(man_do_msg));//·¢ËÍÄÚÈİ¸ø¿Í»§¶Ë
+					serverSocket.Send(man_do_msg, sizeof(man_do_msg));//å‘é€å†…å®¹ç»™å®¢æˆ·ç«¯
 				}
 			}
 			else if (rt == 1)
@@ -129,7 +129,7 @@ void CDataCtrl::DataControl(COPC* dOpc)
 			}
 			else
 			{
-				//AfxMessageBox(TEXT("XML½âÎöÊ§°Ü"));
+				//AfxMessageBox(TEXT("XMLè§£æå¤±è´¥"));
 			}
 			if (exitFlag == true)
 			{
@@ -155,7 +155,7 @@ int CDataCtrl::ParseXmlData(char* data, float* num)
 	clientMsgXml.Parse(data);
 	if (clientMsgXml.Error())
 	{
-		AfxMessageBox(TEXT("XML¸ñÊ½´íÎó"));
+		AfxMessageBox(TEXT("XMLæ ¼å¼é”™è¯¯"));
 		return -1;
 	}
 	TiXmlElement *rootElement = clientMsgXml.RootElement();
@@ -164,12 +164,12 @@ int CDataCtrl::ParseXmlData(char* data, float* num)
 	{
 		if (strncmp(rootElement->Value(), "read", strlen("read")) == 0) 
 		{
-			//AfxMessageBox(TEXT("¶ÁÊı¾İÇëÇó"));
+			//AfxMessageBox(TEXT("è¯»æ•°æ®è¯·æ±‚"));
 			return 0;
 		} 
 		else if ((strncmp(rootElement->Value(), "write", strlen("write")) == 0))
 		{
-			//AfxMessageBox(TEXT("Ğ´Êı¾İÇëÇó"));
+			//AfxMessageBox(TEXT("å†™æ•°æ®è¯·æ±‚"));
 			const char* value = rootElement->GetText();
 			*num = atoi(value);
 
@@ -177,13 +177,13 @@ int CDataCtrl::ParseXmlData(char* data, float* num)
 		}
 		else
 		{
-			AfxMessageBox(TEXT("·Ç·¨ÇëÇó"));
+			AfxMessageBox(TEXT("éæ³•è¯·æ±‚"));
 			return -1;
 		}
 	}
 	else 
 	{
-		AfxMessageBox(TEXT("¿ÕÊı¾İ"));
+		AfxMessageBox(TEXT("ç©ºæ•°æ®"));
 	}
 	return 0;
 }

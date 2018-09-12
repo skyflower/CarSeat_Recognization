@@ -1,0 +1,10 @@
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xFFFFFFFF
+Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A80104, ServerIp = 0xFFFFFFFF
+Error	[CKepServerSocket::initSocket,203]connect failed, err = 10035
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = cmd, text = (null)
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = hostGreetings, text = (null)
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = supportedVersions, text = (null)
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = version, text = V1.0
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = readerMode, text = Run
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = readerType, text = SIMATIC_RF640R
+Info	[CCarSeat_RecognizationDlg::testXML,697]value = id, text = 100000129

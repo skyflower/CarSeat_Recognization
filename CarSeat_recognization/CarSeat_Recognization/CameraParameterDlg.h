@@ -3,33 +3,33 @@
 #include <iostream>
 #include "./Camera/LineCamera.h"
 
-// CCameraParameterDlg ¶Ô»°¿ò
+// CCameraParameterDlg å¯¹è¯æ¡†
 
 class CCameraParameterDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CCameraParameterDlg)
 
 public:
-	CCameraParameterDlg(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	CCameraParameterDlg(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~CCameraParameterDlg();
 
 	void SetLineCamera(CLineCamera *pCamera);
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_CAMERA_PARAMETER };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
 	DECLARE_MESSAGE_MAP()
 private:
-	// //ÔöÒædb
+	// //å¢ç›Šdb
 	double m_dGainDB;
-	// //ÉèÖÃÆØ¹âÊ±¼ä
+	// //è®¾ç½®æ›å…‰æ—¶é—´
 	UINT m_uExposureTimeLower;
-	// //Ö¡ÂÊ
+	// //å¸§ç‡
 	float m_fCameraFPS;
 
 	CLineCamera *m_pLineCamera;
@@ -39,6 +39,6 @@ public:
 	afx_msg void OnBnClickedButtonSetParameter();
 	virtual BOOL OnInitDialog();
 private:
-	// //×Ô¶¯ÆØ¹âÉÏÏŞ
+	// //è‡ªåŠ¨æ›å…‰ä¸Šé™
 	UINT m_uExposureTimeUpper;
 };

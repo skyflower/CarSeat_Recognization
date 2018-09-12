@@ -22,7 +22,7 @@ void CRecogResultManager::init()
 		m_pRecogResult = new std::list<RecogResultA>;
 	}
 	/*
-	³õÊ¼»¯±¾µØÎÄ¼þ£¬¶ÔÓÚÈÕÆÚÊ±¼ä³¬¹ýÒ»¸öÔÂÒÔÉÏµÄÊ¶±ð½á¹û²»Óè³õÊ¼»¯,not implement
+	åˆå§‹åŒ–æœ¬åœ°æ–‡ä»¶ï¼Œå¯¹äºŽæ—¥æœŸæ—¶é—´è¶…è¿‡ä¸€ä¸ªæœˆä»¥ä¸Šçš„è¯†åˆ«ç»“æžœä¸äºˆåˆå§‹åŒ–,not implement
 	*/
 	char *content = nullptr;
 	size_t length = 0;
@@ -86,7 +86,7 @@ void CRecogResultManager::init()
 }
 
 
-/// »ØÐ´µ½Ó²ÅÌ
+/// å›žå†™åˆ°ç¡¬ç›˜
 bool CRecogResultManager::serialize()
 {
 	if ((m_pRecogResult == nullptr) || (m_pRecogResult->size() == 0))

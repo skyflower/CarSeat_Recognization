@@ -1,5 +1,5 @@
 
-## ·şÎñÆ÷Í¨ĞÅµÄipµØÖ·ºÍ¶Ë¿ÚºÅ
+## æœåŠ¡å™¨é€šä¿¡çš„ipåœ°å€å’Œç«¯å£å·
 serverip="118.24.164.247"
 serverport="10567"
 serverImagePort="44004"
@@ -9,43 +9,43 @@ testClientPort="10909"
 testServerPort="10909"
 
 
-## ftpµÇÂ¼ĞèÒªµÄÓÃ»§ÃûºÍÕËºÅ£¬ÒÔ¼°´æ´¢Í¼ÏñµÄÂ·¾¶£¬Ã»ÓĞÊ¹ÓÃ
+## ftpç™»å½•éœ€è¦çš„ç”¨æˆ·åå’Œè´¦å·ï¼Œä»¥åŠå­˜å‚¨å›¾åƒçš„è·¯å¾„ï¼Œæ²¡æœ‰ä½¿ç”¨
 ##ftpLogin={"siyuanxu", "yuan", "/home/ftpImage/files"}
 
-## »ñÈ¡ÌõĞÎÂëµÄipµØÖ·ºÍ¶Ë¿ÚºÅ
+## è·å–æ¡å½¢ç çš„ipåœ°å€å’Œç«¯å£å·
 barcodeIp="10.109.78.19"
 barcodePort="10001"
 barcodeResetParam="0025000000010001"
 
-##ÄÃµ½ÌõĞÎÂëÖ®ºó£¬È»ºóÆô¶¯Ïà»úÅÄÕÕ£¬Õâ¸ö¼äÏ¶ÖĞµÄÑÓ³Ù£¬ÓÉÓÚÏà»úÆØ¹âÊ±¼äµÄ¹ØÏµ£¬ĞèÒªÑÓ³Ù±£Ö¤ÅÄÉãµ½µÄÏà»úÕÕÆ¬Á¼ºÃ£¬ºÁÃëÎªµ¥Î»
-##Õâ¸öÖµ²»½¨ÒéĞ¡ÓÚ100£¬Ò²²»½¨Òé´óÓÚ1500
+##æ‹¿åˆ°æ¡å½¢ç ä¹‹åï¼Œç„¶åå¯åŠ¨ç›¸æœºæ‹ç…§ï¼Œè¿™ä¸ªé—´éš™ä¸­çš„å»¶è¿Ÿï¼Œç”±äºç›¸æœºæ›å…‰æ—¶é—´çš„å…³ç³»ï¼Œéœ€è¦å»¶è¿Ÿä¿è¯æ‹æ‘„åˆ°çš„ç›¸æœºç…§ç‰‡è‰¯å¥½ï¼Œæ¯«ç§’ä¸ºå•ä½
+##è¿™ä¸ªå€¼ä¸å»ºè®®å°äº100ï¼Œä¹Ÿä¸å»ºè®®å¤§äº1500
 barcodeTimeout="500"
 
-##²úÏß¶ÔÓ¦µÄÏà»úÃû³ÆmacµØÖ·
+##äº§çº¿å¯¹åº”çš„ç›¸æœºåç§°macåœ°å€
 lineCamera={"Line01":"001", "Line02":"002", "Line03":"003"}
 
-## ²úÏßÎÄ¼ş
+## äº§çº¿æ–‡ä»¶
 lineName="Line01"
 
-//´Ë´Î²úÏßÏà»úµÄmacµØÖ·
+//æ­¤æ¬¡äº§çº¿ç›¸æœºçš„macåœ°å€
 cameraName="C42F90ff3ceb"
 
-##Ê¶±ğÄ£¿éµÄÄ£ĞÍÎÄ¼şÒÔ¼°±êÇ©ÀàĞÍÎÄ¼ş
+##è¯†åˆ«æ¨¡å—çš„æ¨¡å‹æ–‡ä»¶ä»¥åŠæ ‡ç­¾ç±»å‹æ–‡ä»¶
 graphFile="C:\Users\Administrator\Documents\Downloads\test1-master\carseat\part-classify\output_graph.pb"
 labelFile="C:\Users\Administrator\Documents\Downloads\test1-master\carseat\part-classify\output_labels.txt"
 
-##×ùÒÎÍ¼Ïñ´æ´¢Â·¾¶
+##åº§æ¤…å›¾åƒå­˜å‚¨è·¯å¾„
 imagePath="D:\Cache\GithubCache\CarSeatImage"
 
 
-##Ê¶±ğÄ£¿éÁÙÊ±´æ´¢ÇĞ¸îÎÄ¼şµÄÄ¿Â¼
+##è¯†åˆ«æ¨¡å—ä¸´æ—¶å­˜å‚¨åˆ‡å‰²æ–‡ä»¶çš„ç›®å½•
 cacheImagePath="D:\Cache\GithubCache\CarSeatImage\Cache"
 patternImagePath="D:\Cache\GithubCache\CarSeat_Recognization\patternImage"
 
-##»º´æ·¢ËÍÊ§°ÜµÄ½á¹ûÒÔ¼°Í¼ÏñÂ·¾¶
+##ç¼“å­˜å‘é€å¤±è´¥çš„ç»“æœä»¥åŠå›¾åƒè·¯å¾„
 sendFailedRecog="D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\CarSeat_Recognization\sendFailedCache.txt"
 
-###kepServerÍ¨ĞÅipµØÖ·ÒÔ¼°¶Ë¿ÚºÅ
+###kepServeré€šä¿¡ipåœ°å€ä»¥åŠç«¯å£å·
 kepServerIp="172.30.150.33"
 kepServerPort="47005"
 

@@ -38,7 +38,7 @@ CRFIDReader::~CRFIDReader()
 
 std::string CRFIDReader::readBarcode()
 {
-	//N160310118880001   6-8Î»ÓĞĞ§
+	//N160310118880001   6-8ä½æœ‰æ•ˆ
 #if 0
 	char tmp[20];
 	memset(tmp, 0, sizeof(tmp));
@@ -176,13 +176,13 @@ std::string CRFIDReader::readBarcode()
 	char tmpValue[256] = { 0 };
 	memset(tmpValue, 0, sizeof(tmpValue));
 	/*
-	´Ó·µ»ØÏûÏ¢ÖĞ½âÎöµÃµ½ÌõĞÎÂë×Ö¶Î
+	ä»è¿”å›æ¶ˆæ¯ä¸­è§£æå¾—åˆ°æ¡å½¢ç å­—æ®µ
 	*/
 	if (parseBarcode(barcodeChar, tmpValue) == true)
 	{
 		/*
-		½«ÌõĞÎÂëµÄ±àÂë¸ñÊ½×ª»»³Éascii£¬È»ºóºÍÖ®Ç°µÄ¶Ô±È£¬Èç¹ûÒ»Ñù£¬Ôò±íÊ¾¶ÁÈ¡ĞÂÊı¾İÊ§°Ü
-		// Èç¹û²»Ò»Ñù£¬Ôò±íÊ¾¶ÁÈ¡ĞÂÊı¾İ³É¹¦
+		å°†æ¡å½¢ç çš„ç¼–ç æ ¼å¼è½¬æ¢æˆasciiï¼Œç„¶åå’Œä¹‹å‰çš„å¯¹æ¯”ï¼Œå¦‚æœä¸€æ ·ï¼Œåˆ™è¡¨ç¤ºè¯»å–æ–°æ•°æ®å¤±è´¥
+		// å¦‚æœä¸ä¸€æ ·ï¼Œåˆ™è¡¨ç¤ºè¯»å–æ–°æ•°æ®æˆåŠŸ
 		*/
 		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
 		{
@@ -245,7 +245,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	sockaddr_in addr;
 	memset(&addr, 0, sizeof(sockaddr_in));
 
-	//½ÓÊÕÊ±ÏŞ
+	//æ¥æ”¶æ—¶é™
 	int value = 1000;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_RCVTIMEO, (char *)&value, sizeof(int));
 

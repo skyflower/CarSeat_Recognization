@@ -37,10 +37,10 @@ m_nBarcodeTime(1)
 	Init();
 
 
-	/// ½¨Á¢ÈÕÆÚÄ¿Â¼´æ´¢Í¼ÏñÎÄ¼þ
-	time_t  time1 = time(NULL);//»ñÈ¡ÏµÍ³Ê±¼ä£¬µ¥Î»ÎªÃë;
+	/// å»ºç«‹æ—¥æœŸç›®å½•å­˜å‚¨å›¾åƒæ–‡ä»¶
+	time_t  time1 = time(NULL);//èŽ·å–ç³»ç»Ÿæ—¶é—´ï¼Œå•ä½ä¸ºç§’;
 	struct tm tmpTime;
-	localtime_s(&tmpTime, &time1);//×ª»»³ÉtmÀàÐÍµÄ½á¹¹Ìå;
+	localtime_s(&tmpTime, &time1);//è½¬æ¢æˆtmç±»åž‹çš„ç»“æž„ä½“;
 
 	char logFileName[256] = { 0 };
 	memset(logFileName, 0, sizeof(logFileName));
@@ -48,7 +48,7 @@ m_nBarcodeTime(1)
 	sprintf_s(logFileName, "%s\\%04d%02d%02d", m_szImagePath, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday);
 
 
-	//´´½¨Ä¿Â¼
+	//åˆ›å»ºç›®å½•
 	utils::mkdir(logFileName);
 
 	if (PathFileExistsA(logFileName) == TRUE)
@@ -160,7 +160,6 @@ unsigned int CParamManager::__auxLocalIP()
 			(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
 			(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
 			(sa->sin_addr.S_un.S_un_b.s_b4);
-
 		if (true == CNetworkTask::IsReachable(tmpIp, m_nServerIp))
 		{
 			nIp = tmpIp;

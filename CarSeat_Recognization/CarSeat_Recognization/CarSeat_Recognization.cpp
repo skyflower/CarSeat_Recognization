@@ -1,4 +1,4 @@
-
+﻿
 // CarSeat_Recognization.cpp : 定义应用程序的类行为。
 //
 
@@ -33,6 +33,9 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
 	//m_pNetworkTask = nullptr;
 	m_pClassify = nullptr;
 	m_pLabelManager = nullptr;
+	_model = nullptr;
+	_controller = nullptr;
+
 	_tsetlocale(LC_ALL, _T("chs"));
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
@@ -90,8 +93,42 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	
+	//CameraModel* cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo)
+
+
+	//Create CameraController
+	_controller = new CameraController();
+	//Create View Dialog
+	//CCameraControlDlg			view;
+
 	CCarSeat_RecognizationDlg dlg;
+
+	//_controller->setCameraModel(_model);
+	//_model->addObserver(&dlg);
+
+	// Send Model Event to view	
+	dlg.setCameraController(_controller);
+
+	//Set Property Event Handler
+	//if (err == EDS_ERR_OK)
+	//{
+	//	err = EdsSetPropertyEventHandler(camera, kEdsPropertyEvent_All, CameraEventListener::handlePropertyEvent, (EdsVoid *)_controller);
+	//}
+
+	////Set Object Event Handler
+	//if (err == EDS_ERR_OK)
+	//{
+	//	err = EdsSetObjectEventHandler(camera, kEdsObjectEvent_All, CameraEventListener::handleObjectEvent, (EdsVoid *)_controller);
+	//}
+
+	////Set State Event Handler
+	//if (err == EDS_ERR_OK)
+	//{
+	//	err = EdsSetCameraStateEventHandler(camera, kEdsStateEvent_All, CameraEventListener::handleStateEvent, (EdsVoid *)_controller);
+	//}
+
+	
+	
 	
 	INT_PTR nResponse = IDOK;
 	if (LoginSystem() == true)
@@ -212,6 +249,9 @@ void CCarSeat_RecognizationApp::initSystem()
 	//WriteInfo("Get m_pLabelManager success");
 	m_pCameraManager = CCameraManager::GetInstance();
 
+
+
+
 	//WriteInfo("initSystem Success");
 
 }
@@ -264,10 +304,36 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		delete m_pLog;
 		m_pLog = nullptr;
 	}
+
+	if (_model != NULL)
+	{
+		delete _model;
+		_model = NULL;
+	}
+
+
+	if (_controller != NULL)
+	{
+		delete _controller;
+		_controller = NULL;
+	}
+
 	if (m_pCameraManager != nullptr)
 	{
 		delete m_pCameraManager;
 		m_pCameraManager = nullptr;
 	}
 	
+}
+
+CameraModel* CCarSeat_RecognizationApp::cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo)
+{
+	// if Legacy protocol.
+	if (deviceInfo.deviceSubType == 0)
+	{
+		return new CameraModelLegacy(camera);
+	}
+
+	// PTP protocol.
+	return new CameraModel(camera);
 }

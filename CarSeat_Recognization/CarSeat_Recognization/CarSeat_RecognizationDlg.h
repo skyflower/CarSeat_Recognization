@@ -1,20 +1,23 @@
-
+﻿
 // CarSeat_RecognizationDlg.h : 头文件
 //
 
 #pragma once
 #include "afxwin.h"
 #include "./common/LabelManager.h"
-#include "./Camera/Camera.h"
+//#include "./Camera/Camera.h"
 #include "./Camera/CameraManager.h"
-#include "./Camera/LineCamera.h"
+//#include "./Camera/LineCamera.h"
 #include "./common/RFIDReader.h"
 #include "./common/RecogResultManager.h"
 #include "./network/KepServerSocket.h"
+#include "./Camera/Class/ActionSource.h"
+#include "./Camera/Class/Observer.h"
+#include "./Camera/Camera/CameraEvent.h"
 
 
 // CCarSeat_RecognizationDlg 对话框
-class CCarSeat_RecognizationDlg : public CDHtmlDialog
+class CCarSeat_RecognizationDlg : public CDHtmlDialog, public ActionSource, public Observer
 {
 // 构造
 public:
@@ -33,6 +36,10 @@ public:
 protected:
 	HICON m_hIcon;
 
+
+protected:
+	CameraController* _controller;
+
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -48,7 +55,6 @@ private:
 	CStatic m_stImagePattern;
 	CStatic m_stImageRec;
 
-	//CImage *m_pImageRec;
 	CImage *m_pImagePattern;
 
 	CStatic m_barCode;
@@ -61,11 +67,6 @@ private:
 
 	bool m_bThreadStatus;
 
-	/* CImage::Load(filePath)   */
-	// CStatic.SetBitmap((HBITMAP)CImage))
-	//CImage m_image;
-
-	//CLog *m_pLog;
 	CParamManager *m_pParamManager;
 	CNetworkTask *m_pNetworkTask;
 	
@@ -73,12 +74,13 @@ private:
 	CLabelManager *m_pLabelManager;
 
 	std::mutex m_LineCameraMutex;
-	CLineCamera *m_pLineCamera;
+	//CLineCamera *m_pLineCamera;
 
 	int m_nCameraIndex;
 	CCameraManager *m_pCameraManager;
 
 	CRFIDReader *m_pRFIDReader;
+
 	CRecogResultManager *m_pRecogManager;
 	CKepServerSocket *m_pKepServer;
 
@@ -124,7 +126,12 @@ public:
 	void terminate();
 	bool SetLabelManager(CLabelManager *pLabelManager);
 
+	virtual void update(Observable* from, CameraEvent *e);
+	void setCameraController(CameraController* controller) { _controller = controller; }
 
+
+	afx_msg LRESULT OnDownloadComplete(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnProgressReport(WPARAM wParam, LPARAM lParam);
 
 
 	afx_msg void OnStartCamera();

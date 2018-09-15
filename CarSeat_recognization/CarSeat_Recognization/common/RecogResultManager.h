@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include <iostream>
 #include <Windows.h>
 #include <list>
 #include "utils.h"
-
+ 
 /*
 
 */

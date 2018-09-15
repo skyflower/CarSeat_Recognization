@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+﻿#include "../stdafx.h"
 #include "Log.h"
 #include "utils.h"
 #include <cstdlib>
@@ -15,7 +15,7 @@ CLog * CLog::GetInstance()
 	}
 	return m_pInstance;
 }
-
+ 
 const CLog & CLog::GetReference()
 {
 	// TODO: 在此处插入 return 语句

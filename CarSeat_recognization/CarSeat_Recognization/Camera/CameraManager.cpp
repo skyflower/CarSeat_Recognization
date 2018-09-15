@@ -1,4 +1,4 @@
-
+﻿
 // BasicDemoDlg.cpp : implementation file
 // 
 
@@ -6,7 +6,8 @@
 #include "CameraManager.h"
 #include "../common/Log.h"
 #include "../common/utils.h"
-
+#include "./Header/EDSDK.h"
+ 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,7 +20,19 @@ std::mutex CCameraManager::m_Mutex;
 
 CCameraManager::CCameraManager()
 {
-	memset(&m_stDevList, 0, sizeof(m_stDevList));
+	isSDKLoaded = false;
+	m_stDevList = nullptr;
+
+	//memset(&m_stDevList, 0, sizeof(m_stDevList));
+
+	EdsError	 err = EDS_ERR_OK;
+	// Initialization of SDK
+	err = EdsInitializeSDK();
+
+	if (err == EDS_ERR_OK)
+	{
+		isSDKLoaded = true;
+	}
 	//m_Mutex = 
 }
 
@@ -38,7 +51,10 @@ CCameraManager * CCameraManager::GetInstance()
 
 CCameraManager::~CCameraManager()
 {
-
+	if (isSDKLoaded)
+	{
+		EdsTerminateSDK();
+	}
 }
 
 
@@ -52,11 +68,12 @@ bool  CCameraManager::EnumCamera()
 	}
     CString strMsg;
     // ch:初始化设备信息列表 | en:Device Information List Initialization
-    memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
+    //memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
 
     // ch:枚举子网内所有设备 | en:Enumerate all devices within subnet
-    int nRet = CCamera::EnumDevices(&m_stDevList);
-    if (MV_OK != nRet)
+    //int nRet = CCamera::EnumDevices(&m_stDevList);
+	int err = EdsGetCameraList(&m_stDevList);
+    if (EDS_ERR_OK != err)
     {
         return false;
     }
@@ -69,7 +86,7 @@ bool  CCameraManager::EnumCamera()
 	
 
     // ch:将值加入到信息列表框中并显示出来 | en:Add value to the information list box and display
-    unsigned int i = 0;
+    /*unsigned int i = 0;
     int nIp1 = 0, nIp2 = 0, nIp3 = 0, nIp4 = 0;
     for (i = 0; i < m_stDevList.nDeviceNum; i++)
     {
@@ -139,11 +156,16 @@ bool  CCameraManager::EnumCamera()
             }
         }
     }
-
-    if (0 == m_stDevList.nDeviceNum)
-    {
-        return false;
-    }
+*/
+	if (err == EDS_ERR_OK)
+	{
+		EdsUInt32 count = 0;
+		err = EdsGetChildCount(m_stDevList, &count);
+		if (count == 0)
+		{
+			err = EDS_ERR_DEVICE_NOT_FOUND;
+		}
+	}
     return true;
 }
 
@@ -156,10 +178,20 @@ int CCameraManager::GetCameraCount()
 	{
 		return 0;
 	}
-	return m_stDevList.nDeviceNum;
+	if (m_stDevList != nullptr)
+	{
+		EdsUInt32 count = 0;
+		int err = EdsGetChildCount(m_stDevList, &count);
+		if (count == 0)
+		{
+			err = EDS_ERR_DEVICE_NOT_FOUND;
+		}
+		return count;
+	}
+	return 0;
 }
 
-MV_CC_DEVICE_INFO * CCameraManager::GetCamera(int index)
+EdsCameraRef CCameraManager::GetCamera(int index)
 {
 	if (index < 0)
 	{
@@ -171,12 +203,21 @@ MV_CC_DEVICE_INFO * CCameraManager::GetCamera(int index)
 	{
 		return nullptr;
 	}
-	
-	if (tmpIndex >= m_stDevList.nDeviceNum)
+	if (m_stDevList == nullptr)
 	{
 		return nullptr;
 	}
-	return m_stDevList.pDeviceInfo[tmpIndex];
+	EdsUInt32 count = 0;
+	int err = EdsGetChildCount(m_stDevList, &count);
+	
+	if (count >= tmpIndex)
+	{
+		return nullptr;
+	}
+	EdsCameraRef camera = NULL;
+	err = EdsGetChildAtIndex(m_stDevList, index, &camera);
+
+	return camera;
 }
 
 int CCameraManager::GetCameraIndexByName(const char * name)
@@ -186,33 +227,30 @@ int CCameraManager::GetCameraIndexByName(const char * name)
 	{
 		return -1;
 	}
-	if (m_stDevList.nDeviceNum <= 0)
+	if (m_stDevList == nullptr)
 	{
 		return -1;
 	}
-	char tmpMac[20] = { 0 };
-	char tmpName[20] = { 0 };
-	memset(tmpName, 0, sizeof(tmpName));
+	EdsUInt32 count = 0;
+	int err = EdsGetChildCount(m_stDevList, &count);
 
-	for (int i = 0; (i < strlen(name)) && (i < sizeof(tmpName)); ++i)
+	if (count == 0)
 	{
-		tmpName[i] = tolower(name[i]);
+		return -1;
 	}
-	tmpName[sizeof(tmpName) - 1] = '\0';
-	
-	for (unsigned int i = 0; i < m_stDevList.nDeviceNum; ++i)
+	for (int i = 0; i < count; ++i)
 	{
-		memset(tmpMac, 0, sizeof(tmpMac));
-		sprintf_s(tmpMac, sizeof(tmpMac), "%x%x", \
-			m_stDevList.pDeviceInfo[i]->nMacAddrHigh, \
-			m_stDevList.pDeviceInfo[i]->nMacAddrLow);
-		tmpMac[sizeof(tmpMac) - 1] = '\0';
-		size_t length = strlen(tmpMac);
-		for (size_t j = 0; j < length; ++j)
+		EdsCameraRef camera = NULL;
+		EdsDeviceInfo deviceInfo;
+		err = EdsGetChildAtIndex(m_stDevList, i, &camera);
+		if ((err != EDS_ERR_OK) || (camera == NULL))
 		{
-			tmpMac[j] = tolower(tmpMac[j]);
+			continue;
 		}
-		if (strncmp(tmpName, tmpMac, length) == 0)
+
+		err = EdsGetDeviceInfo(camera, &deviceInfo);
+
+		if (strncmp(deviceInfo.szDeviceDescription, name, strlen(name)) == 0)
 		{
 			return i;
 		}
@@ -220,19 +258,37 @@ int CCameraManager::GetCameraIndexByName(const char * name)
 	return -1;
 }
 
-MV_CC_DEVICE_INFO * CCameraManager::GetCamera(const char * name)
+const char * CCameraManager::GetDesriptorByIndex(int index)
 {
+	static char desc[L_MAX_URL_LENGTH];
+	memset(desc, 0, sizeof(desc));
+
 	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
 	if (lock.try_lock() == false)
 	{
-		return false;
+		return desc;
 	}
-	int index = GetCameraIndexByName(name);
-	if (index == -1)
+	EdsUInt32 count = 0;
+	int err = EdsGetChildCount(m_stDevList, &count);
+	if (count == 0)
 	{
-		return nullptr;
+		err = EDS_ERR_DEVICE_NOT_FOUND;
 	}
-	return GetCamera(index);
+	
+	EdsCameraRef camera = NULL;
+	err = EdsGetChildAtIndex(m_stDevList, index, &camera);
+
+	if (camera == nullptr)
+	{
+		return desc;
+	}
+	EdsDeviceInfo deviceInfo;
+	memset(&deviceInfo, 0, sizeof(EdsDeviceInfo));
+	EdsGetDeviceInfo(camera, &deviceInfo);
+
+	sprintf_s(desc, sizeof(desc), "%s_%s_%u", deviceInfo.szPortName, deviceInfo.szDeviceDescription, deviceInfo.deviceSubType);
+		
+	return desc;
 }
 
 void CCameraManager::testPrint()
@@ -242,19 +298,31 @@ void CCameraManager::testPrint()
 	{
 		return;
 	}
+	EdsUInt32 count = 0;
+	int err = EdsGetChildCount(m_stDevList, &count);
+	if (count == 0)
+	{
+		err = EDS_ERR_DEVICE_NOT_FOUND;
+	}
 	//m_stDevList;
 	unsigned int i = 0;
-	while(i < m_stDevList.nDeviceNum)
+	
+	while(i < count)
 	{
-		WriteInfo("index = %d, Ver = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMajorVer, m_stDevList.pDeviceInfo[i]->nMinorVer);
-		WriteInfo("index = %d, MAC = 0x%X.%x", i, m_stDevList.pDeviceInfo[i]->nMacAddrHigh, m_stDevList.pDeviceInfo[i]->nMacAddrLow);
-		WriteInfo("index = %d, DeviceVer = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chDeviceVersion);
-		WriteInfo("index = %d, ManufacturerName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chManufacturerName);
-		WriteInfo("index = %d, ManufacturerSpecificInfo = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chManufacturerSpecificInfo);
-		WriteInfo("index = %d, ModelName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chModelName);
-		WriteInfo("index = %d, SerialNumber = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chSerialNumber);
-		WriteInfo("index = %d, UserDefinedName = %s", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.chUserDefinedName);
-		WriteInfo("index = %d, CurrentIp = %u", i, m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp);
+		EdsCameraRef camera = NULL;
+		int err = EdsGetChildAtIndex(m_stDevList, i, &camera);
+		
+		if (camera == nullptr)
+		{
+			continue;
+		}
+		EdsDeviceInfo deviceInfo;
+		memset(&deviceInfo, 0, sizeof(EdsDeviceInfo));
+		EdsGetDeviceInfo(camera, &deviceInfo);
+
+		WriteInfo("index = %u, deviceSubType = %u", i, deviceInfo.deviceSubType);
+		WriteInfo("index = %u, deviceDesc = %s", deviceInfo.szDeviceDescription);
+		WriteInfo("index = %u, devicePortName = %s", deviceInfo.szPortName);
 		++i;
 	}
 }

@@ -1,4 +1,4 @@
-// CameraParameter.cpp : 实现文件
+﻿// CameraParameter.cpp : 实现文件
 //
 
 #include "stdafx.h"
@@ -16,7 +16,7 @@ CCameraParameterDlg::CCameraParameterDlg(CWnd* pParent /*=NULL*/)
 	, m_dGainDB(0)
 	, m_uExposureTimeLower(0)
 	, m_fCameraFPS(1)
-	, m_pLineCamera(nullptr)
+	//, m_pLineCamera(nullptr)
 	, m_uExposureTimeUpper(0)
 {
 
@@ -26,19 +26,19 @@ CCameraParameterDlg::~CCameraParameterDlg()
 {
 }
 
-void CCameraParameterDlg::SetLineCamera(CLineCamera * pCamera)
-{
-	if (pCamera == nullptr)
-	{
-		return;
-	}
-	m_pLineCamera = pCamera;
-	m_uExposureTimeUpper = m_pLineCamera->GetExposureTimeMax();
-	m_uExposureTimeLower = m_pLineCamera->GetExposureTimeMin();
-	m_fCameraFPS = m_pLineCamera->GetFrameRate();
-	m_dGainDB = m_pLineCamera->GetGain();
-	
-}
+//void CCameraParameterDlg::SetLineCamera(CLineCamera * pCamera)
+//{
+//	if (pCamera == nullptr)
+//	{
+//		return;
+//	}
+//	m_pLineCamera = pCamera;
+//	m_uExposureTimeUpper = m_pLineCamera->GetExposureTimeMax();
+//	m_uExposureTimeLower = m_pLineCamera->GetExposureTimeMin();
+//	m_fCameraFPS = m_pLineCamera->GetFrameRate();
+//	m_dGainDB = m_pLineCamera->GetGain();
+//	
+//}
 
 void CCameraParameterDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -65,14 +65,14 @@ END_MESSAGE_MAP()
 void CCameraParameterDlg::OnBnClickedButtonGetParameter()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	if (m_pLineCamera == nullptr)
+	/*if (m_pLineCamera == nullptr)
 	{
 		return;
 	}
 	m_uExposureTimeUpper = m_pLineCamera->GetExposureTimeMax();
 	m_uExposureTimeLower = m_pLineCamera->GetExposureTimeMin();
 	m_fCameraFPS = m_pLineCamera->GetFrameRate();
-	m_dGainDB = m_pLineCamera->GetGain();
+	m_dGainDB = m_pLineCamera->GetGain();*/
 	UpdateData(FALSE); // false 将数值从变量传给控件
 }
 
@@ -80,14 +80,14 @@ void CCameraParameterDlg::OnBnClickedButtonGetParameter()
 void CCameraParameterDlg::OnBnClickedButtonSetParameter()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	if (m_pLineCamera == nullptr)
-	{
-		return;
-	}
-	UpdateData(TRUE); // false 将数值从控件传给变量
-	m_pLineCamera->SetExposureTime(m_uExposureTimeUpper, m_uExposureTimeLower);
-	m_pLineCamera->SetFrameRate(m_fCameraFPS);
-	m_pLineCamera->SetGain(m_dGainDB);
+	//if (m_pLineCamera == nullptr)
+	//{
+	//	return;
+	//}
+	//UpdateData(TRUE); // false 将数值从控件传给变量
+	//m_pLineCamera->SetExposureTime(m_uExposureTimeUpper, m_uExposureTimeLower);
+	//m_pLineCamera->SetFrameRate(m_fCameraFPS);
+	//m_pLineCamera->SetGain(m_dGainDB);
 }
 
 

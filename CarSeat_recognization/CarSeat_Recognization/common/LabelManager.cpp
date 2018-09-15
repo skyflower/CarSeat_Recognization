@@ -1,10 +1,10 @@
-#include "LabelManager.h"
+﻿#include "LabelManager.h"
 #include <cstdlib>
 #include "./Log.h"
 #include <sys/stat.h>
 #include "./utils.h"
 #include <Windows.h>
-
+ 
 bool CLabelManager::m_bInitFlag = false;
 
 CLabelManager::CLabelManager()

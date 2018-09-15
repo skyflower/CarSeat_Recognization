@@ -1,6 +1,6 @@
-// QueryDlg.cpp : 实现文件
+﻿// QueryDlg.cpp : 实现文件
 //
-
+ 
 #include "stdafx.h"
 #include "CarSeat_Recognization.h"
 #include "QueryDlg.h"

@@ -291,6 +291,33 @@ const char * CCameraManager::GetDesriptorByIndex(int index)
 	return desc;
 }
 
+EdsDeviceInfo CCameraManager::GetDeviceInfoByIndex(int index)
+{
+	EdsDeviceInfo deviceInfo;
+	memset(&deviceInfo, 0, sizeof(EdsDeviceInfo));
+	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
+	if (lock.try_lock() == false)
+	{
+		return deviceInfo;
+	}
+	EdsUInt32 count = 0;
+	int err = EdsGetChildCount(m_stDevList, &count);
+	if (count == 0)
+	{
+		err = EDS_ERR_DEVICE_NOT_FOUND;
+	}
+	
+	EdsCameraRef camera = NULL;
+	err = EdsGetChildAtIndex(m_stDevList, index, &camera);
+	if (camera == nullptr)
+	{
+		return deviceInfo;
+	}
+	
+	EdsGetDeviceInfo(camera, &deviceInfo);
+	return deviceInfo;
+}
+
 void CCameraManager::testPrint()
 {
 	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);

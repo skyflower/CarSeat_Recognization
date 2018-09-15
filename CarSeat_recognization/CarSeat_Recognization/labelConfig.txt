@@ -1,25 +1,25 @@
 barcodeTable={"201456":"-d2-",
 "201457":"-d2-",
-"201458":"-d2-",
 "201436":"-d2-",
-"201459":"-d2-",
+"201458":"-d2-",
 "201446":"-k3-",
+"201459":"-d2-",
 "201416":"-d2-",
 "301436":"-d4-",
 "401416":"-k2-"}
 classifyType={"k216_black_pvc_diamond_cloth":"201456",
-"d2_black_pvc_hole_cloth":"201416",
-"d2_black_pvc_line_cloth":"201457",
+"k216_black_pvc_leather":"401416",
 "k216_ecru_pvc_diamond_cloth":"201458",
 "k215_ecru_pvc_buckskin":"301436",
-"k216_black_pvc_leather":"401416",
-"k215_ecru_pvc_leather":"201459",
+"d2_black_pvc_line_cloth":"201457",
+"d2_black_pvc_hole_cloth":"201416",
 "k215_black_pvc_leather":"201446",
+"k215_ecru_pvc_leather":"201459",
 "d2_black_pvc_leather":"201436"}
 
 ExposureTimeMax="1500000"
 ExposureTimeMin="500000"
 
-LoginUsrName="root6"
+LoginUsrName="root"
 LoginPasswd="12345678"
 LoginInfoAutoSave="0"

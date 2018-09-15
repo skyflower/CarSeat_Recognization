@@ -69,6 +69,8 @@ void CLog::run()
 {
 	LogMessage buffer;
 	char currentTime[100];
+	SYSTEMTIME curTime;
+	
 	while (1)
 	{
 		CLog *pLog = CLog::GetInstance();
@@ -105,17 +107,15 @@ void CLog::run()
 			{
 				break;
 			}
-
-			time_t  time1 = time(NULL);//获取系统时间，单位为秒;
-
-			struct tm tmpTime;
-			localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
+			
+			memset(&curTime, 0, sizeof(curTime));
+			GetLocalTime(&curTime);
 
 			memset(currentTime, 0, sizeof(currentTime));
 
-			sprintf_s(currentTime, "%04d%02d%02d:%02d%02d%02d", \
-				tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
-				tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
+			sprintf_s(currentTime, "%04d%02d%02d:%02d%02d%02d:%d", \
+				curTime.wYear, curTime.wMonth, curTime.wDay, \
+				curTime.wHour, curTime.wMinute, curTime.wSecond, curTime.wMilliseconds);
 
 			m_pLog << currentTime << "\t";
 

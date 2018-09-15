@@ -26,6 +26,8 @@ public:
 
 	const char* GetDesriptorByIndex(int index);
 
+	EdsDeviceInfo GetDeviceInfoByIndex(int index);
+
 	void testPrint();
 
 	/*ch:初始化 | en:Initialization*/

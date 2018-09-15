@@ -93,47 +93,19 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	//CameraModel* cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo)
-
 
 	//Create CameraController
 	_controller = new CameraController();
+
 	//Create View Dialog
-	//CCameraControlDlg			view;
-
 	CCarSeat_RecognizationDlg dlg;
-
-	//_controller->setCameraModel(_model);
-	//_model->addObserver(&dlg);
 
 	// Send Model Event to view	
 	dlg.setCameraController(_controller);
-
-	//Set Property Event Handler
-	//if (err == EDS_ERR_OK)
-	//{
-	//	err = EdsSetPropertyEventHandler(camera, kEdsPropertyEvent_All, CameraEventListener::handlePropertyEvent, (EdsVoid *)_controller);
-	//}
-
-	////Set Object Event Handler
-	//if (err == EDS_ERR_OK)
-	//{
-	//	err = EdsSetObjectEventHandler(camera, kEdsObjectEvent_All, CameraEventListener::handleObjectEvent, (EdsVoid *)_controller);
-	//}
-
-	////Set State Event Handler
-	//if (err == EDS_ERR_OK)
-	//{
-	//	err = EdsSetCameraStateEventHandler(camera, kEdsStateEvent_All, CameraEventListener::handleStateEvent, (EdsVoid *)_controller);
-	//}
-
-	
-	
 	
 	INT_PTR nResponse = IDOK;
 	if (LoginSystem() == true)
 	{
-		
 		m_pMainWnd = &dlg;
 
 		dlg.SetImageClassify(m_pClassify);
@@ -244,15 +216,9 @@ void CCarSeat_RecognizationApp::initSystem()
 		//m_pClassifyThread = std::thread(std::bind(&CImageClassify::run, m_pClassify));
 	}
 	
-
 	m_pLabelManager = new CLabelManager();
 	//WriteInfo("Get m_pLabelManager success");
 	m_pCameraManager = CCameraManager::GetInstance();
-
-
-
-
-	//WriteInfo("initSystem Success");
 
 }
 
@@ -263,7 +229,7 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		m_pClassify->terminate();
 		m_pClassifyThread.join();
 	}*/
-
+	WriteInfo("enter DeInitSystem");
 	if (m_NetworkThread.joinable())
 	{
 		CNetworkTask::message msg;
@@ -273,6 +239,7 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		m_pNetworkTask->SendMessageTo(&msg);
 		m_NetworkThread.join();
 	}
+	WriteInfo("close network task");
 
 	if (m_pNetworkTask != nullptr)
 	{
@@ -283,27 +250,14 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 	{
 		m_UIThread.join();
 	}
+	WriteInfo("close ui thread;");
 
 	if (m_pClassify != nullptr)
 	{
 		delete m_pClassify;
 		m_pClassify = nullptr;
 	}
-	if (m_pLabelManager != nullptr)
-	{
-		delete m_pLabelManager;
-		m_pLabelManager = nullptr;
-	}
-	if (m_pParamManager != nullptr)
-	{
-		delete m_pParamManager;
-		m_pParamManager = nullptr;
-	}
-	if (m_pLog != nullptr)
-	{
-		delete m_pLog;
-		m_pLog = nullptr;
-	}
+
 
 	if (_model != NULL)
 	{
@@ -324,16 +278,22 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		m_pCameraManager = nullptr;
 	}
 	
-}
-
-CameraModel* CCarSeat_RecognizationApp::cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo)
-{
-	// if Legacy protocol.
-	if (deviceInfo.deviceSubType == 0)
+	if (m_pLabelManager != nullptr)
 	{
-		return new CameraModelLegacy(camera);
+		delete m_pLabelManager;
+		m_pLabelManager = nullptr;
 	}
-
-	// PTP protocol.
-	return new CameraModel(camera);
+	if (m_pParamManager != nullptr)
+	{
+		delete m_pParamManager;
+		m_pParamManager = nullptr;
+	}
+	WriteInfo("free classify model controller cameramanager lableManager ParamMangaeer");
+	if (m_pLog != nullptr)
+	{
+		delete m_pLog;
+		m_pLog = nullptr;
+	}
 }
+
+

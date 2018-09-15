@@ -340,6 +340,9 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
+	unsigned long tmpBlock = 1;
+	ioctlsocket(socketFD, FIONBIO, &tmpBlock);
+
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.S_un.S_addr = htonl(serverIp);

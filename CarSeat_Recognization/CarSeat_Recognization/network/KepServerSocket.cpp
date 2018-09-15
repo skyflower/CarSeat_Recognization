@@ -167,19 +167,10 @@ bool CKepServerSocket::GetSocketStatus()
 
 SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 {
-	/*WSADATA wsaData;
-	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (err != 0)
-	{
-		err = WSAGetLastError();
-		WriteError("err = %u", err);
-		return -1;
-	}*/
 	int err = 0;
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketFD == -1)
 	{
-		//WSACleanup();
 		return -1;
 	}
 
@@ -190,8 +181,9 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
-	unsigned long ul = 1;
-	ioctlsocket(socketFD, FIONBIO, (unsigned long*)&ul);
+	unsigned long tmpBlock = 1;
+	ioctlsocket(socketFD, FIONBIO, &tmpBlock);
+
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
@@ -200,10 +192,8 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
 	{
 		err = WSAGetLastError();
-		
 		WriteError("connect failed, err = %d", err);
 		closesocket(socketFD);
-		//WSACleanup();
 		return -1;
 	}
 	return socketFD;

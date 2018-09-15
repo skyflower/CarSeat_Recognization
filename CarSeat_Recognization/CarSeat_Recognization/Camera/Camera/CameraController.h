@@ -43,7 +43,6 @@
 
 class CameraController : public ActionListener
 {
-
 protected:
 	// Camera model
 	CameraModel* _model;
@@ -60,6 +59,14 @@ public:
 
 	void setCameraModel(CameraModel* model) {_model = model;}
 
+	void close()
+	{
+		_processor.setCloseCommand(new CloseSessionCommand(_model));
+		_processor.stop();
+		_processor.join();
+		
+	}
+
 	//Execution beginning
 	void run()
 	{
@@ -73,8 +80,6 @@ public:
 			//It is necessary to acquire the property information that cannot acquire in sending OpenSessionCommand automatically by manual operation.
 			StoreAsync(new GetPropertyCommand(_model, kEdsPropID_ProductName));
 		}
-
-		
 	}
 
 public:
@@ -86,7 +91,6 @@ public:
 			return;
 		}
 		std::string command = event.getActionCommand();
-
 
 		if ( command == "opensession" )
 		{
@@ -172,12 +176,7 @@ public:
 			StoreAsync(new NotifyCommand(_model, "shutDown"));
 		}
 
-		if( command == "closing")
-		{
-			_processor.setCloseCommand(new CloseSessionCommand(_model));
-			_processor.stop();
-			_processor.join();		
-		}
+		
 
 /////////////////////////////
 //		EVF Control

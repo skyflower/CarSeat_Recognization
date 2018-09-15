@@ -182,3 +182,12 @@ CarSeat_recognization/x64/Release/CarSeat_Recognization.iobj
 *.ipch
 *.ipch
 *.pdb
+CarSeat_Recognization/x64/Debug/CarSeat_Recognization.exe
+CarSeat_Recognization/x64/Debug/CarSeat_Recognization.pdb
+CarSeat_Recognization/x64/Debug/CarSeat_Recognization.ilk
+CarSeat_Recognization/CarSeat_Recognization/Log/Log_20180915_161217.txt
+CarSeat_Recognization/CarSeat_Recognization/Log/Log_20180915_161643.txt
+*.tlog
+*.idb
+*.obj
+*.pdb

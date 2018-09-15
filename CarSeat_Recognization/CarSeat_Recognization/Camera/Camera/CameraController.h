@@ -53,7 +53,7 @@ protected:
 
 public:
 	// Constructor
-	CameraController(): _model(){}
+	CameraController() : _model() { _model = nullptr; }
 
 	// Destoracta
 	virtual ~CameraController(){}
@@ -65,17 +65,26 @@ public:
 	{
 		_processor.start();
 
-		//The communication with the camera begins
-		StoreAsync(new OpenSessionCommand(_model));
+		if (_model != nullptr)
+		{
+			//The communication with the camera begins
+			StoreAsync(new OpenSessionCommand(_model));
 
-		//It is necessary to acquire the property information that cannot acquire in sending OpenSessionCommand automatically by manual operation.
-		StoreAsync(new GetPropertyCommand(_model, kEdsPropID_ProductName));
+			//It is necessary to acquire the property information that cannot acquire in sending OpenSessionCommand automatically by manual operation.
+			StoreAsync(new GetPropertyCommand(_model, kEdsPropID_ProductName));
+		}
+
+		
 	}
 
 public:
 	
 	void actionPerformed(const ActionEvent& event)
 	{
+		if (_model == nullptr)
+		{
+			return;
+		}
 		std::string command = event.getActionCommand();
 
 

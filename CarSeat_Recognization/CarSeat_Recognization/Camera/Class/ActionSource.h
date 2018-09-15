@@ -36,17 +36,11 @@ public:
 		}
 	}
 	
-	void fireEvent(LPCTSTR command, void* arg = 0)
+	void fireEvent(char* command, void* arg = 0)
 	{
 		std::vector<ActionListener*>::iterator i = _listeners.begin();
-		//char *tmpPointer = command;
 		
-		char*tmpCommand =  utils::WcharToChar((wchar_t*)command);
-		
-		ActionEvent event(std::string(tmpCommand), arg);
-		delete[]tmpCommand;
-		tmpCommand = nullptr;
-		
+		ActionEvent event(command, arg);
 		
 		while ( i != _listeners.end() )
 		{

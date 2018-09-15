@@ -39,6 +39,7 @@ protected:
 
 protected:
 	CameraController* _controller;
+	CameraModel *_model;
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
@@ -111,6 +112,13 @@ private:
 	std::wstring testGenerateBarcode();
 
 	bool heartBloodServer(unsigned int ip, unsigned int port);
+
+	CameraModel* cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo);
+
+
+	void setupListener(ActionListener* listener);
+
+	void setupObserver(Observable* ob);
 
 
 public:

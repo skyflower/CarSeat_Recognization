@@ -46,7 +46,7 @@ private:
 	//销毁系统
 	void DeInitSystem();
 
-	CameraModel* cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo);
+	//CameraModel* cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo);
 
 
 // 实现

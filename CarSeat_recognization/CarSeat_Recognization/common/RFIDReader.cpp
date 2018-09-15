@@ -252,6 +252,9 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	value = 1;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&value, sizeof(int));
 
+	unsigned long tmpBlock = 1;
+	ioctlsocket(m_nSocket, FIONBIO, &tmpBlock);
+
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);

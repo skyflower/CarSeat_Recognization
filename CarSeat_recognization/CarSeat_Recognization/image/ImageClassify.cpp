@@ -1,4 +1,4 @@
-#include "ImageClassify.h"
+﻿#include "ImageClassify.h"
 #include "../common/Log.h"
 
 CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
@@ -8,7 +8,7 @@ CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
 	m_pPyFunc(nullptr),
 	m_pPyDict(nullptr),
 #endif // PYTHON_TENSORFLOW
-
+	 
 	m_bRunning(true),
 	m_Mutex()
 {

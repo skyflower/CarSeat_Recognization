@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+ 
 #include <iostream>
 #include <Windows.h>
 #include <winsock.h>
@@ -10,11 +10,11 @@
 #include <unordered_set>
 #include "../image/ImageClassify.h"
 #include "../Camera/CameraManager.h"
-#include "../Camera/LineCamera.h"
-#include "../Camera/Camera.h"
+//#include "../Camera/LineCamera.h"
+//#include "../Camera/Camera.h"
 #include "../common/RecogResultManager.h"
 
-
+ 
 
 /*
 发送历史识别结果到服务器，以及当网络连接失败时，保存历史识别结果，等网络状态号的时候发送到服务器

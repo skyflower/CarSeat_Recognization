@@ -1,13 +1,14 @@
-
+﻿
 // BasicDemoDlg.h : header file
 // 
-
-#pragma once
+ 
+#pragma once 
 
 #include <iostream>
-#include "Camera.h"
+//#include "Camera.h"
 #include <Windows.h>
 #include <mutex>
+#include "./Header/EDSDK.h"
 
 
 class CCameraManager
@@ -19,24 +20,26 @@ public:
 
 	int GetCameraCount();
 
-	MV_CC_DEVICE_INFO* GetCamera(int index);
+	EdsCameraRef GetCamera(int index);
 
 	int GetCameraIndexByName(const char *name);
 
-	MV_CC_DEVICE_INFO* GetCamera(const char *name);
+	const char* GetDesriptorByIndex(int index);
 
 	void testPrint();
 
+	/*ch:初始化 | en:Initialization*/
+	bool EnumCamera();               // ch:查找设备 | en:Find Devices
+
 private:
-    MV_CC_DEVICE_INFO_LIST m_stDevList;         // ch:设备信息列表结构体变量，用来存储设备列表
+	EdsCameraListRef m_stDevList;         // ch:设备信息列表结构体变量，用来存储设备列表
                                                
 	CCameraManager();	// Standard constructor
 
 	static CCameraManager *m_pInstance;
 
 	static std::mutex m_Mutex;
-public:
-    /*ch:初始化 | en:Initialization*/
-    bool EnumCamera();               // ch:查找设备 | en:Find Devices
+
+	bool isSDKLoaded;
     
 };

@@ -1,9 +1,9 @@
-
+﻿
 // CarSeat_Recognization.h : PROJECT_NAME 应用程序的主头文件
 //
 
 #pragma once
-
+ 
 #ifndef __AFXWIN_H__
 	#error "在包含此文件之前包含“stdafx.h”以生成 PCH 文件"
 #endif
@@ -16,6 +16,9 @@
 #include <chrono>
 #include "./image/ImageClassify.h"
 #include "./common/LabelManager.h"
+#include "./Camera/Camera/CameraController.h"
+#include "./Camera/Camera/CameraModel.h"
+#include "./Camera/Camera/CameraModelLegacy.h"
 
 
 // CCarSeat_RecognizationApp: 
@@ -30,6 +33,7 @@ public:
 // 重写
 public:
 	virtual BOOL InitInstance();
+	
 
 private:
 
@@ -41,6 +45,8 @@ private:
 
 	//销毁系统
 	void DeInitSystem();
+
+	CameraModel* cameraModelFactory(EdsCameraRef camera, EdsDeviceInfo deviceInfo);
 
 
 // 实现
@@ -54,6 +60,10 @@ private:
 	CLabelManager *m_pLabelManager;
 
 	CCameraManager *m_pCameraManager;
+
+
+	CameraModel*		_model;
+	CameraController*	_controller;
 
 	std::thread m_UIThread;
 

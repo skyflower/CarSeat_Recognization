@@ -1,4 +1,4 @@
-#include "../stdafx.h"
+﻿#include "../stdafx.h"
 #include "NetworkTask.h"
 #include "../common/ParamManager.h"
 #include "../common/Log.h"

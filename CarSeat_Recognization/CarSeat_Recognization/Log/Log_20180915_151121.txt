@@ -1,0 +1,8 @@
+Info	20180915:151121	[CParamManager::__auxLocalIP,158] IP = 0x1C9A8C0
+Error	20180915:151121	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0x7618A4F7
+Error	20180915:151121	[CParamManager::__auxLocalIP,168] ip reach failed
+Error	20180915:151121	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0x7618A4F7
+Error	20180915:151121	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180915:151121	[CParamManager::__auxLocalIP,158] IP = 0x501A8C0
+Info	20180915:151121	[CParamManager::__auxLocalIP,175] get localIp cost Time = 193
+Error	20180915:151121	[CParamManager::CParamManager,56] create directory [D:\Cache\GithubCache\CarSeatImage\20180915] success

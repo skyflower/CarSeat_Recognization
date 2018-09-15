@@ -1,4 +1,4 @@
-// LoginDlg.cpp : 实现文件
+﻿// LoginDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"

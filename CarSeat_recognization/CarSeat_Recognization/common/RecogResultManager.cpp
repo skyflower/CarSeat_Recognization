@@ -1,8 +1,8 @@
-#include "RecogResultManager.h"
+﻿#include "RecogResultManager.h"
 #include <functional>
 #include <fstream>
 #include "Log.h"
-
+ 
 
 CRecogResultManager* CRecogResultManager::m_pInstance = nullptr;
 

@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-
+  
 /*
 
 解析参数文件config.txt

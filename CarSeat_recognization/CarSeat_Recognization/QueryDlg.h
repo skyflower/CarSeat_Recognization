@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "afxwin.h"
 #include "./common/RecogResultManager.h"
 #include <atlimage.h>

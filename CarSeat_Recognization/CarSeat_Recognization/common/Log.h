@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <fstream>
 #include <mutex>
@@ -8,7 +8,7 @@
 #include <condition_variable>
 #include <atomic>
 #include <sstream>
-
+ 
 
 // 添加日志类,记录此系统的所有日志。
 //	需求.1.满足多线程的运行场景

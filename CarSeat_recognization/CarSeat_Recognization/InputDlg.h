@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "afxwin.h"
 #include "./common/ParamManager.h"
 #include "./common/LabelManager.h"

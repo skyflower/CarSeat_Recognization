@@ -25,8 +25,20 @@
     <Filter Include="image">
       <UniqueIdentifier>{f72a318f-8c95-431d-b945-a89c0784cd58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="camera">
+    <Filter Include="Camera">
       <UniqueIdentifier>{5252815d-b4cf-40a2-a33b-a90ae54fc3b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Header">
+      <UniqueIdentifier>{0bca6498-6b18-41bc-b183-c20a1fa263a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Camera">
+      <UniqueIdentifier>{86267418-a7db-4649-9579-dd6715756397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Command">
+      <UniqueIdentifier>{ddb826db-becf-42a4-9a66-454a817f8eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Class">
+      <UniqueIdentifier>{545440f3-0061-4834-9160-77859a5e8350}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,17 +102,8 @@
     <ClInclude Include="common\md5.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="Camera\Camera.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera\CameraManager.h">
-      <Filter>camera</Filter>
-    </ClInclude>
     <ClInclude Include="LoginDlg.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera\LineCamera.h">
-      <Filter>camera</Filter>
     </ClInclude>
     <ClInclude Include="common\LabelManager.h">
       <Filter>common</Filter>
@@ -119,6 +122,105 @@
     </ClInclude>
     <ClInclude Include="network\KepServerSocket.h">
       <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\CameraManager.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Header\EDSDK.h">
+      <Filter>Camera\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Header\EDSDKErrors.h">
+      <Filter>Camera\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Header\EDSDKTypes.h">
+      <Filter>Camera\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera\CameraController.h">
+      <Filter>Camera\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera\CameraEvent.h">
+      <Filter>Camera\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera\CameraEventListener.h">
+      <Filter>Camera\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera\CameraModel.h">
+      <Filter>Camera\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera\CameraModelLegacy.h">
+      <Filter>Camera\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera\Processor.h">
+      <Filter>Camera\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\CloseSessionCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\Command.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\DoEvfAFCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\DownloadCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\DownloadEvfCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\DriveLensCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\EndEvfCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\GetPropertyCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\GetPropertyDescCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\NotifyCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\OpenSessionCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\PressShutterButtonCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\SaveSettingCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\SetCapacityCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\SetPropertyCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\StartEvfCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Command\TakePictureCommand.h">
+      <Filter>Camera\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Class\ActionEvent.h">
+      <Filter>Camera\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Class\ActionListener.h">
+      <Filter>Camera\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Class\ActionSource.h">
+      <Filter>Camera\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Class\Observer.h">
+      <Filter>Camera\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Class\Synchronized.h">
+      <Filter>Camera\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Class\Thread.h">
+      <Filter>Camera\Class</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -179,17 +281,8 @@
     <ClCompile Include="common\md5.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="Camera\Camera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera\CameraManager.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
     <ClCompile Include="LoginDlg.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera\LineCamera.cpp">
-      <Filter>camera</Filter>
     </ClCompile>
     <ClCompile Include="common\LabelManager.cpp">
       <Filter>common</Filter>
@@ -208,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="network\KepServerSocket.cpp">
       <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\CameraManager.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

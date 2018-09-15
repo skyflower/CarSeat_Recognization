@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <iostream>
-#include "./Camera/LineCamera.h"
+//#include "./Camera/LineCamera.h"
 
 // CCameraParameterDlg 对话框
 
@@ -13,7 +13,7 @@ public:
 	CCameraParameterDlg(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CCameraParameterDlg();
 
-	void SetLineCamera(CLineCamera *pCamera);
+	//void SetLineCamera(CLineCamera *pCamera);
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -32,7 +32,7 @@ private:
 	// //帧率
 	float m_fCameraFPS;
 
-	CLineCamera *m_pLineCamera;
+	//CLineCamera *m_pLineCamera;
 
 public:
 	afx_msg void OnBnClickedButtonGetParameter();

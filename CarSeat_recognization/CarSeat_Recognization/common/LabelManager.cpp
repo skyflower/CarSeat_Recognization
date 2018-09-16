@@ -3,7 +3,7 @@
 #include "./Log.h"
 #include <sys/stat.h>
 #include "./utils.h"
-#include <Windows.h>
+//#include <Windows.h>
  
 bool CLabelManager::m_bInitFlag = false;
 

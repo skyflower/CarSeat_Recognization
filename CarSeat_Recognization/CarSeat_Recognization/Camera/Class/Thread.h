@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <windows.h>
+//#include <windows.h>
 #include <process.h>
 #include "Synchronized.h"
 

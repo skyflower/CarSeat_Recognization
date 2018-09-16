@@ -1,7 +1,6 @@
 ﻿#pragma once
  
 #include <iostream>
-#include <Windows.h>
 #include <winsock.h>
 #include "../common/ParamManager.h"
 #include <mutex>

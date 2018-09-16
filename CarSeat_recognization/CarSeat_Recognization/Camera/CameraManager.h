@@ -6,7 +6,7 @@
 
 #include <iostream>
 //#include "Camera.h"
-#include <Windows.h>
+//#include <Windows.h>
 #include <mutex>
 #include "./Header/EDSDK.h"
 

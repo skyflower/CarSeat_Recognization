@@ -9,7 +9,6 @@
 
 #include <vector>
 #include <unordered_map>
-#include <Windows.h>
 #include "TypeIDManager.h"
 
 class CPatternManager

@@ -199,6 +199,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action\AEMode.h" />
+    <ClInclude Include="Action\Av.h" />
+    <ClInclude Include="Action\ClickAction.h" />
+    <ClInclude Include="Action\EvfAFMode.h" />
+    <ClInclude Include="Action\EVFPictureBox.h" />
+    <ClInclude Include="Action\EvfZoomAction.h" />
+    <ClInclude Include="Action\ExposureComp.h" />
+    <ClInclude Include="Action\ImageQuality.h" />
+    <ClInclude Include="Action\Iso.h" />
+    <ClInclude Include="Action\MeteringMode.h" />
+    <ClInclude Include="Action\Property.h" />
+    <ClInclude Include="Action\Tv.h" />
     <ClInclude Include="CameraParameterDlg.h" />
     <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="Camera\Camera\CameraController.h" />
@@ -242,12 +254,7 @@
     <ClInclude Include="common\RecogResultManager.h" />
     <ClInclude Include="common\RFIDReader.h" />
     <ClInclude Include="common\utils.h" />
-    <ClInclude Include="image\BaseMatch.h" />
-    <ClInclude Include="image\COrbFlann.h" />
-    <ClInclude Include="image\FileManager.h" />
     <ClInclude Include="image\ImageClassify.h" />
-    <ClInclude Include="image\PatternManager.h" />
-    <ClInclude Include="image\TypeIDManager.h" />
     <ClInclude Include="InputDlg.h" />
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="network\KepServerSocket.h" />
@@ -260,8 +267,21 @@
     <ClInclude Include="xml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action\AEMode.cpp" />
+    <ClCompile Include="Action\Av.cpp" />
+    <ClCompile Include="Action\ClickAction.cpp" />
+    <ClCompile Include="Action\EvfAFMode.cpp" />
+    <ClCompile Include="Action\EVFPictureBox.cpp" />
+    <ClCompile Include="Action\EvfZoomAction.cpp" />
+    <ClCompile Include="Action\ExposureComp.cpp" />
+    <ClCompile Include="Action\ImageQuality.cpp" />
+    <ClCompile Include="Action\Iso.cpp" />
+    <ClCompile Include="Action\MeteringMode.cpp" />
+    <ClCompile Include="Action\Property.cpp" />
+    <ClCompile Include="Action\Tv.cpp" />
     <ClCompile Include="CameraParameterDlg.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
+    <ClCompile Include="Camera\Class\ActionSource.cpp" />
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
     <ClCompile Include="common\LabelManager.cpp" />
@@ -271,12 +291,7 @@
     <ClCompile Include="common\RecogResultManager.cpp" />
     <ClCompile Include="common\RFIDReader.cpp" />
     <ClCompile Include="common\utils.cpp" />
-    <ClCompile Include="image\BaseMatch.cpp" />
-    <ClCompile Include="image\COrbFlann.cpp" />
-    <ClCompile Include="image\FileManager.cpp" />
     <ClCompile Include="image\ImageClassify.cpp" />
-    <ClCompile Include="image\PatternManager.cpp" />
-    <ClCompile Include="image\TypeIDManager.cpp" />
     <ClCompile Include="InputDlg.cpp" />
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="network\KepServerSocket.cpp" />

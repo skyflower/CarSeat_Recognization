@@ -6,12 +6,23 @@
 #include "ActionEvent.h"
 #include "ActionListener.h" 
 #include "../../common/utils.h"
+//#include "../../CarSeat_RecognizationDlg.h"
+#include "CameraModel.h"
 
 
 class ActionSource {
 private:
 	std::vector<ActionListener*> _listeners;
 	std::string _command;
+	
+	//CCarSeat_RecognizationDlg *m_pHwnd;
+protected:
+
+	CameraModel *getCameraModel()
+	{
+		return nullptr;// m_pHwnd->getAppCameraModel();
+	}
+
 
 public:
 	void addActionListener(ActionListener* listener)
@@ -36,7 +47,7 @@ public:
 		}
 	}
 	
-	void fireEvent(char* command, void* arg = 0)
+	void fireEvent(const char* command, void* arg = 0)
 	{
 		std::vector<ActionListener*>::iterator i = _listeners.begin();
 		

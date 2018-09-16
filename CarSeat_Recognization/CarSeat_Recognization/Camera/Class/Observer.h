@@ -28,7 +28,6 @@
 #include <string>
 #include "CameraEvent.h"
 
-
 class Observable;
 class CameraEvent;
 

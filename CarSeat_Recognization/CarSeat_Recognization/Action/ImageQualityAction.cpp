@@ -13,13 +13,13 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "ImageQuality.h"
+#include "ImageQualityAction.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1
 #define WM_USER_PROPERTYDESC_CHANGED	WM_APP+2
-// CImageQuality
+// CImageQualityAction
 
-CImageQuality::CImageQuality():ActionSource()
+CImageQualityAction::CImageQualityAction():ActionSource()
 {
 	// set up action command
 	setActionCommand("set_ImageQuality");
@@ -113,27 +113,27 @@ CImageQuality::CImageQuality():ActionSource()
 
 }
 
-CImageQuality::~CImageQuality()
+CImageQualityAction::~CImageQualityAction()
 {
 }
 
 
-//BEGIN_MESSAGE_MAP(CImageQuality, CProperty)
+//BEGIN_MESSAGE_MAP(CImageQualityAction, CProperty)
 //	ON_MESSAGE(WM_USER_PROPERTY_CHANGED, OnPropertyChanged)
 //	ON_MESSAGE(WM_USER_PROPERTYDESC_CHANGED, OnPropertyDescChanged)
 //	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
 //END_MESSAGE_MAP()
 
 
-// CImageQuality message handler
-void CImageQuality::OnSelChange(int index) 
+// CImageQualityAction message handler
+void CImageQualityAction::OnSelChange(int index) 
 {
 	//DWORD_PTR data = GetItemData(GetCurSel());
 	CProperty::OnSelChange(index);
 	fireEvent(&index);
 }
 
-void CImageQuality::update(Observable* from, CameraEvent *e)
+void CImageQualityAction::update(Observable* from, CameraEvent *e)
 {
 
 	std::string event = e->getEvent();
@@ -164,13 +164,13 @@ void CImageQuality::update(Observable* from, CameraEvent *e)
 	}
 }
 
-LRESULT CImageQuality::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CImageQualityAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
 	updateProperty(getCameraModel()->getImageQuality());
 	return 0;
 }
 
-//LRESULT CImageQuality::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
+//LRESULT CImageQualityAction::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
 //{
 //	updatePropertyDesc(&getCameraModel()->getImageQualityDesc());
 //	return 0;

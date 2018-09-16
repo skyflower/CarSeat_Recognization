@@ -13,13 +13,13 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "ExposureComp.h"
+#include "ExposureAction.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1
 #define WM_USER_PROPERTYDESC_CHANGED	WM_APP+2
-// CExposureComp
+// CExposureAction
 
-CExposureComp::CExposureComp():ActionSource()
+CExposureAction::CExposureAction():ActionSource()
 {
 	// set up action command
 	setActionCommand("set_ExposureCompensation");
@@ -73,12 +73,12 @@ CExposureComp::CExposureComp():ActionSource()
 	_propertyTable->insert( std::make_pair(0xffffffff,"unknown"));
 }
 
-CExposureComp::~CExposureComp()
+CExposureAction::~CExposureAction()
 {
 }
 
 
-//BEGIN_MESSAGE_MAP(CExposureComp, CProperty)
+//BEGIN_MESSAGE_MAP(CExposureAction, CProperty)
 //	ON_MESSAGE(WM_USER_PROPERTY_CHANGED, OnPropertyChanged)
 //	ON_MESSAGE(WM_USER_PROPERTYDESC_CHANGED, OnPropertyDescChanged)
 //	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
@@ -86,15 +86,15 @@ CExposureComp::~CExposureComp()
 
 
 
-// CExposureComp message handler
-void CExposureComp::OnSelChange(int index) 
+// CExposureAction message handler
+void CExposureAction::OnSelChange(int index) 
 {
 	//DWORD_PTR data = GetItemData(GetCurSel());
 	CProperty::OnSelChange(index);
 	fireEvent(&index);
 }
 
-void CExposureComp::update(Observable* from, CameraEvent *e)
+void CExposureAction::update(Observable* from, CameraEvent *e)
 {
 
 	std::string event = e->getEvent();
@@ -125,13 +125,13 @@ void CExposureComp::update(Observable* from, CameraEvent *e)
 	}
 }
 
-LRESULT CExposureComp::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CExposureAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
 	updateProperty(getCameraModel()->getExposureCompensation());
 	return 0;
 }
 
-//LRESULT CExposureComp::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
+//LRESULT CExposureAction::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
 //{
 //	updatePropertyDesc(&getCameraModel()->getExposureCompensationDesc());
 //	return 0;

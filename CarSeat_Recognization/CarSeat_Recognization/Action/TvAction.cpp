@@ -13,13 +13,13 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "Tv.h"
+#include "TvAction.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1
 #define WM_USER_PROPERTYDESC_CHANGED	WM_APP+2
-// CTv
+// CTvAction
 
-CTv::CTv():ActionSource()
+CTvAction::CTvAction():ActionSource()
 {
 	setActionCommand("set_Tv");
 	if (_propertyTable == nullptr)
@@ -104,26 +104,26 @@ CTv::CTv():ActionSource()
 	_propertyTable->insert( std::make_pair(0xffffffff,"unknown"));
 }
 
-CTv::~CTv()
+CTvAction::~CTvAction()
 {
 }
 
 //
-//BEGIN_MESSAGE_MAP(CTv, CProperty)
+//BEGIN_MESSAGE_MAP(CTvAction, CProperty)
 //	ON_MESSAGE(WM_USER_PROPERTY_CHANGED, OnPropertyChanged)
 //	ON_MESSAGE(WM_USER_PROPERTYDESC_CHANGED, OnPropertyDescChanged)
 //	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
 //END_MESSAGE_MAP()
 
 
-// CTv message handler
-void CTv::OnSelChange(int index) 
+// CTvAction message handler
+void CTvAction::OnSelChange(int index) 
 {
 	CProperty::OnSelChange(index);
 	fireEvent(&index);
 }
 
-void CTv::update(Observable* from, CameraEvent *e)
+void CTvAction::update(Observable* from, CameraEvent *e)
 {
 
 	std::string event = e->getEvent();
@@ -154,13 +154,13 @@ void CTv::update(Observable* from, CameraEvent *e)
 	}
 }
 
-LRESULT CTv::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CTvAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
 	updateProperty(getCameraModel()->getTv());
 	return 0;
 }
 
-//LRESULT CTv::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
+//LRESULT CTvAction::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
 //{
 //	updatePropertyDesc(&getCameraModel()->getTvDesc());
 //	return 0;

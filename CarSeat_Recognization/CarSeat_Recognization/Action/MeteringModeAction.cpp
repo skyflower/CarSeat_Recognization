@@ -13,13 +13,13 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "MeteringMode.h"
+#include "MeteringModeAction.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1
 #define WM_USER_PROPERTYDESC_CHANGED	WM_APP+2
-// CMeteringMode
+// CMeteringModeAction
 
-CMeteringMode::CMeteringMode( ):ActionSource()
+CMeteringModeAction::CMeteringModeAction( ):ActionSource()
 {
 	// set up action command
 	setActionCommand("set_MeteringMode");
@@ -36,26 +36,26 @@ CMeteringMode::CMeteringMode( ):ActionSource()
 	_propertyTable->insert( std::make_pair(0xffffffff,"unknown"));
 }
 
-CMeteringMode::~CMeteringMode()
+CMeteringModeAction::~CMeteringModeAction()
 {
 }
 
 
-//BEGIN_MESSAGE_MAP(CMeteringMode, CProperty)
+//BEGIN_MESSAGE_MAP(CMeteringModeAction, CProperty)
 //	ON_MESSAGE(WM_USER_PROPERTY_CHANGED, OnPropertyChanged)
 //	ON_MESSAGE(WM_USER_PROPERTYDESC_CHANGED, OnPropertyDescChanged)
 //	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
 //END_MESSAGE_MAP()
 
 
-// CMeteringMode message handler
-void CMeteringMode::OnSelChange(int index) 
+// CMeteringModeAction message handler
+void CMeteringModeAction::OnSelChange(int index) 
 {
 	CProperty::OnSelChange(index);
 	fireEvent(&index);
 }
 
-void CMeteringMode::update(Observable* from, CameraEvent *e)
+void CMeteringModeAction::update(Observable* from, CameraEvent *e)
 {
 
 	std::string event = e->getEvent();
@@ -86,13 +86,13 @@ void CMeteringMode::update(Observable* from, CameraEvent *e)
 	}
 }
 
-LRESULT CMeteringMode::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CMeteringModeAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
 	updateProperty(getCameraModel()->getMeteringMode());
 	return 0;
 }
 
-//LRESULT CMeteringMode::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
+//LRESULT CMeteringModeAction::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
 //{
 //	updatePropertyDesc(&getCameraModel()->getMeteringModeDesc());
 //	return 0;

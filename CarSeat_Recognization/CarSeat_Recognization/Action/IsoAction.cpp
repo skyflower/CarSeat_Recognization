@@ -13,13 +13,13 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "Iso.h"
+#include "IsoAction.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1
 #define WM_USER_PROPERTYDESC_CHANGED	WM_APP+2
-// CIso
+// CIsoAction
 
-CIso::CIso():ActionSource()
+CIsoAction::CIsoAction():ActionSource()
 {
 	// set up action command
 	setActionCommand("set_ISOSpeed");
@@ -68,12 +68,12 @@ CIso::CIso():ActionSource()
 	_propertyTable->insert( std::make_pair(0xffffffff,"unknown"));
 }
 
-CIso::~CIso()
+CIsoAction::~CIsoAction()
 {
 }
 
 
-//BEGIN_MESSAGE_MAP(CIso, CProperty)
+//BEGIN_MESSAGE_MAP(CIsoAction, CProperty)
 //	ON_MESSAGE(WM_USER_PROPERTY_CHANGED, OnPropertyChanged)
 //	ON_MESSAGE(WM_USER_PROPERTYDESC_CHANGED, OnPropertyDescChanged)
 //	ON_CONTROL_REFLECT(CBN_SELCHANGE, OnSelChange)
@@ -81,14 +81,14 @@ CIso::~CIso()
 
 
 
-// CIso message handler
-void CIso::OnSelChange(int index) 
+// CIsoAction message handler
+void CIsoAction::OnSelChange(int index) 
 {
 	CProperty::OnSelChange(index);
 	fireEvent(&index);
 }
 
-void CIso::update(Observable* from, CameraEvent *e)
+void CIsoAction::update(Observable* from, CameraEvent *e)
 {
 
 	std::string event = e->getEvent();
@@ -119,13 +119,13 @@ void CIso::update(Observable* from, CameraEvent *e)
 	}
 }
 
-LRESULT CIso::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
+LRESULT CIsoAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
 	updateProperty(getCameraModel()->getIso());
 	return 0;
 }
 //
-//LRESULT CIso::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
+//LRESULT CIsoAction::OnPropertyDescChanged(WPARAM wParam, LPARAM lParam)
 //{
 //	updatePropertyDesc(&getCameraModel()->getIsoDesc());
 //	return 0;

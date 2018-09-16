@@ -265,7 +265,7 @@ int CCameraManager::GetCameraIndexByName(const char * name)
 
 const char * CCameraManager::GetDesriptorByIndex(int index)
 {
-	static char desc[L_MAX_URL_LENGTH];
+	static char desc[MAX_CHAR_LENGTH];
 	memset(desc, 0, sizeof(desc));
 
 	std::unique_lock<std::mutex> lock(m_Mutex, std::defer_lock);
@@ -291,7 +291,7 @@ const char * CCameraManager::GetDesriptorByIndex(int index)
 	memset(&deviceInfo, 0, sizeof(EdsDeviceInfo));
 	EdsGetDeviceInfo(camera, &deviceInfo);
 
-	sprintf_s(desc, sizeof(desc), "%s_%s_%u", deviceInfo.szPortName, deviceInfo.szDeviceDescription, deviceInfo.deviceSubType);
+	sprintf_s(desc, sizeof(desc), "%s_%u", deviceInfo.szDeviceDescription, deviceInfo.deviceSubType);
 		
 	return desc;
 }

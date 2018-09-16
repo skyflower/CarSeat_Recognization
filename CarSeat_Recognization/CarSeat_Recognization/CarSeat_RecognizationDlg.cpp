@@ -321,7 +321,7 @@ void CCarSeat_RecognizationDlg::run()
 		/*
 		读取条形码
 		*/
-		imagepath = std::string();
+		//imagepath = std::string();
 
 		// 读取条形码后需要延迟在取照片
 		std::string tmpBarcode = m_pRFIDReader->readBarcode();
@@ -350,18 +350,31 @@ void CCarSeat_RecognizationDlg::run()
 			}
 			if (m_pLineCamera != nullptr)
 			{
-				imagepath = m_pLineCamera->saveJpg();
-				if (imagepath.size() == 0)
+				m_pLineCamera->saveJpg();
+				int tmpCount = 0;
+				while (1)
 				{
-					OnStartCamera();
-
-					CLineCamera::CameraStatus status = m_pLineCamera->getCameraStatus();
-					if (status == CLineCamera::CameraStatus::CAMERA_GRAB)
+					std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(10);
+					std::this_thread::sleep_for(a);
+					if (strcmp(imagepath.c_str(), m_pLineCamera->getCurrentImage()) != 0)
 					{
-						imagepath = m_pLineCamera->saveJpg();
+						imagepath = std::string(m_pLineCamera->getCurrentImage());
+						break;
 					}
-					
+					tmpCount++;
+					if (tmpCount > 1000)
+					{
+						WriteError("get camera image failed");
+						OnStartCamera();
+						CLineCamera::CameraStatus status = m_pLineCamera->getCameraStatus();
+						if (status == CLineCamera::CameraStatus::CAMERA_GRAB)
+						{
+							m_pLineCamera->saveJpg();
+						}
+						break;
+					}
 				}
+				
 			}
 		}
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
@@ -997,7 +1010,7 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 void CCarSeat_RecognizationDlg::OnClose()
 {
 	
-	//WriteInfo("fireEvent closing");
+	WriteInfo("closing");
 	
 	
 
@@ -1019,6 +1032,11 @@ void CCarSeat_RecognizationDlg::OnClose()
 			m_pUIThread == nullptr;
 		}*/
 	}
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->close();
+	}
+	Sleep(10);
 	//WriteInfo("thread status false");
 
 	if (_model != nullptr)
@@ -1041,7 +1059,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 		_model = nullptr;
 	}
 	
-	
+	WriteInfo("free controller, model, lineCamera");
 	if (m_pRecogManager != nullptr)
 	{
 		delete m_pRecogManager;
@@ -1064,7 +1082,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pImagePattern;
 		m_pImagePattern = nullptr;
 	}
-	//WriteInfo("free RecogManager KepServer ImagePattern");
+	WriteInfo("free RecogManager KepServer ImagePattern");
 	
 	CDHtmlDialog::OnClose();
 }
@@ -1278,9 +1296,11 @@ void CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob()
 	{
 		m_bBeginJob = false;
 		GetDlgItem(IDC_BUTTON_BEGIN_JOB)->SetWindowTextW(L"开始作业");
+		WriteInfo("end job");
 	}
 	else
 	{
+		WriteInfo("begin job");
 		m_bBeginJob = true;
 		GetDlgItem(IDC_BUTTON_BEGIN_JOB)->SetWindowTextW(L"终止作业");
 	}
@@ -1320,6 +1340,56 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 {
 	//End of download of image
 	//_progress.SetPos(0);
+	//TRACE2("wParam hi = %u, low = %u\n", HIWORD(wParam), LOWORD(wParam));
+	//TRACE2("lParam hi = %u, low = %u\n", HIWORD(lParam), LOWORD(lParam));
+	static int i = 1;
+	TRACE1("download complete i = %d\n", i);
+
+	wchar_t imageName[MAX_CHAR_LENGTH];
+	memset(imageName, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
+	
+	
+	wchar_t imagePath[MAX_CHAR_LENGTH];
+	memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
+	GetCurrentDirectory(MAX_CHAR_LENGTH, imagePath);
+
+	wsprintf(imageName, L".\\IMG_%04d.JPG", i);
+
+	//wchar_t movePath[MAX_CHAR_LENGTH];
+	SYSTEMTIME curTime;
+	memset(&curTime, 0, sizeof(curTime));
+	GetLocalTime(&curTime);
+
+	memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
+
+	wchar_t *tmpDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
+
+	wsprintf(imagePath, L"%s\\%04d%02d%02d_%02d%02d%02d.jpg", \
+		tmpDirectory, curTime.wYear, curTime.wMonth, curTime.wDay, \
+		curTime.wHour, curTime.wMinute, curTime.wSecond);
+
+	if (_waccess(imageName, 0) == 0)
+	{
+		MoveFile(imageName, imagePath);
+	}
+
+	if (tmpDirectory != nullptr)
+	{
+		delete[]tmpDirectory;
+		tmpDirectory = nullptr;
+	}
+
+	char *tmp = utils::WcharToChar(imagePath);
+
+	if (tmp != nullptr)
+	{
+		WriteInfo("save image path = %s", tmp);
+		m_pLineCamera->setCurrentImage(tmp);
+		delete[]tmp;
+		tmp = nullptr;
+	}
+	
+	i = i + 1;
 	return 0;
 }
 

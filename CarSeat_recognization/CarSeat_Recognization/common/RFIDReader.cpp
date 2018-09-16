@@ -39,7 +39,7 @@ CRFIDReader::~CRFIDReader()
 std::string CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8位有效
-#if 0
+#if 1
 	char tmp[20];
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;

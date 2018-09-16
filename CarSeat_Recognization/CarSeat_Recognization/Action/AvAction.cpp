@@ -148,7 +148,7 @@ void CAvAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CAvAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getAv());
+	//updateProperty(getCameraModel()->getAv());
 	return 0;
 }
 

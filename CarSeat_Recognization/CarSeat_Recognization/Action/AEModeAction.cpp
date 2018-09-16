@@ -99,7 +99,7 @@ void CAEModeAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CAEModeAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getAEMode());
+	//updateProperty(getCameraModel()->getAEMode());
 	return 0;
 }
 

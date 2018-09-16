@@ -80,7 +80,7 @@ void CEvfAFModeAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CEvfAFModeAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getEvfAFMode());
+	//updateProperty(getCameraModel()->getEvfAFMode());
 	return 0;
 }
 

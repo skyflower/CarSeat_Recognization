@@ -280,6 +280,16 @@ namespace utils
 		{
 			memset(text + i, 0, sizeof(char) * (len - i));
 		}
+		char s = '#';
+		i = 0;
+		while (text[i] != '\0')
+		{
+			if (text[i] == s)
+			{
+				text[i] = ' ';
+			}
+			++i;
+		}
 		return true;
 	}
 

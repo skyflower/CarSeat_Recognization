@@ -121,7 +121,7 @@ void CIsoAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CIsoAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getIso());
+	//updateProperty(getCameraModel()->getIso());
 	return 0;
 }
 //

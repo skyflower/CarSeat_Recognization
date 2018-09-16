@@ -86,13 +86,14 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pCameraManager = CCameraManager::GetInstance();
 	m_pRecogManager = CRecogResultManager::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
+	m_pLineCamera = new CLineCamera();
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDHtmlDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_IMAGE_PATTERN, m_stImagePattern);
-	DDX_Control(pDX, IDC_IMAGE_REC, m_stImageRec);
+	DDX_Control(pDX, IDC_IMAGE_REC, _pictureBox);
 	DDX_Control(pDX, IDC_BARCODE, m_barCode);
 	DDX_Control(pDX, IDC_REG_RATIO, m_RegRatio);
 }
@@ -151,6 +152,8 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 
 	SetIcon(m_hIcon, TRUE);		
 	SetIcon(m_hIcon, FALSE);
+
+
 
 	m_nCxScreen = GetSystemMetrics(SM_CXSCREEN);
 	m_nCyScreen = GetSystemMetrics(SM_CYSCREEN);
@@ -336,27 +339,30 @@ void CCarSeat_RecognizationDlg::run()
 
 		if (tmpBarcode.size() != 0)
 		{
-			/*if (m_pLineCamera == nullptr)
+			if (_model == nullptr)
+			{
+				initCameraModule();
+				OnStartCamera();
+			}
+			if (m_pLineCamera == nullptr)
 			{
 				initCameraModule();
 			}
 			if (m_pLineCamera != nullptr)
 			{
-				imagepath = m_pLineCamera->SaveJpg();
+				imagepath = m_pLineCamera->saveJpg();
 				if (imagepath.size() == 0)
 				{
-					initCameraModule();
-
 					OnStartCamera();
 
-					CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
-					if (status == CCamera::CameraStatus::CAMERA_GRAB)
+					CLineCamera::CameraStatus status = m_pLineCamera->getCameraStatus();
+					if (status == CLineCamera::CameraStatus::CAMERA_GRAB)
 					{
-						imagepath = m_pLineCamera->SaveJpg();
+						imagepath = m_pLineCamera->saveJpg();
 					}
 					
 				}
-			}*/
+			}
 		}
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
@@ -595,15 +601,20 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 		if (pDevice != nullptr)
 		{
 			EdsDeviceInfo deviceInfo = m_pCameraManager->GetDeviceInfoByIndex(m_nCameraIndex);
-			_model = cameraModelFactory(pDevice, deviceInfo);
-			_controller->setCameraModel(_model);
-			_model->addObserver(this);
-			setupObserver(_model);
+			if (_model == nullptr)
+			{
+				_model = cameraModelFactory(pDevice, deviceInfo);
+				_controller->setCameraModel(_model);
+
+				_model->addObserver(this);
+				setupObserver(_model);
+			}
+			
 
 			//m_pLineCamera = new CLineCamera(pDevice);
-			const char* tmpImageDir = m_pParamManager->GetImageDirectory();
+			//const char* tmpImageDir = m_pParamManager->GetImageDirectory();
 
-			WriteInfo("create line camera, set image directory = %s", tmpImageDir);
+			//WriteInfo("create line camera, set image directory = %s", tmpImageDir);
 
 			int err = 0;
 			if (err == EDS_ERR_OK)
@@ -900,7 +911,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		//TRACE1("CameraName = %s", tmpName);
 		m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 	}
-	//if ((m_pLineCamera == nullptr) && (m_nCameraIndex != -1))
+	if (m_nCameraIndex != -1)
 	{
 		EdsCameraRef pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
 		if (pDevice == nullptr)
@@ -908,121 +919,54 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 			AfxMessageBox(L"get Camera device Failed");
 			return;
 		}
-		//m_pLineCamera = new CLineCamera(pDevice);
+		if (_model == nullptr)
+		{
+			EdsDeviceInfo deviceInfo = m_pCameraManager->GetDeviceInfoByIndex(m_nCameraIndex);
+			_model = cameraModelFactory(pDevice, deviceInfo);
+		}
+		_controller->setCameraModel(_model);
+
+		_model->addObserver(this);
+		setupObserver(_model);
+
+		if (m_pLineCamera == nullptr)
+		{
+			m_pLineCamera = new CLineCamera();
+		}
 		const char* tmpImageDir = m_pParamManager->GetImageDirectory();
 		//wchar_t *tmpWPath = utils::CharToWchar(const_cast<char*>(tmpImageDir));
-
-		
-		//if (m_pLineCamera != nullptr)
+		if (m_pLineCamera != nullptr)
 		{
-			//m_pLineCamera->SetImageSaveDirectory(tmpImageDir);
-			//m_pLineCamera->StartGrabbing();
+			m_pLineCamera->setImageSaveDirectory(tmpImageDir);
+			m_pLineCamera->startCamera();
 		}
-			
 	}
-	/*if (m_pLineCamera == nullptr)
+
+	if ((m_pLineCamera == nullptr)||(_model == nullptr))
 	{
-		AfxMessageBox(L"line camera init Failed");
+		AfxMessageBox(L"line camera or cameraModel init Failed");
 		return;
 	}
-	CCamera::CameraStatus tmpStatus = m_pLineCamera->GetCameraStatus();
-	if (tmpStatus == CCamera::CameraStatus::CAMERA_GRAB)
+	CLineCamera::CameraStatus tmpStatus = m_pLineCamera->getCameraStatus();
+	if (tmpStatus == CLineCamera::CameraStatus::CAMERA_GRAB)
 	{
 		return;
-	}*/
+	}
 
-	//do
-	//{
-	//	if (tmpStatus != CCamera::CameraStatus::CAMERA_OPEN)
-	//	{
-	//		if (m_pLineCamera->OpenButton() == false)
-	//		{
-	//			TRACE0("open button Failed\n");
-	//			WriteError("open button Failed");
-	//			break;
-	//		}
-	//	}
+	do
+	{
+		if (tmpStatus != CLineCamera::CameraStatus::CAMERA_OPEN)
+		{
+			setupListener(_controller);
+			setupObserver(_model);
+		}
 
+		m_pLineCamera->startCamera();
 
-	//	if (m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_CONTINUOUS) != true)
-	//	{
-	//		TRACE0("Set exposure mode timed Failed\n");
-	//		WriteError("Set exposure mode time Failed");
-	//	}
-
-	//	/*if (m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_CONTINUOUS) == true)
-	//	{
-	//		TRACE0("Set auto exposure time mode Failed\n");
-	//		WriteError("Set auto exposure time mode Failed");
-	//	}*/
-
-	//	int tmpMax = m_pLabelManager->GetExposureTimeMax();
-	//	int tmpMin = m_pLabelManager->GetExposureTimeMin();
-	//	if (m_pLineCamera->SetExposureTime(tmpMax, tmpMin) != true)
-	//	{
-	//		TRACE2("Set exposureTime Max = %d,Min = %d Failed\n", tmpMax, tmpMin);
-	//		WriteError("Set exposureTime Max = %d,Min = %d Failed", tmpMax, tmpMin);
-	//	}
-
-	//	if (m_pLineCamera->SetPixelFormat(PixelType_Gvsp_RGB16_Packed) != true)
-	//	{
-	//		TRACE0("Set PixelFormat Failed\n");
-	//		WriteError("Set PixelFormat Failed");
-	//	}
-	//	
-	//	if (m_pLineCamera->SetBalanceWhile(MV_BALANCEWHITE_AUTO_CONTINUOUS) == false)
-	//	{
-	//		TRACE0("set BALANCE WHITE AUTO CONTINUOUS Failed\n");
-	//		WriteError("set BALANCE WHITE AUTO CONTINUOUS Failed");
-	//	}
-
-	//	if (m_pLineCamera->SetGain(0) == false)
-	//	{
-	//		TRACE0("SetGain Failed\n");
-	//		WriteError("SetGain Failed");
-	//	}
-	//	if (m_pLineCamera->SetTriggerMode(MV_TRIGGER_MODE_OFF) == false)
-	//	{
-	//		TRACE0("SetTriggerMode MV_TRIGGER_MODE_ON Failed\n");
-	//		WriteError("SetTriggerMode MV_TRIGGER_MODE_ON Failed");
-	//	}
-	//	if (m_pLineCamera->SetTriggerSource(MV_TRIGGER_SOURCE_LINE0) == false)
-	//	{
-	//		TRACE0("SetTriggerSource MV_TRIGGER_SOURCE_LINE0 Failed\n");
-	//		WriteError("SetTriggerSource MV_TRIGGER_SOURCE_LINE0 Failed");
-	//	}
-	//	HWND imageHwnd = GetDlgItem(IDC_IMAGE_REC)->GetSafeHwnd();
-	//	m_pLineCamera->SetDisplayHwnd(imageHwnd);
-	//	
-	//	SIZE tmpSize = m_pLineCamera->GetImageSize();
-	//	if ((tmpSize.cx != 0) && (tmpSize.cy != 0))
-	//	{
-	//		RECT tmpRecRect;
-	//		GetDlgItem(IDC_IMAGE_REC)->GetClientRect(&tmpRecRect);
-
-	//		CRect rect;
-
-	//		GetDlgItem(IDC_IMAGE_REC)->GetWindowRect(&rect);//获取控件的屏幕坐标
-	//		ScreenToClient(&rect);//转换为对话框上的客户坐标
-
-	//		SIZE recSize;
-	//		recSize.cx = tmpRecRect.right - tmpRecRect.left;
-	//		recSize.cy = tmpRecRect.bottom - tmpRecRect.top;
-	//		SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
-	//		GetDlgItem(IDC_IMAGE_REC)->MoveWindow(rect.left, rect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
-
-	//	}
-
-	//	if (m_pLineCamera->StartGrabbing() == false)
-	//	{
-	//		TRACE0("StartGrabbing Failed\n");
-	//		WriteError("StartGrabbing Failed");
-	//		break;
-	//	}
-	//	return;
-	//} while (0);
-	//
-	//m_pLineCamera->CloseDevice();
+		return;
+	} while (0);
+	
+	m_pLineCamera->stopCamera();
 }
 
 
@@ -1052,14 +996,13 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 
 void CCarSeat_RecognizationDlg::OnClose()
 {
-	WriteInfo("fireEvent closing");
-
-	//fireEvent("closing");
-	//_controller.close();
 	
-	_controller->close();
+	//WriteInfo("fireEvent closing");
+	
+	
+
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	WriteInfo("next set ui thread status");
+	//WriteInfo("next set ui thread status");
 	if (m_bThreadStatus == true)
 	{
 		m_bThreadStatus = false;
@@ -1076,7 +1019,27 @@ void CCarSeat_RecognizationDlg::OnClose()
 			m_pUIThread == nullptr;
 		}*/
 	}
-	WriteInfo("thread status false");
+	//WriteInfo("thread status false");
+
+	if (_model != nullptr)
+	{
+		_model->deleteObserver(static_cast<Observer*>(&_pictureBox));
+		_model->deleteObserver(this);
+	}
+
+	_controller->close();
+
+	if (m_pLineCamera != nullptr)
+	{
+		delete m_pLineCamera;
+		m_pLineCamera = nullptr;
+	}
+
+	if (_model != nullptr)
+	{
+		delete _model;
+		_model = nullptr;
+	}
 	
 	
 	if (m_pRecogManager != nullptr)
@@ -1089,6 +1052,11 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pKepServer;
 		m_pKepServer = nullptr;
 	}
+	if (m_pRFIDReader != nullptr)
+	{
+		delete m_pRFIDReader;
+		m_pRFIDReader = nullptr;
+	}
 	
 	
 	if (m_pImagePattern != nullptr)
@@ -1096,7 +1064,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pImagePattern;
 		m_pImagePattern = nullptr;
 	}
-	WriteInfo("free RecogManager KepServer ImagePattern");
+	//WriteInfo("free RecogManager KepServer ImagePattern");
 	
 	CDHtmlDialog::OnClose();
 }
@@ -1113,6 +1081,10 @@ void CCarSeat_RecognizationDlg::OnTakePhoto()
 			std::string path = m_pLineCamera->SaveJpg();
 		}
 	}*/
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->saveJpg();
+	}
 }
 
 
@@ -1322,6 +1294,11 @@ void CCarSeat_RecognizationDlg::OnMenuStartGrab()
 	{
 		m_pLineCamera->StartGrabbing();
 	}*/
+
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->startCamera();
+	}
 }
 
 
@@ -1332,6 +1309,10 @@ void CCarSeat_RecognizationDlg::OnMenuStopGrab()
 	{
 		m_pLineCamera->StopGrabbing();
 	}*/
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->stopCamera();
+	}
 }
 
 
@@ -1364,21 +1345,22 @@ CameraModel* CCarSeat_RecognizationDlg::cameraModelFactory(EdsCameraRef camera, 
 void CCarSeat_RecognizationDlg::setupListener(ActionListener* listener)
 {
 	addActionListener(listener);
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->setupListener(listener);
+	}
+	_pictureBox.setActionCommand("downloadEVF");
+	_pictureBox.addActionListener(listener);
 }
 
 
 void CCarSeat_RecognizationDlg::setupObserver(Observable* ob)
 {
-	/*ob->addObserver(static_cast<Observer*>(&_comboAEMode));
-	ob->addObserver(static_cast<Observer*>(&_comboTv));
-	ob->addObserver(static_cast<Observer*>(&_comboAv));
-	ob->addObserver(static_cast<Observer*>(&_comboIso));
-	ob->addObserver(static_cast<Observer*>(&_comboMeteringMode));
-	ob->addObserver(static_cast<Observer*>(&_comboExposureComp));
-	ob->addObserver(static_cast<Observer*>(&_comboImageQuality));
 	ob->addObserver(static_cast<Observer*>(&_pictureBox));
-	ob->addObserver(static_cast<Observer*>(&_comboEvfAFMode));
-	ob->addObserver(static_cast<Observer*>(&_btnZoomZoom));*/
+	if (m_pLineCamera != nullptr)
+	{
+		m_pLineCamera->setupObserver(ob);
+	}
 }
 
 CameraModel *CCarSeat_RecognizationDlg::getAppCameraModel()

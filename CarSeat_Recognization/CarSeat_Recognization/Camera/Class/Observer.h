@@ -44,7 +44,7 @@ private:
 	std::vector<Observer*> _observers;
 
 public:
-	Observable(){}
+	Observable():_observers(){}
 	virtual ~Observable(){deleteObservers();}
 
 	// Addition of Observer

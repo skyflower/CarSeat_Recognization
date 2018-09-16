@@ -7,26 +7,15 @@
 #include "./common/LabelManager.h"
 //#include "./Camera/Camera.h"
 #include "./Camera/CameraManager.h"
-//#include "./Camera/LineCamera.h"
+#include "./Camera/LineCamera.h"
 #include "./common/RFIDReader.h"
 #include "./common/RecogResultManager.h"
 #include "./network/KepServerSocket.h"
 #include "./Camera/Class/ActionSource.h"
 #include "./Camera/Class/Observer.h"
 #include "./Camera/Camera/CameraEvent.h"
-#include "CameraController.h"
-#include "CameraModel.h"
-#include "./Action/AEModeAction.h"
-#include "./Action/AvAction.h"
-#include "./Action/ClickAction.h"
-#include "./Action/EvfAFModeAction.h"
 #include "./Action/EVFPictureBox.h"
-#include "./Action/EvfZoomAction.h"
-#include "./Action/MeteringModeAction.h"
-#include "./Action/ExposureAction.h"
-#include "./Action/ImageQualityAction.h"
-#include "./Action/TvAction.h"
-#include "./Action/IsoAction.h"
+
 // C EvfZoomAction
 
 
@@ -70,7 +59,8 @@ private:
 	int m_nCyScreen;
 	
 	CStatic m_stImagePattern;
-	CStatic m_stImageRec;
+
+	//CStatic m_stImageRec;
 
 	CImage *m_pImagePattern;
 
@@ -91,7 +81,8 @@ private:
 	CLabelManager *m_pLabelManager;
 
 	std::mutex m_LineCameraMutex;
-	//CLineCamera *m_pLineCamera;
+	
+	CLineCamera *m_pLineCamera;
 
 	int m_nCameraIndex;
 	CCameraManager *m_pCameraManager;
@@ -103,49 +94,8 @@ private:
 
 	bool m_bBeginJob;
 
-
-
-
-
-
-	CClickAction	_btnTakePicture;
-	CClickAction	_btnStartEVF;
-	CClickAction	_btnEndEVF;
-	CClickAction	_btnFocusNear3;
-	CClickAction	_btnFocusNear2;
-	CClickAction	_btnFocusNear1;
-	CClickAction	_btnFocusFar3;
-	CClickAction	_btnFocusFar2;
-	CClickAction	_btnFocusFar1;
-	CClickAction	_btnFocusUp;
-	CClickAction	_btnFocusDown;
-	CClickAction	_btnFocusLeft;
-	CClickAction	_btnFocusRight;
-	CClickAction	_btnZoomFit;
-	CEvfZoomAction	_btnZoomZoom;
 	
-
 	CEVFPictureBox	_pictureBox;
-
-	CAEModeAction	_comboAEMode;
-	CTvAction			_comboTv;
-	CAvAction			_comboAv;
-	CIsoAction		_comboIso;
-	CMeteringModeAction	_comboMeteringMode;
-	CExposureAction	_comboExposureComp;
-	CImageQualityAction	_comboImageQuality;
-	CClickAction	_btnPressingHalfway;
-	CClickAction	_btnPressingCompletely;
-	CClickAction	_btnPressingOff;
-	CEvfAFModeAction		_comboEvfAFMode;
-	CClickAction	_btnEvfAfON;
-	CClickAction	_btnEvfAfOFF;
-
-
-
-
-
-
 
 
 	void CheckAndUpdate(std::string barcode, std::string type, std::string tmppath);

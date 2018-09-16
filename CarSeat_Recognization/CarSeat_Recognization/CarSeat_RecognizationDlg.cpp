@@ -1380,3 +1380,8 @@ void CCarSeat_RecognizationDlg::setupObserver(Observable* ob)
 	ob->addObserver(static_cast<Observer*>(&_comboEvfAFMode));
 	ob->addObserver(static_cast<Observer*>(&_btnZoomZoom));*/
 }
+
+CameraModel *CCarSeat_RecognizationDlg::getAppCameraModel()
+{
+	return _model;
+}

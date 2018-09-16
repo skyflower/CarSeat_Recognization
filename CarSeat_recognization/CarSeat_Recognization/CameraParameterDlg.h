@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <Windows.h>
+
 #include <iostream>
 //#include "./Camera/LineCamera.h"
 

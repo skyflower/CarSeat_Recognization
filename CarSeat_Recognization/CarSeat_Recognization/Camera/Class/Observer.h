@@ -26,6 +26,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include "CameraEvent.h"
 
 
 class Observable;

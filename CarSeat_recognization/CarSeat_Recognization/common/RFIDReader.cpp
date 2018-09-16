@@ -2,7 +2,7 @@
 #include "RFIDReader.h"
 #include <cstdlib>
 #include <cstdio>
-#include <Windows.h>
+//#include <Windows.h>
 #include "utils.h"
 #include "Log.h"
 #include "../xml/tinyxml.h"

@@ -40,6 +40,9 @@
     <Filter Include="Camera\Class">
       <UniqueIdentifier>{545440f3-0061-4834-9160-77859a5e8350}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Action">
+      <UniqueIdentifier>{85303966-89a1-4834-91a9-62aa854bea63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -80,21 +83,6 @@
     </ClInclude>
     <ClInclude Include="InputDlg.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="image\BaseMatch.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="image\COrbFlann.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="image\FileManager.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="image\PatternManager.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="image\TypeIDManager.h">
-      <Filter>image</Filter>
     </ClInclude>
     <ClInclude Include="image\ImageClassify.h">
       <Filter>image</Filter>
@@ -222,6 +210,42 @@
     <ClInclude Include="Camera\Class\Thread.h">
       <Filter>Camera\Class</Filter>
     </ClInclude>
+    <ClInclude Include="Action\AEMode.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\Av.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\ClickAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\EvfAFMode.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\EVFPictureBox.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\ExposureComp.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\ImageQuality.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\Iso.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\MeteringMode.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\Tv.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\Property.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\EvfZoomAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -260,21 +284,6 @@
     <ClCompile Include="InputDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="image\BaseMatch.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="image\COrbFlann.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="image\FileManager.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="image\PatternManager.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="image\TypeIDManager.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
     <ClCompile Include="image\ImageClassify.cpp">
       <Filter>image</Filter>
     </ClCompile>
@@ -304,6 +313,45 @@
     </ClCompile>
     <ClCompile Include="Camera\CameraManager.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\AEMode.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\Av.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\ClickAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\EvfAFMode.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\EVFPictureBox.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\ExposureComp.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\ImageQuality.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\Iso.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\MeteringMode.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\Tv.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\Property.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Class\ActionSource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\EvfZoomAction.cpp">
+      <Filter>Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

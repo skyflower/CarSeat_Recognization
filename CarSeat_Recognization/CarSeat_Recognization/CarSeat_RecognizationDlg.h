@@ -14,6 +14,8 @@
 #include "./Camera/Class/ActionSource.h"
 #include "./Camera/Class/Observer.h"
 #include "./Camera/Camera/CameraEvent.h"
+#include "CameraController.h"
+#include "CameraModel.h"
 
 
 // CCarSeat_RecognizationDlg 对话框
@@ -140,6 +142,8 @@ public:
 
 	afx_msg LRESULT OnDownloadComplete(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnProgressReport(WPARAM wParam, LPARAM lParam);
+
+	CameraModel *getAppCameraModel();
 
 
 	afx_msg void OnStartCamera();

@@ -3,7 +3,7 @@
 serverip="118.24.164.247"
 serverport="10567"
 serverImagePort="44004"
-
+blockSocket="1"
 
 testClientPort="10909"
 testServerPort="10909"

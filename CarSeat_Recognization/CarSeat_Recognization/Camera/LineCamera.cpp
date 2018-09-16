@@ -5,8 +5,8 @@
 CLineCamera::CLineCamera():m_nStatus(CLineCamera::CameraStatus::CAMERA_INIT)
 {
 	memset(m_szSaveDirectory, 0, sizeof(m_szSaveDirectory));
+	memset(m_szCurImagePath, 0, sizeof(m_szCurImagePath));
 	m_bSetupFlag[0] = m_bSetupFlag[1] = 0;
-
 }
 
 
@@ -53,6 +53,7 @@ void CLineCamera::setupListener(ActionListener * listener)
 	m_bSetupFlag[0] = 1;
 	if ((m_bSetupFlag[0] & m_bSetupFlag[1]) == 1)
 	{
+		WriteInfo("set listener, m_nStatus = %d", m_nStatus);
 		m_nStatus = CLineCamera::CameraStatus::CAMERA_OPEN;
 	}
 }
@@ -70,14 +71,15 @@ void CLineCamera::setupObserver(Observable * ob)
 	m_bSetupFlag[1] = 1;
 	if ((m_bSetupFlag[0] & m_bSetupFlag[1]) == 1)
 	{
+		WriteInfo("set, m_nStatus = %d", m_nStatus);
 		m_nStatus = CLineCamera::CameraStatus::CAMERA_OPEN;
-		
 	}
 }
 
 std::string CLineCamera::saveJpg()
 {
 	_btnTakePicture.OnClicked();
+	WriteInfo("saveJpg Camera, m_nStatus = %d", m_nStatus);
 	return std::string();
 }
 
@@ -90,6 +92,8 @@ void CLineCamera::startCamera()
 	}
 	initCameraStatus();
 	_btnStartEVF.OnClicked();
+	
+	WriteInfo("startCamera Camera, m_nStatus = %d", m_nStatus);
 	m_nStatus = CameraStatus::CAMERA_GRAB;
 }
 
@@ -98,9 +102,18 @@ void CLineCamera::stopCamera()
 	if (m_nStatus != CameraStatus::CAMERA_GRAB)
 	{
 		WriteInfo("start Camera status not match, m_nStatus = %d not CAMERA_GRAB", m_nStatus);
+		return;
 	}
 	_btnEndEVF.OnClicked();
+	
+	WriteInfo("stop Camera, m_nStatus = %d", m_nStatus);
 	m_nStatus = CameraStatus::CAMERA_OPEN;
+}
+
+void CLineCamera::close()
+{
+	stopCamera();
+	//_btnEvfAfOFF.OnClicked();
 }
 
 void CLineCamera::setImageSaveDirectory(const char * dir)
@@ -113,7 +126,21 @@ CLineCamera::CameraStatus CLineCamera::getCameraStatus()
 	return m_nStatus;
 }
 
+void CLineCamera::setCurrentImage(const char * file)
+{
+	if (file != nullptr)
+	{
+		strcpy_s(m_szCurImagePath, file);
+	}
+}
+
+const char * CLineCamera::getCurrentImage()
+{
+	return m_szCurImagePath;
+}
+
 void CLineCamera::initCameraStatus()
 {
 	_comboImageQuality.OnSelChange(EdsImageQuality_MJF);
+	WriteInfo("InitCamera Status, set image quality mjf, m_nStatus = %d", m_nStatus);
 }

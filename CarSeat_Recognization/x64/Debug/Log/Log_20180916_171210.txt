@@ -1,0 +1,224 @@
+Error	20180916:171210:792	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0xFFFFFFFF
+Error	20180916:171210:794	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180916:171210:794	[CParamManager::__auxLocalIP,158] IP = 0x150A8C0
+Error	20180916:171211:293	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xFFFFFFFF
+Error	20180916:171211:293	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180916:171211:293	[CParamManager::__auxLocalIP,158] IP = 0x501A8C0
+Error	20180916:171211:792	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xFFFFFFFF
+Error	20180916:171211:792	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180916:171211:793	[CParamManager::__auxLocalIP,175] get localIp cost Time = 1368
+Error	20180916:171211:793	[CParamManager::CParamManager,56] create directory [\20180916] success
+Error	20180916:171213:66	[CKepServerSocket::initSocket,195] connect failed, err = 10035
+Error	20180916:171214:145	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:145	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171214:145	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:145	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171214:356	[CCameraManager::testPrint,355] index = 0, deviceSubType = 1
+Info	20180916:171214:356	[CCameraManager::testPrint,356] index = 0, deviceDesc = Canon EOS 1300D
+Info	20180916:171214:356	[CCameraManager::testPrint,357] index = 0, devicePortName = \\?\usb#vid_04a9&pid_32b4#5&262ed807&0&2#{6ac27878-a6fa-4155-ba85-f98f491d4f33}
+Info	20180916:171214:356	[CCarSeat_RecognizationDlg::initCameraModule,590] camera count = 1
+Info	20180916:171214:358	[CCarSeat_RecognizationDlg::initCameraModule,639] init CameraModule success
+Info	20180916:171214:359	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171214:359	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171214:359	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171214:359	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171214:359	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171214:360	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171214:410	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:411	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171214:411	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:411	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171214:613	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171214:613	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171214:613	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171214:613	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171214:664	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:665	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171214:665	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:665	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171214:866	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171214:866	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171214:866	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171214:866	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171214:917	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:918	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171214:918	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171215:119	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171215:119	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171215:119	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171215:119	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171215:169	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:170	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:170	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171215:373	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171215:373	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171215:373	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171215:374	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171215:424	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:425	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171215:425	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:425	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171215:626	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171215:626	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171215:626	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171215:626	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171215:677	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:677	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171215:677	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:677	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171215:879	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171215:879	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171215:879	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171215:879	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171215:930	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:931	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171215:931	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171216:132	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171216:132	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171216:132	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171216:132	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171216:183	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:184	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:184	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171216:386	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171216:386	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171216:386	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171216:386	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171216:438	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:438	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171216:439	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:439	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171216:641	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171216:641	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171216:641	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171216:641	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171216:692	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:692	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171216:692	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:692	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171216:893	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171216:893	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171216:893	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171216:893	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171216:945	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:946	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171216:946	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171217:147	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171217:147	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171217:147	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171217:147	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171217:198	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:199	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:199	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171217:401	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171217:401	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171217:401	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171217:401	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171217:453	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:453	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171217:453	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:453	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171217:655	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171217:655	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171217:655	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171217:655	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171217:707	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:708	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Info	20180916:171217:909	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171217:909	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171217:909	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171217:909	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171217:960	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:960	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171217:961	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171217:961	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171218:163	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171218:163	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171218:163	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171218:163	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171218:214	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:214	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171218:214	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:214	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171218:416	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171218:416	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171218:416	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171218:416	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171218:467	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:467	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171218:467	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:467	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171218:669	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171218:669	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171218:669	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171218:670	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171218:721	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:721	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171218:721	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:721	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171218:924	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171218:924	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171218:924	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171218:924	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171218:977	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:977	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171218:978	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171218:978	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171219:180	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171219:180	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171219:180	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171219:180	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171219:230	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:230	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171219:230	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:230	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171219:432	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171219:432	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171219:432	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171219:432	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171219:482	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:483	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:483	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171219:684	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171219:684	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171219:684	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171219:684	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171219:735	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:736	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:736	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171219:937	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171219:941	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171219:941	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171219:941	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171219:989	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:989	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171219:989	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171219:989	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171220:191	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171220:191	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171220:191	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171220:191	[CLineCamera::saveJpg,81] saveJpg Camera
+Error	20180916:171220:243	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171220:244	[CRFIDReader::reset,281] rfid socket not connect
+Error	20180916:171220:244	[CRFIDReader::initRFID,267] connect failed, ip = 0xFFFFFFFF, port = 4294967295, err = 10035
+Error	20180916:171220:244	[CRFIDReader::reset,281] rfid socket not connect
+Info	20180916:171220:445	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171220:445	[CLineCamera::initCameraStatus,122] InitCamera Status, set image quality mjf
+Info	20180916:171220:445	[CLineCamera::startCamera,95] stop Camera
+Info	20180916:171220:445	[CLineCamera::saveJpg,81] saveJpg Camera
+Info	20180916:171221:824	[CParamManager::__auxLocalIP,158] IP = 0x1C9A8C0
+Error	20180916:171222:292	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0xFFFFFFFF
+Error	20180916:171222:292	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180916:171222:293	[CParamManager::__auxLocalIP,158] IP = 0x150A8C0
+Error	20180916:171222:792	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xFFFFFFFF
+Error	20180916:171222:792	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180916:171222:792	[CParamManager::__auxLocalIP,158] IP = 0x501A8C0
+Error	20180916:171223:293	[CNetworkTask::IsReachable,81] icmpSendEcho failed clientIp = 0xC0A80105, ServerIp = 0xFFFFFFFF
+Error	20180916:171223:293	[CParamManager::__auxLocalIP,168] ip reach failed
+Info	20180916:171223:293	[CParamManager::__auxLocalIP,175] get localIp cost Time = 1471
+Error	20180916:171223:685	[CRFIDReader::__communicate,691] socket Error, 10038
+Error	20180916:171223:685	[CRFIDReader::stopRead,469] communicate err = 6
+Info	20180916:171223:726	[CCarSeat_RecognizationApp::DeInitSystem,234] enter DeInitSystem
+Info	20180916:171223:897	[CCarSeat_RecognizationApp::DeInitSystem,244] close network task
+Info	20180916:171223:897	[CCarSeat_RecognizationApp::DeInitSystem,255] close ui thread;
+Info	20180916:171223:911	[CCarSeat_RecognizationApp::DeInitSystem,285] free classify model controller cameramanager lableManager ParamMangaeer

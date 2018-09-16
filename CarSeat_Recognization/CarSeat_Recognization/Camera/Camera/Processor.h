@@ -21,6 +21,7 @@
 #include "Thread.h"
 #include "Synchronized.h"
 #include "Command.h"
+#include "../../common/Log.h"
 
 class Processor : public Thread 
 {
@@ -109,8 +110,9 @@ public:
 			Command* command = take();
 			if(command != NULL)
 			{
+				WriteInfo("before command type = %s", typeid(*command).raw_name());
 				bool complete = command->execute();
-				
+				WriteInfo("after command type = %s", typeid(*command).raw_name());
 				if(complete == false)
 				{
 					//If commands that were issued fail ( because of DeviceBusy or other reasons )
@@ -123,10 +125,12 @@ public:
 				else
 				{
 					delete command;
+					command = nullptr;
 				}
+				
 			}
 		}
-		
+		WriteInfo("_running false");
 		// Clear que
 		clear();
 
@@ -139,7 +143,7 @@ public:
 		}
 
 		CoUninitialize();
-
+		WriteInfo("CoUninitialize");
 	}
 
 protected:

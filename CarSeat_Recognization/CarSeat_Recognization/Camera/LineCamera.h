@@ -32,15 +32,18 @@ public:
 	void setupListener(ActionListener* listener);
 	void setupObserver(Observable* ob);
 
-
 	std::string saveJpg();
 
 	void startCamera();
 	void stopCamera();
+	void close();
 
 	void setImageSaveDirectory(const char *dir);
 
 	CLineCamera::CameraStatus getCameraStatus();
+
+	void setCurrentImage(const char*file);
+	const char* getCurrentImage();
 
 private:
 
@@ -65,6 +68,7 @@ private:
 	CClickAction	_btnEvfAfOFF;
 
 	char m_szSaveDirectory[256];
+	char m_szCurImagePath[256];
 
 	CameraStatus m_nStatus;
 

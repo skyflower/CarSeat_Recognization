@@ -25,8 +25,6 @@ public:
 
 public:
 	virtual ~CClickAction();
-
-protected:
 	void OnClicked();
 };
 

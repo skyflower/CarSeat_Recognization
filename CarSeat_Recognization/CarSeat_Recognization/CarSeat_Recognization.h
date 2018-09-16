@@ -62,7 +62,6 @@ private:
 	CCameraManager *m_pCameraManager;
 
 
-	CameraModel*		_model;
 	CameraController*	_controller;
 
 	std::thread m_UIThread;

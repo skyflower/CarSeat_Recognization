@@ -23,16 +23,16 @@
 
 class CImageQualityAction : public CProperty, public ActionSource , public Observer  
 {
-
 public:
 	CImageQualityAction();
 	virtual ~CImageQualityAction();
 
 	//observer
 	virtual void update(Observable* from, CameraEvent *e);
+	void OnSelChange(int index);
 
 protected:
-	void OnSelChange(int index);
+	
 	LRESULT OnPropertyChanged(WPARAM wParam, LPARAM lParam);
 	//afx_msg LRESULT OnPropertyDescChanged(WPARAM wParam, LPARAM lParam);
 

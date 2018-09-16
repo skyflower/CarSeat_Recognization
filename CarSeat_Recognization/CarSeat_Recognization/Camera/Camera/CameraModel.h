@@ -61,7 +61,11 @@ protected:
 
 public:
 	// Constructor
-	CameraModel(EdsCameraRef camera):_lockCount(0),_camera(camera){memset(&_focusInfo, 0, sizeof(_focusInfo));} 
+	CameraModel(EdsCameraRef camera):_lockCount(0),_camera(camera)
+	{
+		memset(&_focusInfo, 0, sizeof(_focusInfo));
+		memset(_modelName, 0, sizeof(_modelName));
+	}
 
 	//Acquisition of Camera Object
 	EdsCameraRef getCameraObject() const {return _camera;}

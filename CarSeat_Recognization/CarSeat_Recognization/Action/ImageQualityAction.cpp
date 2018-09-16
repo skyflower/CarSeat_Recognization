@@ -88,6 +88,8 @@ CImageQualityAction::CImageQualityAction():ActionSource()
 	_propertyTable->insert( std::make_pair(EdsImageQuality_M1J,    "Middle1 Jpeg"));
 	_propertyTable->insert( std::make_pair(EdsImageQuality_M2J,    "Middle2 Jpeg"));
 	_propertyTable->insert( std::make_pair(EdsImageQuality_SJ,     "Small Jpeg"));
+
+	/////////////////////////////////////
 	_propertyTable->insert( std::make_pair(kEdsImageQualityForLegacy_LR,    "RAW"));
 	_propertyTable->insert( std::make_pair(kEdsImageQualityForLegacy_LRLJF, "RAW + Large Fine Jpeg"));
 	_propertyTable->insert( std::make_pair(kEdsImageQualityForLegacy_LRMJF, "RAW + Middle Fine Jpeg"));
@@ -166,7 +168,7 @@ void CImageQualityAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CImageQualityAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getImageQuality());
+	//updateProperty(getCameraModel()->getImageQuality());
 	return 0;
 }
 

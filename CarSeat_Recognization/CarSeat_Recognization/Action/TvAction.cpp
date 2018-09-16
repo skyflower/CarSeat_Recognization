@@ -156,7 +156,7 @@ void CTvAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CTvAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getTv());
+	//updateProperty(getCameraModel()->getTv());
 	return 0;
 }
 

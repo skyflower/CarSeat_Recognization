@@ -28,7 +28,7 @@ lineCamera={"Line01":"001", "Line02":"002", "Line03":"003"}
 lineName="Line01"
 
 //此次产线相机的mac地址
-cameraName="C42F90ff3ceb"
+cameraName="Canon#EOS#1300D"
 
 ##识别模块的模型文件以及标签类型文件
 graphFile="C:\Users\Administrator\Documents\Downloads\test1-master\carseat\part-classify\output_graph.pb"

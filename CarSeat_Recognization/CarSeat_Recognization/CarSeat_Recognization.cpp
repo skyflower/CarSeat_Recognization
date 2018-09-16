@@ -33,8 +33,9 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
 	//m_pNetworkTask = nullptr;
 	m_pClassify = nullptr;
 	m_pLabelManager = nullptr;
-	_model = nullptr;
 	_controller = nullptr;
+
+	//_CrtSetBreakAlloc(1195);
 
 	_tsetlocale(LC_ALL, _T("chs"));
 	// TODO: 在此处添加构造代码，
@@ -93,10 +94,11 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-
+	
 	//Create CameraController
 	_controller = new CameraController();
 
+	
 	//Create View Dialog
 	CCarSeat_RecognizationDlg dlg;
 
@@ -104,7 +106,7 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	dlg.setCameraController(_controller);
 	
 	INT_PTR nResponse = IDOK;
-	if (LoginSystem() == true)
+	if ((_controller != nullptr) && (LoginSystem() == true))
 	{
 		m_pMainWnd = &dlg;
 
@@ -257,14 +259,6 @@ void CCarSeat_RecognizationApp::DeInitSystem()
 		delete m_pClassify;
 		m_pClassify = nullptr;
 	}
-
-
-	if (_model != NULL)
-	{
-		delete _model;
-		_model = NULL;
-	}
-
 
 	if (_controller != NULL)
 	{

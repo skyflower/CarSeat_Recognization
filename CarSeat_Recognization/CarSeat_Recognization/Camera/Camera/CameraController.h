@@ -57,7 +57,19 @@ public:
 	// Destoracta
 	virtual ~CameraController(){}
 
-	void setCameraModel(CameraModel* model) {_model = model;}
+	void setCameraModel(CameraModel* model)
+	{
+		if (model != nullptr)
+		{
+			//The communication with the camera begins
+			StoreAsync(new OpenSessionCommand(model));
+
+			//It is necessary to acquire the property information that cannot acquire in sending OpenSessionCommand automatically by manual operation.
+			StoreAsync(new GetPropertyCommand(model, kEdsPropID_ProductName));
+
+			_model = model;
+		}
+	}
 
 	void close()
 	{
@@ -72,14 +84,7 @@ public:
 	{
 		_processor.start();
 
-		if (_model != nullptr)
-		{
-			//The communication with the camera begins
-			StoreAsync(new OpenSessionCommand(_model));
-
-			//It is necessary to acquire the property information that cannot acquire in sending OpenSessionCommand automatically by manual operation.
-			StoreAsync(new GetPropertyCommand(_model, kEdsPropID_ProductName));
-		}
+		
 	}
 
 public:

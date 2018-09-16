@@ -127,7 +127,7 @@ void CExposureAction::update(Observable* from, CameraEvent *e)
 
 LRESULT CExposureAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getExposureCompensation());
+	//updateProperty(getCameraModel()->getExposureCompensation());
 	return 0;
 }
 

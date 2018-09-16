@@ -82,13 +82,13 @@ void CMeteringModeAction::update(Observable* from, CameraEvent *e)
 		{
 			//The update processing can be executed from another thread. 
 			//::PostMessage(this->m_hWnd, WM_USER_PROPERTYDESC_CHANGED, NULL, NULL);
-		}	
+		}
 	}
 }
 
 LRESULT CMeteringModeAction::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	updateProperty(getCameraModel()->getMeteringMode());
+	//updateProperty(getCameraModel()->getMeteringMode());
 	return 0;
 }
 

@@ -245,6 +245,7 @@
     <ClInclude Include="Camera\Header\EDSDK.h" />
     <ClInclude Include="Camera\Header\EDSDKErrors.h" />
     <ClInclude Include="Camera\Header\EDSDKTypes.h" />
+    <ClInclude Include="Camera\LineCamera.h" />
     <ClInclude Include="CarSeat_Recognization.h" />
     <ClInclude Include="CarSeat_RecognizationDlg.h" />
     <ClInclude Include="common\LabelManager.h" />
@@ -282,6 +283,7 @@
     <ClCompile Include="CameraParameterDlg.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Camera\Class\ActionSource.cpp" />
+    <ClCompile Include="Camera\LineCamera.cpp" />
     <ClCompile Include="CarSeat_Recognization.cpp" />
     <ClCompile Include="CarSeat_RecognizationDlg.cpp" />
     <ClCompile Include="common\LabelManager.cpp" />

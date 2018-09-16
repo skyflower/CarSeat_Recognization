@@ -51,6 +51,10 @@ CCameraManager * CCameraManager::GetInstance()
 
 CCameraManager::~CCameraManager()
 {
+	if (m_stDevList != nullptr)
+	{
+		EdsRelease(m_stDevList);
+	}
 	if (isSDKLoaded)
 	{
 		EdsTerminateSDK();
@@ -66,7 +70,7 @@ bool  CCameraManager::EnumCamera()
 	{
 		return false;
 	}
-    CString strMsg;
+    //CString strMsg;
     // ch:初始化设备信息列表 | en:Device Information List Initialization
     //memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
 
@@ -77,6 +81,7 @@ bool  CCameraManager::EnumCamera()
     {
         return false;
     }
+	lock.unlock();
 
 #ifdef _DEBUG
 	testPrint();
@@ -210,7 +215,7 @@ EdsCameraRef CCameraManager::GetCamera(int index)
 	EdsUInt32 count = 0;
 	int err = EdsGetChildCount(m_stDevList, &count);
 	
-	if (count >= tmpIndex)
+	if (count <= tmpIndex)
 	{
 		return nullptr;
 	}
@@ -270,7 +275,7 @@ const char * CCameraManager::GetDesriptorByIndex(int index)
 	}
 	EdsUInt32 count = 0;
 	int err = EdsGetChildCount(m_stDevList, &count);
-	if (count == 0)
+	if ((count == 0) || (index >= count))
 	{
 		err = EDS_ERR_DEVICE_NOT_FOUND;
 	}
@@ -302,7 +307,7 @@ EdsDeviceInfo CCameraManager::GetDeviceInfoByIndex(int index)
 	}
 	EdsUInt32 count = 0;
 	int err = EdsGetChildCount(m_stDevList, &count);
-	if (count == 0)
+	if ((count == 0) || (index >= count))
 	{
 		err = EDS_ERR_DEVICE_NOT_FOUND;
 	}
@@ -348,8 +353,8 @@ void CCameraManager::testPrint()
 		EdsGetDeviceInfo(camera, &deviceInfo);
 
 		WriteInfo("index = %u, deviceSubType = %u", i, deviceInfo.deviceSubType);
-		WriteInfo("index = %u, deviceDesc = %s", deviceInfo.szDeviceDescription);
-		WriteInfo("index = %u, devicePortName = %s", deviceInfo.szPortName);
+		WriteInfo("index = %u, deviceDesc = %s", i, deviceInfo.szDeviceDescription);
+		WriteInfo("index = %u, devicePortName = %s", i, deviceInfo.szPortName);
 		++i;
 	}
 }

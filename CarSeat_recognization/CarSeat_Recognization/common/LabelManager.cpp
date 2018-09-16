@@ -85,6 +85,11 @@ bool CLabelManager::init()
 	utils::readFile(m_configFile, content, nSize);
 	if ((content == nullptr) || (nSize == 0))
 	{
+		if (content != nullptr)
+		{
+			delete[]content;
+			content = nullptr;
+		}
 		return false;
 	}
 

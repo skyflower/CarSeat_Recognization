@@ -246,6 +246,9 @@
     <ClInclude Include="Action\TvAction.h">
       <Filter>Action</Filter>
     </ClInclude>
+    <ClInclude Include="Camera\LineCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarSeat_Recognization.cpp">
@@ -352,6 +355,9 @@
     </ClCompile>
     <ClCompile Include="Action\TvAction.cpp">
       <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\LineCamera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

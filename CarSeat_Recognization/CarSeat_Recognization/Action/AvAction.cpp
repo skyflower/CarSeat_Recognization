@@ -13,7 +13,7 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "Av.h"
+#include "AvAction.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1
 #define WM_USER_PROPERTYDESC_CHANGED	WM_APP+2

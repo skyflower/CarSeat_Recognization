@@ -199,18 +199,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Action\AEMode.h" />
-    <ClInclude Include="Action\Av.h" />
+    <ClInclude Include="Action\AEModeAction.h" />
+    <ClInclude Include="Action\AvAction.h" />
     <ClInclude Include="Action\ClickAction.h" />
-    <ClInclude Include="Action\EvfAFMode.h" />
+    <ClInclude Include="Action\EvfAFModeAction.h" />
     <ClInclude Include="Action\EVFPictureBox.h" />
     <ClInclude Include="Action\EvfZoomAction.h" />
-    <ClInclude Include="Action\ExposureComp.h" />
-    <ClInclude Include="Action\ImageQuality.h" />
-    <ClInclude Include="Action\Iso.h" />
-    <ClInclude Include="Action\MeteringMode.h" />
+    <ClInclude Include="Action\ExposureAction.h" />
+    <ClInclude Include="Action\ImageQualityAction.h" />
+    <ClInclude Include="Action\IsoAction.h" />
+    <ClInclude Include="Action\MeteringModeAction.h" />
     <ClInclude Include="Action\Property.h" />
-    <ClInclude Include="Action\Tv.h" />
+    <ClInclude Include="Action\TvAction.h" />
     <ClInclude Include="CameraParameterDlg.h" />
     <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="Camera\Camera\CameraController.h" />
@@ -267,18 +267,18 @@
     <ClInclude Include="xml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Action\AEMode.cpp" />
-    <ClCompile Include="Action\Av.cpp" />
+    <ClCompile Include="Action\AEModeAction.cpp" />
+    <ClCompile Include="Action\AvAction.cpp" />
     <ClCompile Include="Action\ClickAction.cpp" />
-    <ClCompile Include="Action\EvfAFMode.cpp" />
+    <ClCompile Include="Action\EvfAFModeAction.cpp" />
     <ClCompile Include="Action\EVFPictureBox.cpp" />
     <ClCompile Include="Action\EvfZoomAction.cpp" />
-    <ClCompile Include="Action\ExposureComp.cpp" />
-    <ClCompile Include="Action\ImageQuality.cpp" />
-    <ClCompile Include="Action\Iso.cpp" />
-    <ClCompile Include="Action\MeteringMode.cpp" />
+    <ClCompile Include="Action\ExposureAction.cpp" />
+    <ClCompile Include="Action\ImageQualityAction.cpp" />
+    <ClCompile Include="Action\IsoAction.cpp" />
+    <ClCompile Include="Action\MeteringModeAction.cpp" />
     <ClCompile Include="Action\Property.cpp" />
-    <ClCompile Include="Action\Tv.cpp" />
+    <ClCompile Include="Action\TvAction.cpp" />
     <ClCompile Include="CameraParameterDlg.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Camera\Class\ActionSource.cpp" />

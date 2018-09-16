@@ -13,7 +13,7 @@
 *                                                                             *
 *******************************************************************************/
 
-#include "AEMode.h"
+#include "AEModeAction.h"
 #include "CameraEvent.h"
 
 #define WM_USER_PROPERTY_CHANGED		WM_APP+1

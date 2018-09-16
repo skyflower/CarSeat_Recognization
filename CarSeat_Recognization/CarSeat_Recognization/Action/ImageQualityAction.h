@@ -1,7 +1,7 @@
 /******************************************************************************
 *                                                                             *
 *   PROJECT : EOS Digital Software Development Kit EDSDK                      *
-*      NAME : Tv.h      	                                                  *
+*      NAME : ImageQuality.h	                                              *
 *                                                                             *
 *   Description: This is the Sample code to show the usage of EDSDK.          *
 *                                                                             *
@@ -18,16 +18,15 @@
 #include "Property.h"
 #include "Observer.h"
 #include "ActionSource.h"
+#include "CameraEvent.h"
+// CImageQualityAction
 
-// CTv
-
-class CTv : public CProperty, public ActionSource , public Observer
+class CImageQualityAction : public CProperty, public ActionSource , public Observer  
 {
 
 public:
-	CTv();
-	virtual ~CTv();
-
+	CImageQualityAction();
+	virtual ~CImageQualityAction();
 
 	//observer
 	virtual void update(Observable* from, CameraEvent *e);
@@ -36,6 +35,7 @@ protected:
 	void OnSelChange(int index);
 	LRESULT OnPropertyChanged(WPARAM wParam, LPARAM lParam);
 	//afx_msg LRESULT OnPropertyDescChanged(WPARAM wParam, LPARAM lParam);
+
 	//DECLARE_MESSAGE_MAP()
 };
 

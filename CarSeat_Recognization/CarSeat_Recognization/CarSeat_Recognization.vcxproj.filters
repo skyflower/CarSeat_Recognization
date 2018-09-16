@@ -210,40 +210,40 @@
     <ClInclude Include="Camera\Class\Thread.h">
       <Filter>Camera\Class</Filter>
     </ClInclude>
-    <ClInclude Include="Action\AEMode.h">
-      <Filter>Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Action\Av.h">
-      <Filter>Action</Filter>
-    </ClInclude>
     <ClInclude Include="Action\ClickAction.h">
       <Filter>Action</Filter>
     </ClInclude>
-    <ClInclude Include="Action\EvfAFMode.h">
-      <Filter>Action</Filter>
-    </ClInclude>
     <ClInclude Include="Action\EVFPictureBox.h">
-      <Filter>Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Action\ExposureComp.h">
-      <Filter>Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Action\ImageQuality.h">
-      <Filter>Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Action\Iso.h">
-      <Filter>Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Action\MeteringMode.h">
-      <Filter>Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Action\Tv.h">
       <Filter>Action</Filter>
     </ClInclude>
     <ClInclude Include="Action\Property.h">
       <Filter>Action</Filter>
     </ClInclude>
     <ClInclude Include="Action\EvfZoomAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\AEModeAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\AvAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\EvfAFModeAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\ExposureAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\ImageQualityAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\IsoAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\MeteringModeAction.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="Action\TvAction.h">
       <Filter>Action</Filter>
     </ClInclude>
   </ItemGroup>
@@ -314,34 +314,10 @@
     <ClCompile Include="Camera\CameraManager.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Action\AEMode.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
-    <ClCompile Include="Action\Av.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
     <ClCompile Include="Action\ClickAction.cpp">
       <Filter>Action</Filter>
     </ClCompile>
-    <ClCompile Include="Action\EvfAFMode.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
     <ClCompile Include="Action\EVFPictureBox.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
-    <ClCompile Include="Action\ExposureComp.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
-    <ClCompile Include="Action\ImageQuality.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
-    <ClCompile Include="Action\Iso.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
-    <ClCompile Include="Action\MeteringMode.cpp">
-      <Filter>Action</Filter>
-    </ClCompile>
-    <ClCompile Include="Action\Tv.cpp">
       <Filter>Action</Filter>
     </ClCompile>
     <ClCompile Include="Action\Property.cpp">
@@ -351,6 +327,30 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Action\EvfZoomAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\AEModeAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\AvAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\EvfAFModeAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\ExposureAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\ImageQualityAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\IsoAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\MeteringModeAction.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Action\TvAction.cpp">
       <Filter>Action</Filter>
     </ClCompile>
   </ItemGroup>

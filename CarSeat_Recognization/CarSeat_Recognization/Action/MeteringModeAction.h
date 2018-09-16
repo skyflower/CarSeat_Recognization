@@ -15,18 +15,20 @@
 
 #pragma once
 
+
+#include "MeteringModeAction.h"
 #include "Property.h"
 #include "Observer.h"
 #include "ActionSource.h"
 #include "CameraEvent.h"
-// CMeteringMode
+// CMeteringModeAction
 
-class CMeteringMode : public CProperty, public ActionSource , public Observer  
+class CMeteringModeAction : public CProperty, public ActionSource , public Observer  
 {
 
 public:
-	CMeteringMode();
-	virtual ~CMeteringMode();
+	CMeteringModeAction();
+	virtual ~CMeteringModeAction();
 
 	//observer
 	virtual void update(Observable* from, CameraEvent *e);

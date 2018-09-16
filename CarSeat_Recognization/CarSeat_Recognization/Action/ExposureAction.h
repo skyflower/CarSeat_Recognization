@@ -1,7 +1,7 @@
 /******************************************************************************
 *                                                                             *
 *   PROJECT : EOS Digital Software Development Kit EDSDK                      *
-*      NAME : ImageQuality.h	                                              *
+*      NAME : ExposureComp.h	                                              *
 *                                                                             *
 *   Description: This is the Sample code to show the usage of EDSDK.          *
 *                                                                             *
@@ -17,16 +17,15 @@
 
 #include "Property.h"
 #include "Observer.h"
-#include "ActionSource.h"
 #include "CameraEvent.h"
-// CImageQuality
+#include "ActionSource.h"
 
-class CImageQuality : public CProperty, public ActionSource , public Observer  
+class CExposureAction : public CProperty, public ActionSource , public Observer  
 {
 
 public:
-	CImageQuality();
-	virtual ~CImageQuality();
+	CExposureAction();
+	virtual ~CExposureAction();
 
 	//observer
 	virtual void update(Observable* from, CameraEvent *e);
@@ -35,7 +34,6 @@ protected:
 	void OnSelChange(int index);
 	LRESULT OnPropertyChanged(WPARAM wParam, LPARAM lParam);
 	//afx_msg LRESULT OnPropertyDescChanged(WPARAM wParam, LPARAM lParam);
-
 	//DECLARE_MESSAGE_MAP()
 };
 

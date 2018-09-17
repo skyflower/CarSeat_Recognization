@@ -35,7 +35,7 @@ CCarSeat_RecognizationApp::CCarSeat_RecognizationApp():
 	m_pLabelManager = nullptr;
 	_controller = nullptr;
 
-	//_CrtSetBreakAlloc(1195);
+	//_CrtSetBreakAlloc(2430);
 
 	_tsetlocale(LC_ALL, _T("chs"));
 	// TODO: 在此处添加构造代码，

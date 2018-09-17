@@ -76,7 +76,7 @@ public:
 		_running = false;
 		_syncObject.unlock();
 		//resume();
-	}  
+	}
 
 
 	void clear() 
@@ -110,9 +110,16 @@ public:
 			Command* command = take();
 			if(command != NULL)
 			{
-				WriteInfo("before command type = %s", typeid(*command).raw_name());
+				std::string commandName(typeid(*command).raw_name());
+				if ((strstr(commandName.c_str(), "AVGetPropertyCommand") == NULL)	\
+					&& (strstr(commandName.c_str(), "AVDownloadEvfCommand") == NULL)	\
+					&& (strstr(commandName.c_str(), "AVGetPropertyDescCommand") == NULL))
+				{
+					WriteInfo("command type = %s\n", commandName.c_str());
+				}
+				//WriteInfo("before command type = %s", typeid(*command).raw_name());
 				bool complete = command->execute();
-				WriteInfo("after command type = %s", typeid(*command).raw_name());
+				//WriteInfo("after command type = %s", typeid(*command).raw_name());
 				if(complete == false)
 				{
 					//If commands that were issued fail ( because of DeviceBusy or other reasons )

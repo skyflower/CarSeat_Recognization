@@ -104,7 +104,11 @@ void CLineCamera::stopCamera()
 		WriteInfo("start Camera status not match, m_nStatus = %d not CAMERA_GRAB", m_nStatus);
 		return;
 	}
+	
 	_btnEndEVF.OnClicked();
+
+	_comboMeteringMode.OnSelChange(5);
+
 	
 	WriteInfo("stop Camera, m_nStatus = %d", m_nStatus);
 	m_nStatus = CameraStatus::CAMERA_OPEN;
@@ -142,5 +146,7 @@ const char * CLineCamera::getCurrentImage()
 void CLineCamera::initCameraStatus()
 {
 	_comboImageQuality.OnSelChange(EdsImageQuality_MJF);
+	_comboMeteringMode.OnSelChange(3);
+	_comboEvfAFMode.OnSelChange(0);
 	WriteInfo("InitCamera Status, set image quality mjf, m_nStatus = %d", m_nStatus);
 }

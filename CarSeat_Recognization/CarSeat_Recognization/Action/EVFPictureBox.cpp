@@ -27,10 +27,16 @@ CEVFPictureBox::CEVFPictureBox():ActionSource()
 {
 	active = FALSE;
 	memset(&m_focusInfo, 0, sizeof(EdsFocusInfo));
+	m_bStopUpdate = false;
 }
 
 CEVFPictureBox::~CEVFPictureBox()
 {
+}
+
+void CEVFPictureBox::stopUpdate()
+{
+	m_bStopUpdate = true;
 }
 
 
@@ -44,7 +50,10 @@ END_MESSAGE_MAP()
 
 void CEVFPictureBox::update(Observable* from, CameraEvent *e)
 {
-
+	if (m_bStopUpdate == true)
+	{
+		return;
+	}
 	std::string event = e->getEvent();
 
 	if(event == "EvfDataChanged")

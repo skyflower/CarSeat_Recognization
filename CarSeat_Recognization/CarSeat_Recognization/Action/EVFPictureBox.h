@@ -28,12 +28,15 @@ private:
 	BOOL active;
 	EdsFocusInfo	m_focusInfo;
 	EdsBool			m_bDrawZoomFrame;
+	volatile bool m_bStopUpdate;
 
 	void OnDrawImage(CDC *pDC, unsigned char* pbyteImage, int size);
 	void OnDrawFocusRect(CDC *pDC, CRect zoomRect, CSize sizeJpegLarge);
 public:
 	CEVFPictureBox();
 	virtual ~CEVFPictureBox();
+
+	void stopUpdate();
 
 	//observer
 	virtual void update(Observable* from, CameraEvent *e);

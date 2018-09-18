@@ -1,4 +1,0 @@
-Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xA9FE5CA5, ServerIp = 0xFFFFFFFF
-Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0xFFFFFFFF
-Error	[CNetworkTask::IsReachable,54]icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xFFFFFFFF
-Error	[CKepServerSocket::initSocket,203]connect failed, err = 10035

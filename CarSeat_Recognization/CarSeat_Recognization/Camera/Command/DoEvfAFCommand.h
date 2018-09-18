@@ -33,6 +33,12 @@ public:
 	{
 		EdsError err = EDS_ERR_OK;
 		bool	 locked = false;
+
+		if (_model == nullptr)
+		{
+			incFail();
+			return false;
+		}
 		
 		//EvfAFON
 		if(err == EDS_ERR_OK)
@@ -43,16 +49,18 @@ public:
 		//Notification of error
 		if(err != EDS_ERR_OK)
 		{
+			incFail();
 			// It retries it at device busy
 			if(err == EDS_ERR_DEVICE_BUSY)
 			{
 				CameraEvent e("DeviceBusy");
 				_model->notifyObservers(&e);
-				return true;
+				return false;
 			}
 			
 			CameraEvent e("error", &err); 
 			_model->notifyObservers(&e);
+			return false;
 		}
 
 		return true;

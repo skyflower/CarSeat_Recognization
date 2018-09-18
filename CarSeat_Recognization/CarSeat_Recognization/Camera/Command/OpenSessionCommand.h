@@ -72,8 +72,10 @@ public:
 		//Notification of error
 		if(err != EDS_ERR_OK)
 		{
+			incFail();
 			CameraEvent e("error", &err);
 			_model->notifyObservers(&e);
+			return false;
 		}
 
 		return true;

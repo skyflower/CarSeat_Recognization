@@ -4,4 +4,8 @@
     <LocalDebuggerEnvironment>PATH=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\CarSeat_Recognization\Camera\Dll $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerEnvironment>PATH=D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\CarSeat_Recognization\Camera\Dll $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

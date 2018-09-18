@@ -42,12 +42,15 @@ public:
 			{
 				CameraEvent e("error", &err);
 				_model->notifyObservers(&e);
+				incFail();
+				return false;
 			}
+			return true;
 		}
 	
 		
 
-		return true;
+		return false;
 	}
 
 };

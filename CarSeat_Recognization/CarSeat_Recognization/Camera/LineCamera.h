@@ -52,20 +52,20 @@ private:
 	CClickAction	_btnTakePicture;
 	CClickAction	_btnStartEVF;
 	CClickAction	_btnEndEVF;
-	CAEModeAction	_comboAEMode;
-	CTvAction			_comboTv;
-	CAvAction			_comboAv;
-	CIsoAction		_comboIso;
+	//CAEModeAction	_comboAEMode;
+	//CTvAction			_comboTv;
+	//CAvAction			_comboAv;
+	//CIsoAction		_comboIso;
 	CMeteringModeAction	_comboMeteringMode;
-	CExposureAction	_comboExposureComp;
+	//CExposureAction	_comboExposureComp;
 	CImageQualityAction	_comboImageQuality;
 
-	CClickAction	_btnPressingHalfway;
-	CClickAction	_btnPressingCompletely;
-	CClickAction	_btnPressingOff;
-	CEvfAFModeAction		_comboEvfAFMode;
-	CClickAction	_btnEvfAfON;
-	CClickAction	_btnEvfAfOFF;
+	//CClickAction	_btnPressingHalfway;
+	//CClickAction	_btnPressingCompletely;
+	//CClickAction	_btnPressingOff;
+	//CEvfAFModeAction		_comboEvfAFMode;
+	//CClickAction	_btnEvfAfON;
+	//CClickAction	_btnEvfAfOFF;
 
 	char m_szSaveDirectory[256];
 	char m_szCurImagePath[256];

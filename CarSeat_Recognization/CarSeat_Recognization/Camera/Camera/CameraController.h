@@ -50,19 +50,25 @@ protected:
 	// Command processing
 	Processor _processor;
 
+private:
+
+	bool m_bIsOpenned;
+
 public:
 	// Constructor
-	CameraController() : _model() { _model = nullptr; }
+	CameraController() : _model(), m_bIsOpenned(false){ _model = nullptr; }
 
 	// Destoracta
 	virtual ~CameraController(){}
 
 	void setCameraModel(CameraModel* model)
 	{
-		if (model != nullptr)
+		if ((model != nullptr) && (_model != model))
 		{
 			//The communication with the camera begins
 			StoreAsync(new OpenSessionCommand(model));
+
+			WriteInfo("openSessionCommand");
 
 			//It is necessary to acquire the property information that cannot acquire in sending OpenSessionCommand automatically by manual operation.
 			StoreAsync(new GetPropertyCommand(model, kEdsPropID_ProductName));
@@ -75,6 +81,7 @@ public:
 	{
 		_processor.setCloseCommand(new CloseSessionCommand(_model));
 		_processor.stop();
+		//_processor.clear();
 		_processor.join();
 		
 	}

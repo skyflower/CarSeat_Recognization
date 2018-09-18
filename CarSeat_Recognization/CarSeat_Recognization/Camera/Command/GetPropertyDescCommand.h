@@ -53,6 +53,7 @@ public:
 		//Notification of error
 		if(err != EDS_ERR_OK)
 		{
+			incFail();
 			// It retries it at device busy
 			if((err & EDS_ERRORID_MASK) == EDS_ERR_DEVICE_BUSY)
 			{
@@ -63,6 +64,7 @@ public:
 
 			CameraEvent e("error", &err);
 			_model->notifyObservers(&e);
+			return false;
 		}
 
 		return true;

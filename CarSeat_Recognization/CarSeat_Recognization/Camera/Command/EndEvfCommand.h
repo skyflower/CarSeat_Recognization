@@ -18,6 +18,7 @@
 #include "Command.h"
 #include "CameraEvent.h"
 #include "EDSDK.h"
+#include "../../common/Log.h"
 
 
 
@@ -42,7 +43,7 @@ public:
 		{
 			return true;
 		}
-
+		WriteInfo("endEvfCommand 1111111111111");
 
 		// Get depth of field status.
 		EdsUInt32 depthOfFieldPreview = _model->getEvfDepthOfFieldPreview();
@@ -59,7 +60,7 @@ public:
 				Sleep(500);
 			}
 		}
-
+		WriteInfo("endEvfCommand 2222222222222");
 			
 		// Change the output device.
 		if (err == EDS_ERR_OK)
@@ -67,10 +68,11 @@ public:
 			device &= ~kEdsEvfOutputDevice_PC;
 			err = EdsSetPropertyData(_model->getCameraObject(), kEdsPropID_Evf_OutputDevice, 0, sizeof(device), &device);
 		}
-
+		WriteInfo("endEvfCommand 33333333333");
 		//Notification of error
 		if(err != EDS_ERR_OK)
 		{
+			incFail();
 			// It retries it at device busy
 			if(err == EDS_ERR_DEVICE_BUSY)
 			{

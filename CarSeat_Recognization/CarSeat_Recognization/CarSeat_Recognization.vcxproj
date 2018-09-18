@@ -175,14 +175,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions);PYTHON_TENSORFLOW</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);D:\SoftwareInstall\Python_v3.5.2_x64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);../Python_v3.5.2_x64/include;./Camera/Header;./Camera/Class;./Camera/Command;./Camera/Camera</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3.lib;python35.lib;EDSDK.lib;label_image_command_line_two.cp35-win_amd64.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..Python_v3.5.2_x64/libs;./Camera/Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../Python_v3.5.2_x64/amd64/Release;./Camera/Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

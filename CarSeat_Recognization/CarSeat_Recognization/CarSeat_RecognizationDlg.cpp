@@ -287,6 +287,19 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 		
+		if (m_pLineCamera == nullptr)
+		{
+			m_pLineCamera = new CLineCamera();
+		}
+
+		if (_model == nullptr)
+		{
+			initCameraModule();
+		}
+		if (m_pLineCamera->getCameraStatus() != CLineCamera::CameraStatus::CAMERA_GRAB)
+		{
+			OnStartCamera();
+		}
 
 		// 是否开始识别标志
 		if (m_bBeginJob == false)
@@ -301,7 +314,7 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			m_pKepServer->HeartBlood();
 		}
-
+		
 		// 检测rfid的连接状态
 		if (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK)
 		{
@@ -335,19 +348,14 @@ void CCarSeat_RecognizationDlg::run()
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(m_pParamManager->GetBarcodeTime());
 			std::this_thread::sleep_for(a);
 		}
+		if (m_bThreadStatus == false)
+		{
+			break;
+		}
 
 
 		if (tmpBarcode.size() != 0)
 		{
-			if (_model == nullptr)
-			{
-				initCameraModule();
-				OnStartCamera();
-			}
-			if (m_pLineCamera == nullptr)
-			{
-				initCameraModule();
-			}
 			if (m_pLineCamera != nullptr)
 			{
 				m_pLineCamera->saveJpg();
@@ -362,14 +370,18 @@ void CCarSeat_RecognizationDlg::run()
 						break;
 					}
 					tmpCount++;
+					if (m_bThreadStatus == false)
+					{
+						break;
+					}
 					if (tmpCount > 1000)
 					{
 						WriteError("get camera image failed");
-						OnStartCamera();
+						//OnStartCamera();
 						CLineCamera::CameraStatus status = m_pLineCamera->getCameraStatus();
 						if (status == CLineCamera::CameraStatus::CAMERA_GRAB)
 						{
-							m_pLineCamera->saveJpg();
+							//m_pLineCamera->saveJpg();
 						}
 						break;
 					}
@@ -377,12 +389,20 @@ void CCarSeat_RecognizationDlg::run()
 				
 			}
 		}
+		if (m_bThreadStatus == false)
+		{
+			break;
+		}
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
 			//std::string tmpPath = utils::WStrToStr(imagepath);
 			//m_pParamManager->GetImageDirectory();
 			//std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
 			reType = m_pClassify->compute(imagepath.c_str());
+			if (m_bThreadStatus == false)
+			{
+				break;
+			}
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
 		
@@ -505,7 +525,10 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	memset(result, 0, sizeof(result));
 	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", \
 		utils::StrToWStr(barcode).c_str(), utils::StrToWStr(RecogType).c_str(), utils::StrToWStr(reType).c_str());
-	m_barCode.SetWindowTextW(result);
+	if (m_bThreadStatus == true)
+	{
+		m_barCode.SetWindowTextW(result);
+	}
 
 	if (barInternalType != typeInternalType)	// 识别类型不匹配
 	{
@@ -522,19 +545,19 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 		// 人工输入对话框
 
-		CInputDlg dlg;
-		dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
-		WriteInfo("inputDlg set imagepath = %s", tmpPath.c_str());
-		
-		dlg.SetTestImagePath(tmpPath);
-		INT_PTR msg = dlg.DoModal();
-		
-		if (msg == IDOK)
-		{
-			reType = dlg.GetInputType();
-			//std::string cReType = utils::WStrToStr(reType);
-			memcpy(tmpResult.m_szTypeByUsrInput, reType.c_str(), sizeof(char) * reType.size());
-		}
+		//CInputDlg dlg;
+		//dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
+		//WriteInfo("inputDlg set imagepath = %s", tmpPath.c_str());
+		//
+		//dlg.SetTestImagePath(tmpPath);
+		//INT_PTR msg = dlg.DoModal();
+		//
+		//if (msg == IDOK)
+		//{
+		//	reType = dlg.GetInputType();
+		//	//std::string cReType = utils::WStrToStr(reType);
+		//	memcpy(tmpResult.m_szTypeByUsrInput, reType.c_str(), sizeof(char) * reType.size());
+		//}
 
 		////// send message to server
 		////
@@ -553,8 +576,11 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
 
 		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
-		m_RegRatio.SetWindowTextW(result);
-
+		
+		if (m_bThreadStatus == true)
+		{
+			m_RegRatio.SetWindowTextW(result);
+		}
 		if (m_pImagePattern != nullptr)
 		{
 			//LPCTSTR;
@@ -584,6 +610,10 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 void CCarSeat_RecognizationDlg::initCameraModule()
 {
+	if (_model != nullptr)
+	{
+		return;
+	}
 	if (m_pCameraManager == nullptr)
 	{
 		m_pCameraManager = CCameraManager::GetInstance();
@@ -624,11 +654,6 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			}
 			
 
-			//m_pLineCamera = new CLineCamera(pDevice);
-			//const char* tmpImageDir = m_pParamManager->GetImageDirectory();
-
-			//WriteInfo("create line camera, set image directory = %s", tmpImageDir);
-
 			int err = 0;
 			if (err == EDS_ERR_OK)
 			{
@@ -647,9 +672,13 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 				err = EdsSetCameraStateEventHandler(pDevice, kEdsStateEvent_All, CameraEventListener::handleStateEvent, (EdsVoid *)_controller);
 			}
 		}
+		else
+		{
+			m_nCameraIndex = -1;
+		}
 	}
 	
-	WriteInfo("init CameraModule success");
+	//WriteInfo("init CameraModule success");
 }
 
 SIZE CCarSeat_RecognizationDlg::adjustRecSize(SIZE imageSize, SIZE recSize)
@@ -863,7 +892,7 @@ bool CCarSeat_RecognizationDlg::heartBloodServer(unsigned int ip, unsigned int p
 		}
 		if (CNetworkTask::IsReachable(tmpLocalIp, tmpServerIp) == true)
 		{
-			if (pLinkStatusControl != nullptr)
+			if ((pLinkStatusControl != nullptr) && (m_bThreadStatus == true))
 			{
 				pLinkStatusControl->SetWindowTextW(L"网络连接成功");
 			}
@@ -871,7 +900,7 @@ bool CCarSeat_RecognizationDlg::heartBloodServer(unsigned int ip, unsigned int p
 		}
 		else
 		{
-			if (pLinkStatusControl != nullptr)
+			if ((pLinkStatusControl != nullptr) && (m_bThreadStatus == true))
 			{
 				pLinkStatusControl->SetWindowTextW(L"与服务器连接失败");
 			}
@@ -899,6 +928,16 @@ void CCarSeat_RecognizationDlg::OnUsrinput()
 void CCarSeat_RecognizationDlg::OnStartCamera()
 {
 	// TODO: 在此添加命令处理程序代码
+	if (m_pLineCamera != nullptr)
+	{
+		CLineCamera::CameraStatus tmpStatus = m_pLineCamera->getCameraStatus();
+		if (tmpStatus == CLineCamera::CameraStatus::CAMERA_GRAB)
+		{
+			return;
+		}
+	}
+	
+
 	if (m_pCameraManager == nullptr)
 	{
 		m_pCameraManager = CCameraManager::GetInstance();
@@ -916,7 +955,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		
 		if (m_pCameraManager->GetCameraCount() == 0)
 		{
-			AfxMessageBox(L"no Camera connect software");
+			//AfxMessageBox(L"no Camera connect software");
 			return;
 		}
 		//m_nCameraIndex = 0;
@@ -936,11 +975,13 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		{
 			EdsDeviceInfo deviceInfo = m_pCameraManager->GetDeviceInfoByIndex(m_nCameraIndex);
 			_model = cameraModelFactory(pDevice, deviceInfo);
-		}
-		_controller->setCameraModel(_model);
 
-		_model->addObserver(this);
-		setupObserver(_model);
+			_controller->setCameraModel(_model);
+
+			_model->addObserver(this);
+			setupObserver(_model);
+		}
+		
 
 		if (m_pLineCamera == nullptr)
 		{
@@ -960,14 +1001,11 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		AfxMessageBox(L"line camera or cameraModel init Failed");
 		return;
 	}
-	CLineCamera::CameraStatus tmpStatus = m_pLineCamera->getCameraStatus();
-	if (tmpStatus == CLineCamera::CameraStatus::CAMERA_GRAB)
-	{
-		return;
-	}
+	
 
 	do
 	{
+		CLineCamera::CameraStatus tmpStatus = m_pLineCamera->getCameraStatus();
 		if (tmpStatus != CLineCamera::CameraStatus::CAMERA_OPEN)
 		{
 			setupListener(_controller);
@@ -1009,11 +1047,9 @@ void CCarSeat_RecognizationDlg::OnUpdateStartCamera(CCmdUI *pCmdUI)
 
 void CCarSeat_RecognizationDlg::OnClose()
 {
-	
-	WriteInfo("closing");
-	
-	
+	_pictureBox.stopUpdate();
 
+	WriteInfo("closing");
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	//WriteInfo("next set ui thread status");
 	if (m_bThreadStatus == true)
@@ -1032,11 +1068,11 @@ void CCarSeat_RecognizationDlg::OnClose()
 			m_pUIThread == nullptr;
 		}*/
 	}
+	
 	if (m_pLineCamera != nullptr)
 	{
 		m_pLineCamera->close();
 	}
-	Sleep(10);
 	//WriteInfo("thread status false");
 
 	if (_model != nullptr)
@@ -1267,6 +1303,10 @@ void CCarSeat_RecognizationDlg::OnUpdateChooseCamera(CCmdUI *pCmdUI)
 void CCarSeat_RecognizationDlg::displayImage(CImage * pImage, CStatic * pStatic)
 {
 	if ((pImage == nullptr) || (pStatic == nullptr))
+	{
+		return;
+	}
+	if (m_bThreadStatus == false)
 	{
 		return;
 	}

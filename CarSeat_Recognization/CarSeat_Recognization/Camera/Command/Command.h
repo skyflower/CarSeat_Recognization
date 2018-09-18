@@ -23,11 +23,16 @@ class Command {
 protected:
 	// Camera Model
 	CameraModel* _model;
+	int failedCount;
+
+	void incFail() { ++failedCount; };
 
 public:
-	Command(CameraModel *model) : _model(model) {}
+	Command(CameraModel *model) : _model(model), failedCount(0){}
 
 	CameraModel* getCameraModel(){return _model;}
+
+	int getFailedCount() { return failedCount; }
 
 	// Execute command	
 	virtual bool execute() = 0;

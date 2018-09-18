@@ -125,7 +125,7 @@ public:
 		//Notification of error
 		if(err != EDS_ERR_OK)
 		{
-		
+			incFail();
 			// Retry getting image data if EDS_ERR_OBJECT_NOTREADY is returned
 			// when the image data is not ready yet.
 			if(err == EDS_ERR_OBJECT_NOTREADY)
@@ -143,6 +143,7 @@ public:
 
 			CameraEvent e("error", &err);
 			_model->notifyObservers(&e);
+			return false;
 		}
 
 		return true;

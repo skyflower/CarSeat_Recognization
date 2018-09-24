@@ -2,7 +2,8 @@
 #include "../../common/Log.h"
 
 
-CLineCamera::CLineCamera():m_nStatus(CLineCamera::CameraStatus::CAMERA_INIT)
+CLineCamera::CLineCamera():m_nStatus(CLineCamera::CameraStatus::CAMERA_INIT),
+m_nEdsImageQuality(0x0013ff0f)
 {
 	memset(m_szSaveDirectory, 0, sizeof(m_szSaveDirectory));
 	memset(m_szCurImagePath, 0, sizeof(m_szCurImagePath));
@@ -113,7 +114,6 @@ void CLineCamera::stopCamera()
 	}
 	
 
-
 	_comboMeteringMode.OnSelChange(5);
 	_btnEndEVF.OnClicked();
 	
@@ -126,6 +126,12 @@ void CLineCamera::close()
 {
 	stopCamera();
 	//_btnEvfAfOFF.OnClicked();
+}
+
+void CLineCamera::setImageQuality(unsigned int quality)
+{
+	m_nEdsImageQuality = quality;
+	_comboImageQuality.OnSelChange(m_nEdsImageQuality);
 }
 
 void CLineCamera::setImageSaveDirectory(const char * dir)
@@ -153,7 +159,7 @@ const char * CLineCamera::getCurrentImage()
 
 void CLineCamera::initCameraStatus()
 {
-	_comboImageQuality.OnSelChange(EdsImageQuality_MJF);
+	_comboImageQuality.OnSelChange(m_nEdsImageQuality);
 	_comboMeteringMode.OnSelChange(3);
 	//_comboEvfAFMode.OnSelChange(0);
 	WriteInfo("InitCamera Status, set image quality mjf, m_nStatus = %d", m_nStatus);

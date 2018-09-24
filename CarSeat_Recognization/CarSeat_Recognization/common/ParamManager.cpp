@@ -12,7 +12,7 @@ CParamManager *CParamManager::m_pInstance = nullptr;
 
 CParamManager::CParamManager() :
 //m_pFtp(nullptr),
-m_pLineCamera(nullptr),
+//m_pLineCamera(nullptr),
 m_nLocalIp(-1),
 m_nServerIp(-1),
 m_nServerPort(-1),
@@ -22,7 +22,8 @@ m_nBarcodeIp(-1),
 m_nBarcodePort(-1),
 m_nKepServerIp(-1),
 m_nKepServerPort(-1),
-m_nBarcodeTime(1)
+m_nBarcodeTime(1),
+m_nEdsImageQuality(-1)
 {
 	
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
@@ -74,12 +75,12 @@ CParamManager::~CParamManager()
 		delete m_pFtp;
 		m_pFtp = nullptr;
 	}*/
-	if (m_pLineCamera != nullptr)
-	{
-		//m_pLineCamera->clear();
-		delete m_pLineCamera;
-		m_pLineCamera = nullptr;
-	}
+	//if (m_pLineCamera != nullptr)
+	//{
+	//	//m_pLineCamera->clear();
+	//	delete m_pLineCamera;
+	//	m_pLineCamera = nullptr;
+	//}
 
 }
 
@@ -208,26 +209,31 @@ unsigned int CParamManager::GetKepServerPort()
 	return m_nKepServerPort;
 }
 
+unsigned int CParamManager::GetEdsImageQuality()
+{
+	return m_nEdsImageQuality;
+}
+
 //std::vector<std::wstring>* CParamManager::GetFtpParameter()
 //{
 //	return m_pFtp;
 //}
 
 
-std::string CParamManager::FindCameraByLineID(std::string lineID)
-{
-	if (m_pLineCamera != nullptr)
-	{
-		std::unordered_map < std::string, std::string>::const_iterator iter = \
-			m_pLineCamera->find(lineID);
-		if (iter == m_pLineCamera->end())
-		{
-			return std::string();
-		}
-		return iter->second;
-	}
-	return std::string();
-}
+//std::string CParamManager::FindCameraByLineID(std::string lineID)
+//{
+//	if (m_pLineCamera != nullptr)
+//	{
+//		std::unordered_map < std::string, std::string>::const_iterator iter = \
+//			m_pLineCamera->find(lineID);
+//		if (iter == m_pLineCamera->end())
+//		{
+//			return std::string();
+//		}
+//		return iter->second;
+//	}
+//	return std::string();
+//}
 
 unsigned int CParamManager::GetBarcodeIp()
 {
@@ -318,15 +324,15 @@ void CParamManager::Init()
 		{
 			WriteError("ftp Parameter init Failed");
 		}*/
-		if (m_pLineCamera == nullptr)
+		/*if (m_pLineCamera == nullptr)
 		{
 			m_pLineCamera = new std::unordered_map<std::string, std::string>;
-		}
-		utils::parseMap(content, "lineCamera", m_pLineCamera);
+		}*/
+		/*utils::parseMap(content, "lineCamera", m_pLineCamera);
 		if ((m_pLineCamera == nullptr) || (m_pLineCamera->size() == 0))
 		{
 			WriteError("line Camera init Failed");
-		}
+		}*/
 
 		unsigned int tmpLocal = utils::parseIp(content, "serverip");
 		if (tmpLocal == 0)
@@ -366,6 +372,12 @@ void CParamManager::Init()
 		if (utils::getValueByName(content, "kepServerPort", tmpStr) == true)
 		{
 			m_nKepServerPort = atoi(tmpStr);
+		}
+		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (utils::getValueByName(content, "EdsImageQuality", tmpStr) == true)
+		{
+			sscanf_s(tmpStr, "%x", &m_nEdsImageQuality);
 		}
 		memset(tmpStr, 0, sizeof(tmpStr));
 

@@ -128,11 +128,27 @@ namespace utils
 				delete[]tmp;
 				tmp = nullptr;
 			}
-			
+			tmp = utils::CharToWchar(a.m_szInternalType);
+			if (tmp != nullptr)
+			{
+				memcpy(b.m_szInternalType, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
+			}
+
+
 			tmp = utils::CharToWchar(a.m_szTypeByBarcode);
 			if (tmp != nullptr)
 			{
 				memcpy(b.m_szTypeByBarcode, tmp, sizeof(wchar_t) * wcslen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
+			}
+
+			tmp = utils::CharToWchar(a.m_szInternalType);
+			if (tmp != nullptr)
+			{
+				memcpy(b.m_szInternalType, tmp, sizeof(wchar_t) * wcslen(tmp));
 				delete[]tmp;
 				tmp = nullptr;
 			}
@@ -196,6 +212,14 @@ namespace utils
 			if (tmp != nullptr)
 			{
 				memcpy(b.m_szCameraName, tmp, sizeof(wchar_t) * strlen(tmp));
+				delete[]tmp;
+				tmp = nullptr;
+			}
+
+			tmp = utils::WcharToChar(a.m_szInternalType);
+			if (tmp != nullptr)
+			{
+				memcpy(b.m_szInternalType, tmp, sizeof(wchar_t) * strlen(tmp));
 				delete[]tmp;
 				tmp = nullptr;
 			}

@@ -8,6 +8,7 @@
 #include <IcmpAPI.h>
 #include "../common/utils.h"
 #include "../xml/tinyxml.h"
+#include "../common/md5.h"
 
 #ifdef PYTHON_TENSORFLOW
 #include <Python.h>
@@ -20,16 +21,11 @@ CNetworkTask *CNetworkTask::m_pInstance = nullptr;
 
 
 CNetworkTask::CNetworkTask():
-	m_bThreadStatus(true),
-	m_pMsgList(nullptr)
-	//m_pClassify(nullptr),
-	//m_szBarCode(),
-	//m_szImagePath()
+	m_bThreadStatus(true)
 {
 	m_pParamManager = CParamManager::GetInstance();
-	m_pMsgQueue = new message[CNetworkTask::msg::MAX_MSG_SIZE];
-	m_nMsgSize = 0;
-	m_nIn = m_nOut = 0;
+	
+	m_pMsgList = new std::list<message>;
 
 	//设置临时保存文件
 	memset(m_szCacheFile, 0, sizeof(m_szCacheFile));
@@ -50,19 +46,17 @@ CNetworkTask::CNetworkTask():
 		}
 		delete[]tmpWCacheFile;
 		tmpWCacheFile = nullptr;
+		
 	}
 }
 
 
 CNetworkTask::~CNetworkTask()
 {
-	if (m_pMsgQueue != nullptr)
-	{
-		delete[]m_pMsgQueue;
-		m_pMsgQueue = nullptr;
-	}
 	if (m_pMsgList != nullptr)
 	{
+		serialize();
+
 		delete m_pMsgList;
 		m_pMsgList = nullptr;
 	}
@@ -164,21 +158,8 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 
 void CNetworkTask::SendMessageTo(message * msg)
 {
-	std::unique_lock<std::mutex> lock(m_MutexMsg, std::defer_lock);
-	if (lock.try_lock())
-	{
-		if (m_nMsgSize == MAX_MSG_SIZE)
-		{
-			WriteInfo("networkTask message queue is full");
-			return;
-		}
-		else
-		{
-			memcpy(&m_pMsgQueue[m_nIn], msg, sizeof(message));
-			m_nIn = (m_nIn + 1) % MAX_MSG_SIZE;
-			m_nMsgSize++;
-		}
-	}
+	std::lock_guard<std::mutex> lock(m_MutexMsg);
+	m_pMsgList->push_back(*msg);
 }
 
 bool CNetworkTask::GetThreadStatus()
@@ -191,20 +172,6 @@ void CNetworkTask::SetThreadStatus(bool status)
 	m_bThreadStatus = status;
 }
 
-//void CNetworkTask::SetImageClassify(CImageClassify * pClassify)
-//{
-//	m_pClassify = pClassify;
-//}
-//
-//std::wstring CNetworkTask::GetCurrentImagePath()
-//{
-//	return m_szImagePath;
-//}
-//
-//std::wstring CNetworkTask::GetCurrentBarcode()
-//{
-//	return m_szBarCode;
-//}
 
 void CNetworkTask::run()
 {
@@ -219,76 +186,34 @@ void CNetworkTask::run()
 			heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 			preBlood = now;
 		}
-		if (m_nMsgSize > 0)
+		if (m_pMsgList->size() > 0)
 		{
 			std::unique_lock<std::mutex> lock(m_MutexMsg, std::defer_lock);
 			if (lock.try_lock())
 			{
-				memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
-				m_nOut = (m_nOut + 1) % MAX_MSG_SIZE;
-				m_nMsgSize--;
+				tmpMsg = m_pMsgList->front();
+				m_pMsgList->pop_front();
+
+				//memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
+				//m_nOut = (m_nOut + 1) % MAX_MSG_SIZE;
+				//m_nMsgSize--;
 				if ((tmpMsg.serverIp == -1) && (tmpMsg.serverPort == -1))
 				{
 					break;
 				}
 				size_t recvLength = 0;
 				lock.release();
-
-				//__sendToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.data, strlen(tmpMsg.data), recvMsg.data, recvLength);
+				WriteInfo("get recog result");
+				if (__sendRecogToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.imagePort, &tmpMsg.mRecogResult) == false)
+				{
+					SendMessageTo(&tmpMsg);
+				}
+				
 			}
 		}
-		///////////////////////////
-		//  add code
-
-		//unsigned int barcodeIp = m_pParamManager->GetBarcodeIp();
-		//unsigned int barcodePort = m_pParamManager->GetBarcodePort();
-
-		//std::wstring tmpBarcode = getBarcodeByNet(barcodeIp, barcodePort);
-
-		//if (tmpBarcode.size() != 0)
-		//{
-		//	std::string path = TakeImage(0);
-
-		//	//std::wstring tmpPath(L"J:\\AutocarSeat_Recognition\\backupImage\\D2_black_pvc_hole_cloth\\1\\1009.jpg");
-		//	//__ImageClassify(path);
-
-		//	//m_szBarCode = tmpBarcode;
-		//	//m_szImagePath = path;
-
-		//}
-
-
-//#if (defined _DEBUG) && (defined FTP_TEST)
-//		const wchar_t *filename = L"config.txt";
-//		std::vector<std::wstring> *ftpParam = m_pParamManager->GetFtpParameter();
-//
-//		if ((ftpParam != nullptr) && (ftpParam->size() >= 3))
-//		{
-//			if (false == ftpUpload(m_pParamManager->GetServerIP(),
-//				ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), ftpParam->at(2).c_str(), filename))
-//			{
-//				WriteError("user = %s, passwd = %s,upload File = %s to serverIp = %u Failed", ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), filename, m_pParamManager->GetServerIP());
-//			}
-//		}
-//
-//		const wchar_t *downloadFile = L"config_copy.txt";
-//
-//		if ((ftpParam != nullptr) && (ftpParam->size() >= 3))
-//		{
-//			if (false == ftpDownload(m_pParamManager->GetServerIP(),
-//				ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), ftpParam->at(2).c_str(), downloadFile))
-//			{
-//				WriteError("user = %s, passwd = %s,download File = %s to serverIp = %u Failed", ftpParam->at(0).c_str(), ftpParam->at(1).c_str(), downloadFile, m_pParamManager->GetServerIP());
-//			}
-//		}
-//#endif // _DEBUG
-//
-
-		
-		//CLOCKS_PER_SEC
 
 		//////////////////////////////
-		if (m_nMsgSize == 0)
+		if (m_pMsgList->size() == 0)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(200));
 		}
@@ -315,21 +240,11 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		return false;
 	}
 
-	/*WSADATA wsaData;
-	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (err != 0)
-	{
-		err = WSAGetLastError();
-		WriteError("err = %u", err);
-		recvMsgLen = 0;
-		return false;
-	}*/
 	int err = 0;
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketFD == -1)
 	{
 		TRACE("create socket failed\n");
-		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -340,8 +255,8 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
-	unsigned long tmpBlock = 1;
-	ioctlsocket(socketFD, FIONBIO, &tmpBlock);
+	//unsigned long tmpBlock = 0;
+	//ioctlsocket(socketFD, FIONBIO, &tmpBlock);
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
@@ -386,11 +301,121 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 }
 bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int imagePort, RecogResultA * recog)
 {
+	////////根据通信标准格式化成xml
+	// MD5为图像数据的md5值
+	char textXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
+		<identification lineID = \"%s\" ip = \"%s\" time=\"%s\">	\
+		<data barcode = \"%s\" barcodeResult = \"%s\" md5 = \"%s\"	\
+		  method = \"auto\" usrName=\"%s\" imagePath=\"%s\"	\
+		typeByRecog = \"%s\" typeByBarcode=\"%s\" typeByInput=\"%s\"	\
+		cameraName=\"%s\"	/>	\
+		</identification>";
+
+	char *content = nullptr;
+	size_t imageSize = 0;
+	utils::readFile(recog->m_szImagePath, content, imageSize);
+	if (imageSize == 0)
+	{
+		if (connect != nullptr)
+		{
+			delete[]content;
+			content = nullptr;
+		}
+		WriteError("read image file %s failed", recog->m_szImagePath);
+		return false;
+	}
+	std::string tmpStr(content, content + imageSize);
+
+	//delete[]content;
+	//content = nullptr;
 	
-	return false;
+	MD5 md5(tmpStr);
+	const char *digest = (const char*)md5.getDigest();
+
+	const size_t length = 1000;
+	char sendXml[length];
+	memset(sendXml, 0, sizeof(char) * length);
+
+	sprintf_s(sendXml, length, textXml, recog->m_szLineName, m_pParamManager->GetLocalIP(), recog->m_szTime,	\
+		recog->m_szBarcode, recog->m_szInternalType, digest, recog->m_szUsrName, recog->m_szImagePath, recog->m_szTypeByRecog,	\
+	recog->m_szTypeByBarcode,recog->m_szTypeByUsrInput, recog->m_szCameraName);
+
+	char recvText[length];
+	memset(recvText, 0, sizeof(char) * imageSize);
+	size_t recvMsgLen = 0;
+
+	bool flag = false;
+	do
+	{
+		if (false == __sendToServer(serverIp, textPort, sendXml, strlen(sendXml), recvText, recvMsgLen))
+		{
+			WriteError("send recog text to server failed");
+			break;
+		}
+		if (recvMsgLen == 0)
+		{
+			WriteError("get return text failed");
+			break;
+		}
+
+		TiXmlDocument lconfigXML;
+		lconfigXML.Parse(recvText);
+		if (lconfigXML.Error())
+		{
+			WriteError("parse return text recvMsg = [%s]", recvText);
+			break;
+		}
+		TiXmlElement *rootElement = lconfigXML.RootElement();
+		if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+		{
+			WriteError("recvBlood get root element Failed, %s", recvText);
+			break;
+		}
+		if (strcmp(rootElement->Attribute("statu"), "ok") != 0)
+		{
+			WriteError("return recvMsg error， %s", recvText);
+			break;
+		}
+		rootElement->Clear();
+		lconfigXML.Clear();
+
+		__sendToServer(serverIp, imagePort, content, imageSize, recvText, recvMsgLen);
+		
+		lconfigXML;
+		lconfigXML.Parse(recvText);
+		if (lconfigXML.Error())
+		{
+			WriteError("parse return text recvMsg = [%s]", recvText);
+			break;
+		}
+		rootElement = lconfigXML.RootElement();
+		if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+		{
+			WriteError("recvBlood get root element Failed, %s", recvText);
+			break;
+		}
+		if (strcmp(rootElement->Attribute("statu"), "ok") != 0)
+		{
+			WriteError("return recvMsg error， %s", recvText);
+			break;
+		}
+		rootElement->Clear();
+		lconfigXML.Clear();
+		flag = true;
+
+	} while (0);
+
+	if (content != nullptr)
+	{
+		delete[]content;
+		content = nullptr;
+	}
+
+	return flag;
 }
 bool CNetworkTask::initCacheFile()
 {
+
 	m_pLog.seekg(0, std::ios::end);
 
 	size_t fileLength = m_pLog.tellg();
@@ -427,8 +452,6 @@ bool CNetworkTask::initCacheFile()
 		memcpy(line, content + begin, lineEnd - content - begin);
 		memset(&tmpResult, 0, sizeof(RecogResultA));
 		RecogResultA::TextToRecog(tmpResult, line);
-
-		
 	}
 
 	delete[]line;
@@ -439,152 +462,25 @@ bool CNetworkTask::initCacheFile()
 
 	return true;
 }
-//
-//std::wstring CNetworkTask::getBarcodeByNet(unsigned int ip, unsigned int port)
-//{
-//	// 添加获取条形码的代码
-//	// 暂时为空
-//	
-//	return std::wstring();
-//}
-//
-////  
-//
-//std::string CNetworkTask::TakeImage(std::string lineID)
-//{
-//	std::string CameraID = m_pParamManager->FindCameraByLineID(lineID);
-//	CCameraManager *pManager = CCameraManager::GetInstance();
-//	if (pManager->GetCameraCount() == 0)
-//	{
-//		return std::string();
-//	}
-//	
-//	//std::wstring path = m_Camera.takePhoto(CameraID);
-//	return CameraID;
-//}
-//
-//bool CNetworkTask::__ImageClassify(std::wstring & path)
-//{
-//	if (m_pClassify != nullptr)
-//	{
-//		std::string tmpPath = utils::WStrToStr(path);
-//
-//		m_pClassify->pushImage(tmpPath.c_str());
-//		return true;
-//	}
-//	return false;
-//}
-//
-//bool CNetworkTask::ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, 
-//	const wchar_t *fileName)
-//{
-//	unsigned int localIP = m_pParamManager->GetLocalIP();
-//	if ((localIP == 0) || (IsReachable(localIP, serverIp) == false))
-//	{
-//		WriteError("get LocalIp Failed");
-//		return false;
-//	}
-//	CInternetSession * pInternetSession = NULL;
-//	CFtpConnection* pFtpConnection = NULL;
-//	//建立连接  
-//	pInternetSession = new CInternetSession(AfxGetAppName());
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
-//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
-//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
-//	//服务器的ip地址
-//	CString strADddress;
-//	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
-//		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
-//		(serverIp & 0xFF));
-//
-//	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
-//	if (pFtpConnection == NULL)
-//	{
-//		WriteError("usr = %s, passwd = %s connect Failed", name, passwd);
-//		return false;
-//	}
-//	//设置服务器的目录  
-//	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
-//	if (bRetVal == FALSE)
-//	{
-//		AfxMessageBox(L"目录设置失败");
-//		return false;
-//	}
-//	else
-//	{
-//		//把本地文件上传到服务器上  
-//		pFtpConnection->PutFile(fileName, fileName);
-//	}
-//	//释放资源  
-//	if (NULL != pFtpConnection)
-//	{
-//		pFtpConnection->Close();
-//		delete pFtpConnection;
-//		pFtpConnection = NULL;
-//	}
-//	if (NULL != pInternetSession)
-//	{
-//		delete pInternetSession;
-//		pInternetSession = NULL;
-//	}
-//	return true;
-//}
-//
-//bool CNetworkTask::ftpDownload(unsigned int serverIp, const wchar_t *name, 
-//	const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName)
-//{
-//	CInternetSession* pInternetSession = NULL;
-//	
-//	CFtpConnection* pFtpConnection = NULL;
-//	//建立连接
-//	pInternetSession = new CInternetSession(AfxGetAppName());
-//
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_TIMEOUT, 5000);      // 5秒的连接超时
-//	pInternetSession->SetOption(INTERNET_OPTION_SEND_TIMEOUT, 1000);           // 1秒的发送超时
-//	pInternetSession->SetOption(INTERNET_OPTION_RECEIVE_TIMEOUT, 7000);        // 7秒的接收超时
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_SEND_TIMEOUT, 1000);     // 1秒的发送超时
-//	pInternetSession->SetOption(INTERNET_OPTION_DATA_RECEIVE_TIMEOUT, 7000);       // 7秒的接收超时
-//	pInternetSession->SetOption(INTERNET_OPTION_CONNECT_RETRIES, 1);          // 1次重试
-//
-//
-//	//服务器的ip地址
-//	//若要设置为服务器的根目录，则使用"\\"就可以了  
-//	//创建了一个CFtpConnection对象，之后就可以通过这个对象进行上传文件，下载文件了  
-//	CString strADddress;
-//	strADddress.Format(L"%u.%u.%u.%u", ((serverIp & 0xFF000000) >> 24), \
-//		((serverIp & 0xFF0000) >> 16), ((serverIp & 0xFF00) >> 8), \
-//		(serverIp & 0xFF));
-//
-//	pFtpConnection = pInternetSession->GetFtpConnection(strADddress, name, passwd);
-//	//设置服务器的目录
-//	BOOL bRetVal = pFtpConnection->SetCurrentDirectory(ftpDir);
-//	//setsockopt
-//	if (bRetVal == FALSE)
-//	{
-//		AfxMessageBox(L"目录设置失败");
-//		return false;
-//	}
-//	else
-//	{
-//		pFtpConnection->GetFile(fileName, fileName);
-//	}
-//	//释放源  
-//	if (NULL != pFtpConnection)
-//	{
-//		pFtpConnection->Close();
-//		delete pFtpConnection;
-//		pFtpConnection = NULL;
-//	}
-//	if (NULL != pInternetSession)
-//	{
-//		delete pInternetSession;
-//		pInternetSession = NULL;
-//	}
-//	return false;
-//}
+
+void CNetworkTask::serialize()
+{
+	if (m_pMsgList->size() > 0)
+	{
+		size_t nSize = m_pMsgList->size();
+		m_pLog.clear();
+
+		char tmpLine[1000];
+
+		for (std::list<message>::iterator iter = m_pMsgList->begin(); iter != m_pMsgList->end(); ++iter)
+		{
+			memset(tmpLine, 0, sizeof(tmpLine));
+			message::serialize(*iter, tmpLine);
+			m_pLog << tmpLine << "\n";
+		}
+	}
+}
+
 
 bool CNetworkTask::message::serialize(message & a, char * line)
 {
@@ -610,7 +506,7 @@ bool CNetworkTask::message::serialize(message & a, char * line)
 
 bool CNetworkTask::message::deserialize(message & a, char * line)
 {
-	/*std::stringstream ss(line);
+	std::stringstream ss(line);
 	ss >> a.serverIp >> "," >> a.serverPort >> "," >> a.imagePort >> ",";
 
 	constexpr const size_t tmpLength = sizeof(RecogResultA);
@@ -621,7 +517,7 @@ bool CNetworkTask::message::deserialize(message & a, char * line)
 
 	ss >> tmp;
 
-	RecogResultA::TextToRecog(a.mRecogResult, tmp);*/
+	RecogResultA::TextToRecog(a.mRecogResult, tmp);
 
 	return true;
 }

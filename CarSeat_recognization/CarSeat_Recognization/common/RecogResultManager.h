@@ -16,6 +16,7 @@ public:
 	~RecogResult();
 	type m_szBarcode[32];		//	完整条形码
 	type m_szTime[32];			//	结果形成的时间戳，包含本地日期和时间
+	type m_szInternalType[32];
 	type m_szTypeByRecog[32];	//	识别结果的外部类型
 	type m_szTypeByBarcode[32];	//	根据条形码拿到的外部类型
 	type m_szTypeByUsrInput[32];	//当识别错误的时候，产线管理员输入的外部类型
@@ -45,6 +46,7 @@ RecogResult<type>::RecogResult():m_bIsCorrect(false)
 	memset(m_szLineName, 0, sizeof(m_szLineName));
 	memset(m_szUsrName, 0, sizeof(m_szUsrName));
 	memset(m_szImagePath, 0, sizeof(m_szImagePath));
+	memset(m_szInternalType, 0, sizeof(m_szInternalType));
 }
 
 template<typename type>
@@ -60,6 +62,7 @@ bool RecogResult<type>::RecogToText(RecogResult<type> &a, type *buffer)
 	std::basic_stringstream<type, std::char_traits<type>, std::allocator<type> > fs;
 	fs << a.m_szBarcode << ","	\
 		<< a.m_szTime << ","	\
+		<< a.m_szInternalType << ","	\
 		<< a.m_szTypeByRecog << ",";
 	fs << a.m_szTypeByBarcode << ","		\
 		<< a.m_szTypeByUsrInput << ","	\
@@ -122,6 +125,15 @@ bool RecogResult<type>::TextToRecog(RecogResult<type> &a, type *buffer)
 			break;
 		}
 		memcpy(a.m_szTime, begin, (end - begin) * sizeof(type));
+		tmpLength = tmpLength - (end - begin) - 1;
+		begin = end + 1;
+
+		end = std::find(begin, begin + tmpLength, quote);
+		if (end == NULL)
+		{
+			break;
+		}
+		memcpy(a.m_szInternalType, begin, (end - begin) * sizeof(type));
 		tmpLength = tmpLength - (end - begin) - 1;
 		begin = end + 1;
 

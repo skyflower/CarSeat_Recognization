@@ -38,6 +38,8 @@ public:
 	void stopCamera();
 	void close();
 
+	void setImageQuality(unsigned int quality);
+
 	void setImageSaveDirectory(const char *dir);
 
 	CLineCamera::CameraStatus getCameraStatus();
@@ -71,7 +73,7 @@ private:
 	char m_szCurImagePath[256];
 
 	CameraStatus m_nStatus;
-
+	unsigned int m_nEdsImageQuality;
 	unsigned char m_bSetupFlag[2];
 };
 

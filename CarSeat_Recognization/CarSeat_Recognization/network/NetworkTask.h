@@ -36,6 +36,7 @@ public:
 		static bool serialize(message &a, char *line);
 		static bool deserialize(message &a, char *line);
 	};
+
 	CNetworkTask();
 	~CNetworkTask();
 	static bool IsReachable(unsigned int clientIp, unsigned int serverIp);
@@ -74,6 +75,8 @@ private:
 
 
 	bool initCacheFile();
+
+	void serialize();
 	
 
 	/*
@@ -110,31 +113,19 @@ private:
 	
 
 	std::mutex m_MutexMsg;
-	message *m_pMsgQueue;
+	//message *m_pMsgQueue;
 
 	//缓存没有成功发送的历史识别记录
-	std::vector<message> *m_pMsgList;
+	std::list<message> *m_pMsgList;
 
 
 	char m_szCacheFile[MAX_CHAR_LENGTH];
 
 	std::fstream m_pLog;
 
-	size_t m_nMsgSize;
-	int m_nIn;
-	int m_nOut;
-
-	//std::wstring m_szBarCode;
-	//std::wstring m_szImagePath;
-
-
 	static CNetworkTask *m_pInstance;
 	bool m_bThreadStatus;
-	//CCamera m_Camera;
 
 	CParamManager *m_pParamManager;
-
-	
-	//CImageClassify *m_pClassify;
 };
 

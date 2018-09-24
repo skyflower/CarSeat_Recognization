@@ -24,8 +24,6 @@ public:
 
 private:
 
-	//void resetConnect();
-
 	bool SetValue(int value);
 
 	bool SendMessageToServer(char *msg, int len, char *recv, int &recvLen);

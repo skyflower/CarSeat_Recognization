@@ -28,9 +28,11 @@ public:
 	unsigned int GetKepServerIp();
 	unsigned int GetKepServerPort();
 
+	unsigned int GetEdsImageQuality();
+
 
 	//std::vector<std::wstring> *GetFtpParameter();
-	std::string FindCameraByLineID(std::string lineID);
+	//std::string FindCameraByLineID(std::string lineID);
 
 	unsigned int GetBarcodeIp();
 	unsigned int GetBarcodePort();
@@ -89,7 +91,11 @@ private:
 	//获取条形码的端口号
 	unsigned int m_nBarcodePort;
 
+	
+
 	char m_szBarcodeResetParam[100];
+
+	unsigned int m_nEdsImageQuality;
 
 
 	//从获取条形码到拍照的延迟时间
@@ -131,6 +137,6 @@ private:
 	std::string m_szLabelFile;
 
 	//产线和相机的对应关系
-	std::unordered_map<std::string, std::string> *m_pLineCamera;
+	//std::unordered_map<std::string, std::string> *m_pLineCamera;
 };
 

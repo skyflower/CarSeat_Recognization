@@ -87,6 +87,15 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 	m_pRecogManager = CRecogResultManager::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
 	m_pLineCamera = new CLineCamera();
+	unsigned int tmp = m_pParamManager->GetEdsImageQuality();
+	if ((tmp == 0) || (tmp == -1))
+	{
+		m_pLineCamera->setImageQuality(EdsImageQuality_LJF);
+	}
+	else
+	{
+		m_pLineCamera->setImageQuality(tmp);
+	}
 }
 
 void CCarSeat_RecognizationDlg::DoDataExchange(CDataExchange* pDX)
@@ -285,11 +294,21 @@ void CCarSeat_RecognizationDlg::run()
 	
 	while (m_bThreadStatus)
 	{
+		WriteInfo("thread begin");
 		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 		
 		if (m_pLineCamera == nullptr)
 		{
 			m_pLineCamera = new CLineCamera();
+			unsigned int tmp = m_pParamManager->GetEdsImageQuality();
+			if ((tmp == 0) || (tmp == -1))
+			{
+				m_pLineCamera->setImageQuality(EdsImageQuality_LJF);
+			}
+			else
+			{
+				m_pLineCamera->setImageQuality(tmp);
+			}	
 		}
 
 		if (_model == nullptr)
@@ -312,7 +331,7 @@ void CCarSeat_RecognizationDlg::run()
 		// 和kepServer模块的心跳包
 		if (m_pKepServer != nullptr)
 		{
-			m_pKepServer->HeartBlood();
+			//m_pKepServer->HeartBlood();
 		}
 		
 		// 检测rfid的连接状态
@@ -353,7 +372,7 @@ void CCarSeat_RecognizationDlg::run()
 			break;
 		}
 
-
+		WriteInfo("thread get barcode");
 		if (tmpBarcode.size() != 0)
 		{
 			if (m_pLineCamera != nullptr)
@@ -374,8 +393,9 @@ void CCarSeat_RecognizationDlg::run()
 					{
 						break;
 					}
-					if (tmpCount > 1000)
+					if (tmpCount > 500)
 					{
+						imagepath = std::string("D:\\Cache\\GithubCache\\CarSeat_Recognization\\20180922\\20180922_101058.jpg");
 						WriteError("get camera image failed");
 						//OnStartCamera();
 						CLineCamera::CameraStatus status = m_pLineCamera->getCameraStatus();
@@ -405,7 +425,7 @@ void CCarSeat_RecognizationDlg::run()
 			}
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
-		
+		WriteInfo("thread end");
 		
 		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 		std::this_thread::sleep_for(a);
@@ -484,6 +504,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 	//std::string cRecogExternalType = utils::WStrToStr(RecogExternalType);
 	memcpy(tmpResult.m_szTypeByRecog, RecogExternalType.c_str(), sizeof(char) * RecogExternalType.size());
+
+	memcpy(tmpResult.m_szInternalType, barInternalType.c_str(), sizeof(char) * barInternalType.size());
 
 	strcpy_s(tmpResult.m_szCameraName, m_pCameraManager->GetDesriptorByIndex(m_nCameraIndex));
 
@@ -603,6 +625,15 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		///  not implement
 
 		//m_pKepServer->SetCorrect();
+	}
+	if (m_pNetworkTask != nullptr)
+	{
+		CNetworkTask::message msg;
+		msg.imagePort = m_pParamManager->GetServerImagePort();
+		msg.serverIp = m_pParamManager->GetServerIP();
+		msg.serverPort = m_pParamManager->GetServerPort();
+		msg.mRecogResult = tmpResult;
+		m_pNetworkTask->SendMessageTo(&msg);
 	}
 
 	m_pRecogManager->add(tmpResult);

@@ -270,7 +270,6 @@ bool CLabelManager::serialize()
 	sprintf_s(tmpStr, Length, "\nLoginUsrName=\"%s\"\nLoginPasswd=\"%s\"\nLoginInfoAutoSave=\"%d\"\n", \
 		m_strLoginName, m_strLoginPasswd, (m_bLoginAutoSave == true ? 1 : 0));
 	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
-	//memset(tmpStr, 0, sizeof(wchar_t) * Length);
 
 	delete[]tmpStr;
 	tmpStr = nullptr;

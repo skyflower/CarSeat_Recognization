@@ -94,11 +94,9 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	
 	//Create CameraController
 	_controller = new CameraController();
 
-	
 	//Create View Dialog
 	CCarSeat_RecognizationDlg dlg;
 

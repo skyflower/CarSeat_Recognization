@@ -70,7 +70,7 @@ bool CKepServerSocket::SetValue(int value)
 	int length = XmlLength;
 	int i = 0;
 	bool ret = false;
-	while (i < 3)
+	while (i < 2)
 	{
 		ret = SendMessageToServer(valueXml, strlen(valueXml), recvXml, length);
 		if (ret == true)
@@ -181,8 +181,8 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
-	unsigned long tmpBlock = 1;
-	ioctlsocket(socketFD, FIONBIO, &tmpBlock);
+	//unsigned long tmpBlock = 0;
+	//ioctlsocket(socketFD, FIONBIO, &tmpBlock);
 
 
 	addr.sin_family = AF_INET;

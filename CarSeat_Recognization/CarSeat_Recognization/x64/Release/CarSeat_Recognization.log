@@ -1,2 +1,24 @@
-﻿  CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Release\CarSeat_Recognization.exe
+﻿  CameraParameterDlg.cpp
+  CarSeat_Recognization.cpp
+  CarSeat_RecognizationDlg.cpp
+  InputDlg.cpp
+  LoginDlg.cpp
+  QueryDlg.cpp
+  ParamManager.cpp
+  RFIDReader.cpp
+common\RFIDReader.cpp(57): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+common\RFIDReader.cpp(58): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+common\RFIDReader.cpp(681): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  KepServerSocket.cpp
+network\KepServerSocket.cpp(75): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  NetworkTask.cpp
+network\NetworkTask.cpp(80): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
+network\NetworkTask.cpp(368): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+network\NetworkTask.cpp(377): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码
+  12 of 3125 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    38 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Release\CarSeat_Recognization.exe
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Release\CarSeat_Recognization.pdb (Full PDB)

@@ -99,6 +99,7 @@ bool CRecogResultManager::serialize()
 	{
 		fs << iter->m_szBarcode << ","	\
 			<<  iter->m_szTime << ","	\
+			<< iter->m_szInternalType << ","	\
 			<< iter->m_szTypeByRecog << ",";
 		fs << iter->m_szTypeByBarcode << ","		\
 			<< iter->m_szTypeByUsrInput << ","	\

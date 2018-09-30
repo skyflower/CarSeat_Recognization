@@ -132,6 +132,8 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_MENU_STOP_GRAB, &CCarSeat_RecognizationDlg::OnMenuStopGrab)
 	ON_MESSAGE(WM_USER_DOWNLOAD_COMPLETE, OnDownloadComplete)
 	ON_MESSAGE(WM_USER_PROGRESS_REPORT, OnProgressReport)
+	ON_COMMAND(ID_ROTATE_Z_90, &CCarSeat_RecognizationDlg::OnRotateZ90)
+	ON_UPDATE_COMMAND_UI(ID_ROTATE_Z_90, &CCarSeat_RecognizationDlg::OnUpdateRotateZ90)
 END_MESSAGE_MAP()
 
 
@@ -294,7 +296,7 @@ void CCarSeat_RecognizationDlg::run()
 	
 	while (m_bThreadStatus)
 	{
-		WriteInfo("thread begin");
+		//WriteInfo("thread begin");
 		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 		
 		if (m_pLineCamera == nullptr)
@@ -308,7 +310,7 @@ void CCarSeat_RecognizationDlg::run()
 			else
 			{
 				m_pLineCamera->setImageQuality(tmp);
-			}	
+			}
 		}
 
 		if (_model == nullptr)
@@ -372,7 +374,7 @@ void CCarSeat_RecognizationDlg::run()
 			break;
 		}
 
-		WriteInfo("thread get barcode");
+		//WriteInfo("thread get barcode");
 		if (tmpBarcode.size() != 0)
 		{
 			if (m_pLineCamera != nullptr)
@@ -393,7 +395,7 @@ void CCarSeat_RecognizationDlg::run()
 					{
 						break;
 					}
-					if (tmpCount > 500)
+					if (tmpCount > 300)
 					{
 						imagepath = std::string("D:\\Cache\\GithubCache\\CarSeat_Recognization\\20180922\\20180922_101058.jpg");
 						WriteError("get camera image failed");
@@ -415,7 +417,7 @@ void CCarSeat_RecognizationDlg::run()
 		}
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
-			//std::string tmpPath = utils::WStrToStr(imagepath);
+			std::wstring tmpPath = utils::StrToWStr(imagepath);
 			//m_pParamManager->GetImageDirectory();
 			//std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
 			reType = m_pClassify->compute(imagepath.c_str());
@@ -423,9 +425,10 @@ void CCarSeat_RecognizationDlg::run()
 			{
 				break;
 			}
+			//MoveFile(imagepath, )
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
-		WriteInfo("thread end");
+		//WriteInfo("thread end");
 		
 		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 		std::this_thread::sleep_for(a);
@@ -783,22 +786,30 @@ void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
 	}
 
 
+	//if (m_pLineCamera != nullptr)
+	//{
+	//	CRect tmpRecRect;
+	//	CWnd *pRecStatic = GetDlgItem(IDC_IMAGE_REC);
+	//	if (pRecStatic != nullptr)
+	//	{
+	//		pRecStatic->GetWindowRect(&tmpRecRect);//获取控件的屏幕坐标
+	//		ScreenToClient(&tmpRecRect);//转换为对话框上的客户坐标
+
+	//		SIZE recSize;
+	//		recSize.cx = tmpRecRect.right - tmpRecRect.left;
+	//		recSize.cy = tmpRecRect.bottom - tmpRecRect.top;
+	//		SIZE tmpSize;
+	//		tmpSize.cx = m_pLineCamera->getImageWidth();
+	//		tmpSize.cy = m_pLineCamera->getImageHeight();
+	//		if ((tmpSize.cx != 0) && (tmpSize.cy != 0))
+	//		{
+	//			SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
+	//			pRecStatic->MoveWindow(tmpRecRect.left, tmpRecRect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
+	//		}
+	//	}
+	//}
+
 	Invalidate();
-
-
-	//CRect rect;
-
-	//GetDlgItem(IDC_IMAGE_REC)->GetWindowRect(&rect);//获取控件的屏幕坐标
-	//ScreenToClient(&rect);//转换为对话框上的客户坐标
-
-	//SIZE recSize;
-	//recSize.cx = tmpRecRect.right - tmpRecRect.left;
-	//recSize.cy = tmpRecRect.bottom - tmpRecRect.top;
-	//SIZE tmpAdjustSize = adjustRecSize(tmpSize, recSize);
-	//GetDlgItem(IDC_IMAGE_REC)->MoveWindow(rect.left, rect.top, tmpRecRect.left + tmpAdjustSize.cx, tmpRecRect.top + tmpAdjustSize.cy, TRUE);
-
-
-
 }
 
 void CCarSeat_RecognizationDlg::testXML()
@@ -834,7 +845,6 @@ void CCarSeat_RecognizationDlg::testXML()
 
 
 	TiXmlDocument lconfigXML;
-	//TiXmlParsingData data;
 	lconfigXML.Parse(greedyXML);
 	if (lconfigXML.Error())
 	{
@@ -1414,6 +1424,7 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 	//TRACE2("wParam hi = %u, low = %u\n", HIWORD(wParam), LOWORD(wParam));
 	//TRACE2("lParam hi = %u, low = %u\n", HIWORD(lParam), LOWORD(lParam));
 	static int i = 1;
+	//static bool initDisplaySize = false;
 	TRACE1("download complete i = %d\n", i);
 
 	wchar_t imageName[MAX_CHAR_LENGTH];
@@ -1442,6 +1453,25 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 	if (_waccess(imageName, 0) == 0)
 	{
 		MoveFile(imageName, imagePath);
+		//if (initDisplaySize == false)
+		//{
+		//	CImage tmpload;
+		//	tmpload.Load(imagePath);
+		//	if ((tmpload.GetHeight() != 0) && (tmpload.GetWidth() != 0))
+		//	{
+		//		m_pLineCamera->setImageHeight(tmpload.GetHeight());
+		//		m_pLineCamera->setImageWidth(tmpload.GetWidth());
+		//		//LPARAM tmpParam;
+
+		//		RECT tmpWinRect;
+		//		GetWindowRect(&tmpWinRect);
+		//		LPARAM tmpParam;
+		//		tmpParam = MAKELPARAM(tmpWinRect.right - tmpWinRect.left, tmpWinRect.bottom - tmpWinRect.top);
+		//		SendMessage(WM_SIZE, 0, tmpParam);
+
+		//		initDisplaySize = true;
+		//	}
+		//}
 	}
 
 	if (tmpDirectory != nullptr)
@@ -1507,4 +1537,20 @@ void CCarSeat_RecognizationDlg::setupObserver(Observable* ob)
 CameraModel *CCarSeat_RecognizationDlg::getAppCameraModel()
 {
 	return _model;
+}
+
+void CCarSeat_RecognizationDlg::OnRotateZ90()
+{
+	// TODO: 在此添加命令处理程序代码
+	_pictureBox.reverseRotateZ();
+}
+
+
+void CCarSeat_RecognizationDlg::OnUpdateRotateZ90(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	if (pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+	}
 }

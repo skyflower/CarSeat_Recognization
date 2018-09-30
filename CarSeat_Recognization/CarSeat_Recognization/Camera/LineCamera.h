@@ -47,6 +47,13 @@ public:
 	void setCurrentImage(const char*file);
 	const char* getCurrentImage();
 
+	unsigned int getImageWidth();
+	unsigned int getImageHeight();
+
+	unsigned int setImageWidth(unsigned int width);
+	unsigned int setImageHeight(unsigned int height);
+
+
 private:
 
 	void initCameraStatus();
@@ -75,5 +82,7 @@ private:
 	CameraStatus m_nStatus;
 	unsigned int m_nEdsImageQuality;
 	unsigned char m_bSetupFlag[2];
+	//unsigned int m_nImageWidth;
+	//unsigned int m_nImageHeight;
 };
 

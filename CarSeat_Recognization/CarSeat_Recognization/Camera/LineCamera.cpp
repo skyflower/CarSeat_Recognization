@@ -149,6 +149,7 @@ void CLineCamera::setCurrentImage(const char * file)
 	if (file != nullptr)
 	{
 		strcpy_s(m_szCurImagePath, file);
+		
 	}
 }
 
@@ -156,6 +157,27 @@ const char * CLineCamera::getCurrentImage()
 {
 	return m_szCurImagePath;
 }
+
+//unsigned int CLineCamera::getImageWidth()
+//{
+//	return m_nImageWidth;
+//}
+//
+//unsigned int CLineCamera::getImageHeight()
+//{
+//	return m_nImageHeight;
+//}
+
+//unsigned int CLineCamera::setImageWidth(unsigned int width)
+//{
+//	return m_nImageWidth = width;
+//}
+//
+//unsigned int CLineCamera::setImageHeight(unsigned int height)
+//{
+//	return m_nImageHeight = height;
+//}
+
 
 void CLineCamera::initCameraStatus()
 {

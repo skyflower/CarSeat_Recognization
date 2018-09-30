@@ -173,4 +173,6 @@ public:
 	afx_msg void OnBnClickedButtonBeginJob();
 	afx_msg void OnMenuStartGrab();
 	afx_msg void OnMenuStopGrab();
+	afx_msg void OnRotateZ90();
+	afx_msg void OnUpdateRotateZ90(CCmdUI *pCmdUI);
 };

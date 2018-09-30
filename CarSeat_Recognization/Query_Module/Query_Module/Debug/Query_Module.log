@@ -1,11 +1,18 @@
-﻿  NetworkTask.cpp
-d:\cache\githubcache\carseat_recognization\carseat_recognization\query_module\query_module\network\networktask.cpp(46): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
-  utils.cpp
-  ParamManager.cpp
+﻿  stdafx.cpp
+  tinyxmlparser.cpp
+  tinyxmlerror.cpp
+  tinyxml.cpp
+  tinystr.cpp
   Query_Module.cpp
+  NetworkTask.cpp
+d:\cache\githubcache\carseat_recognization\carseat_recognization\query_module\query_module\network\networktask.cpp(46): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
   MainFrm.cpp
   LoginDlg.cpp
   ConditonDlg.cpp
+  utils.cpp
+  ParamManager.cpp
+  md5.cpp
+  Log.cpp
   ChildView.cpp
   ChildFrm.cpp
   正在生成代码...

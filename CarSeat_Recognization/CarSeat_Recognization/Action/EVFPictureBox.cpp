@@ -23,11 +23,14 @@
 // CEVFPictureBox
 
 IMPLEMENT_DYNAMIC(CEVFPictureBox, CStatic)
-CEVFPictureBox::CEVFPictureBox():ActionSource()
+CEVFPictureBox::CEVFPictureBox():ActionSource(),
+active(FALSE),
+m_bStopUpdate(false),
+rotateZ(0),
+m_nImageWidth(0),
+m_nImageHeight(0)
 {
-	active = FALSE;
 	memset(&m_focusInfo, 0, sizeof(EdsFocusInfo));
-	m_bStopUpdate = false;
 }
 
 CEVFPictureBox::~CEVFPictureBox()
@@ -121,6 +124,12 @@ void CEVFPictureBox::update(Observable* from, CameraEvent *e)
 	}	
 }
 
+void CEVFPictureBox::reverseRotateZ()
+{
+	rotateZ += 90;
+	rotateZ %= 360;
+}
+
 LRESULT CEVFPictureBox::OnEvfDataChanged(WPARAM wParam, LPARAM lParam)
 {
 	EVF_DATASET data = *(EVF_DATASET *)wParam;
@@ -149,7 +158,6 @@ LRESULT CEVFPictureBox::OnEvfDataChanged(WPARAM wParam, LPARAM lParam)
 		ReleaseDC(pDC);
 	}
 
-
 	return 0;
 }
 
@@ -167,18 +175,40 @@ void CEVFPictureBox::OnDrawImage(CDC *pDC, unsigned char* pbyteImage, int size)
 
 	memcpy(pBuff, pbyteImage, size);
 
+	//auxRotateZ((char*)pBuff, size, rotateZ);
+
 	::GlobalUnlock(hMem);
 	CreateStreamOnHGlobal(hMem, TRUE, &stream);
 
 	image.Load(stream);
+	
+	image = auxRotateZ(image, rotateZ);
 
+	int tmpImageHeight = image.GetHeight();
+	int tmpImageWidth = image.GetWidth();
+	if ((tmpImageHeight != m_nImageHeight) || (tmpImageWidth != m_nImageWidth))
+	{
+		if ((m_nImageHeight != 0) && (m_nImageWidth != 0))
+		{
+			RECT tmpRect;
+			GetWindowRect(&tmpRect);
+			int tmpWidth = tmpRect.right - tmpRect.left;
+			int tmpHeight = tmpWidth * tmpImageHeight / (float)tmpImageWidth;
+			this->MoveWindow(tmpRect.left, tmpRect.top, tmpWidth, tmpHeight, TRUE);
+		}
+
+		m_nImageHeight = tmpImageHeight;
+		m_nImageWidth = tmpImageWidth;
+	}
 	
 	CRect rect;
 	GetWindowRect(&rect);
 
 	// Drawing
 	SetStretchBltMode(pDC->GetSafeHdc() , COLORONCOLOR);
-	image.StretchBlt(pDC->GetSafeHdc(),  0,0,rect.Width(),rect.Height(),0,0,image.GetWidth(), image.GetHeight(),SRCCOPY);
+	
+	image.StretchBlt(pDC->GetSafeHdc(), 0, 0, rect.Width(),rect.Height(),0,0,image.GetWidth(), image.GetHeight(),SRCCOPY);
+	
 	//image.BitBlt(hDC, 0, 0);
 	image.Destroy();
 
@@ -269,4 +299,81 @@ void CEVFPictureBox::OnDrawFocusRect(CDC *pDC, CRect zoomRect, CSize sizeJpegLar
 	DeleteObject(disablePen);
 	DeleteObject(justPen);
 	DeleteObject(defaultPen);
+}
+
+void CEVFPictureBox::auxRotateZ(char * byte, unsigned int size, int degree)
+{
+	if (degree == 90)
+	{
+
+	}
+	else if (degree == 180)
+	{
+
+	}
+	else if(degree == 270)
+	{
+
+	}
+}
+
+CImage CEVFPictureBox::auxRotateZ(CImage & src, int degree)
+{
+	CImage dst;
+	if (degree == 90)
+	{
+		int tmpHeight = src.GetHeight();
+		int tmpWidth = src.GetWidth();
+		if ((tmpHeight == 0) || (tmpWidth == 0))
+		{
+			return src;
+		}
+		dst.Create(tmpHeight, tmpWidth, src.GetBPP());
+		for (int i = 0; i < tmpWidth; ++i)
+		{
+			for (int j = 0; j < tmpHeight; ++j)
+			{
+				dst.SetPixel(tmpHeight - j - 1, i, src.GetPixel(i, j));
+			}
+		}
+		return dst;
+	}
+	else if (degree == 180)
+	{
+		int tmpHeight = src.GetHeight();
+		int tmpWidth = src.GetWidth();
+		if ((tmpHeight == 0) || (tmpWidth == 0))
+		{
+			return src;
+		}
+		dst.Create(tmpWidth, tmpHeight, src.GetBPP());
+		for (int i = 0; i < tmpWidth; ++i)
+		{
+			for (int j = 0; j < tmpHeight; ++j)
+			{
+				dst.SetPixel(tmpWidth - i - 1, tmpHeight - 1 - j, src.GetPixel(i, j));
+			}
+		}
+		return dst;
+	}
+	else
+	{
+		int tmpHeight = src.GetHeight();
+		int tmpWidth = src.GetWidth();
+		if ((tmpHeight == 0) || (tmpWidth == 0))
+		{
+			return src;
+		}
+		dst.Create(tmpHeight, tmpWidth, src.GetBPP());
+		for (int i = 0; i < tmpWidth; ++i)
+		{
+			for (int j = 0; j < tmpHeight; ++j)
+			{
+				dst.SetPixel(i, tmpHeight - 1 - j, src.GetPixel(i, j));
+			}
+		}
+		return dst;
+	}
+
+	return dst;
 }

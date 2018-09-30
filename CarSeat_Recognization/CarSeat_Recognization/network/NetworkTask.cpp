@@ -46,7 +46,10 @@ CNetworkTask::CNetworkTask():
 		}
 		delete[]tmpWCacheFile;
 		tmpWCacheFile = nullptr;
-		
+		if (false == initCacheFile())
+		{
+			WriteError("init cache file failed");
+		}
 	}
 }
 
@@ -199,10 +202,11 @@ void CNetworkTask::run()
 				//m_nMsgSize--;
 				if ((tmpMsg.serverIp == -1) && (tmpMsg.serverPort == -1))
 				{
+					lock.unlock();
 					break;
 				}
 				size_t recvLength = 0;
-				lock.release();
+				lock.unlock();
 				WriteInfo("get recog result");
 				if (__sendRecogToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.imagePort, &tmpMsg.mRecogResult) == false)
 				{
@@ -303,13 +307,27 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 {
 	////////根据通信标准格式化成xml
 	// MD5为图像数据的md5值
-	char textXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
-		<identification lineID = \"%s\" ip = \"%s\" time=\"%s\">	\
+	/*char textXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
+		<identification lineID =\"%s\" ip =\"%s\" time=\"%s\">	\
 		<data barcode = \"%s\" barcodeResult = \"%s\" md5 = \"%s\"	\
 		  method = \"auto\" usrName=\"%s\" imagePath=\"%s\"	\
 		typeByRecog = \"%s\" typeByBarcode=\"%s\" typeByInput=\"%s\"	\
-		cameraName=\"%s\"	/>	\
-		</identification>";
+		cameraName=\"%s\" correct=%d	/>	\
+		</identification>";*/
+	char textXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
+		<SeatInfo>	\
+		<barcode>%s</barcode>		\
+		<user>%s</user>				\
+		< time>%s</time >		\
+		< type>%s</type >				\
+		<material>%s</material>		\
+		<color>black</color>		\
+		<correct>yes</correct>		\
+		<mode>auto< / mode>		\
+		< cameraNum>3 < / cameraNum >		\
+		<line>L2< / line>		\
+		<pictureName>L1T1M0C2N000001< / pictureName>		\
+		< / SeatInfo>";
 
 	char *content = nullptr;
 	size_t imageSize = 0;
@@ -325,9 +343,6 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 		return false;
 	}
 	std::string tmpStr(content, content + imageSize);
-
-	//delete[]content;
-	//content = nullptr;
 	
 	MD5 md5(tmpStr);
 	const char *digest = (const char*)md5.getDigest();
@@ -336,12 +351,18 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 	char sendXml[length];
 	memset(sendXml, 0, sizeof(char) * length);
 
-	sprintf_s(sendXml, length, textXml, recog->m_szLineName, m_pParamManager->GetLocalIP(), recog->m_szTime,	\
+	struct in_addr inTmp;
+	char tmpIp[20];
+	inTmp.S_un.S_addr = htonl(m_pParamManager->GetLocalIP());
+	memset(tmpIp, 0, sizeof(tmpIp));
+	inet_ntop(AF_INET, &inTmp, tmpIp, sizeof(tmpIp));
+	
+	sprintf_s(sendXml, length, textXml, recog->m_szLineName, tmpIp, recog->m_szTime,	\
 		recog->m_szBarcode, recog->m_szInternalType, digest, recog->m_szUsrName, recog->m_szImagePath, recog->m_szTypeByRecog,	\
-	recog->m_szTypeByBarcode,recog->m_szTypeByUsrInput, recog->m_szCameraName);
-
+	recog->m_szTypeByBarcode,recog->m_szTypeByUsrInput, recog->m_szCameraName, recog->m_bIsCorrect);
+	
 	char recvText[length];
-	memset(recvText, 0, sizeof(char) * imageSize);
+	memset(recvText, 0, sizeof(char) * length);
 	size_t recvMsgLen = 0;
 
 	bool flag = false;
@@ -428,10 +449,10 @@ bool CNetworkTask::initCacheFile()
 
 	m_pLog.read(content, fileLength);
 
-	RecogResultA tmpResult;
+	message tmpResult;
 	
 
-	const size_t lineLength = 1000;
+	const size_t lineLength = 2000;
 	char *line = new char[lineLength];
 	if (line == nullptr)
 	{
@@ -450,8 +471,9 @@ bool CNetworkTask::initCacheFile()
 			break;
 		}
 		memcpy(line, content + begin, lineEnd - content - begin);
-		memset(&tmpResult, 0, sizeof(RecogResultA));
-		RecogResultA::TextToRecog(tmpResult, line);
+		memset(&tmpResult, 0, sizeof(tmpResult));
+		message::deserialize(tmpResult, line);
+		m_pMsgList->push_back(tmpResult);
 	}
 
 	delete[]line;
@@ -506,16 +528,46 @@ bool CNetworkTask::message::serialize(message & a, char * line)
 
 bool CNetworkTask::message::deserialize(message & a, char * line)
 {
-	std::stringstream ss(line);
-	ss >> a.serverIp >> "," >> a.serverPort >> "," >> a.imagePort >> ",";
+	if (line == nullptr)
+	{
+		return false;
+	}
 
-	constexpr const size_t tmpLength = sizeof(RecogResultA);
+	char tmp[1000];
 
-	char tmp[tmpLength];
-
+	char *begin = line;
+	char *end = strchr(begin, ',');
+	if (end == nullptr)
+	{
+		return false;
+	}
 	memset(tmp, 0, sizeof(tmp));
+	memcpy(tmp, begin, end - begin);
+	a.serverIp = atoi(tmp);
+	begin = end + 1;
 
-	ss >> tmp;
+	end = strchr(begin, ',');
+	if (end == nullptr)
+	{
+		return false;
+	}
+	memset(tmp, 0, sizeof(tmp));
+	memcpy(tmp, begin, end - begin);
+	a.serverPort = atoi(tmp);
+	begin = end + 1;
+
+
+	end = strchr(begin, ',');
+	if (end == nullptr)
+	{
+		return false;
+	}
+	memset(tmp, 0, sizeof(tmp));
+	memcpy(tmp, begin, end - begin);
+	a.imagePort = atoi(tmp);
+	begin = end + 1;
+
+	memcpy(tmp, begin, strlen(begin));
 
 	RecogResultA::TextToRecog(a.mRecogResult, tmp);
 

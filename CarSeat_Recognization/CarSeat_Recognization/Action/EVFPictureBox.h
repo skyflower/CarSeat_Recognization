@@ -29,9 +29,15 @@ private:
 	EdsFocusInfo	m_focusInfo;
 	EdsBool			m_bDrawZoomFrame;
 	volatile bool m_bStopUpdate;
-
+	int rotateZ;
+	int m_nImageWidth;
+	int m_nImageHeight;
 	void OnDrawImage(CDC *pDC, unsigned char* pbyteImage, int size);
 	void OnDrawFocusRect(CDC *pDC, CRect zoomRect, CSize sizeJpegLarge);
+
+	void auxRotateZ(char *byte, unsigned int size, int degree);
+	CImage auxRotateZ(CImage &src, int degree);
+
 public:
 	CEVFPictureBox();
 	virtual ~CEVFPictureBox();
@@ -41,9 +47,13 @@ public:
 	//observer
 	virtual void update(Observable* from, CameraEvent *e);
 
+	void reverseRotateZ();
+
 protected:
 	afx_msg LRESULT OnEvfDataChanged(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 

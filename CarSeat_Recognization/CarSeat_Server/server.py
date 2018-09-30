@@ -64,7 +64,7 @@ def process_msg(conn, addr):
                 root = ""
                 try:
                     root = ET.fromstring(recvData)
-                except xml.etree.ElementTree.ParseError, e:
+                except ...:#xml.etree.ElementTree.ParseError, e:
                     print(recvData)
                     print("parse Error, data len = %u" % len(recvData))
                     continue
@@ -87,7 +87,7 @@ def process_msg(conn, addr):
         conn.close()
         
 def process_pic(conn, addr):
-    print 'Accept new connection from {0}'.format(addr)
+    print('Accept new connection from {0}'.format(addr))
     #conn.settimeout(500)
     conn.send('Hi, Welcome to the server!')
 
@@ -101,7 +101,7 @@ def process_pic(conn, addr):
 
             recvd_size = 0  # 定义已接收文件的大小
             fp = open(new_filename, 'wb')
-            print 'start receiving...'
+            print('start receiving...')
             while not recvd_size == filesize:
                 if filesize - recvd_size > 1024:
                     data = conn.recv(1024)
@@ -111,7 +111,7 @@ def process_pic(conn, addr):
                     recvd_size = filesize
                 fp.write(data)
             fp.close()
-            print 'end receive...'
+            print('end receive...')
     conn.close()
         
 def process_search(conn, addr):
@@ -209,7 +209,7 @@ def server_init():
     dbName = db.setup()
     dbCon = db.connect(dbName)
     if not dbCon:
-        printf('ERROR: %r not supported or unreachable, exit' % db)
+        print('ERROR: %r not supported or unreachable, exit' % db)
         return
     db.init(dbCon)
     dbCon.close()

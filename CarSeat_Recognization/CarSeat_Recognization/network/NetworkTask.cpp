@@ -184,7 +184,7 @@ void CNetworkTask::run()
 	while (m_bThreadStatus)
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 10 * 1000)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 60 * 1000)
 		{
 			heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 			preBlood = now;
@@ -272,6 +272,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, err = %u", err);
 		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
 		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
@@ -282,6 +283,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
 		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
 		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
@@ -291,13 +293,14 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		WriteError("recv Failed, Err: %u", GetLastError());
 		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
 		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
 	recvMsgLen = tmpLen;
 	closesocket(socketFD);
-	socketFD = -1;
+	socketFD = INVALID_SOCKET;
 
 	//WSACleanup();
 

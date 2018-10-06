@@ -12,7 +12,7 @@
 CRFIDReader::CRFIDReader():
 	m_nDefaultPort(10001),
 	m_bDefaultDHCP(false),
-	m_nSocket(0),
+	m_nSocket(INVALID_SOCKET),
 	m_nSessionID(1000)
 {
 	memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
@@ -32,14 +32,14 @@ CRFIDReader::~CRFIDReader()
 		
 		closesocket(m_nSocket);
 		//WSACleanup();
-		m_nSocket = 0;
+		m_nSocket = INVALID_SOCKET;
 	}
 }
 
 std::string CRFIDReader::readBarcode()
 {
 	//N160310118880001   6-8位有效
-#if 1
+#if 0
 	char tmp[20];
 	memset(tmp, 0, sizeof(tmp));
 	static double x = 0.000012345678;
@@ -237,7 +237,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	if (m_nSocket == INVALID_SOCKET)
 	{
 		closesocket(m_nSocket);
-		m_nSocket = 0;
+		m_nSocket = INVALID_SOCKET;
 		//WSACleanup();
 		return ErrorType::ERROR_SOCKET_CREATE;
 	}
@@ -266,7 +266,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, ip = 0x%X, port = %u, err = %u", serverIp, port, err);
 		closesocket(m_nSocket);
-		m_nSocket = 0;
+		m_nSocket = INVALID_SOCKET;
 		//WSACleanup();
 		return ErrorType::ERROR_SOCKET_CONNECT;
 	}
@@ -685,7 +685,7 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int 
 		{
 			WriteError("rfid server has closed");
 			closesocket(fd);
-			fd = -1;
+			fd = INVALID_SOCKET;
 			return ErrorType::ERROR_SOCKET_CLOSED;
 		}
 		WriteError("socket Error, %d", WSAGetLastError());
@@ -700,7 +700,7 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int 
 	{
 		WriteError("rfid server has closed");
 		closesocket(fd);
-		fd = -1;
+		fd = INVALID_SOCKET;
 		return ErrorType::ERROR_SOCKET_CLOSED;
 	}
 	else if (nret == SOCKET_ERROR)

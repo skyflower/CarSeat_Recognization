@@ -32,11 +32,21 @@ private:
 	int rotateZ;
 	int m_nImageWidth;
 	int m_nImageHeight;
+	int m_nBpp;
+
+	const static size_t PixelLength = 10 * 1024 * 1024 * 3;
+	COLORREF *m_pPixel;
+	COLORREF *m_pExBuffer;
+
 	void OnDrawImage(CDC *pDC, unsigned char* pbyteImage, int size);
 	void OnDrawFocusRect(CDC *pDC, CRect zoomRect, CSize sizeJpegLarge);
 
-	void auxRotateZ(char *byte, unsigned int size, int degree);
-	CImage auxRotateZ(CImage &src, int degree);
+	void auxRotateZ(COLORREF *byte, unsigned int size, int degree);
+	void auxRotateZ(CImage &src, int degree);
+
+	void OnRotate90Image(CImage &srcImage);
+	void OnRotate180Image(CImage &srcImage);
+	void OnRotate270Image(CImage &srcImage);
 
 public:
 	CEVFPictureBox();
@@ -53,7 +63,6 @@ protected:
 	afx_msg LRESULT OnEvfDataChanged(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 

@@ -18,6 +18,7 @@
 
 #include "EVFPictureBox.h"
 #include "../Command/DownloadEvfCommand.h"
+#include "../../common/Log.h"
 
 #define WM_USER_EVF_DATA_CHANGED		WM_APP+1
 // CEVFPictureBox
@@ -31,10 +32,26 @@ m_nImageWidth(0),
 m_nImageHeight(0)
 {
 	memset(&m_focusInfo, 0, sizeof(EdsFocusInfo));
+	m_pPixel = new COLORREF[PixelLength];
+	memset(m_pPixel, 0, sizeof(COLORREF) * PixelLength);
+
+	m_pExBuffer = new COLORREF[PixelLength];
+	memset(m_pExBuffer, 0, sizeof(COLORREF) * PixelLength);
+
 }
 
 CEVFPictureBox::~CEVFPictureBox()
 {
+	if (m_pPixel != NULL)
+	{
+		delete[]m_pPixel;
+		m_pPixel = NULL;
+	}
+	if (m_pExBuffer != NULL)
+	{
+		delete[]m_pExBuffer;
+		m_pExBuffer = NULL;
+	}
 }
 
 void CEVFPictureBox::stopUpdate()
@@ -175,35 +192,38 @@ void CEVFPictureBox::OnDrawImage(CDC *pDC, unsigned char* pbyteImage, int size)
 
 	memcpy(pBuff, pbyteImage, size);
 
-	//auxRotateZ((char*)pBuff, size, rotateZ);
-
 	::GlobalUnlock(hMem);
 	CreateStreamOnHGlobal(hMem, TRUE, &stream);
 
 	image.Load(stream);
-	
-	image = auxRotateZ(image, rotateZ);
+	//WriteInfo("image width = %d, height = %d, bpp = %d", image.GetWidth(),	\
+	//	image.GetHeight(), image.GetBPP());
+
+	auxRotateZ(image, rotateZ);
 
 	int tmpImageHeight = image.GetHeight();
 	int tmpImageWidth = image.GetWidth();
+	//WriteInfo("degeree = %d", rotateZ);
+	//WriteInfo("image width = %d, height = %d, bpp = %d", image.GetWidth(),	\
+	//	image.GetHeight(), image.GetBPP());
 	if ((tmpImageHeight != m_nImageHeight) || (tmpImageWidth != m_nImageWidth))
 	{
-		if ((m_nImageHeight != 0) && (m_nImageWidth != 0))
+		/*if ((m_nImageHeight != 0) && (m_nImageWidth != 0))
 		{
 			RECT tmpRect;
 			GetWindowRect(&tmpRect);
 			int tmpWidth = tmpRect.right - tmpRect.left;
 			int tmpHeight = tmpWidth * tmpImageHeight / (float)tmpImageWidth;
 			this->MoveWindow(tmpRect.left, tmpRect.top, tmpWidth, tmpHeight, TRUE);
-		}
-
+		}*/
+		
 		m_nImageHeight = tmpImageHeight;
 		m_nImageWidth = tmpImageWidth;
+		m_nBpp = image.GetBPP();
 	}
 	
 	CRect rect;
 	GetWindowRect(&rect);
-
 	// Drawing
 	SetStretchBltMode(pDC->GetSafeHdc() , COLORONCOLOR);
 	
@@ -301,79 +321,197 @@ void CEVFPictureBox::OnDrawFocusRect(CDC *pDC, CRect zoomRect, CSize sizeJpegLar
 	DeleteObject(defaultPen);
 }
 
-void CEVFPictureBox::auxRotateZ(char * byte, unsigned int size, int degree)
+void CEVFPictureBox::auxRotateZ(COLORREF * byte, unsigned int size, int degree)
 {
+	if (size != m_nImageHeight * m_nImageWidth)
+	{
+		return;
+	}
+	memset(m_pPixel, 0, sizeof(COLORREF) * PixelLength);
 	if (degree == 90)
 	{
-
+		//dst.SetPixel(tmpHeight - j - 1, i, src.GetPixel(i, j));
+		for (int i = 0; i < m_nImageWidth; ++i)
+		{
+			for (int j = 0; j < m_nImageHeight; ++j)
+			{
+				unsigned int dstIndex = (m_nImageHeight - j - 1) * m_nImageWidth + i;
+				unsigned int srcIndex = i * m_nImageHeight + j;
+				m_pPixel[dstIndex] = byte[srcIndex];
+			}
+		}
 	}
 	else if (degree == 180)
 	{
-
+		for (int i = 0; i < m_nImageWidth; ++i)
+		{
+			for (int j = 0; j < m_nImageHeight; ++j)
+			{
+				unsigned int dstIndex = (m_nImageWidth - i - 1) * m_nImageHeight + (m_nImageHeight - 1 - j);
+				unsigned int srcIndex = i * m_nImageHeight + j;
+				m_pPixel[dstIndex] = byte[srcIndex];
+			}
+		}
 	}
 	else if(degree == 270)
 	{
-
-	}
-}
-
-CImage CEVFPictureBox::auxRotateZ(CImage & src, int degree)
-{
-	CImage dst;
-	if (degree == 90)
-	{
-		int tmpHeight = src.GetHeight();
-		int tmpWidth = src.GetWidth();
-		if ((tmpHeight == 0) || (tmpWidth == 0))
+		for (int i = 0; i < m_nImageWidth; ++i)
 		{
-			return src;
-		}
-		dst.Create(tmpHeight, tmpWidth, src.GetBPP());
-		for (int i = 0; i < tmpWidth; ++i)
-		{
-			for (int j = 0; j < tmpHeight; ++j)
+			for (int j = 0; j < m_nImageHeight; ++j)
 			{
-				dst.SetPixel(tmpHeight - j - 1, i, src.GetPixel(i, j));
+				unsigned int dstIndex = j * m_nImageWidth + (m_nImageWidth - 1 - i);
+				unsigned int srcIndex = i * m_nImageHeight + j;
+				m_pPixel[dstIndex] = byte[srcIndex];
 			}
 		}
-		return dst;
+	}
+	memcpy(byte, m_pPixel, size * sizeof(COLORREF));
+}
+
+void CEVFPictureBox::auxRotateZ(CImage &src, int degree)
+{
+	if ((degree == 0) || (m_pExBuffer == nullptr))
+	{
+		return;
+	}
+	if (degree == 90)
+	{
+		OnRotate90Image(src);
 	}
 	else if (degree == 180)
 	{
-		int tmpHeight = src.GetHeight();
-		int tmpWidth = src.GetWidth();
-		if ((tmpHeight == 0) || (tmpWidth == 0))
-		{
-			return src;
-		}
-		dst.Create(tmpWidth, tmpHeight, src.GetBPP());
-		for (int i = 0; i < tmpWidth; ++i)
-		{
-			for (int j = 0; j < tmpHeight; ++j)
-			{
-				dst.SetPixel(tmpWidth - i - 1, tmpHeight - 1 - j, src.GetPixel(i, j));
-			}
-		}
-		return dst;
+		OnRotate180Image(src);
 	}
-	else
+	else if (degree == 270)
 	{
-		int tmpHeight = src.GetHeight();
-		int tmpWidth = src.GetWidth();
-		if ((tmpHeight == 0) || (tmpWidth == 0))
-		{
-			return src;
-		}
-		dst.Create(tmpHeight, tmpWidth, src.GetBPP());
-		for (int i = 0; i < tmpWidth; ++i)
-		{
-			for (int j = 0; j < tmpHeight; ++j)
-			{
-				dst.SetPixel(i, tmpHeight - 1 - j, src.GetPixel(i, j));
-			}
-		}
-		return dst;
+		OnRotate270Image(src);
+	}
+}
+
+
+
+void CEVFPictureBox::OnRotate90Image(CImage &srcImage)
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if ((HBITMAP)srcImage == NULL)
+	{
+		return;
 	}
 
-	return dst;
+	int pit = srcImage.GetPitch();
+	int bitCount = srcImage.GetBPP() / 8;
+	byte *pRealData = (byte*)srcImage.GetBits();
+
+	int tmpHeight = srcImage.GetHeight();
+	int tmpWidth = srcImage.GetWidth();
+	int tmpBpp = srcImage.GetBPP();
+
+	memset(m_pExBuffer, 0, PixelLength);
+
+	memcpy(m_pExBuffer, pRealData + (tmpHeight - 1) * pit, tmpHeight * tmpWidth * bitCount);
+
+	srcImage.Destroy();
+	pRealData = NULL;
+
+	srcImage.Create(tmpHeight, tmpWidth, tmpBpp, 0);
+
+	int dstPit = srcImage.GetPitch();
+	byte *dstData = (byte*)srcImage.GetBits();
+
+	for (size_t i = 0; i < tmpHeight * tmpWidth * bitCount; i = i + bitCount)
+	{
+		size_t j = i / bitCount;
+		int x = j % tmpWidth;
+		int y = j / tmpWidth;
+		y = tmpHeight - 1 - y;
+
+		unsigned char *tmp = (unsigned char*)m_pExBuffer;
+		byte *curData = dstData + dstPit * x + (tmpHeight - 1 - y) * bitCount;
+		curData[0] = tmp[i];
+		curData[1] = tmp[i + 1];
+		curData[2] = tmp[i + 2];
+	}
+
+}
+
+
+void CEVFPictureBox::OnRotate180Image(CImage &srcImage)
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if ((HBITMAP)srcImage == NULL)
+	{
+		return;
+	}
+
+	unsigned int tmpBase = 0;
+	int tmpImageHeight = srcImage.GetHeight();
+	int tmpImageWidth = srcImage.GetWidth();
+	int pit = srcImage.GetPitch();
+	int tmpBpp = srcImage.GetBPP();
+	int bitCount = tmpBpp / 8;
+	byte *pRealData = (byte*)srcImage.GetBits();
+
+	memcpy((char*)m_pExBuffer, pRealData + pit * (tmpImageHeight - 1), tmpImageHeight * tmpImageWidth * bitCount);
+
+	char *left = (char*)pRealData + pit * (tmpImageHeight - 1);
+	char *right = left + (tmpImageHeight * tmpImageWidth - 1) * bitCount;
+
+	while (left < right)
+	{
+		for (int i = 0; i < bitCount; ++i)
+		{
+			*left ^= *right;
+			*right ^= *left;
+			*left ^= *right;
+
+			left++;
+			right++;
+		}
+
+		right = right - 2 * bitCount;
+	}
+	
+}
+
+
+void CEVFPictureBox::OnRotate270Image(CImage &srcImage)
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if ((HBITMAP)srcImage == NULL)
+	{
+		return;
+	}
+
+	int pit = srcImage.GetPitch();
+	int bitCount = srcImage.GetBPP() / 8;
+	byte *pRealData = (byte*)srcImage.GetBits();
+
+	int tmpHeight = srcImage.GetHeight();
+	int tmpWidth = srcImage.GetWidth();
+	int tmpBpp = srcImage.GetBPP();
+
+	memset(m_pExBuffer, 0, PixelLength);
+
+	memcpy(m_pExBuffer, pRealData + (tmpHeight - 1) * pit, tmpHeight * tmpWidth * bitCount);
+
+	srcImage.Destroy();
+	pRealData = NULL;
+	srcImage.Create(tmpHeight, tmpWidth, tmpBpp, 0);
+
+	int dstPit = srcImage.GetPitch();
+	byte *dstData = (byte*)srcImage.GetBits();
+
+	for (size_t i = 0; i < tmpHeight * tmpWidth * bitCount; i = i + bitCount)
+	{
+		size_t j = i / bitCount;
+		int x = j % tmpWidth;
+		int y = j / tmpWidth;
+		y = tmpHeight - 1 - y;
+
+		unsigned char *tmp = (unsigned char*)m_pExBuffer;
+		byte *curData = dstData + dstPit * (tmpWidth - 1 - x) + y * bitCount;
+		curData[0] = tmp[i];
+		curData[1] = tmp[i + 1];
+		curData[2] = tmp[i + 2];
+	}
 }

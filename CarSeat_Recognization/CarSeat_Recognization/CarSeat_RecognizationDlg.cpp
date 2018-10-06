@@ -297,7 +297,7 @@ void CCarSeat_RecognizationDlg::run()
 	while (m_bThreadStatus)
 	{
 		//WriteInfo("thread begin");
-		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+		//heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 		
 		if (m_pLineCamera == nullptr)
 		{
@@ -395,9 +395,9 @@ void CCarSeat_RecognizationDlg::run()
 					{
 						break;
 					}
-					if (tmpCount > 300)
+					if (tmpCount > 700)
 					{
-						imagepath = std::string("D:\\Cache\\GithubCache\\CarSeat_Recognization\\20180922\\20180922_101058.jpg");
+						//imagepath = std::string("D:\\Cache\\GithubCache\\CarSeat_Recognization\\20180922\\20180922_101058.jpg");
 						WriteError("get camera image failed");
 						//OnStartCamera();
 						CLineCamera::CameraStatus status = m_pLineCamera->getCameraStatus();

@@ -64,7 +64,7 @@ void CLineCamera::setupObserver(Observable * ob)
 {
 	unsigned long long tmp = (unsigned long long)ob;
 	//unsigned int tmpValue
-	WriteInfo("set up Observable 0x%X, 0x%X", (tmp & 0xFFFFFFFF), ((tmp >> 32) & 0xFFFFFFFF));
+	//WriteInfo("set up Observable 0x%X, 0x%X", (tmp & 0xFFFFFFFF), ((tmp >> 32) & 0xFFFFFFFF));
 	//ob->addObserver(static_cast<Observer*>(&_comboAEMode));
 	//ob->addObserver(static_cast<Observer*>(&_comboTv));
 	//ob->addObserver(static_cast<Observer*>(&_comboAv));
@@ -184,5 +184,5 @@ void CLineCamera::initCameraStatus()
 	_comboImageQuality.OnSelChange(m_nEdsImageQuality);
 	_comboMeteringMode.OnSelChange(3);
 	//_comboEvfAFMode.OnSelChange(0);
-	WriteInfo("InitCamera Status, set image quality mjf, m_nStatus = %d", m_nStatus);
+	WriteInfo("InitCamera Status, set image quality 0x%X, m_nStatus = %d", m_nEdsImageQuality, m_nStatus);
 }

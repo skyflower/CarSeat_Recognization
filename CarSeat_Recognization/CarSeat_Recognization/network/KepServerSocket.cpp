@@ -9,7 +9,7 @@
 CKepServerSocket::CKepServerSocket(unsigned int ip, unsigned int port):
 	m_nIp(ip),
 	m_nPort(port),
-	m_nSocket(0)
+	m_nSocket(INVALID_SOCKET)
 {
 	//m_nSocket = initSocket(ip, port);
 }
@@ -20,7 +20,7 @@ CKepServerSocket::~CKepServerSocket()
 	if (m_nSocket != 0)
 	{
 		closesocket(m_nSocket);
-		m_nSocket = 0;
+		m_nSocket = INVALID_SOCKET;
 	}
 	//WSACleanup();
 }
@@ -119,11 +119,11 @@ bool CKepServerSocket::SetValue(int value)
 
 bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffer, int &recvLen)
 {
-	if (m_nSocket == 0)
+	if (m_nSocket == INVALID_SOCKET)
 	{
 		resetConnect();
 	}
-	if (m_nSocket == 0)
+	if (m_nSocket == INVALID_SOCKET)
 	{
 		return false;
 	}
@@ -132,7 +132,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:%d", msg, len, WSAGetLastError());
 		closesocket(m_nSocket);
-		m_nSocket = 0;
+		m_nSocket = INVALID_SOCKET;
 		//WSACleanup();
 		return false;
 	}
@@ -144,7 +144,7 @@ bool CKepServerSocket::SendMessageToServer(char * msg, int len, char * recvBuffe
 		closesocket(m_nSocket);
 		//WSACleanup();
 		recvMsgLen = 0;
-		m_nSocket = 0;
+		m_nSocket = INVALID_SOCKET;
 		return false;
 	}
 	recvLen = recvMsgLen;

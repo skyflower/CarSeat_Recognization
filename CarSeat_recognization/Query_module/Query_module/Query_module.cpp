@@ -21,6 +21,7 @@
 #include "./common/utils.h"
 #include "ChildFrm.h"
 #include <time.h>
+#include <WinSock2.h>
 
 
 #ifdef _DEBUG
@@ -160,12 +161,21 @@ BOOL CQuery_ModuleApp::InitInstance()
 
 
 	
+	
 
 
 
 	// 主窗口已初始化，因此显示它并对其进行更新
 	pFrame->ShowWindow(m_nCmdShow);
 	pFrame->UpdateWindow();
+
+
+	pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
+	pFrame->LockWindowUpdate();
+	// 创建新的 MDI 子窗口
+	pFrame->CreateNewChild(
+		RUNTIME_CLASS(CQueryFrame), IDR_Query_ModuleTYPE, m_hMDIMenu, m_hMDIAccel);
+	pFrame->UnlockWindowUpdate();
 
 	return TRUE;
 }
@@ -198,7 +208,7 @@ int CQuery_ModuleApp::ExitInstance()
 
 // CQuery_ModuleApp 消息处理程序
 
-void CQuery_ModuleApp::OnFileNew() 
+void CQuery_ModuleApp::OnFileNew()
 {
 	CMainFrame* pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
 	pFrame->LockWindowUpdate();
@@ -278,7 +288,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 	{
 		return;
 	}
-	CConditionFilter filter = mConditionDlg.GetFilterCondition();
+	CConditionFilterA filter = mConditionDlg.GetFilterCondition();
 	TRACE1("ret = %d\n", ret);
 	WriteInfo("date = [begin = %s],[end = %s]", filter.mDateBeign, filter.mDateEnd);
 	WriteInfo("time = [begin = %s],[end = %s]", filter.mTimeBegin, filter.mTimeEnd);
@@ -305,6 +315,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 		%s													\
 		</search>";
 
+	
 
 	/*<timePolicy control = \"%d\" startTime=\"%s\" endTime=\"%s\"/>				\
 		<linePolicy control=\"%d\" startLine=\"%s\" endLine=\"%s\"/>				\
@@ -342,7 +353,6 @@ void CQuery_ModuleApp::OnButtonChoose()
 	struct tm nowTime;
 	localtime_s(&nowTime, &tmpTime_t);
 
-	//sprintf_s(tmpTime, "%04d%02d%02d-%02d%02d%02d", )
 
 	sprintf_s(tmpTime, "%04d%02d%02d-%02d%02d%02d", \
 		nowTime.tm_year + 1900, nowTime.tm_mon + 1, nowTime.tm_mday, \
@@ -352,82 +362,145 @@ void CQuery_ModuleApp::OnButtonChoose()
 	memset(ipStr, 0, sizeof(ipStr));
 	unsigned int ip = m_pParamManager->GetLocalIP();
 
-	sprintf_s(ipStr, "%d.%d.%d.%d", (ip >> 24), ((ip >> 16) & 0xFF), ((ip >> 8) & 0xFF), (ip & 0xFF));
+	in_addr in;
+	in.S_un.S_addr = ip;
+	
+	inet_ntop(AF_INET, (void *)&in, ipStr, sizeof(ipStr));
+	
+	//sprintf_s(ipStr, "%s", inet_ntoa(in));
 
 
 	// 时间选择策略
 	const int policyLength = 200;
-	char timePolicy[policyLength] = { 0 };
+	char *timePolicy = new char[policyLength];
+
 	memset(timePolicy, 0, sizeof(timePolicy));
 	int timePolicyControl = 1;
-	if ((strlen(filter.mTimeBegin) == 0) && (strlen(filter.mTimeEnd) == 0))
+	if ((strcmp(filter.mDateBeign, filter.mDateEnd) == 0)	\
+		&& (strcmp(filter.mTimeBegin, filter.mTimeEnd) == 0))
 	{
 		timePolicyControl = 0;
 	}
 
-	sprintf_s(timePolicy, "<timePolicy control = \"%d\" startTime=\"%s\" endTime=\"%s\"/>",
+	sprintf_s(timePolicy, policyLength, "<timePolicy control = \"%d\" startTime=\"%s\" endTime=\"%s\"/>",
 		timePolicyControl, filter.mTimeBegin, filter.mTimeEnd);
 
 
 	//产线选择策略
-	char linePolicy[policyLength] = { 0 };
+	//char linePolicy[policyLength] = { 0 };
+	char *linePolicy = new char[policyLength];
 	memset(linePolicy, 0, sizeof(linePolicy));
 	int linePolicyControl = 1;
 	if ((strlen(filter.mLineBegin) == 0) && (strlen(filter.mLineEnd) == 0))
 	{
 		linePolicyControl = 0;
 	}
-	sprintf_s(linePolicy, "<linePolicy control=\"%d\" startLine=\"%s\" endLine=\"%s\"/>",
+	sprintf_s(linePolicy, policyLength, "<linePolicy control=\"%d\" startLine=\"%s\" endLine=\"%s\"/>",
 		linePolicyControl, filter.mLineBegin, filter.mLineEnd);
 
 
 
 	// 格式化条形码策略
-	char barcodePolicy[policyLength] = { 0 };
+	//char barcodePolicy[policyLength] = { 0 };
+	char *barcodePolicy = new char[policyLength];
 	memset(barcodePolicy, 0, sizeof(barcodePolicy));
 	int barcodePolicyControl = 1;
 	if ((strlen(filter.mBarcodeBegin) == 0) && (strlen(filter.mBarcodeEnd) == 0))
 	{
 		barcodePolicyControl = 0;
 	}
-	sprintf_s(barcodePolicy, "<barcodePolicy control=\"%d\" startBarcode=\"%s\" endBarcode=\"%s\"/>",
+	sprintf_s(barcodePolicy, policyLength, "<barcodePolicy control=\"%d\" startBarcode=\"%s\" endBarcode=\"%s\"/>",
 		barcodePolicyControl, filter.mBarcodeBegin, filter.mBarcodeEnd);
 
 
 	// 座椅类型策略
-	char typePolicy[policyLength] = { 0 };
+	//char typePolicy[policyLength] = { 0 };
+	char *typePolicy = new char[policyLength];
 	memset(typePolicy, 0, sizeof(typePolicy));
 	int typePolicyControl = 1;
 	if ((strlen(filter.mSeatType) == 0))
 	{
 		typePolicyControl = 0;
 	}
-	sprintf_s(typePolicy, "<typePolicy control=\"%d\" type=\"%s\"/>",
+	sprintf_s(typePolicy, policyLength, "<typePolicy control=\"%d\" type=\"%s\"/>",
 		typePolicyControl, filter.mSeatType);
 
 
 	// 识别类型策略，目前只支持自动识别
-	char methodPolicy[policyLength] = { 0 };
+	//char methodPolicy[policyLength] = { 0 };
+	char *methodPolicy = new char[policyLength];
 	memset(methodPolicy, 0, sizeof(methodPolicy));
 	int methodPolicyControl = 1;
 	//if ((strlen(filter.mSeatType) == 0))
 	//{
 	//	methodPolicyControl = 0;
 	//}
-	sprintf_s(methodPolicy, "<methodPolicy control=\"%d\" method=\"auto\"/>", methodPolicyControl);
+	sprintf_s(methodPolicy, policyLength, "<methodPolicy control=\"%d\" method=\"auto\"/>", methodPolicyControl);
+
+	//timePolicy, barcodePolicy, linePolicy, typePolicy, methodPolicy
+	WriteInfo("timePolicy = %s", timePolicy);
+	WriteInfo("barcodePolicy = %s", barcodePolicy);
+	WriteInfo("linePolicy = %s", linePolicy);
+	WriteInfo("typePolicy = %s", typePolicy);
+	WriteInfo("methodPolicy = %s", methodPolicy);
+
+	//sprintf_s(tmpChar, sizeof(char) * length, "%s\n", linePolicy);
 
 
 	sprintf_s(tmpChar, sizeof(char) * length, "%s\n%s\n%s\n%s\n%s\n", timePolicy, barcodePolicy, linePolicy, typePolicy, methodPolicy);
 
+	if (timePolicy != nullptr)
+	{
+		delete[]timePolicy;
+		timePolicy = nullptr;
+	}
+	if (typePolicy != nullptr)
+	{
+		delete[]typePolicy;
+		typePolicy = nullptr;
+	}
+	if (barcodePolicy != nullptr)
+	{
+		delete[]barcodePolicy;
+		barcodePolicy = nullptr;
+	}
+	if (linePolicy != nullptr)
+	{
+		delete[]linePolicy;
+		linePolicy = nullptr;
+	}
+	if (methodPolicy != nullptr)
+	{
+		delete[]methodPolicy;
+		methodPolicy = nullptr;
+	}
+
 	//sprintf_s(tmpChar, "%s\n%s\n%s\n%s\n%s\n", timePolicy, barcodePolicy, linePolicy, typePolicy, methodPolicy);
 
-	sprintf_s(tmpXml, sizeof(char) * length, queryXml, ipStr, m_pParamManager->GetLoginUserName(), m_pParamManager->GetLoginPasswd(), tmpTime, tmpChar);
+	//"%s%s%s%s%s";
+	//TRACE1("strlen(tmpChar) = %d\n", strlen(tmpChar));
+	//tmpTime, tmpChar
+	//
+	//std::unique_ptr<char> t(new char[10]);
 
+	/*TRACE1("ipStr = %s\n", std::unique_ptr<wchar_t>(utils::CharToWChar(ipStr)));
+	TRACE1("USname = %s\n", utils::StrToWStr(m_pParamManager->GetLoginUserName()).c_str());
+	TRACE1("passwd = %s\n", utils::StrToWStr(m_pParamManager->GetLoginPasswd()).c_str());
+	TRACE1("tmpTime = %s\n", std::unique_ptr<wchar_t>(utils::CharToWChar(tmpTime)));
+	TRACE1("tmpChar = %s\n", std::unique_ptr<wchar_t>(utils::CharToWChar(tmpChar)));*/
+
+
+	sprintf_s(tmpXml, sizeof(char) * length, queryXml, ipStr, m_pParamManager->GetLoginUserName().c_str(), m_pParamManager->GetLoginPasswd().c_str(), tmpTime, tmpChar);
+
+
+	TRACE1("tmpXml = %s\n", std::unique_ptr<wchar_t>(utils::CharToWChar(tmpXml)));
 
 
 	/*
 	将过滤xml发送到服务器端
 	*/
+
+
 
 
 
@@ -446,6 +519,8 @@ void CQuery_ModuleApp::OnButtonBarcode()
 	条形码对照表
 	*/
 
+
+
 }
 
 
@@ -453,6 +528,10 @@ void CQuery_ModuleApp::OnButtonLogin()
 {
 	// TODO: 在此添加命令处理程序代码
 	CLoginDlg dlg;
+	dlg.SetLoginUserName(utils::StrToWStr(m_pParamManager->GetLoginUserName()).c_str());
+	dlg.SetLoginPasswd(utils::StrToWStr(m_pParamManager->GetLoginPasswd()).c_str());
+	dlg.SetAutoSaveFlag(m_pParamManager->GetAutoSaveFlag());
+
 	int ret = dlg.DoModal();
 	if (ret == IDCANCEL)
 	{
@@ -475,8 +554,10 @@ void CQuery_ModuleApp::OnButtonLogin()
 
 	/*
 	判断用户名是否正确，
-	
 	*/
+
+
+
 	std::wstring tmp = std::wstring(mUsrName);
 
 	m_pParamManager->SetLoginUserName(utils::WStrToStr(tmp));

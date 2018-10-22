@@ -26,7 +26,7 @@ public:
 
 // ÌØĞÔ
 public:
-
+	
 // ²Ù×÷
 public:
 

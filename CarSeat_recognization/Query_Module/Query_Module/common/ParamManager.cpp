@@ -141,7 +141,7 @@ unsigned int CParamManager::__auxLocalIP()
 
 	//WSACleanup();
 	clock_t endTime = clock();
-	TRACE1("get localIp cost Time = %u", endTime - startTime);
+	TRACE1("get localIp cost Time = %u\n", endTime - startTime);
 
 	return nIp;
 }
@@ -178,6 +178,16 @@ const std::vector<std::string>* CParamManager::GetLineNo() const
 {
 	return m_pLineVec;
 	
+}
+
+bool CParamManager::GetAutoSaveFlag()
+{
+	return mAutoSaveFlag;
+}
+
+void CParamManager::SetAutoSaveFalg(bool flag)
+{
+	mAutoSaveFlag = flag;
 }
 
 bool CParamManager::SetLoginUserName(std::string tmpUserName)

@@ -26,7 +26,7 @@ public:
 
 // ²Ù×÷
 public:
-
+	
 // ÖØÐ´
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);

@@ -23,6 +23,7 @@
 #include "./common/Log.h"
 #include "./common/utils.h"
 #include "./network/NetworkTask.h"
+#include "QueryFrame.h"
 
 // CQuery_ModuleApp:
 // 有关此类的实现，请参阅 Query_Module.cpp

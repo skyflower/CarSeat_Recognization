@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <iostream>
 #include <fstream>
 #include <mutex>
@@ -8,12 +8,12 @@
 #include <condition_variable>
 #include <atomic>
 #include <sstream>
+ 
 
-
-// Ìí¼ÓÈÕÖ¾Àà,¼ÇÂ¼´ËÏµÍ³µÄËùÓĞÈÕÖ¾¡£
-//	ĞèÇó.1.Âú×ã¶àÏß³ÌµÄÔËĞĞ³¡¾°
-//		2.³¤Ê±¼äÔËĞĞÈÕÖ¾²»ÄÜ¶ªÊ§¡£°´ÕÕÊ±¼äÈÕÆÚ·Ö±ğ±£´æ
-//		3.ĞèÒª¼ÇÂ¼º¯ÊıÃû³ÆÒÔ¼°ĞĞÊı.
+// æ·»åŠ æ—¥å¿—ç±»,è®°å½•æ­¤ç³»ç»Ÿçš„æ‰€æœ‰æ—¥å¿—ã€‚
+//	éœ€æ±‚.1.æ»¡è¶³å¤šçº¿ç¨‹çš„è¿è¡Œåœºæ™¯
+//		2.é•¿æ—¶é—´è¿è¡Œæ—¥å¿—ä¸èƒ½ä¸¢å¤±ã€‚æŒ‰ç…§æ—¶é—´æ—¥æœŸåˆ†åˆ«ä¿å­˜
+//		3.éœ€è¦è®°å½•å‡½æ•°åç§°ä»¥åŠè¡Œæ•°.
 
 
 class CLog
@@ -29,7 +29,7 @@ public:
 	struct LogMessage
 	{
 		LogType type;
-		char pFunc[40];
+		char pFunc[100];
 		unsigned int mLine;
 		char data[2000];
 	};
@@ -69,12 +69,12 @@ public:
 };
 
 
-//  logÈÕÖ¾µ÷ÓÃ½Ó¿Ú
+//  logæ—¥å¿—è°ƒç”¨æ¥å£
 #define WriteInfo(x, ...) CLog::Write(CLog::LogType::INFO, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 #define WriteError(x, ...) CLog::Write(CLog::LogType::FATAL_ERROR, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 #define WriteWarning(x, ...) CLog::Write(CLog::LogType::WARNING, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 
-// ²»ÔÊĞíµ÷ÓÃÏÂÃæÕâ¸ö½Ó¿Ú
+// ä¸å…è®¸è°ƒç”¨ä¸‹é¢è¿™ä¸ªæ¥å£
 #define WriteExit(x, ...) CLog::Write(CLog::LogType::EXIT, __FUNCTION__, __LINE__, x, __VA_ARGS__)
 
 //#define WriteLog(x)		CLog::GetReference() << __FUNCTION__ << "  " << __LINE__ << "  " << x;
@@ -83,7 +83,7 @@ public:
 //template<typename type>
 //inline const CLog & CLog::operator<<(type value) const
 //{
-//	// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+//	// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 //	CLog *pLog = GetInstance();
 //	if (pLog == nullptr)
 //	{

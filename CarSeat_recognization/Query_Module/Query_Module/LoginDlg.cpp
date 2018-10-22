@@ -50,6 +50,27 @@ bool CLoginDlg::GetAutoSaveFlag()
 	return mAutoSaveFlag;
 }
 
+void CLoginDlg::SetLoginUserName(const wchar_t * str)
+{
+	if (str != nullptr)
+	{
+		memcpy(mUserName, str, sizeof(wchar_t) * wcslen(str));
+	}
+}
+
+void CLoginDlg::SetLoginPasswd(const wchar_t * str)
+{
+	if (str != nullptr)
+	{
+		memcpy(mPasswd, str, sizeof(wchar_t) * wcslen(str));
+	}
+}
+
+void CLoginDlg::SetAutoSaveFlag(bool flag)
+{
+	mAutoSaveFlag = flag;
+}
+
 void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -79,4 +100,28 @@ void CLoginDlg::OnOK()
 	mAutoSaveFlag = (ret == 1);
 
 	CDialogEx::OnOK();
+}
+
+
+BOOL CLoginDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  在此添加额外的初始化
+
+	if (wcslen(mUserName) > 0)
+	{
+		GetDlgItem(IDC_EDIT_USERNAME)->SetWindowTextW(mUserName);
+	}
+
+	if (wcslen(mPasswd) > 0)
+	{
+		GetDlgItem(IDC_EDIT_PASSWD)->SetWindowTextW(mPasswd);
+	}
+	((CButton*)GetDlgItem(IDC_CHECK_SAVE_USERNAME_PASSWD))->SetCheck(mAutoSaveFlag);
+
+	//int ret = ((CButton*)GetDlgItem(IDC_CHECK_SAVE_USERNAME_PASSWD))->GetCheck();
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 异常: OCX 属性页应返回 FALSE
 }

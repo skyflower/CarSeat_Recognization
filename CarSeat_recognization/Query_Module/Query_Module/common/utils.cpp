@@ -7,7 +7,7 @@
 namespace utils
 {
 
-	char* WcharToChar(wchar_t* wc)
+	char* WCharToChar(wchar_t* wc)
 	{
 		if (wc == nullptr)
 		{
@@ -21,7 +21,7 @@ namespace utils
 		m_char[len] = '\0';
 		return m_char;
 	}
-	wchar_t* CharToWchar(char* c)
+	wchar_t* CharToWChar(char* c)
 	{
 		if (c == nullptr)
 		{
@@ -73,7 +73,7 @@ namespace utils
 	std::wstring StrToWStr(const std::string str)
 	{
 		//wchar_t* CharToWchar(char* c);
-		wchar_t *pWChar = CharToWchar(const_cast<char*>(str.c_str()));
+		wchar_t *pWChar = CharToWChar(const_cast<char*>(str.c_str()));
 		std::wstring tmpStr(pWChar);
 		delete[]pWChar;
 		pWChar = nullptr;
@@ -81,7 +81,7 @@ namespace utils
 	}
 	std::string WStrToStr(const std::wstring wstr)
 	{
-		char *pChar = WcharToChar(const_cast<wchar_t*>(wstr.c_str()));
+		char *pChar = WCharToChar(const_cast<wchar_t*>(wstr.c_str()));
 
 		std::string tmpStr(pChar);
 		delete[]pChar;
@@ -422,7 +422,7 @@ namespace utils
 			return false;
 		}
 
-		WSADATA wsaData;
+		/*WSADATA wsaData;
 		int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
 		if (err != 0)
 		{
@@ -430,12 +430,13 @@ namespace utils
 			WriteError("err = %u", err);
 			recvMsgLen = 0;
 			return false;
-		}
+		}*/
+		int err = 0;
 		SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (socketFD == -1)
 		{
 			TRACE("create socket failed\n");
-			WSACleanup();
+			//WSACleanup();
 			recvMsgLen = 0;
 			return false;
 		}
@@ -456,7 +457,8 @@ namespace utils
 			TRACE1("connect failed,err = %u\n", err);
 			WriteError("connect failed, err = %u", err);
 			closesocket(socketFD);
-			WSACleanup();
+			socketFD = INVALID_SOCKET;
+			//WSACleanup();
 			recvMsgLen = 0;
 			return false;
 		}
@@ -466,7 +468,8 @@ namespace utils
 		{
 			WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
 			closesocket(socketFD);
-			WSACleanup();
+			//WSACleanup();
+			socketFD = INVALID_SOCKET;
 			recvMsgLen = 0;
 			return false;
 		}
@@ -475,15 +478,16 @@ namespace utils
 		{
 			WriteError("recv Failed, Err: %u", GetLastError());
 			closesocket(socketFD);
-			WSACleanup();
+			//WSACleanup();
 			recvMsgLen = 0;
+			socketFD = INVALID_SOCKET;
 			return false;
 		}
 		recvMsgLen = tmpLen;
 		closesocket(socketFD);
-		socketFD = -1;
+		socketFD = INVALID_SOCKET;
 
-		WSACleanup();
+		//WSACleanup();
 
 		return true;
 	}

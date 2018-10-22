@@ -10,9 +10,10 @@
 
 namespace utils
 {
-
-	char* WcharToChar(wchar_t* wc);
-	wchar_t* CharToWchar(char* c);
+	char* WCharToChar(wchar_t* wc);
+	//char* WcharToChar(wchar_t* wc);
+	//wchar_t* CharToWchar(char* c);
+	wchar_t* CharToWChar(char* c);
 
 	bool WCharToChar(wchar_t* wc, char *bc, int *length);
 

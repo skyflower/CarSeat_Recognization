@@ -1446,8 +1446,16 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 
 	wchar_t *tmpDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
 
+	wchar_t tmpDateDirectory[MAX_CHAR_LENGTH] = { 0 };
+	wsprintf(tmpDateDirectory, L"%s\\%04d%02d%02d", tmpDirectory, curTime.wYear, curTime.wMonth, curTime.wDay);
+
+	if (_waccess_s(tmpDateDirectory, 0) == -1)
+	{
+		_wmkdir(tmpDateDirectory);
+	}
+
 	wsprintf(imagePath, L"%s\\%04d%02d%02d_%02d%02d%02d.jpg", \
-		tmpDirectory, curTime.wYear, curTime.wMonth, curTime.wDay, \
+		tmpDateDirectory, curTime.wYear, curTime.wMonth, curTime.wDay, \
 		curTime.wHour, curTime.wMinute, curTime.wSecond);
 
 	if (_waccess(imageName, 0) == 0)

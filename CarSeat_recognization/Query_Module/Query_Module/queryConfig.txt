@@ -12,5 +12,5 @@ serverip="192.168.1.177"
 serverport="8080"
 ftpLogin={"siyuanxu","yuan","/home/ftpImage/files"}
 methodType={"auto","manual"}
-username="1111111"
-passwd="1111111"
+username="ssssss"
+passwd="sssssss"

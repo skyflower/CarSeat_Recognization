@@ -1,20 +1,3 @@
-﻿  stdafx.cpp
-  tinyxmlparser.cpp
-  tinyxmlerror.cpp
-  tinyxml.cpp
-  tinystr.cpp
-  Query_Module.cpp
-  NetworkTask.cpp
-d:\cache\githubcache\carseat_recognization\carseat_recognization\query_module\query_module\network\networktask.cpp(46): warning C4267: “参数”: 从“size_t”转换到“WORD”，可能丢失数据
-  MainFrm.cpp
-  LoginDlg.cpp
-  ConditonDlg.cpp
-  utils.cpp
-  ParamManager.cpp
-  md5.cpp
-  Log.cpp
-  ChildView.cpp
-  ChildFrm.cpp
-  正在生成代码...
-  Query_Module.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\Query_Module\Debug\Query_Module.exe
-  Query_Module.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_Recognization\Query_Module\Debug\Query_Module.pdb (Partial PDB)
+﻿  QueryFrame.cpp
+  Query_Module.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Query_module\Debug\Query_Module.exe
+  Query_Module.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\Query_module\Debug\Query_Module.pdb (Partial PDB)

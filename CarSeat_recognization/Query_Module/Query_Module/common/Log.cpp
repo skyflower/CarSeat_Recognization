@@ -1,6 +1,8 @@
-#include "../stdafx.h"
+﻿#include "../stdafx.h"
 #include "Log.h"
-
+#include "utils.h"
+#include <cstdlib>
+#include <io.h>
 
 CLog *CLog::m_pInstance = nullptr;
 
@@ -13,10 +15,10 @@ CLog * CLog::GetInstance()
 	}
 	return m_pInstance;
 }
-
+ 
 const CLog & CLog::GetReference()
 {
-	// TODO: �ڴ˴����� return ���
+	// TODO: 在此处插入 return 语句
 	if (m_pInstance == nullptr)
 	{
 		m_pInstance = new CLog();
@@ -66,6 +68,9 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 void CLog::run()
 {
 	LogMessage buffer;
+	char currentTime[100];
+	SYSTEMTIME curTime;
+	
 	while (1)
 	{
 		CLog *pLog = CLog::GetInstance();
@@ -102,7 +107,21 @@ void CLog::run()
 			{
 				break;
 			}
-			m_pLog << "[" << buffer.pFunc << "," << buffer.mLine << "]" << buffer.data << "\n";
+			
+			memset(&curTime, 0, sizeof(curTime));
+			GetLocalTime(&curTime);
+
+			memset(currentTime, 0, sizeof(currentTime));
+
+			sprintf_s(currentTime, "%04d%02d%02d:%02d%02d%02d:%d", \
+				curTime.wYear, curTime.wMonth, curTime.wDay, \
+				curTime.wHour, curTime.wMinute, curTime.wSecond, curTime.wMilliseconds);
+
+			m_pLog << currentTime << "\t";
+
+
+			m_pLog << "[" << buffer.pFunc << "," << buffer.mLine << "] " << buffer.data << "\n";
+			m_pLog.flush();
 		}
 	}
 	m_pLog.close();
@@ -121,7 +140,33 @@ void CLog::init()
 	m_nCurValid = 0;
 	m_bFlag = false;
 
-	m_pLog.open("trace_log.txt", std::ios::trunc | std::ios::in | std::ios::out);
+	
+	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
+
+	struct tm tmpTime;
+	localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
+
+	char logFileName[100] = { 0 };
+	memset(logFileName, 0, sizeof(logFileName));
+
+	char *LogDir = "./Log/";
+
+	if (_access(LogDir, 0) != 0)
+	{
+		wchar_t *tmpPath = utils::CharToWChar(LogDir);
+		if (tmpPath != nullptr)
+		{
+			_wmkdir(tmpPath);
+			delete tmpPath;
+			tmpPath = nullptr;
+		}
+	}
+
+	sprintf_s(logFileName, "%sLog_%04d%02d%02d_%02d%02d%02d.txt", \
+		LogDir, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
+		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
+
+	m_pLog.open(logFileName, std::ios::trunc | std::ios::in | std::ios::out | std::ios::binary);
 }
 
 void CLog::SetFlag(bool flag)
@@ -142,8 +187,8 @@ CLog::~CLog()
 		WriteExit("End");
 		m_pThread.join();
 	}
-	std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
-	std::this_thread::sleep_for(a);
+	//std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
+	//std::this_thread::sleep_for(a);
 	//m_pLog.close();
 	if (m_pMessage != nullptr)
 	{

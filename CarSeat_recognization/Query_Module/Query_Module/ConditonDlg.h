@@ -5,20 +5,24 @@
 #include "afxwin.h"
 #include "afxdtctl.h"
 
+template<typename type>
 struct CConditionFilter
 {
-	char mDateBeign[20];
-	char mDateEnd[20];
-	char mTimeBegin[20];
-	char mTimeEnd[20];
-	char mLineBegin[20];
-	char mLineEnd[20];
-	char mBarcodeBegin[50];
-	char mBarcodeEnd[50];
-	char mSeatType[50];
-	char mMethodType[20];
+	type mDateBeign[20];
+	type mDateEnd[20];
+	type mTimeBegin[20];
+	type mTimeEnd[20];
+	type mLineBegin[20];
+	type mLineEnd[20];
+	type mBarcodeBegin[50];
+	type mBarcodeEnd[50];
+	type mSeatType[50];
+	type mMethodType[20];
 };
 
+
+typedef CConditionFilter<char> CConditionFilterA;
+typedef CConditionFilter<wchar_t> CConditionFilterW;
 
 // CConditonDlg 对话框
 
@@ -30,12 +34,12 @@ public:
 	CConditonDlg(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CConditonDlg();
 private:
-	CConditionFilter mFilter;
+	CConditionFilterA mFilter;
 	//void SetLine(std::vector<std::string> &line);
 	//CParamManager *m_pParamManager;
 
 public:
-	CConditionFilter GetFilterCondition();
+	CConditionFilterA GetFilterCondition();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_CONDITION };
@@ -75,7 +79,8 @@ public:
 	afx_msg void OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnSetfocusLineEnd();
-	afx_msg void OnSetfocusLineBegin();
+	//afx_msg void OnSetfocusLineEnd();
+	//afx_msg void OnSetfocusLineBegin();
+	afx_msg void OnSelchangeLineEnd();
 	afx_msg void OnSelchangeLineBegin();
 };

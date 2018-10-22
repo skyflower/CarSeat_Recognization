@@ -16,6 +16,10 @@ public:
 	bool GetLoginPasswd(wchar_t *str, int &length);
 	bool GetAutoSaveFlag();
 
+	void SetLoginUserName(const wchar_t *str);
+	void SetLoginPasswd(const wchar_t *str);
+	void SetAutoSaveFlag(bool flag);
+
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_LOGIN };
@@ -31,4 +35,6 @@ private:
 	wchar_t mUserName[MAX_CHAR_LENGTH];
 	wchar_t mPasswd[MAX_CHAR_LENGTH];
 	virtual void OnOK();
+public:
+	virtual BOOL OnInitDialog();
 };

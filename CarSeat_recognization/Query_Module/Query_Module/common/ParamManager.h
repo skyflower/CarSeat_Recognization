@@ -33,6 +33,8 @@ public:
 	std::string GetLocalName() { return m_strLocalName; }
 	std::string GetLoginUserName() { return m_strUsrName; }
 	std::string GetLoginPasswd() { return m_strPasswd; }
+	bool GetAutoSaveFlag();
+	void SetAutoSaveFalg(bool flag);
 
 	bool SetLoginUserName(std::string tmpUserName);
 	bool SetLoginPasswd(std::string tmpPasswd);

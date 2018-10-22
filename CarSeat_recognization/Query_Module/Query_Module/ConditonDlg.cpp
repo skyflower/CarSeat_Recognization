@@ -24,7 +24,7 @@ CConditonDlg::~CConditonDlg()
 {
 }
 
-CConditionFilter CConditonDlg::GetFilterCondition()
+CConditionFilterA CConditonDlg::GetFilterCondition()
 {
 	return mFilter;
 }
@@ -51,9 +51,8 @@ BEGIN_MESSAGE_MAP(CConditonDlg, CDialogEx)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TIME_BEGIN, &CConditonDlg::OnDatetimechangeTimeBegin)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TIME_END, &CConditonDlg::OnDatetimechangeTimeEnd)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATE_END, &CConditonDlg::OnDatetimechangeDateEnd)
-	ON_CBN_SETFOCUS(IDC_LINE_END, &CConditonDlg::OnSetfocusLineEnd)
-	ON_CBN_SETFOCUS(IDC_LINE_BEGIN, &CConditonDlg::OnSetfocusLineBegin)
 	ON_CBN_SELCHANGE(IDC_LINE_BEGIN, &CConditonDlg::OnSelchangeLineBegin)
+	ON_CBN_SELCHANGE(IDC_LINE_END, &CConditonDlg::OnSelchangeLineEnd)
 END_MESSAGE_MAP()
 
 
@@ -64,7 +63,7 @@ END_MESSAGE_MAP()
 void CConditonDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	memset(&mFilter, 0, sizeof(CConditionFilter));
+	memset(&mFilter, 0, sizeof(CConditionFilterA));
 
 	wchar_t text[256];
 
@@ -73,14 +72,13 @@ void CConditonDlg::OnBnClickedOk()
 	GetDlgItemText(IDC_DATE_BEGIN, text, sizeof(text));
 	int tmpLength = sizeof(mFilter.mDateBeign);
 	utils::WCharToChar(text, mFilter.mDateBeign, &tmpLength);
-	//memcpy(mFilter.mDateBeign, text, wcslen(text));
-
+	
 	//日期结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mDateEnd);
 	utils::WCharToChar(text, mFilter.mDateEnd, &tmpLength);
-	//memcpy(mFilter.mDateEnd, text, wcslen(text));
+
 
 
 	//时间开始
@@ -89,15 +87,12 @@ void CConditonDlg::OnBnClickedOk()
 	tmpLength = sizeof(mFilter.mTimeBegin);
 	utils::WCharToChar(text, mFilter.mTimeBegin, &tmpLength);
 
-	//memcpy(mFilter.mTimeBegin, text, wcslen(text));
 
 	//时间结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mTimeEnd);
 	utils::WCharToChar(text, mFilter.mTimeEnd, &tmpLength);
-
-	//memcpy(mFilter.mTimeEnd, text, wcslen(text));
 
 
 	//产线开始
@@ -106,7 +101,6 @@ void CConditonDlg::OnBnClickedOk()
 	tmpLength = sizeof(mFilter.mLineBegin);
 	utils::WCharToChar(text, mFilter.mLineBegin, &tmpLength);
 
-	//memcpy(mFilter.mLineBegin, text, wcslen(text));
 
 	//产线结束
 	memset(text, 0, sizeof(text));
@@ -114,15 +108,13 @@ void CConditonDlg::OnBnClickedOk()
 	tmpLength = sizeof(mFilter.mLineEnd);
 	utils::WCharToChar(text, mFilter.mLineEnd, &tmpLength);
 
-	//memcpy(mFilter.mLineEnd, text, wcslen(text));
-
+	
 	//条形码开始
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_BARCODE_BEGIN, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mBarcodeBegin);
 	utils::WCharToChar(text, mFilter.mBarcodeBegin, &tmpLength);
 
-	//memcpy(mFilter.mBarcodeBegin, text, wcslen(text));
 
 	//条形码结束
 	memset(text, 0, sizeof(text));
@@ -130,23 +122,19 @@ void CConditonDlg::OnBnClickedOk()
 	tmpLength = sizeof(mFilter.mBarcodeEnd);
 	utils::WCharToChar(text, mFilter.mBarcodeEnd, &tmpLength);
 
-	//memcpy(mFilter.mBarcodeEnd, text, wcslen(text));
-
+	
 	//座椅类型
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_SEAT_TYPE, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mSeatType);
 	utils::WCharToChar(text, mFilter.mSeatType, &tmpLength);
 
-	//memcpy(mFilter.mSeatType, text, wcslen(text));
-
+	
 	//识别类型
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_METHOD_TYPE, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mMethodType);
 	utils::WCharToChar(text, mFilter.mMethodType, &tmpLength);
-
-	//memcpy(mFilter.mMethodType, text, wcslen(text));
 
 	CDialogEx::OnOK();
 }
@@ -324,42 +312,6 @@ void CConditonDlg::OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 }
 
-void CConditonDlg::OnSetfocusLineEnd()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	const size_t length = 20;
-	wchar_t begin[20] = { 0 };
-	int sel = mBarcodeBegin.GetCurSel();
-	mBarcodeBegin.GetLBText(sel, begin);
-
-	wchar_t end[length] = { 0 };
-	sel = mBarcodeEnd.GetCurSel();
-	mBarcodeEnd.GetLBText(sel, end);
-
-	if (wcscmp(begin, end) > 0)
-	{
-		int sel = mBarcodeBegin.GetCurSel();
-		mBarcodeEnd.SetCurSel(sel);
-	}
-}
-
-
-void CConditonDlg::OnSetfocusLineBegin()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	const size_t length = 20;
-	wchar_t begin[20] = { 0 };
-	mBarcodeBegin.GetWindowTextW(begin, length);
-
-	wchar_t end[length] = { 0 };
-	mBarcodeEnd.GetWindowTextW(end, length);
-
-	if (wcscmp(begin, end) > 0)
-	{
-		int sel = mBarcodeEnd.GetCurSel();
-		mBarcodeBegin.SetCurSel(sel);
-	}
-}
 
 
 void CConditonDlg::OnSelchangeLineBegin()
@@ -367,16 +319,35 @@ void CConditonDlg::OnSelchangeLineBegin()
 	// TODO: 在此添加控件通知处理程序代码
 	const size_t length = 20;
 	wchar_t begin[20] = { 0 };
-	int sel = mBarcodeBegin.GetCurSel();
-	mBarcodeBegin.GetLBText(sel, begin);
+	int sel = mLineBegin.GetCurSel();
+	mLineBegin.GetLBText(sel, begin);
 	
 	wchar_t end[length] = { 0 };
-	sel = mBarcodeEnd.GetCurSel();
-	mBarcodeEnd.GetLBText(sel, end);
+	sel = mLineEnd.GetCurSel();
+	mLineEnd.GetLBText(sel, end);
 
 	if (wcscmp(begin, end) > 0)
 	{
-		int sel = mBarcodeEnd.GetCurSel();
-		mBarcodeBegin.SetCurSel(sel);
+		int sel = mLineBegin.GetCurSel();
+		mLineEnd.SetCurSel(sel);
+	}
+}
+
+void CConditonDlg::OnSelchangeLineEnd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	const size_t length = 20;
+	wchar_t begin[20] = { 0 };
+	int sel = mLineBegin.GetCurSel();
+	mLineBegin.GetLBText(sel, begin);
+
+	wchar_t end[length] = { 0 };
+	sel = mLineEnd.GetCurSel();
+	mLineEnd.GetLBText(sel, end);
+
+	if (wcscmp(begin, end) > 0)
+	{
+		int sel = mLineEnd.GetCurSel();
+		mLineBegin.SetCurSel(sel);
 	}
 }

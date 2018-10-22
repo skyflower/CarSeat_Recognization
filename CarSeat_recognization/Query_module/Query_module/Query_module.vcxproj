@@ -199,6 +199,7 @@
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="network\NetworkTask.h" />
+    <ClInclude Include="QueryFrame.h" />
     <ClInclude Include="Query_Module.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="network\NetworkTask.cpp" />
+    <ClCompile Include="QueryFrame.cpp" />
     <ClCompile Include="Query_Module.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

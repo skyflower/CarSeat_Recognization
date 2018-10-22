@@ -47,7 +47,7 @@ bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
 	{
 		WriteError("icmpSendEcho failed clientIp = 0x%X, ServerIp = 0x%X", clientIp, serverIp);
 		IcmpCloseHandle(IcmpHandle);
-		WSACleanup();
+		//WSACleanup();
 		return false;
 	}
 	
@@ -254,7 +254,7 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		return false;
 	}
 
-	WSADATA wsaData;
+	/*WSADATA wsaData;
 	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (err != 0)
 	{
@@ -262,12 +262,13 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		WriteError("err = %u", err);
 		recvMsgLen = 0;
 		return false;
-	}
+	}*/
+	int err = 0;
 	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketFD == -1)
 	{
 		TRACE("create socket failed\n");
-		WSACleanup();
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -288,7 +289,8 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, err = %u", err);
 		closesocket(socketFD);
-		WSACleanup();
+		socketFD = INVALID_SOCKET;
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -298,7 +300,8 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
 		closesocket(socketFD);
-		WSACleanup();
+		socketFD = INVALID_SOCKET;
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
@@ -307,15 +310,15 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	{
 		WriteError("recv Failed, Err: %u", GetLastError());
 		closesocket(socketFD);
-		WSACleanup();
+		socketFD = INVALID_SOCKET;
+		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
 	recvMsgLen = tmpLen;
 	closesocket(socketFD);
-	socketFD = -1;
-
-	WSACleanup();
+	socketFD = INVALID_SOCKET;
+	//WSACleanup();
 
 	return true;
 }

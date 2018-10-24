@@ -7,16 +7,19 @@
  
 bool CLabelManager::m_bInitFlag = false;
 
-CLabelManager::CLabelManager()
+CLabelManager::CLabelManager():
+	m_pBarcode(nullptr),
+	m_pClassifyType(nullptr),
+	m_bLoginAutoSave(false),
+	m_bAlarmFunction(false),
+	m_bObtainBarcodeFunction(false),
+	m_bUsrInputFunction(false)
 {
-	m_pBarcode = nullptr;
-	m_pClassifyType = nullptr;
+	
 	memset(m_strLoginName, 0, sizeof(m_strLoginName));
 	memset(m_strLoginPasswd, 0, sizeof(m_strLoginPasswd));
-	m_bLoginAutoSave = false;
 	memset(m_configFile, 0, sizeof(m_configFile));
 	strcpy_s(m_configFile, "labelConfig.txt");
-
 	
 	if (m_bInitFlag == false)
 	{
@@ -122,6 +125,48 @@ bool CLabelManager::init()
 		else if(tmpValue[0] == '0')
 		{
 			m_bLoginAutoSave = false;
+		}
+	}
+
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "UsrInputFunction", tmpValue))
+	{
+
+		if (tmpValue[0] == '1')
+		{
+			m_bUsrInputFunction = true;
+		}
+		else if (tmpValue[0] == '0')
+		{
+			m_bUsrInputFunction = false;
+		}
+	}
+
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "ObtainBarcodeFunction", tmpValue))
+	{
+
+		if (tmpValue[0] == '1')
+		{
+			m_bObtainBarcodeFunction = true;
+		}
+		else if (tmpValue[0] == '0')
+		{
+			m_bObtainBarcodeFunction = false;
+		}
+	}
+
+	memset(tmpValue, 0, sizeof(tmpValue));
+	if (true == utils::getValueByName(content, "AlarmFunction", tmpValue))
+	{
+
+		if (tmpValue[0] == '1')
+		{
+			m_bAlarmFunction = true;
+		}
+		else if (tmpValue[0] == '0')
+		{
+			m_bAlarmFunction = false;
 		}
 	}
 
@@ -271,6 +316,11 @@ bool CLabelManager::serialize()
 		m_strLoginName, m_strLoginPasswd, (m_bLoginAutoSave == true ? 1 : 0));
 	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
 
+	memset(tmpStr, 0, sizeof(char) * Length);
+	sprintf_s(tmpStr, Length, "\nUsrInputFunction=\"%d\"\nObtainBarcodeFunction=\"%d\"\nAlarmFunction=\"%d\"\n", \
+		m_bUsrInputFunction, m_bObtainBarcodeFunction, m_bAlarmFunction);
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+
 	delete[]tmpStr;
 	tmpStr = nullptr;
 
@@ -361,6 +411,33 @@ void CLabelManager::SetLoginAutoSave(bool autoSave)
 	}
 	m_bLoginAutoSave = autoSave;
 	m_bSerialize = true;
+}
+bool CLabelManager::GetUsrInputFunction()
+{
+	return m_bUsrInputFunction;
+}
+void CLabelManager::SetUsrInputFunction(bool flag)
+{
+	m_bSerialize = true;
+	m_bUsrInputFunction = flag;
+}
+bool CLabelManager::GetObtainBarcodeFunction()
+{
+	return m_bObtainBarcodeFunction;
+}
+void CLabelManager::SetObtainBarcodeFunction(bool flag)
+{
+	m_bSerialize = true;
+	m_bObtainBarcodeFunction = flag;
+}
+bool CLabelManager::GetAlarmFunction()
+{
+	return m_bAlarmFunction;
+}
+void CLabelManager::SetAlarmFunction(bool flag)
+{
+	m_bSerialize = true;
+	m_bAlarmFunction = flag;
 }
 int CLabelManager::GetExposureTimeMax()
 {

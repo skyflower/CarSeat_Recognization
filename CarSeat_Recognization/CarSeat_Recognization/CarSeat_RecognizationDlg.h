@@ -175,4 +175,7 @@ public:
 	afx_msg void OnMenuStopGrab();
 	afx_msg void OnRotateZ90();
 	afx_msg void OnUpdateRotateZ90(CCmdUI *pCmdUI);
+	afx_msg void OnEnableUsrInput();
+	afx_msg void OnEnableObtainBarcode();
+	afx_msg void OnEnableAlarm();
 };

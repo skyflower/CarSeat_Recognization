@@ -34,7 +34,7 @@ public:
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 
 
 //
@@ -81,7 +81,7 @@ CCarSeat_RecognizationDlg::CCarSeat_RecognizationDlg(CWnd* pParent /*=NULL*/)
 
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	
+
 	//m_pLabelManager = new CLabelManager();	
 	m_pCameraManager = CCameraManager::GetInstance();
 	m_pRecogManager = CRecogResultManager::GetInstance();
@@ -134,6 +134,9 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_MESSAGE(WM_USER_PROGRESS_REPORT, OnProgressReport)
 	ON_COMMAND(ID_ROTATE_Z_90, &CCarSeat_RecognizationDlg::OnRotateZ90)
 	ON_UPDATE_COMMAND_UI(ID_ROTATE_Z_90, &CCarSeat_RecognizationDlg::OnUpdateRotateZ90)
+	ON_COMMAND(ID_ENABLE_USR_INPUT, &CCarSeat_RecognizationDlg::OnEnableUsrInput)
+	ON_COMMAND(ID_ENABLE_OBTAIN_BARCODE, &CCarSeat_RecognizationDlg::OnEnableObtainBarcode)
+	ON_COMMAND(ID_ENABLE_ALARM, &CCarSeat_RecognizationDlg::OnEnableAlarm)
 END_MESSAGE_MAP()
 
 
@@ -161,7 +164,7 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 		}
 	}
 
-	SetIcon(m_hIcon, TRUE);		
+	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
 
 
@@ -175,13 +178,13 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	CString tmpBarcodeStr;
 	tmpBarcodeStr.Format(L"%s", tmpStr);
 	m_barCode.SetWindowTextW(tmpBarcodeStr);
-	
+
 	float ratio = 0.0;
 	if (m_nFailCount + m_nSuccessCount != 0)
 	{
 		ratio = float(m_nSuccessCount) / float(m_nFailCount + m_nSuccessCount);
 	}
-	
+
 	tmpBarcodeStr.Format(L"Success:%d\nFailed:%d\nSuccess Rate:%f", m_nSuccessCount, m_nFailCount, ratio);
 	m_RegRatio.SetWindowTextW(tmpBarcodeStr);
 
@@ -191,17 +194,64 @@ BOOL CCarSeat_RecognizationDlg::OnInitDialog()
 	}
 
 	setupListener(_controller);
-	
+
 	//setupObserver(getCameraModel());
 
 	//Execute controller
 	_controller->run();
 
+
+
+	CMenu* pMenu = AfxGetMainWnd()->GetMenu();
+	if (pMenu != nullptr)
+	{
+		CMenu* pSubMenu = pMenu->GetSubMenu(4);
+		if (pSubMenu != nullptr)
+		{
+			bool flag = m_pLabelManager->GetAlarmFunction();
+
+			if (flag == true)
+			{
+				pSubMenu->ModifyMenu(ID_ENABLE_ALARM, MF_BYCOMMAND, ID_ENABLE_ALARM, L"关闭报警功能");
+			}
+			else
+			{
+				pSubMenu->ModifyMenu(ID_ENABLE_ALARM, MF_BYCOMMAND, ID_ENABLE_ALARM, L"开启报警功能");
+			}
+
+			flag = m_pLabelManager->GetUsrInputFunction();
+
+			if (flag == true)
+			{
+				pSubMenu->ModifyMenu(ID_ENABLE_USR_INPUT, MF_BYCOMMAND, ID_ENABLE_USR_INPUT, L"关闭人工输入功能");
+			}
+			else
+			{
+				pSubMenu->ModifyMenu(ID_ENABLE_USR_INPUT, MF_BYCOMMAND, ID_ENABLE_USR_INPUT, L"开启人工输入功能");
+			}
+
+			flag = m_pLabelManager->GetObtainBarcodeFunction();
+
+			if (flag == true)
+			{
+				pSubMenu->ModifyMenu(ID_ENABLE_OBTAIN_BARCODE, MF_BYCOMMAND, ID_ENABLE_OBTAIN_BARCODE, L"关闭获取条形码功能");
+			}
+			else
+			{
+				pSubMenu->ModifyMenu(ID_ENABLE_OBTAIN_BARCODE, MF_BYCOMMAND, ID_ENABLE_OBTAIN_BARCODE, L"开启获取条形码功能");
+			}
+			AfxGetMainWnd()->Invalidate();
+		}
+	}
+
+
+
+
 	/*if (m_pImageRec == nullptr)
 	{
 		m_pImageRec = new CImage();
 	}*/
-	
+
 	//initCameraModule();
 
 //#ifdef  _DEBUG
@@ -248,7 +298,7 @@ void CCarSeat_RecognizationDlg::OnPaint()
 	{
 		CDHtmlDialog::OnPaint();
 	}
-	
+
 }
 
 HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
@@ -267,7 +317,7 @@ void CCarSeat_RecognizationDlg::run()
 	{
 		return;
 	}
-	
+
 	if (m_pParamManager != nullptr)
 	{
 		unsigned int tmpKepServerIp = m_pParamManager->GetKepServerIp();
@@ -293,12 +343,12 @@ void CCarSeat_RecognizationDlg::run()
 
 	//clock_t pingBeginTime = clock();
 
-	
+
 	while (m_bThreadStatus)
 	{
 		//WriteInfo("thread begin");
 		//heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
-		
+
 		if (m_pLineCamera == nullptr)
 		{
 			m_pLineCamera = new CLineCamera();
@@ -331,13 +381,14 @@ void CCarSeat_RecognizationDlg::run()
 		}
 
 		// 和kepServer模块的心跳包
-		if (m_pKepServer != nullptr)
+		if ((m_pKepServer != nullptr) && (m_pLabelManager->GetAlarmFunction() == true))
 		{
-			//m_pKepServer->HeartBlood();
+			m_pKepServer->HeartBlood();
 		}
-		
+
 		// 检测rfid的连接状态
-		if (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK)
+		if ((m_pLabelManager->GetObtainBarcodeFunction() == true)	\
+			&& (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK))
 		{
 			unsigned int rfidIP = m_pParamManager->GetBarcodeIp();
 			unsigned int rfidPort = m_pParamManager->GetBarcodePort();
@@ -358,7 +409,7 @@ void CCarSeat_RecognizationDlg::run()
 		//imagepath = std::string();
 
 		// 读取条形码后需要延迟在取照片
-		std::string tmpBarcode = m_pRFIDReader->readBarcode();
+		std::string tmpBarcode = m_pRFIDReader->readBarcode(m_pLabelManager->GetObtainBarcodeFunction());
 		if (m_pParamManager->GetBarcodeTime() < 100)
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
@@ -408,7 +459,7 @@ void CCarSeat_RecognizationDlg::run()
 						break;
 					}
 				}
-				
+
 			}
 		}
 		if (m_bThreadStatus == false)
@@ -429,7 +480,7 @@ void CCarSeat_RecognizationDlg::run()
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
 		//WriteInfo("thread end");
-		
+
 		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
 		std::this_thread::sleep_for(a);
 
@@ -487,7 +538,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 {
 	/*
 	先将barcode转换成和type一致的类型，然后比较，然后刷新界面，如果错误，则弹出对话框，人工干预
-	
+
 	*/
 	std::string barInternalType = m_pLabelManager->GetInternalTypeByBarcode(barcode);
 	std::string typeInternalType = m_pLabelManager->GetInternalTypeByClassifyType(RecogType);
@@ -515,7 +566,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	strcpy_s(tmpResult.m_szLineName, m_pParamManager->GetLineName());
 
 	strcpy_s(tmpResult.m_szRecogMethod, "auto");
-	
+
 	//std::string cBarExternalType = utils::WStrToStr(barExternalType);
 	memcpy(tmpResult.m_szTypeByBarcode, barExternalType.c_str(), sizeof(char) * barExternalType.size());
 
@@ -524,8 +575,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	struct tm tmpTime;
 	localtime_s(&tmpTime, &time1);//转换成tm类型的结构体;
 
-	sprintf_s(tmpResult.m_szTime, "%04d-%02d-%02d:%02d-%02d-%02d",	\
-		tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday,	\
+	sprintf_s(tmpResult.m_szTime, "%04d-%02d-%02d:%02d-%02d-%02d", \
+		tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
 		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 
 	std::string tmpUsrName(m_pLabelManager->GetLoginUsrName());
@@ -533,7 +584,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 	memcpy(tmpResult.m_szUsrName, tmpUsrName.c_str(), sizeof(char) * tmpUsrName.size());
 
-	
+
 	/*
 	计算拍照图片的绝对路径
 	*/
@@ -569,29 +620,31 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 
 		// 人工输入对话框
+		if (m_pLabelManager->GetUsrInputFunction() == true)
+		{
+			CInputDlg dlg;
+			dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
+			WriteInfo("inputDlg set imagepath = %s", tmpPath.c_str());
 
-		//CInputDlg dlg;
-		//dlg.SetManagePointer(m_pParamManager, m_pLabelManager);
-		//WriteInfo("inputDlg set imagepath = %s", tmpPath.c_str());
-		//
-		//dlg.SetTestImagePath(tmpPath);
-		//INT_PTR msg = dlg.DoModal();
-		//
-		//if (msg == IDOK)
-		//{
-		//	reType = dlg.GetInputType();
-		//	//std::string cReType = utils::WStrToStr(reType);
-		//	memcpy(tmpResult.m_szTypeByUsrInput, reType.c_str(), sizeof(char) * reType.size());
-		//}
+			dlg.SetTestImagePath(tmpPath);
+			INT_PTR msg = dlg.DoModal();
+
+			if (msg == IDOK)
+			{
+				reType = dlg.GetInputType();
+				//std::string cReType = utils::WStrToStr(reType);
+				memcpy(tmpResult.m_szTypeByUsrInput, reType.c_str(), sizeof(char) * reType.size());
+			}
+		}
+
 
 		////// send message to server
 		////
 		///  not implement
-		if (m_pKepServer != nullptr)
+		if ((m_pKepServer != nullptr) && (m_pLabelManager->GetAlarmFunction() == true))
 		{
-			//m_pKepServer->SetError();
+			m_pKepServer->SetError();
 		}
-		
 	}
 	else
 	{
@@ -601,7 +654,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
 
 		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
-		
+
 		if (m_bThreadStatus == true)
 		{
 			m_RegRatio.SetWindowTextW(result);
@@ -626,20 +679,24 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		////// send message to server
 		////
 		///  not implement
+		if ((m_pLabelManager->GetAlarmFunction() == true) && (m_pKepServer != nullptr))
+		{
+			m_pKepServer->SetCorrect();
+		}
 
-		//m_pKepServer->SetCorrect();
-	}
-	if (m_pNetworkTask != nullptr)
-	{
-		CNetworkTask::message msg;
-		msg.imagePort = m_pParamManager->GetServerImagePort();
-		msg.serverIp = m_pParamManager->GetServerIP();
-		msg.serverPort = m_pParamManager->GetServerPort();
-		msg.mRecogResult = tmpResult;
-		m_pNetworkTask->SendMessageTo(&msg);
-	}
 
-	m_pRecogManager->add(tmpResult);
+		if (m_pNetworkTask != nullptr)
+		{
+			CNetworkTask::message msg;
+			msg.imagePort = m_pParamManager->GetServerImagePort();
+			msg.serverIp = m_pParamManager->GetServerIP();
+			msg.serverPort = m_pParamManager->GetServerPort();
+			msg.mRecogResult = tmpResult;
+			m_pNetworkTask->SendMessageTo(&msg);
+		}
+
+		m_pRecogManager->add(tmpResult);
+	}
 }
 
 void CCarSeat_RecognizationDlg::initCameraModule()
@@ -662,8 +719,8 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 				WriteError("init camera Failed");
 			}
 		}
-		
-		TRACE1("camera count = %d\n", m_pCameraManager->GetCameraCount()); 
+
+		TRACE1("camera count = %d\n", m_pCameraManager->GetCameraCount());
 		WriteInfo("camera count = %d", m_pCameraManager->GetCameraCount());
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
@@ -671,7 +728,7 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			m_nCameraIndex = m_pCameraManager->GetCameraIndexByName(tmpName);
 		}
 	}
-	
+
 	if (m_nCameraIndex != -1)
 	{
 		EdsCameraRef  pDevice = m_pCameraManager->GetCamera(m_nCameraIndex);
@@ -686,7 +743,7 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 				_model->addObserver(this);
 				setupObserver(_model);
 			}
-			
+
 
 			int err = 0;
 			if (err == EDS_ERR_OK)
@@ -711,7 +768,7 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			m_nCameraIndex = -1;
 		}
 	}
-	
+
 	//WriteInfo("init CameraModule success");
 }
 
@@ -850,13 +907,13 @@ void CCarSeat_RecognizationDlg::testXML()
 	{
 		TRACE0("xml Format is invalid\n");
 		WriteError("recvBlood = [%s]", greedyXML);
-		return ;
+		return;
 	}
 	TiXmlElement *rootElement = lconfigXML.RootElement();
 	if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "frame", strlen("frame")) != 0))
 	{
 		WriteError("recvBlood get root element Failed, %s", greedyXML);
-		return ;
+		return;
 	}
 
 	if (rootElement->FirstChildElement() != nullptr)
@@ -879,12 +936,12 @@ void CCarSeat_RecognizationDlg::testXML()
 			for (TiXmlAttribute *attribute = tmpNode->FirstAttribute(); attribute != NULL;
 				attribute->Next())
 			{
-				WriteInfo("attribute name = %s, value = %s", attribute->Name(),	\
-				attribute->Value());
+				WriteInfo("attribute name = %s, value = %s", attribute->Name(), \
+					attribute->Value());
 			}
 		}
 	}
-	
+
 
 	rootElement->Clear();
 	lconfigXML.Clear();
@@ -977,7 +1034,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 			return;
 		}
 	}
-	
+
 
 	if (m_pCameraManager == nullptr)
 	{
@@ -993,7 +1050,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 				return;
 			}
 		}
-		
+
 		if (m_pCameraManager->GetCameraCount() == 0)
 		{
 			//AfxMessageBox(L"no Camera connect software");
@@ -1022,7 +1079,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 			_model->addObserver(this);
 			setupObserver(_model);
 		}
-		
+
 
 		if (m_pLineCamera == nullptr)
 		{
@@ -1037,12 +1094,12 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 		}
 	}
 
-	if ((m_pLineCamera == nullptr)||(_model == nullptr))
+	if ((m_pLineCamera == nullptr) || (_model == nullptr))
 	{
 		AfxMessageBox(L"line camera or cameraModel init Failed");
 		return;
 	}
-	
+
 
 	do
 	{
@@ -1057,7 +1114,7 @@ void CCarSeat_RecognizationDlg::OnStartCamera()
 
 		return;
 	} while (0);
-	
+
 	m_pLineCamera->stopCamera();
 }
 
@@ -1109,7 +1166,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 			m_pUIThread == nullptr;
 		}*/
 	}
-	
+
 	if (m_pLineCamera != nullptr)
 	{
 		m_pLineCamera->close();
@@ -1135,7 +1192,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete _model;
 		_model = nullptr;
 	}
-	
+
 	WriteInfo("free controller, model, lineCamera");
 	if (m_pRecogManager != nullptr)
 	{
@@ -1152,15 +1209,15 @@ void CCarSeat_RecognizationDlg::OnClose()
 		delete m_pRFIDReader;
 		m_pRFIDReader = nullptr;
 	}
-	
-	
+
+
 	if (m_pImagePattern != nullptr)
 	{
 		delete m_pImagePattern;
 		m_pImagePattern = nullptr;
 	}
 	WriteInfo("free RecogManager KepServer ImagePattern");
-	
+
 	CDHtmlDialog::OnClose();
 }
 
@@ -1199,7 +1256,10 @@ void CCarSeat_RecognizationDlg::OnUsrLogin()
 {
 	// TODO: 在此添加命令处理程序代码
 	CLoginDlg dlg;
+	dlg.SetLabelManager(m_pLabelManager);
 	INT_PTR ret = dlg.DoModal();
+
+
 	if (ret == IDOK)
 	{
 		// 登录部分代码，更新用户名和密码
@@ -1246,21 +1306,21 @@ void CCarSeat_RecognizationDlg::OnExposureTimeTest()
 		CCamera::CameraStatus status = m_pLineCamera->GetCameraStatus();
 		if (status == CCamera::CameraStatus::CAMERA_GRAB)
 		{*/
-			
-			/*m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_OFF);
-			double timeMax, timeMin;
-			m_pLineCamera->GetExposureTimeRange(&timeMax, &timeMin);
-			m_pLineCamera->SetImageSaveDirectory(L"C:\\Users\\Administrator\\Desktop\\CodeStudy\\hikvision\\");
-			
-			TRACE2("exposure time range = %f, %f\n", timeMax, timeMin);
 
-			const size_t M = 20;
-			double timeStep = (timeMax - timeMin) / M;
-			for (int i = 0; i < M; ++i)
-			{
-				m_pLineCamera->SetExposureTime(timeMin + i * timeStep);
-				std::wstring path = m_pLineCamera->SaveJpg();
-			}*/
+		/*m_pLineCamera->SetExposureTimeAutoMode(MV_EXPOSURE_AUTO_MODE_OFF);
+		double timeMax, timeMin;
+		m_pLineCamera->GetExposureTimeRange(&timeMax, &timeMin);
+		m_pLineCamera->SetImageSaveDirectory(L"C:\\Users\\Administrator\\Desktop\\CodeStudy\\hikvision\\");
+
+		TRACE2("exposure time range = %f, %f\n", timeMax, timeMin);
+
+		const size_t M = 20;
+		double timeStep = (timeMax - timeMin) / M;
+		for (int i = 0; i < M; ++i)
+		{
+			m_pLineCamera->SetExposureTime(timeMin + i * timeStep);
+			std::wstring path = m_pLineCamera->SaveJpg();
+		}*/
 		/*}
 	}*/
 }
@@ -1285,7 +1345,7 @@ void CCarSeat_RecognizationDlg::OnUpdateSetCameraParameter(CCmdUI *pCmdUI)
 	/*if (m_pLineCamera == nullptr)
 	{
 		pCmdUI->Enable(FALSE);
-		
+
 		return;
 	}
 	CCamera::CameraStatus tmpStatus = m_pLineCamera->GetCameraStatus();
@@ -1429,8 +1489,8 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 
 	wchar_t imageName[MAX_CHAR_LENGTH];
 	memset(imageName, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
-	
-	
+
+
 	wchar_t imagePath[MAX_CHAR_LENGTH];
 	memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
 	GetCurrentDirectory(MAX_CHAR_LENGTH, imagePath);
@@ -1497,7 +1557,7 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 		delete[]tmp;
 		tmp = nullptr;
 	}
-	
+
 	i = i + 1;
 	return 0;
 }
@@ -1561,4 +1621,95 @@ void CCarSeat_RecognizationDlg::OnUpdateRotateZ90(CCmdUI *pCmdUI)
 	{
 		pCmdUI->Enable(TRUE);
 	}
+}
+
+
+void CCarSeat_RecognizationDlg::OnEnableUsrInput()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	CMenu* pMenu = AfxGetMainWnd()->GetMenu();
+	if (pMenu == nullptr)
+	{
+		return;
+	}
+	CMenu* pSubMenu = pMenu->GetSubMenu(4);
+	if (pSubMenu == nullptr)
+	{
+		return;
+	}
+
+	bool flag = m_pLabelManager->GetUsrInputFunction();
+
+	if (flag == true)
+	{
+		pSubMenu->ModifyMenu(ID_ENABLE_USR_INPUT, MF_BYCOMMAND, ID_ENABLE_USR_INPUT, L"开启人工输入功能");
+	}
+	else
+	{
+		pSubMenu->ModifyMenu(ID_ENABLE_USR_INPUT, MF_BYCOMMAND, ID_ENABLE_USR_INPUT, L"关闭人工输入功能");
+	}
+	AfxGetMainWnd()->Invalidate();
+	flag = !flag;
+	m_pLabelManager->SetUsrInputFunction(flag);
+}
+
+
+void CCarSeat_RecognizationDlg::OnEnableObtainBarcode()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMenu* pMenu = AfxGetMainWnd()->GetMenu();
+	if (pMenu == nullptr)
+	{
+		return;
+	}
+	CMenu* pSubMenu = pMenu->GetSubMenu(4);
+	if (pSubMenu == nullptr)
+	{
+		return;
+	}
+
+	bool flag = m_pLabelManager->GetObtainBarcodeFunction();
+
+	if (flag == true)
+	{
+		pSubMenu->ModifyMenu(ID_ENABLE_OBTAIN_BARCODE, MF_BYCOMMAND, ID_ENABLE_OBTAIN_BARCODE, L"开启获取条形码功能");
+	}
+	else
+	{
+		pSubMenu->ModifyMenu(ID_ENABLE_OBTAIN_BARCODE, MF_BYCOMMAND, ID_ENABLE_OBTAIN_BARCODE, L"关闭获取条形码功能");
+	}
+	AfxGetMainWnd()->Invalidate();
+	flag = !flag;
+	m_pLabelManager->SetObtainBarcodeFunction(flag);
+}
+
+
+void CCarSeat_RecognizationDlg::OnEnableAlarm()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMenu* pMenu = AfxGetMainWnd()->GetMenu();
+	if (pMenu == nullptr)
+	{
+		return;
+	}
+	CMenu* pSubMenu = pMenu->GetSubMenu(4);
+	if (pSubMenu == nullptr)
+	{
+		return;
+	}
+
+	bool flag = m_pLabelManager->GetAlarmFunction();
+
+	if (flag == true)
+	{
+		pSubMenu->ModifyMenu(ID_ENABLE_ALARM, MF_BYCOMMAND, ID_ENABLE_ALARM, L"开启报警功能");
+	}
+	else
+	{
+		pSubMenu->ModifyMenu(ID_ENABLE_ALARM, MF_BYCOMMAND, ID_ENABLE_ALARM, L"关闭报警功能");
+	}
+	AfxGetMainWnd()->Invalidate();
+	flag = !flag;
+	m_pLabelManager->SetAlarmFunction(flag);
 }

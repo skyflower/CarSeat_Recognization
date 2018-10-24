@@ -1,4 +1,10 @@
 ﻿  RFIDReader.cpp
-d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\common\rfidreader.cpp(681): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\common\rfidreader.cpp(193): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\common\rfidreader.cpp(194): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+d:\cache\githubcache\carseat_recognization\carseat_recognization\carseat_recognization\common\rfidreader.cpp(692): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  CarSeat_RecognizationDlg.cpp
+  正在生成代码...
+  正在跳过...(未检测到相关更改)
+  CarSeat_Recognization.cpp
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Debug\CarSeat_Recognization.exe
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Debug\CarSeat_Recognization.pdb (Partial PDB)

@@ -47,10 +47,21 @@ public:
 
 	const char *GetLoginUsrName()const;
 	const char *GetLoginPasswd()const;
+
 	bool SetLoginUsrName(const char *name);
 	bool SetLoginPasswd(const char *passwd);
+
 	bool GetLoginAutoSave();
 	void SetLoginAutoSave(bool autoSave);
+
+	bool GetUsrInputFunction();
+	void SetUsrInputFunction(bool flag);
+
+	bool GetObtainBarcodeFunction();
+	void SetObtainBarcodeFunction(bool flag);
+
+	bool GetAlarmFunction();
+	void SetAlarmFunction(bool flag);
 
 	int GetExposureTimeMax();
 	int GetExposureTimeMin();
@@ -59,10 +70,8 @@ public:
 	void UpdateBarcode(const char *xmlContent, size_t len);
 
 	
-
 private:
 	bool init();
-
 
 	bool serialize();
 
@@ -74,6 +83,9 @@ private:
 	int m_nExposureTimeMax;
 	int m_nExposureTimeMin;
 	bool m_bLoginAutoSave;
+	bool m_bUsrInputFunction;
+	bool m_bObtainBarcodeFunction;
+	bool m_bAlarmFunction;
 	
 	/*
 	内部类型转换外部类型的条形码对照表,条形码位截取其中有效字段组成

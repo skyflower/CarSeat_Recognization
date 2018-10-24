@@ -173,37 +173,39 @@ def seatClassify(image_path, labelPath, modelPath, cachePath):
 
     image_read = image_read.resize((624, 832))
 
-    img_up = shutter_up(image_read)
-    img_down = shutter_down(image_read)
+    #img_up = shutter_up(image_read)
+    #img_down = shutter_down(image_read)
 
-    img_up.save(os.path.join(path_save, image[:-4] + "_up.jpg"))
-    img_down.save(os.path.join(path_save, image[:-4] + "_down.jpg"))
+    #img_up.save(os.path.join(path_save, image[:-4] + "_up.jpg"))
+    #img_down.save(os.path.join(path_save, image[:-4] + "_down.jpg"))
 
-    image_save_dir = os.listdir(path_save)
+    #image_save_dir = os.listdir(path_save)
     reValue = []
 
-    for image_shutt in image_save_dir:
-        image_save_path = os.path.join(path_save, image_shutt)
-        t = read_tensor_from_image_file(
-            image_save_path,
-            input_height=input_height,
-            input_width=input_width,
-            input_mean=input_mean,
-            input_std=input_std)
+    #for image_shutt in image_path:
+    image_save_path = image_path;#os.path.join(path_save, image_shutt)
+    t = read_tensor_from_image_file(
+        image_save_path,
+        input_height=input_height,
+        input_width=input_width,
+        input_mean=input_mean,
+        input_std=input_std)
 
-        results = sess.run(output_operation.outputs[0], {
-            input_operation.outputs[0]: t
-        })
+    results = sess.run(output_operation.outputs[0], {
+        input_operation.outputs[0]: t
+    })
 
-        results = np.squeeze(results)
-        top_k = results.argsort()[-1:][::-1]
-        #labels = load_labels(label_file)
-        list_map = []
-        #print(top_k)
-        #for i in top_k:
-        #print(image_shutt, " ", labels[top_k], results[top_k])
-        reValue.append(labels[top_k[0]])
-        reValue.append(results[top_k[0]])
-        os.remove(os.path.join(path_save, image_shutt))
+    results = np.squeeze(results)
+    top_k = results.argsort()[-1:][::-1]
+    #labels = load_labels(label_file)
+    list_map = []
+    #print(top_k)
+    #for i in top_k:
+    #print(image_shutt, " ", labels[top_k], results[top_k])
+    reValue.append(labels[top_k[0]])
+    reValue.append(results[top_k[0]])
+    reValue.append(labels[top_k[0]])
+    reValue.append(results[top_k[0]])
+    #os.remove(os.path.join(path_save, image_shutt))
     #os.removedirs(path_save)
     return tuple(reValue)

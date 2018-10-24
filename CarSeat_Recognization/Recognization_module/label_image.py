@@ -161,7 +161,7 @@ if __name__ == "__main__":
                             shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR,class_name, labels[i]))
                         else:
                             os.makedirs(os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,labels[i]))
-                            # TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
+                             # TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, image)]
                             shutil.copy(image_path, os.path.join(PATH_TO_TEST_IMAGES_DIR, class_name,labels[i]))
 
                     #list_map.append(image)

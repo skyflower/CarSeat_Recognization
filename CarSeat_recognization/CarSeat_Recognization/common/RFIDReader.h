@@ -36,7 +36,7 @@ public:
 	/*
 	读取条形码接口，其他暂时没有实现
 	*/
-	std::string readBarcode();
+	std::string readBarcode(bool flag);
 
 	ErrorType initRFID(unsigned int rfidIp, int port);
 
@@ -54,6 +54,10 @@ private:
 	/*
 	连接rfid通讯
 	*/
+
+	std::string getByRandomGenerate();
+
+	std::string getBySocket();
 	
 
 	ErrorType hostGreetings(SOCKET fd);

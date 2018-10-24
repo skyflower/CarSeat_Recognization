@@ -2,12 +2,12 @@
 Action\EVFPictureBox.cpp(167): warning C4244: “参数”: 从“EdsUInt64”转换到“int”，可能丢失数据
 Action\EVFPictureBox.cpp(425): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
 Action\EVFPictureBox.cpp(508): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-  CarSeat_Recognization.cpp
   CarSeat_RecognizationDlg.cpp
+  ParamManager.cpp
   正在生成代码
-  19 of 3225 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
-    3 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+  19 of 3221 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    15 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Release\CarSeat_Recognization.exe
   CarSeat_Recognization.vcxproj -> D:\Cache\GithubCache\CarSeat_Recognization\CarSeat_recognization\x64\Release\CarSeat_Recognization.pdb (Full PDB)

@@ -36,167 +36,17 @@ CRFIDReader::~CRFIDReader()
 	}
 }
 
-std::string CRFIDReader::readBarcode()
+std::string CRFIDReader::readBarcode(bool flag)
 {
 	//N160310118880001   6-8位有效
-#if 0
-	char tmp[20];
-	memset(tmp, 0, sizeof(tmp));
-	static double x = 0.000012345678;
-
-	clock_t tmpInt = clock();
-
-	x = x + (tmpInt + 2031) / 7777;
-	x = x - (int)x;
-
-	for (int i = 0; i < 10; ++i)
+	if (flag == false)
 	{
-		x = 3.9999 * x * (1 - x);
+		return getByRandomGenerate();
 	}
-	double tmpValue = x * pow(10, 8);
-	int hiValue = tmpValue;
-	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
-	sprintf_s(tmp, sizeof(tmp) / sizeof(char), "N%07d%08d", hiValue, lowValue);
-
-	return std::string(tmp);
-
-	
-#else
-	char readXML[] = "<command><readTagData><startAddress>0000</startAddress><dataLength>001E</dataLength></readTagData></command>";
-
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-
-	sprintf_s(buffer, length, "%s", readXML);
-
-	ErrorType ret = __communicate(m_nSocket, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
+	else
 	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return std::string();
+		return getBySocket();
 	}
-	WriteInfo("readData return = [%s]", buffer);
-
-	
-
-	//char *testRecvBuffer = "<reply><resultCode>0000</resultCode><readTagData><returnValue><data>784950484949484949565673495452515600000000000000000000000000</data></returnValue></readTagData></reply>";
-
-	int id = 0;
-	char resultCode[100] = { 0 };
-	memset(resultCode, 0, sizeof(resultCode));
-
-	char barcodeChar[100] = { 0 };
-	memset(barcodeChar, 0, sizeof(barcodeChar));
-
-	do
-	{
-		if ((buffer == nullptr) || (strlen(buffer) == 0))
-		{
-			break;
-		}
-
-		TiXmlDocument lconfigXML;
-		lconfigXML.Parse(buffer);
-		if (lconfigXML.Error())
-		{
-			TRACE0("xml Format is invalid\n");
-			WriteError("recvBlood = [%s]", buffer);
-			break;
-		}
-		TiXmlElement *rootElement = lconfigXML.RootElement();
-		if (rootElement == nullptr)
-		{
-			lconfigXML.Clear();
-			break;
-		}
-
-
-		if (rootElement->FirstChildElement() != nullptr)
-		{
-			std::stack<TiXmlElement*> tmpVec;
-			tmpVec.push(rootElement->FirstChildElement());
-			while (tmpVec.size() != 0)
-			{
-				TiXmlElement* tmpNode = tmpVec.top();
-				tmpVec.pop();
-
-				TiXmlElement *tmpSibElement = tmpNode->NextSiblingElement();
-				while(tmpSibElement != nullptr)
-				{
-					tmpVec.push(tmpSibElement);
-					tmpSibElement = tmpSibElement->NextSiblingElement();
-				}
-
-				for (TiXmlElement *child = tmpNode->FirstChildElement();	\
-					child != NULL; child = child->NextSiblingElement())
-				{
-					tmpVec.push(child);
-				}
-
-				if (strncmp("resultCode", tmpNode->Value(), strlen("resultCode")) == 0)
-				{
-					const char *tmpText = tmpNode->GetText();
-					memcpy(resultCode, tmpText, strlen(tmpText));
-				}
-				if (strncmp("data", tmpNode->Value(), strlen("data")) == 0)
-				{
-					const char *tmpText = tmpNode->GetText();
-					memcpy(barcodeChar, tmpText, strlen(tmpText));
-				}
-			}
-		}
-
-		rootElement->Clear();
-		lconfigXML.Clear();
-
-	} while (0);
-	
-	if (buffer != nullptr)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-	}
-
-	if (strncmp(resultCode, "0000", strlen("0000")) != 0)
-	{
-		WriteError("resultCode = %s", resultCode);
-		WriteError("barcode = %s", barcodeChar);
-		return std::string();
-	}
-
-	if (strlen(barcodeChar) == 0)
-	{
-		return std::string();
-	}
-
-	char tmpValue[256] = { 0 };
-	memset(tmpValue, 0, sizeof(tmpValue));
-	/*
-	从返回消息中解析得到条形码字段
-	*/
-	if (parseBarcode(barcodeChar, tmpValue) == true)
-	{
-		/*
-		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
-		// 如果不一样，则表示读取新数据成功
-		*/
-		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
-		{
-			return std::string();
-		}
-		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
-		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
-
-		std::string barcodeStr(tmpValue);
-		return barcodeStr;
-	}
-
-	return std::string();
-#endif // DEBUG_RFID
 }
 
 bool CRFIDReader::init()
@@ -322,6 +172,167 @@ CRFIDReader::ErrorType CRFIDReader::isConnect()
 		return ErrorType::ERROR_SOCKET_CLOSED;
 	}
 	return ErrorType::ERROR_OK;
+}
+
+std::string CRFIDReader::getByRandomGenerate()
+{
+	char tmp[20];
+	memset(tmp, 0, sizeof(tmp));
+	static double x = 0.000012345678;
+
+	clock_t tmpInt = clock();
+
+	x = x + (tmpInt + 2031) / 7777;
+	x = x - (int)x;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		x = 3.9999 * x * (1 - x);
+	}
+	double tmpValue = x * pow(10, 8);
+	int hiValue = tmpValue;
+	int  lowValue = (tmpValue - int(tmpValue)) * pow(10, 8);
+	sprintf_s(tmp, sizeof(tmp) / sizeof(char), "N%07d%08d", hiValue, lowValue);
+
+	return std::string(tmp);
+}
+
+std::string CRFIDReader::getBySocket()
+{
+	char readXML[] = "<command><readTagData><startAddress>0000</startAddress><dataLength>001E</dataLength></readTagData></command>";
+
+
+	const size_t length = 1000;
+	char *buffer = new char[length];
+	memset(buffer, 0, sizeof(char) * length);
+
+	sprintf_s(buffer, length, "%s", readXML);
+
+	ErrorType ret = __communicate(m_nSocket, buffer, length);
+	if (ret != ErrorType::ERROR_OK)
+	{
+		delete[]buffer;
+		buffer = nullptr;
+		WriteError("communicate err = %d", ret);
+		return std::string();
+	}
+	WriteInfo("readData return = [%s]", buffer);
+
+
+
+	//char *testRecvBuffer = "<reply><resultCode>0000</resultCode><readTagData><returnValue><data>784950484949484949565673495452515600000000000000000000000000</data></returnValue></readTagData></reply>";
+
+	int id = 0;
+	char resultCode[100] = { 0 };
+	memset(resultCode, 0, sizeof(resultCode));
+
+	char barcodeChar[100] = { 0 };
+	memset(barcodeChar, 0, sizeof(barcodeChar));
+
+	do
+	{
+		if ((buffer == nullptr) || (strlen(buffer) == 0))
+		{
+			break;
+		}
+
+		TiXmlDocument lconfigXML;
+		lconfigXML.Parse(buffer);
+		if (lconfigXML.Error())
+		{
+			TRACE0("xml Format is invalid\n");
+			WriteError("recvBlood = [%s]", buffer);
+			break;
+		}
+		TiXmlElement *rootElement = lconfigXML.RootElement();
+		if (rootElement == nullptr)
+		{
+			lconfigXML.Clear();
+			break;
+		}
+
+
+		if (rootElement->FirstChildElement() != nullptr)
+		{
+			std::stack<TiXmlElement*> tmpVec;
+			tmpVec.push(rootElement->FirstChildElement());
+			while (tmpVec.size() != 0)
+			{
+				TiXmlElement* tmpNode = tmpVec.top();
+				tmpVec.pop();
+
+				TiXmlElement *tmpSibElement = tmpNode->NextSiblingElement();
+				while (tmpSibElement != nullptr)
+				{
+					tmpVec.push(tmpSibElement);
+					tmpSibElement = tmpSibElement->NextSiblingElement();
+				}
+
+				for (TiXmlElement *child = tmpNode->FirstChildElement();	\
+					child != NULL; child = child->NextSiblingElement())
+				{
+					tmpVec.push(child);
+				}
+
+				if (strncmp("resultCode", tmpNode->Value(), strlen("resultCode")) == 0)
+				{
+					const char *tmpText = tmpNode->GetText();
+					memcpy(resultCode, tmpText, strlen(tmpText));
+				}
+				if (strncmp("data", tmpNode->Value(), strlen("data")) == 0)
+				{
+					const char *tmpText = tmpNode->GetText();
+					memcpy(barcodeChar, tmpText, strlen(tmpText));
+				}
+			}
+		}
+
+		rootElement->Clear();
+		lconfigXML.Clear();
+
+	} while (0);
+
+	if (buffer != nullptr)
+	{
+		delete[]buffer;
+		buffer = nullptr;
+	}
+
+	if (strncmp(resultCode, "0000", strlen("0000")) != 0)
+	{
+		WriteError("resultCode = %s", resultCode);
+		WriteError("barcode = %s", barcodeChar);
+		return std::string();
+	}
+
+	if (strlen(barcodeChar) == 0)
+	{
+		return std::string();
+	}
+
+	char tmpValue[256] = { 0 };
+	memset(tmpValue, 0, sizeof(tmpValue));
+	/*
+	从返回消息中解析得到条形码字段
+	*/
+	if (parseBarcode(barcodeChar, tmpValue) == true)
+	{
+		/*
+		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
+		// 如果不一样，则表示读取新数据成功
+		*/
+		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
+		{
+			return std::string();
+		}
+		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
+		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
+
+		std::string barcodeStr(tmpValue);
+		return barcodeStr;
+	}
+
+	return std::string();
 }
 
 CRFIDReader::ErrorType CRFIDReader::hostGreetings(SOCKET fd)

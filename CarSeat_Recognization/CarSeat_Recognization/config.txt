@@ -1,8 +1,8 @@
 
 ## 服务器通信的ip地址和端口号
-serverip="118.24.164.247"
-serverport="10567"
-serverImagePort="44004"
+serverip="192.168.1.124"
+serverport="47000"
+serverImagePort="47001"
 blockSocket="1"
 
 testClientPort="10909"

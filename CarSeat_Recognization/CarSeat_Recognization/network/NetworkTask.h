@@ -110,6 +110,8 @@ private:
 
 	*/
 	//bool __ImageClassify(std::wstring &path);
+
+	bool RecogResultToXml(RecogResult<char> &a, char*xml);
 	
 
 	std::mutex m_MutexMsg;

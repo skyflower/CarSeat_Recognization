@@ -347,7 +347,7 @@ void CCarSeat_RecognizationDlg::run()
 	while (m_bThreadStatus)
 	{
 		//WriteInfo("thread begin");
-		//heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 
 		if (m_pLineCamera == nullptr)
 		{
@@ -406,7 +406,6 @@ void CCarSeat_RecognizationDlg::run()
 		/*
 		读取条形码
 		*/
-		//imagepath = std::string();
 
 		// 读取条形码后需要延迟在取照片
 		std::string tmpBarcode = m_pRFIDReader->readBarcode(m_pLabelManager->GetObtainBarcodeFunction());
@@ -461,6 +460,10 @@ void CCarSeat_RecognizationDlg::run()
 				}
 
 			}
+		}
+		else
+		{
+			m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
 		}
 		if (m_bThreadStatus == false)
 		{
@@ -553,6 +556,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	RecogResultA tmpResult;
 	memset(&tmpResult, 0, sizeof(RecogResultA));
 
+	tmpResult.m_nVersion = 0x1;
+
 	//std::string cBarcode = utils::WStrToStr(barcode);
 	memcpy(tmpResult.m_szBarcode, barcode.c_str(), sizeof(char) * barcode.size());
 
@@ -613,11 +618,6 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		*/
 		m_nFailCount++;
 		tmpResult.m_bIsCorrect = false;
-		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
-
-		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
-		m_RegRatio.SetWindowTextW(result);
-
 
 		// 人工输入对话框
 		if (m_pLabelManager->GetUsrInputFunction() == true)
@@ -651,18 +651,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		m_nSuccessCount++;
 		tmpResult.m_bIsCorrect = true;
 
-		float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
-
-		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
-
-		if (m_bThreadStatus == true)
-		{
-			m_RegRatio.SetWindowTextW(result);
-		}
 		if (m_pImagePattern != nullptr)
 		{
-			//LPCTSTR;
-
 			std::wstring tmpWRecogType = utils::StrToWStr(RecogType);
 			//RecogType;//RecogType
 			std::string tmpPatternDir(m_pParamManager->GetPatternImagePath());
@@ -683,20 +673,27 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		{
 			m_pKepServer->SetCorrect();
 		}
-
-
-		if (m_pNetworkTask != nullptr)
-		{
-			CNetworkTask::message msg;
-			msg.imagePort = m_pParamManager->GetServerImagePort();
-			msg.serverIp = m_pParamManager->GetServerIP();
-			msg.serverPort = m_pParamManager->GetServerPort();
-			msg.mRecogResult = tmpResult;
-			m_pNetworkTask->SendMessageTo(&msg);
-		}
-
-		m_pRecogManager->add(tmpResult);
 	}
+
+	float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
+
+	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
+
+	if (m_bThreadStatus == true)
+	{
+		m_RegRatio.SetWindowTextW(result);
+	}
+	if (m_pNetworkTask != nullptr)
+	{
+		CNetworkTask::message msg;
+		msg.imagePort = m_pParamManager->GetServerImagePort();
+		msg.serverIp = m_pParamManager->GetServerIP();
+		msg.serverPort = m_pParamManager->GetServerPort();
+		msg.mRecogResult = tmpResult;
+		m_pNetworkTask->SendMessageTo(&msg);
+	}
+
+	m_pRecogManager->add(tmpResult);
 }
 
 void CCarSeat_RecognizationDlg::initCameraModule()

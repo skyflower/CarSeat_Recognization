@@ -97,8 +97,9 @@ bool CRecogResultManager::serialize()
 	std::list<RecogResultA>::const_iterator iter = m_pRecogResult->begin();
 	for (; iter != m_pRecogResult->end(); ++iter)
 	{
-		fs << iter->m_szBarcode << ","	\
-			<<  iter->m_szTime << ","	\
+		fs << iter->m_nVersion << ","	\
+			<< iter->m_szBarcode << ","	\
+			<< iter->m_szTime << ","	\
 			<< iter->m_szInternalType << ","	\
 			<< iter->m_szTypeByRecog << ",";
 		fs << iter->m_szTypeByBarcode << ","		\

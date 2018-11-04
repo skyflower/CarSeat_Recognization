@@ -112,14 +112,7 @@ unsigned int CParamManager::GetLocalIP()
 unsigned int CParamManager::__auxLocalIP()
 {
 	clock_t startTime = clock();
-	//WORD wVersionRequested = MAKEWORD(2, 2);
-
-	/*WSADATA wsaData;
-	if (WSAStartup(wVersionRequested, &wsaData) != 0)
-	{
-		return 0;
-	}*/
-
+	
 	char               buf[100];
 	int                ret = 0;
 	struct addrinfo    hints;
@@ -137,7 +130,6 @@ unsigned int CParamManager::__auxLocalIP()
 	}
 
 	{
-		//std::string tmpLocalName(buf);
 		m_strLocalName = std::string(buf);// utils::StrToWStr(tmpLocalName);
 	}
 	
@@ -157,7 +149,7 @@ unsigned int CParamManager::__auxLocalIP()
 		inet_ntop(AF_INET, &sa->sin_addr.S_un.S_addr, buf, sizeof(buf));
 		TRACE1("IP = 0x%X\n", sa->sin_addr.S_un.S_addr);
 		WriteInfo("IP = 0x%X", sa->sin_addr.S_un.S_addr);
-		int tmpIp = (sa->sin_addr.S_un.S_un_b.s_b1 << 24) | \
+		unsigned int tmpIp = (sa->sin_addr.S_un.S_un_b.s_b1 << 24) | \
 			(sa->sin_addr.S_un.S_un_b.s_b2 << 16) | \
 			(sa->sin_addr.S_un.S_un_b.s_b3 << 8) | \
 			(sa->sin_addr.S_un.S_un_b.s_b4);
@@ -170,11 +162,9 @@ unsigned int CParamManager::__auxLocalIP()
 		curr = curr->ai_next;
 	}
 
-	//WSACleanup();
 	clock_t endTime = clock();
 	TRACE1("get localIp cost Time = %u", endTime - startTime);
 	WriteInfo("get localIp cost Time = %u", endTime - startTime);
-
 
 	return nIp;
 }

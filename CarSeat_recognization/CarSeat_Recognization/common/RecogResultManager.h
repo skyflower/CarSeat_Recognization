@@ -14,9 +14,10 @@ class RecogResult
 public:
 	RecogResult();
 	~RecogResult();
+	unsigned int m_nVersion;	//  版本
 	type m_szBarcode[32];		//	完整条形码
 	type m_szTime[32];			//	结果形成的时间戳，包含本地日期和时间
-	type m_szInternalType[32];
+	type m_szInternalType[32];  //   内部类型，目前是条形码的的第6-8位字段。
 	type m_szTypeByRecog[32];	//	识别结果的外部类型
 	type m_szTypeByBarcode[32];	//	根据条形码拿到的外部类型
 	type m_szTypeByUsrInput[32];	//当识别错误的时候，产线管理员输入的外部类型
@@ -25,7 +26,6 @@ public:
 	type m_szLineName[8];		//	产线名称
 	type m_szUsrName[20];		//	产线管理员用户名
 	type m_szImagePath[256];	//	照片路径
-
 	bool m_bIsCorrect;			//	识别结果是否一致
 
 	static bool RecogToText(RecogResult & a, type *buffer);
@@ -60,7 +60,8 @@ bool RecogResult<type>::RecogToText(RecogResult<type> &a, type *buffer)
 {
 	//std::stringstream fs;
 	std::basic_stringstream<type, std::char_traits<type>, std::allocator<type> > fs;
-	fs << a.m_szBarcode << ","	\
+	fs << a.m_nVersion << ","	\
+		<< a.m_szBarcode << ","	\
 		<< a.m_szTime << ","	\
 		<< a.m_szInternalType << ","	\
 		<< a.m_szTypeByRecog << ",";
@@ -71,7 +72,7 @@ bool RecogResult<type>::RecogToText(RecogResult<type> &a, type *buffer)
 		<< a.m_szCameraName << "," \
 		<< a.m_szLineName << ",";
 	fs << a.m_szUsrName << ","	\
-		<< a.m_szImagePath << "\n";
+		<< a.m_szImagePath;
 	
 	std::basic_string<type> b = fs.str();
 	memcpy(buffer, b.c_str(), sizeof(type) * b.size());
@@ -104,13 +105,32 @@ bool RecogResult<type>::TextToRecog(RecogResult<type> &a, type *buffer)
 		++length;
 	}
 	bool flag = false;
-
+	type tmpBuffer[20];
 	do
 	{
 		type *begin = buffer;
-		
+
 		int64_t tmpLength = length;
 		type *end = std::find(begin, begin + tmpLength, quote);
+		if (end == NULL)
+		{
+			break;
+		}
+		memset(tmpBuffer, 0, sizeof(tmpBuffer));
+		memcpy(tmpBuffer, begin, (end - begin) * sizeof(type));
+		if (typeid(type) == typeid(','))
+		{
+			a.m_nVersion = atoi((char*)&tmpBuffer[0]);
+		}
+		else if (typeid(type) == typeid(L','))
+		{
+			a.m_nVersion = _wtoi((wchar_t*)&tmpBuffer[0]);
+		}
+		tmpLength = tmpLength - (end - begin) - 1;
+		begin = end + 1;
+		
+		tmpLength = length;
+		end = std::find(begin, begin + tmpLength, quote);
 		if (end == NULL)
 		{
 			break;

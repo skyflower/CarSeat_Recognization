@@ -181,10 +181,6 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
 
-	//unsigned long tmpBlock = 0;
-	//ioctlsocket(socketFD, FIONBIO, &tmpBlock);
-
-
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.S_un.S_addr = htonl(ip);

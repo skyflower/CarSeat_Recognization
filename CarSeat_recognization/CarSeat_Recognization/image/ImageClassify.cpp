@@ -206,6 +206,12 @@ std::string CImageClassify::compute(const char *filePath)
 		return std::string();
 	}
 
+	// 先采用统一识别方式判断，如果不等，则采用上下分开识别方式判断
+	if (strncmp(tmpUpType, tmpDownType, strlen(tmpUpType)) == 0)
+	{
+		return std::string(tmpUpType);
+	}
+
 	/*
 	按照命名方式截取，*_up, *_down，前面的整体类型
 	*/
@@ -225,14 +231,7 @@ std::string CImageClassify::compute(const char *filePath)
 	memset(tmpResultType, 0, sizeof(tmpResultType));
 	memcpy(tmpResultType, tmpUpType, sizeof(char) * (tmpUpLength - 3));
 
-	//std::string tmpBuffer(tmpUpType);
-
-	//wchar_t *tmpWType = utils::CharToWchar(tmpResultType);
-
 	std::string strBuffer(tmpResultType);
-
-	//delete tmpWType;
-	//tmpWType = nullptr;
 
 	return strBuffer;
 }

@@ -83,7 +83,7 @@ private:
 
 	ErrorType parseReplyPackage(char *buffer, size_t length, int &id, int &resultCode);
 
-	ErrorType __communicate(SOCKET fd, char *buffer, int length);
+	ErrorType __communicate(SOCKET &fd, char *buffer, int length);
 
 	/*
 	提取ascii码形式的条形码

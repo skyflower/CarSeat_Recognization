@@ -27,7 +27,7 @@ CRFIDReader::~CRFIDReader()
 	stopRead(m_nSocket);
 	hostGoodbye(m_nSocket);
 	
-	if (m_nSocket != 0)
+	if (m_nSocket != INVALID_SOCKET)
 	{
 		
 		closesocket(m_nSocket);
@@ -96,16 +96,13 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	memset(&addr, 0, sizeof(sockaddr_in));
 
 	//接收时限
-	int value = 1000;
+	int value = 2000;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_RCVTIMEO, (char *)&value, sizeof(int));
 
 	value = 1;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&value, sizeof(int));
 
-	//unsigned long tmpBlock = 0;
-	//ioctlsocket(m_nSocket, FIONBIO, &tmpBlock);
-
-
+	
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.S_un.S_addr = htonl(serverIp);
@@ -126,7 +123,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 
 CRFIDReader::ErrorType CRFIDReader::reset(const char * param)
 {
-	if (m_nSocket == 0)
+	if (m_nSocket == INVALID_SOCKET)
 	{
 		WriteError("rfid socket not connect");
 		return ErrorType::ERROR_SOCKET_INVALID;
@@ -148,29 +145,18 @@ CRFIDReader::ErrorType CRFIDReader::reset(const char * param)
 		WriteError("communicate err = %d", ret);
 		return ret;
 	}
-	return ErrorType::ERROR_OK;
-
-	/*int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
 	delete[]buffer;
 	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-	return ErrorType();*/
+	return ErrorType::ERROR_OK;
 }
 
 CRFIDReader::ErrorType CRFIDReader::isConnect()
 {
-	if (m_nSocket == 0)
+	if ((m_nSocket == 0) || (m_nSocket == INVALID_SOCKET) || (m_nSocket == -1))
 	{
 		return ErrorType::ERROR_SOCKET_CLOSED;
 	}
+	
 	return ErrorType::ERROR_OK;
 }
 
@@ -218,10 +204,6 @@ std::string CRFIDReader::getBySocket()
 	}
 	WriteInfo("readData return = [%s]", buffer);
 
-
-
-	//char *testRecvBuffer = "<reply><resultCode>0000</resultCode><readTagData><returnValue><data>784950484949484949565673495452515600000000000000000000000000</data></returnValue></readTagData></reply>";
-
 	int id = 0;
 	char resultCode[100] = { 0 };
 	memset(resultCode, 0, sizeof(resultCode));
@@ -235,8 +217,31 @@ std::string CRFIDReader::getBySocket()
 		{
 			break;
 		}
+		char *tmpBegin = strstr(buffer, "<resultCode>");
+		if (tmpBegin == NULL)
+		{
+			break;
+		}
+		char *tmpEnd = strstr(tmpBegin, "</resultCode>");
+		if (tmpEnd == NULL)
+		{
+			break;
+		}
+		memcpy(resultCode, tmpBegin + strlen("<resultCode>"), tmpEnd - tmpBegin - strlen("<resultCode>"));
 
-		TiXmlDocument lconfigXML;
+		tmpBegin = strstr(buffer, "<data>");
+		if (tmpBegin == NULL)
+		{
+			break;
+		}
+		tmpEnd = strstr(tmpBegin, "</data>");
+		if (tmpEnd == NULL)
+		{
+			break;
+		}
+		memcpy(barcodeChar, tmpBegin + strlen("<data>"), tmpEnd - tmpBegin - strlen("<data>"));
+
+		/*TiXmlDocument lconfigXML;
 		lconfigXML.Parse(buffer);
 		if (lconfigXML.Error())
 		{
@@ -250,7 +255,6 @@ std::string CRFIDReader::getBySocket()
 			lconfigXML.Clear();
 			break;
 		}
-
 
 		if (rootElement->FirstChildElement() != nullptr)
 		{
@@ -288,7 +292,7 @@ std::string CRFIDReader::getBySocket()
 		}
 
 		rootElement->Clear();
-		lconfigXML.Clear();
+		lconfigXML.Clear();*/
 
 	} while (0);
 
@@ -317,6 +321,16 @@ std::string CRFIDReader::getBySocket()
 	*/
 	if (parseBarcode(barcodeChar, tmpValue) == true)
 	{
+
+		for (int i = 0; i < strlen(tmpValue); ++i)
+		{
+			int k = (rand() % 256 + 256) % 256;
+			k = k % 26;
+			tmpValue[i] = 'A' + k;
+		}
+
+
+
 		/*
 		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
 		// 如果不一样，则表示读取新数据成功
@@ -327,6 +341,9 @@ std::string CRFIDReader::getBySocket()
 		}
 		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
+
+
+
 
 		std::string barcodeStr(tmpValue);
 		return barcodeStr;
@@ -686,9 +703,8 @@ CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, size_t leng
 	return ErrorType::ERROR_XML_LABEL;
 }
 
-CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int length)
+CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET &fd, char * buffer, int length)
 {
-
 	if (SOCKET_ERROR == send(fd, buffer, strlen(buffer), 0))
 	{
 		int ret = WSAGetLastError();
@@ -699,11 +715,12 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int 
 			fd = INVALID_SOCKET;
 			return ErrorType::ERROR_SOCKET_CLOSED;
 		}
-		WriteError("socket Error, %d", WSAGetLastError());
+		WriteError("socket = %d Error, %d", fd, WSAGetLastError());
 		return ErrorType::ERROR_SOCKET_SEND;
 	}
 
 	memset(buffer, 0, sizeof(char) * length);
+	Sleep(100);
 
 	int recvLen = length;
 	int nret = recv(fd, buffer, recvLen, 0);
@@ -716,7 +733,7 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET fd, char * buffer, int 
 	}
 	else if (nret == SOCKET_ERROR)
 	{
-		WriteError("rfid server SOCKET ERROR");
+		WriteError("rfid server SOCKET ERROR, socket = %u, error = %d", fd, WSAGetLastError());
 		return ErrorType::ERROR_SOCKET_RECV;
 	}
 	return ErrorType::ERROR_OK;

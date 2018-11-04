@@ -279,6 +279,7 @@ namespace utils
 		return flag;
 	}
 
+
 	bool delBlankSpace(char * text, size_t len)
 	{
 		if ((text == nullptr) || (len == 0))

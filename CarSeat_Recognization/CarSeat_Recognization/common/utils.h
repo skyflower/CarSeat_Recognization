@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "./RecogResultManager.h"
+#include "../xml/tinyxml.h"
 
 #ifdef OPENCV
 #include <opencv2\core\core.hpp>

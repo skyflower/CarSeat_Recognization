@@ -717,8 +717,8 @@ void CCarSeat_RecognizationDlg::initCameraModule()
 			}
 		}
 
-		TRACE1("camera count = %d\n", m_pCameraManager->GetCameraCount());
-		WriteInfo("camera count = %d", m_pCameraManager->GetCameraCount());
+		//TRACE1("camera count = %d\n", m_pCameraManager->GetCameraCount());
+		//WriteInfo("camera count = %d", m_pCameraManager->GetCameraCount());
 		if (m_pCameraManager->GetCameraCount() > 0)
 		{
 			const char *tmpName = m_pParamManager->GetCameraName();

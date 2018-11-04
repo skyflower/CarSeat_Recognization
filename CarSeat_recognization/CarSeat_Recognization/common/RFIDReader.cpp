@@ -322,14 +322,12 @@ std::string CRFIDReader::getBySocket()
 	if (parseBarcode(barcodeChar, tmpValue) == true)
 	{
 
-		for (int i = 0; i < strlen(tmpValue); ++i)
+		/*for (int i = 0; i < strlen(tmpValue); ++i)
 		{
 			int k = (rand() % 256 + 256) % 256;
 			k = k % 26;
 			tmpValue[i] = 'A' + k;
-		}
-
-
+		}*/
 
 		/*
 		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
@@ -341,9 +339,6 @@ std::string CRFIDReader::getBySocket()
 		}
 		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
-
-
-
 
 		std::string barcodeStr(tmpValue);
 		return barcodeStr;

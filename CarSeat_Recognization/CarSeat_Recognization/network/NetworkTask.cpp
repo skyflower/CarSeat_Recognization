@@ -186,7 +186,7 @@ void CNetworkTask::run()
 	while (m_bThreadStatus)
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 10 * 1000)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 60 * 1000)
 		{
 			linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 			preBlood = now;
@@ -197,6 +197,7 @@ void CNetworkTask::run()
 			else
 			{
 				WriteInfo("ping server failed");
+				std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 			}
 		}
 		if ((m_pMsgList->size() > 0) && (linkStatus == true))
@@ -210,17 +211,21 @@ void CNetworkTask::run()
 				//memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
 				//m_nOut = (m_nOut + 1) % MAX_MSG_SIZE;
 				//m_nMsgSize--;
-				if ((tmpMsg.serverIp == -1) && (tmpMsg.serverPort == -1))
+				unsigned int serverIp = m_pParamManager->GetServerIP();
+				unsigned int serverPort = m_pParamManager->GetServerPort();
+				unsigned int serverImagePort = m_pParamManager->GetServerImagePort();
+
+				if ((serverIp == -1) || (serverPort == -1) ||(serverImagePort == -1))
 				{
 					lock.unlock();
 					break;
 				}
 				size_t recvLength = 0;
 				lock.unlock();
-				WriteInfo("get recog result");
-				if (__sendRecogToServer(tmpMsg.serverIp, tmpMsg.serverPort, tmpMsg.imagePort, &tmpMsg.mRecogResult) == false)
+				if (__sendRecogToServer(serverIp, serverPort, serverImagePort, &tmpMsg.mRecogResult) == false)
 				{
 					SendMessageTo(&tmpMsg);
+					std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 				}
 			}
 		}
@@ -366,6 +371,9 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 	char sendXml[length];
 	memset(sendXml, 0, sizeof(char) * length);
 
+	RecogResultToXml(*recog, sendXml);
+	WriteInfo("sendXml = [%s]", sendXml);
+
 	struct in_addr inTmp;
 	char tmpIp[20];
 	inTmp.S_un.S_addr = htonl(m_pParamManager->GetLocalIP());
@@ -404,7 +412,7 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 			WriteError("recvBlood get root element Failed, %s", recvText);
 			break;
 		}
-		if (strcmp(rootElement->Attribute("statu"), "ok") != 0)
+		if (strcmp(rootElement->Attribute("status"), "ok") != 0)
 		{
 			WriteError("return recvMsg error， %s", recvText);
 			break;
@@ -518,6 +526,10 @@ void CNetworkTask::serialize()
 
 		for (std::list<message>::iterator iter = m_pMsgList->begin(); iter != m_pMsgList->end(); ++iter)
 		{
+			if ((iter->serverIp == UINT32_MAX) || (iter->serverIp == 0))
+			{
+				continue;
+			}
 			memset(tmpLine, 0, sizeof(tmpLine));
 			message::serialize(*iter, tmpLine);
 			m_pLog << tmpLine << "\n";
@@ -616,52 +628,52 @@ bool CNetworkTask::RecogResultToXml(RecogResult<char>& a, char * xml)
 	<cameraName>canno eos13D< / cameraName>
 	< correct>0 < / correct >
 	< / identification>\";*/
-	TiXmlDocument xdoc;
+	TiXmlDocument *xdoc = new TiXmlDocument();
 
-	TiXmlDeclaration* xdec = new TiXmlDeclaration("1.0", "utf-8", "yes");
-	xdoc.LinkEndChild(xdec);
+	TiXmlDeclaration* xdec = new TiXmlDeclaration("1.0", "utf-8", "");
+	xdoc->LinkEndChild(xdec);
+	
 	TiXmlElement *root = new TiXmlElement("identification");
+	xdoc->LinkEndChild(root);
 
 	char tmpBuf[100];
 	memset(tmpBuf, 0, sizeof(tmpBuf));
 	sprintf_s(tmpBuf, "%d.%d", ((a.m_nVersion >> 16) & 0xFFFF), (a.m_nVersion & 0xFFFF));
+	
 	TiXmlElement *verEle = new TiXmlElement("version");
-	verEle->SetValue(tmpBuf);
+	TiXmlText *verContent = new TiXmlText(tmpBuf);
+	verEle->LinkEndChild(verContent);
 	root->LinkEndChild(verEle);
 
+
 	TiXmlElement *lineIDEle = new TiXmlElement("lineID");
-	lineIDEle->SetValue(a.m_szLineName);
+	TiXmlText *lineIDContent = new TiXmlText(a.m_szLineName);
+	lineIDEle->LinkEndChild(lineIDContent);
 	root->LinkEndChild(lineIDEle);
+
 
 	TiXmlElement *ipEle = new TiXmlElement("ip");
 	unsigned int ipValue = m_pParamManager->GetLocalIP();
 	struct in_addr addr1;
 	memcpy(&addr1, &ipValue, sizeof(unsigned int));
-	
-	ipEle->SetValue(inet_ntop(AF_INET, &addr1, tmpBuf, sizeof(tmpBuf)));
-	root->LinkEndChild(lineIDEle);
+	TiXmlText *ipContent = new TiXmlText(inet_ntop(AF_INET, &addr1, tmpBuf, sizeof(tmpBuf)));
+	ipEle->LinkEndChild(ipContent);
+	root->LinkEndChild(ipEle);
 
 	TiXmlElement *timeEle = new TiXmlElement("time");
-	timeEle->SetValue(a.m_szTime);
+	TiXmlText *timeContent = new TiXmlText(a.m_szTime);
+	timeEle->LinkEndChild(timeContent);
 	root->LinkEndChild(timeEle);
 
 	TiXmlElement *barcodeEle = new TiXmlElement("barcode");
-	barcodeEle->SetValue(a.m_szBarcode);
+	TiXmlText *barcodeContent = new TiXmlText(a.m_szBarcode);
+	barcodeEle->LinkEndChild(barcodeContent);
 	root->LinkEndChild(barcodeEle);
 
 	TiXmlElement *barcodeResultEle = new TiXmlElement("barcodeResult");
-	barcodeResultEle->SetValue(a.m_szInternalType);
+	TiXmlText *barcodeResultContent = new TiXmlText(a.m_szInternalType);
+	barcodeResultEle->LinkEndChild(barcodeResultContent);
 	root->LinkEndChild(barcodeResultEle);
-
-
-	/*<method>auto< / method>
-		<usrName>zhangsan< / usrName>
-		<typeByRecog>d2_black_pvc_line_cloth< / typeByRecog>
-		<typeByBarcode>k216_black_pvc_hole_cloth< / typeByBarcode>
-		<typeByInput>k215_ecru_pvc_hole_cloth< / typeByInput>
-		<cameraName>canno eos13D< / cameraName>
-		< correct>0 < / correct >
-		< / identification>\";*/
 
 	TiXmlElement *imageNameEle = new TiXmlElement("imageName");
 	char *end = strrchr(a.m_szImagePath, '/');
@@ -669,7 +681,8 @@ bool CNetworkTask::RecogResultToXml(RecogResult<char>& a, char * xml)
 	{
 		memset(tmpBuf, 0, sizeof(tmpBuf));
 		memcpy(tmpBuf, end + 1, strlen(end + 1));
-		imageNameEle->SetValue(tmpBuf);
+		TiXmlText *imageNameContent = new TiXmlText(tmpBuf);
+		imageNameEle->LinkEndChild(imageNameContent);
 	}
 	else
 	{
@@ -678,35 +691,68 @@ bool CNetworkTask::RecogResultToXml(RecogResult<char>& a, char * xml)
 		{
 			memset(tmpBuf, 0, sizeof(tmpBuf));
 			memcpy(tmpBuf, end + 1, strlen(end + 1));
-			imageNameEle->SetValue(tmpBuf);
+			TiXmlText *imageNameContent = new TiXmlText(tmpBuf);
+			imageNameEle->LinkEndChild(imageNameContent);
 		}
 		else
 		{
-			imageNameEle->SetValue(a.m_szImagePath);
+			TiXmlText *imageNameContent = new TiXmlText(a.m_szImagePath);
+			imageNameEle->LinkEndChild(imageNameContent);
 		}
 	}
 	root->LinkEndChild(imageNameEle);
 
 	TiXmlElement *methodEle = new TiXmlElement("method");
-	methodEle->SetValue(a.m_szRecogMethod);
+	TiXmlText *methodContent = new TiXmlText(a.m_szRecogMethod);
+	methodEle->LinkEndChild(methodContent);
 	root->LinkEndChild(methodEle);
 
 	TiXmlElement *usrNameEle = new TiXmlElement("usrName");
-	usrNameEle->SetValue(a.m_szUsrName);
+	TiXmlText *usrNameContent = new TiXmlText(a.m_szUsrName);
+	usrNameEle->LinkEndChild(usrNameContent);
 	root->LinkEndChild(usrNameEle);
 
 	TiXmlElement *typeByRecogEle = new TiXmlElement("typeByRecog");
-	typeByRecogEle->SetValue(a.m_szTypeByRecog);
+	//typeByRecogEle->SetValue(a.m_szTypeByRecog);
+	TiXmlText *typeByRecogContent = new TiXmlText(a.m_szTypeByRecog);
+	typeByRecogEle->LinkEndChild(typeByRecogContent);
 	root->LinkEndChild(typeByRecogEle);
 
 	TiXmlElement *typeByBarcodeEle = new TiXmlElement("typeByBarcode");
-	typeByBarcodeEle->SetValue(a.m_szTypeByBarcode);
+	//typeByBarcodeEle->SetValue(a.m_szTypeByBarcode);
+	TiXmlText *typeByBarcodeContent = new TiXmlText(a.m_szTypeByBarcode);
+	typeByBarcodeEle->LinkEndChild(typeByBarcodeContent);
 	root->LinkEndChild(typeByBarcodeEle);
 
 	TiXmlElement *typeByInputEle = new TiXmlElement("typeByInput");
-	typeByInputEle->SetValue(a.m_szTypeByBarcode);
+	//typeByInputEle->SetValue(a.m_szTypeByUsrInput);
+	TiXmlText *typeByInputContent = new TiXmlText(a.m_szTypeByUsrInput);
+	typeByInputEle->LinkEndChild(typeByInputContent);
 	root->LinkEndChild(typeByInputEle);
 
+	TiXmlElement *cameraNameEle = new TiXmlElement("cameraName");
+	//cameraNameEle->SetValue(a.m_szCameraName);
+	TiXmlText *cameraNameContent = new TiXmlText(a.m_szCameraName);
+	cameraNameEle->LinkEndChild(cameraNameContent);
+	root->LinkEndChild(cameraNameEle);
+
+	TiXmlElement *correctEle = new TiXmlElement("correct");
+	TiXmlText *correctContent = new TiXmlText(a.m_bIsCorrect == true ? "1" : "0");
+	correctEle->LinkEndChild(correctContent);
+	//cameraNameEle->LinkEndChild(cameraNameContent);
+	
+	root->LinkEndChild(correctEle);
+
+	TiXmlPrinter printer;
+	string xmlstr;
+	xdoc->Accept(&printer);
+	xmlstr = printer.CStr();
+
+	memcpy(xml, xmlstr.c_str(), xmlstr.size() * sizeof(char));
+	xml[xmlstr.size()] = '\0';
+
+	delete xdoc;
+	xdoc = nullptr;
 
 	return true;
 }

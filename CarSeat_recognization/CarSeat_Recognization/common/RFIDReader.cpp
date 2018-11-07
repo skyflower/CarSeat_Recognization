@@ -98,6 +98,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	//接收时限
 	int value = 2000;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_RCVTIMEO, (char *)&value, sizeof(int));
+	setsockopt(m_nSocket, SOL_SOCKET, SO_SNDTIMEO, (char *)&value, sizeof(int));
 
 	value = 1;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&value, sizeof(int));

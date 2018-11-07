@@ -93,7 +93,7 @@ bool CRecogResultManager::serialize()
 	{
 		return true;
 	}
-	std::fstream fs(m_szName, std::ios::in | std::ios::out);
+	std::fstream fs(m_szName, std::ios::in | std::ios::out | std::ios::trunc);
 	std::list<RecogResultA>::const_iterator iter = m_pRecogResult->begin();
 	for (; iter != m_pRecogResult->end(); ++iter)
 	{

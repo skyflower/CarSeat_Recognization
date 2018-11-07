@@ -494,7 +494,7 @@ namespace utils
 			memset(tmpStr, 0, sizeof(tmpStr));
 			tmpLength = second - first - 1;
 			memcpy(tmpStr, first + 1, tmpLength);
-			utils::delBlankSpace(tmpStr, strlen(tmpStr));
+			//utils::delBlankSpace(tmpStr, strlen(tmpStr));
 			TRACE1("tmpStr = [%s]\n", tmpStr);
 			std::string valueChar(tmpStr);
 			//std::wstring valueWChar = utils::StrToWStr(valueChar);

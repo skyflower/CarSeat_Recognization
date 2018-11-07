@@ -180,6 +180,11 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	//接收时限
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+	setsockopt(m_nSocket, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int));
+
+	nNetTimeout = 1;
+	setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&nNetTimeout, sizeof(int));
+
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);

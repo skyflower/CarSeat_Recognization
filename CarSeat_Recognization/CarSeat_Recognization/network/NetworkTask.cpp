@@ -162,6 +162,11 @@ bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
 
 void CNetworkTask::SendMessageTo(message * msg)
 {
+	if ((msg == NULL) || (msg->serverIp == -1) || (msg->imagePort == -1) || (msg->serverPort == -1))
+	{
+		return;
+	}
+	
 	std::lock_guard<std::mutex> lock(m_MutexMsg);
 	m_pMsgList->push_back(*msg);
 }
@@ -186,9 +191,9 @@ void CNetworkTask::run()
 	while (m_bThreadStatus)
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 60 * 1000)
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 10 * 1000)
 		{
-			linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+			//linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 			preBlood = now;
 			if (linkStatus == true)
 			{
@@ -272,6 +277,10 @@ bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *s
 	//接收时限
 	int nNetTimeout = 1000;
 	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+	setsockopt(socketFD, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int));
+
+	nNetTimeout = 1;
+	setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, (char *)&nNetTimeout, sizeof(int));
 
 	//unsigned long tmpBlock = 0;
 	//ioctlsocket(socketFD, FIONBIO, &tmpBlock);
@@ -379,7 +388,6 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 	inTmp.S_un.S_addr = htonl(m_pParamManager->GetLocalIP());
 	memset(tmpIp, 0, sizeof(tmpIp));
 	inet_ntop(AF_INET, &inTmp, tmpIp, sizeof(tmpIp));
-	
 	
 	char recvText[length];
 	memset(recvText, 0, sizeof(char) * length);
@@ -520,8 +528,10 @@ void CNetworkTask::serialize()
 	if (m_pMsgList->size() > 0)
 	{
 		size_t nSize = m_pMsgList->size();
-		m_pLog.clear();
+		m_pLog.close();
 
+		m_pLog.open(m_szCacheFile, std::ios::trunc | std::ios::out | std::ios::in);
+		
 		char tmpLine[1000];
 
 		for (std::list<message>::iterator iter = m_pMsgList->begin(); iter != m_pMsgList->end(); ++iter)
@@ -577,7 +587,7 @@ bool CNetworkTask::message::deserialize(message & a, char * line)
 	}
 	memset(tmp, 0, sizeof(tmp));
 	memcpy(tmp, begin, end - begin);
-	a.serverIp = atoi(tmp);
+	a.serverIp = atoll(tmp);
 	begin = end + 1;
 
 	end = strchr(begin, ',');

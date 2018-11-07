@@ -484,8 +484,8 @@ void CCarSeat_RecognizationDlg::run()
 		}
 		//WriteInfo("thread end");
 
-		std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
-		std::this_thread::sleep_for(a);
+		//std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
+		//std::this_thread::sleep_for(a);
 
 	}
 }

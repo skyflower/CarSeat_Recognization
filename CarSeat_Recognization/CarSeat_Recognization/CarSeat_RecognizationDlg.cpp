@@ -604,8 +604,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	memcpy(tmpResult.m_szImagePath, tmpPath.c_str(), sizeof(char) * tmpPath.size());
 
 	memset(result, 0, sizeof(result));
-	wsprintfW(result, L"条形码：%s\n条形码结果：%s\n自动识别结果：%s", \
-		utils::StrToWStr(barcode).c_str(), utils::StrToWStr(RecogType).c_str(), utils::StrToWStr(reType).c_str());
+	wsprintfW(result, L"条码:%s\n条码类型:%s\n识别类型:%s", \
+		utils::StrToWStr(barcode).c_str(), utils::StrToWStr(barExternalType).c_str(), utils::StrToWStr(RecogExternalType).c_str());
 	if (m_bThreadStatus == true)
 	{
 		m_barCode.SetWindowTextW(result);
@@ -1501,12 +1501,15 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 
 	memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
 
+	//WriteInfo("ImageDirectory = [%s]", m_pParamManager->GetImageDirectory());
+
 	wchar_t *tmpDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
 
 	wchar_t tmpDateDirectory[MAX_CHAR_LENGTH] = { 0 };
 	wsprintf(tmpDateDirectory, L"%s\\%04d%02d%02d", tmpDirectory, curTime.wYear, curTime.wMonth, curTime.wDay);
+	
 
-	if (_waccess_s(tmpDateDirectory, 0) == -1)
+	if (_waccess_s(tmpDateDirectory, 0) != 0)
 	{
 		_wmkdir(tmpDateDirectory);
 	}

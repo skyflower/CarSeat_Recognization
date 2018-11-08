@@ -173,7 +173,6 @@ bool CLabelManager::init()
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "ExposureTimeMax", tmpValue))
 	{
-		
 		m_nExposureTimeMax = atoi(tmpValue);
 		
 	}

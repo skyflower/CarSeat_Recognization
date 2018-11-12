@@ -675,10 +675,15 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		}
 	}
 
-	float ratio = 100 * m_nSuccessCount / (m_nSuccessCount + m_nFailCount + 0.0000001f);
+	float ratio = 100.0f * static_cast<float>(m_nSuccessCount) / static_cast<float>(m_nSuccessCount + m_nFailCount);
 
-	wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%d.%02d%%", m_nSuccessCount, m_nFailCount, ratio * 100, (ratio * 10000) / 100);
+	{
+		int int_part = ratio;
+		int frag_part = (ratio - int_part) * 100;
+		wsprintfW(result, L"Success:%d\nFailed:%d\nSuccess Rate:%02d.%02d%%", m_nSuccessCount, m_nFailCount, int_part, frag_part);
 
+	}
+	
 	if (m_bThreadStatus == true)
 	{
 		m_RegRatio.SetWindowTextW(result);

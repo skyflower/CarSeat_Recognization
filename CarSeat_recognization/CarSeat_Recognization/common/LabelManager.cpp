@@ -62,12 +62,17 @@ std::string CLabelManager::GetInternalTypeByBarcode(std::string barcode)
 		tmp[i] = barcode[i + 5];
 	}
 
-	return std::string(tmp);
+	std::string code(tmp);
+	if (m_pBarcode->find(code) != m_pBarcode->end())
+	{
+		return (*m_pBarcode)[code];
+	}
+	return std::string();
 }
 
 std::string CLabelManager::GetInternalTypeByClassifyType(std::string type)
 {
-	if (m_pClassifyType != nullptr)
+	/*if (m_pClassifyType != nullptr)
 	{
 		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->begin();
 		for (; iter != m_pClassifyType->end(); ++iter)
@@ -78,7 +83,8 @@ std::string CLabelManager::GetInternalTypeByClassifyType(std::string type)
 			}
 		}
 	}
-	return std::string();
+	return std::string();*/
+	return type;
 }
 
 bool CLabelManager::init()
@@ -344,10 +350,11 @@ std::vector<std::string> CLabelManager::GetBarcode()
 std::vector<std::string> CLabelManager::GetExternalType()
 {
 	std::vector<std::string> pVec;
-	if (m_pBarcode != nullptr)
+	
+	if (m_pClassifyType != nullptr)
 	{
-		std::unordered_map < std::string, std::string>::const_iterator iter = m_pBarcode->begin();
-		for (; iter != m_pBarcode->end(); ++iter)
+		std::unordered_map < std::string, std::string>::const_iterator iter = m_pClassifyType->begin();
+		for (; iter != m_pClassifyType->end(); ++iter)
 		{
 			pVec.push_back(iter->second);
 		}
@@ -466,10 +473,10 @@ std::string CLabelManager::GetExternalTypeByBarcode(std::string barcode)
 	
 	std::string tmpInternalType = GetInternalTypeByBarcode(barcode);
 
-	if (m_pBarcode != nullptr)
+	if (m_pClassifyType != nullptr)
 	{
-		std::unordered_map<std::string, std::string>::const_iterator iter = m_pBarcode->find(tmpInternalType);
-		if (iter != m_pBarcode->end())
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->find(tmpInternalType);
+		if (iter != m_pClassifyType->end())
 		{
 			return iter->second;
 		}
@@ -478,16 +485,17 @@ std::string CLabelManager::GetExternalTypeByBarcode(std::string barcode)
 }
 std::string CLabelManager::GetExternalTypeByClassifyType(std::string classifyType)
 {
-	std::string internalType;
+	std::string externalType;
 	if (m_pClassifyType != nullptr)
 	{
 		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->find(classifyType);
 		if (iter != m_pClassifyType->end())
 		{
-			internalType = iter->second;
+			externalType = iter->second;
 		}
 	}
-	if (internalType.size() == 0)
+	return externalType;
+	/*if (internalType.size() == 0)
 	{
 		return internalType;
 	}
@@ -499,12 +507,12 @@ std::string CLabelManager::GetExternalTypeByClassifyType(std::string classifyTyp
 			return iter->second;
 		}
 	}
-	return std::string();
+	return std::string();*/
 }
 
 std::string CLabelManager::GetClassifyTypeByExternal(std::string externalType)
 {
-	std::string barcode;
+	/*std::string barcode;
 	if (m_pBarcode != nullptr)
 	{
 		
@@ -516,12 +524,12 @@ std::string CLabelManager::GetClassifyTypeByExternal(std::string externalType)
 				break;
 			}
 		}
-	}
-	if (barcode.size() > 0)
+	}*/
+	if (externalType.size() > 0)
 	{
 		for (auto &k : (*m_pClassifyType))
 		{
-			if (k.second == barcode)
+			if (k.second == externalType)
 			{
 				return k.first;
 			}

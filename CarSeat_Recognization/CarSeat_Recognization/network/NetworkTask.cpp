@@ -193,7 +193,7 @@ void CNetworkTask::run()
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 10 * 1000)
 		{
-			//linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+			linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 			preBlood = now;
 			if (linkStatus == true)
 			{

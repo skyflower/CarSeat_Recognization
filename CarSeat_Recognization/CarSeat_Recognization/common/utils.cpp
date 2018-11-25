@@ -317,6 +317,34 @@ namespace utils
 		}
 		return true;
 	}
+	bool delBlankSpace(wchar_t * text)
+	{
+		if (text == nullptr)
+		{
+			return false;
+		}
+		size_t len = wcslen(text);
+		wchar_t *tmp = new wchar_t[len + 1];
+		if (tmp == nullptr)
+		{
+			return false;
+		}
+		memset(tmp, 0, sizeof(wchar_t) * (len + 1));
+		int j = 0;
+		for (size_t i = 0; i < len; ++i)
+		{
+			if (text[i] > L' ')
+			{
+				tmp[j] = text[i];
+				++j;
+			}
+		}
+		memcpy(text, tmp, sizeof(wchar_t) * wcslen(tmp));
+		text[j] = L'\0';
+		delete[]tmp;
+		tmp = nullptr;
+		return true;
+	}
 
 	bool readFile(char * file, char * &content, size_t & FileSize)
 	{

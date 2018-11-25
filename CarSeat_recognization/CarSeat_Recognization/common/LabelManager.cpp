@@ -47,6 +47,23 @@ CLabelManager::~CLabelManager()
 	}
 }
 
+std::string CLabelManager::GetTypeCodeByBarcode(std::string barcode)
+{
+	if (barcode.size() < 5)
+	{
+		return std::string();
+	}
+
+	char tmp[10] = { 0 };
+	memset(tmp, 0, sizeof(tmp));
+
+	for (int i = 0; (i < 3) && (i + 5 < barcode.size()); ++i)
+	{
+		tmp[i] = barcode[i + 5];
+	}
+	return std::string(tmp);
+}
+
 std::string CLabelManager::GetInternalTypeByBarcode(std::string barcode)
 {
 	if (barcode.size() < 5)

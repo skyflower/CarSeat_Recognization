@@ -12,6 +12,7 @@ public:
 	CLabelManager();
 	~CLabelManager();
 	
+	std::string GetTypeCodeByBarcode(std::string barcode);
 
 	/*
 	条形码转换接口，将其中有效的6-8位提取出来

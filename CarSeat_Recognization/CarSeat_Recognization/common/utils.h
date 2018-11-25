@@ -36,6 +36,8 @@ namespace utils
 
 	bool delBlankSpace(char *text, size_t len);
 
+	bool delBlankSpace(wchar_t * text);
+
 	bool readFile(char *file, char *&content, size_t &FileSize);
 
 	bool mkdir(const char* dir);

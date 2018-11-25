@@ -463,7 +463,7 @@ void CCarSeat_RecognizationDlg::run()
 		}
 		else
 		{
-			m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
+			//m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
 		}
 		if (m_bThreadStatus == false)
 		{
@@ -479,7 +479,59 @@ void CCarSeat_RecognizationDlg::run()
 			{
 				break;
 			}
-			//MoveFile(imagepath, )
+			// 按照条形码，三字码分开目录
+
+			SYSTEMTIME curTime;
+			memset(&curTime, 0, sizeof(SYSTEMTIME));
+			GetLocalTime(&curTime);
+			wchar_t movedPath[512];
+			memset(movedPath, 0, sizeof(movedPath));
+			const wchar_t *tmpDateDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
+
+			std::string typecode = m_pLabelManager->GetTypeCodeByBarcode(tmpBarcode);
+			
+
+			if (tmpDateDirectory != nullptr)
+			{
+				std::wstring tmpWCode = utils::StrToWStr(typecode);
+				wchar_t tmpCurDate[20];
+				wsprintf(tmpCurDate, L"%04d%02d%02d", curTime.wYear, curTime.wMonth, curTime.wDay);
+
+				wchar_t tmpCurTime[20];
+				wsprintf(tmpCurTime, L"%02d%02d%02d", curTime.wHour, curTime.wMinute, curTime.wSecond);
+
+				std::wstring tmpWReType = utils::StrToWStr(reType);
+
+				memset(movedPath, 0, sizeof(movedPath));
+
+				wsprintf(movedPath, L"%s\\%s\\", \
+					tmpDateDirectory, tmpCurDate);
+
+				if (_waccess_s(movedPath, 6) != 0)
+				{
+					_wmkdir(movedPath);
+				}
+
+				memset(movedPath, 0, sizeof(movedPath));
+				wsprintf(movedPath, L"%s\\%s\\%s\\", \
+					tmpDateDirectory, tmpCurDate, tmpWCode.c_str());
+
+				if (_waccess_s(movedPath, 6) != 0)
+				{
+					_wmkdir(movedPath);
+				}
+				memset(movedPath, 0, sizeof(movedPath));
+				wsprintf(movedPath, L"%s\\%s\\%s\\%s_%s_%s.jpg", \
+					tmpDateDirectory, tmpCurDate, tmpWCode.c_str(), tmpCurDate, tmpCurTime, tmpWReType.c_str());
+				
+				if (TRUE == MoveFile(tmpPath.c_str(), movedPath))
+				{
+					tmpPath = std::wstring(movedPath);
+				}
+					
+				delete []tmpDateDirectory;
+				tmpDateDirectory = nullptr;
+			}
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}
 		//WriteInfo("thread end");

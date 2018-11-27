@@ -527,10 +527,12 @@ void CCarSeat_RecognizationDlg::run()
 				if (TRUE == MoveFile(tmpPath.c_str(), movedPath))
 				{
 					tmpPath = std::wstring(movedPath);
+					imagepath = utils::WStrToStr(tmpPath);
 				}
 					
 				delete []tmpDateDirectory;
 				tmpDateDirectory = nullptr;
+				WriteInfo("imagePath = [%s],reType = [%s], barcode = [%s]", imagepath.c_str(), reType.c_str(), tmpBarcode.c_str());
 			}
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
 		}

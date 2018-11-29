@@ -43,7 +43,6 @@ public:
 	ErrorType reset(const char* param);
 
 
-
 	// not implement
 	ErrorType isConnect();
 
@@ -58,28 +57,30 @@ private:
 	std::string getByRandomGenerate();
 
 	std::string getBySocket();
+
+	bool IsReachable(unsigned int serverIp);
 	
 
-	ErrorType hostGreetings(SOCKET fd);
+	//ErrorType hostGreetings(SOCKET fd);
 
-	ErrorType hostGoodbye(SOCKET fd);
+	//ErrorType hostGoodbye(SOCKET fd);
 
-	ErrorType startRead(SOCKET fd);
+	//ErrorType startRead(SOCKET fd);
 
-	ErrorType stopRead(SOCKET fd);
+	//ErrorType stopRead(SOCKET fd);
 
-	ErrorType heartBeat(SOCKET fd);
+	//ErrorType heartBeat(SOCKET fd);
 
 
 	/*
 	此操作会造成和rfid断开连接
 	*/
-	ErrorType setIPConfig(SOCKET fd, char *Ip, char* Netmask, char *Gateway, bool enableDHCP);
+	//ErrorType setIPConfig(SOCKET fd, char *Ip, char* Netmask, char *Gateway, bool enableDHCP);
 
 	/*
 	
 	*/
-	ErrorType resetReader(SOCKET fd, char *resetType);
+	//ErrorType resetReader(SOCKET fd, char *resetType);
 
 	ErrorType parseReplyPackage(char *buffer, size_t length, int &id, int &resultCode);
 
@@ -91,18 +92,22 @@ private:
 	bool parseBarcode(const char* text, char *barcode);
 
 
-	char m_szDefaultIp[16];			// 192.168.0.254
-	char m_szDefaultNetmask[16];	// 255.255.255.0
-	unsigned short m_nDefaultPort;	// 10001
-	char m_szDefaultGatewap[16];	// 192.168.0.1
-	bool m_bDefaultDHCP;			////关
+	//char m_szDefaultIp[16];			// 192.168.0.254
+	//char m_szDefaultNetmask[16];	// 255.255.255.0
+	//unsigned short m_nDefaultPort;	// 10001
+	//char m_szDefaultGatewap[16];	// 192.168.0.1
+	//bool m_bDefaultDHCP;			////关
+
+	unsigned int m_nPort;
+	unsigned int m_nIp;
+
 
 	SOCKET m_nSocket;
 
-	int m_nSessionID;
-	char m_szVersion[16];
-	char m_szReadType[16];
-	char m_szReadMode[16];
+	//int m_nSessionID;
+	//char m_szVersion[16];
+	//char m_szReadType[16];
+	//char m_szReadMode[16];
 
 	/*
 	当前条形码

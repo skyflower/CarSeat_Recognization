@@ -6,14 +6,14 @@
 #include "utils.h"
 #include "Log.h"
 #include "../xml/tinyxml.h"
+#include <IcmpAPI.h>
 #include <stack>
 
 
 CRFIDReader::CRFIDReader():
-	m_nDefaultPort(10001),
-	m_bDefaultDHCP(false),
-	m_nSocket(INVALID_SOCKET),
-	m_nSessionID(1000)
+	m_nIp(10001),
+	m_nPort(10001),
+	m_nSocket(INVALID_SOCKET)
 {
 	memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
 	init();
@@ -24,8 +24,8 @@ CRFIDReader::CRFIDReader():
 CRFIDReader::~CRFIDReader()
 {
 
-	stopRead(m_nSocket);
-	hostGoodbye(m_nSocket);
+	//stopRead(m_nSocket);
+	//hostGoodbye(m_nSocket);
 	
 	if (m_nSocket != INVALID_SOCKET)
 	{
@@ -45,13 +45,18 @@ std::string CRFIDReader::readBarcode(bool flag)
 	}
 	else
 	{
-		return getBySocket();
+		std::string tmpStr = getBySocket();
+		if (tmpStr.size() == 0)
+		{
+			Sleep(400);
+		}
+		return tmpStr;
 	}
 }
 
 bool CRFIDReader::init()
 {
-	memset(m_szDefaultIp, 0, sizeof(m_szDefaultIp));
+	/*memset(m_szDefaultIp, 0, sizeof(m_szDefaultIp));
 	strcpy_s(m_szDefaultIp, "192.168.0.254");
 	
 	memset(m_szDefaultNetmask, 0, sizeof(m_szDefaultNetmask));
@@ -67,7 +72,7 @@ bool CRFIDReader::init()
 	strcpy_s(m_szReadType, "SIMATIC_RF640R");
 
 	memset(m_szReadMode, 0, sizeof(m_szReadMode));
-	strcpy_s(m_szReadMode, "Run");
+	strcpy_s(m_szReadMode, "Run");*/
 
 	return true;
 }
@@ -118,7 +123,9 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 		//WSACleanup();
 		return ErrorType::ERROR_SOCKET_CONNECT;
 	}
-	WriteInfo("rfid socket connect success");
+	//WriteInfo("rfid socket connect success");
+	m_nIp = serverIp;
+	m_nPort = port;
 	return ErrorType::ERROR_OK;
 }
 
@@ -131,21 +138,27 @@ CRFIDReader::ErrorType CRFIDReader::reset(const char * param)
 	}
 	char resetXML[] = "<command><reset><param>%s</param></reset></command>";
 
-
 	const size_t length = 1000;
 	char *buffer = new char[length];
 	memset(buffer, 0, sizeof(char) * length);
-
+	
 	sprintf_s(buffer, length, resetXML, param);
+	int sendLen = strlen(buffer);
 
-	ErrorType ret = __communicate(m_nSocket, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
+	if (SOCKET_ERROR == send(m_nSocket, buffer, sendLen, 0))
 	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
+		int ret = WSAGetLastError();
+		if (ret == WSAENOTCONN)
+		{
+			WriteError("rfid server has closed");
+			closesocket(m_nSocket);
+			m_nSocket = INVALID_SOCKET;
+			return ErrorType::ERROR_SOCKET_CLOSED;
+		}
+		WriteError("socket = %d Error, %d", m_nSocket, WSAGetLastError());
+		return ErrorType::ERROR_SOCKET_SEND;
 	}
+	
 	delete[]buffer;
 	buffer = nullptr;
 	return ErrorType::ERROR_OK;
@@ -157,8 +170,32 @@ CRFIDReader::ErrorType CRFIDReader::isConnect()
 	{
 		return ErrorType::ERROR_SOCKET_CLOSED;
 	}
+	if (IsReachable(m_nIp) == false)
+	{
+		WriteError("rfid server no rearchable = 0x%X", m_nIp);
+		return ErrorType::ERROR_SOCKET_CONNECT;
+	}
 	
 	return ErrorType::ERROR_OK;
+}
+
+bool CRFIDReader::IsReachable(unsigned int serverIp)
+{
+	HANDLE IcmpHandle = IcmpCreateFile();
+	char reply[200] = { 0 };
+	PIP_OPTION_INFORMATION info = NULL;
+
+	if (0 == IcmpSendEcho(IcmpHandle, htonl(serverIp), "icmp", strlen("icmp"), \
+		info, reply, sizeof(reply), (DWORD)1000))
+	{
+		WriteError("icmpSendEcho failed ServerIp = 0x%X", serverIp);
+		IcmpCloseHandle(IcmpHandle);
+		IcmpHandle = INVALID_HANDLE_VALUE;
+		return false;
+	}
+
+	IcmpCloseHandle(IcmpHandle);
+	return true;
 }
 
 std::string CRFIDReader::getByRandomGenerate()
@@ -188,7 +225,6 @@ std::string CRFIDReader::getBySocket()
 {
 	char readXML[] = "<command><readTagData><startAddress>0000</startAddress><dataLength>001E</dataLength></readTagData></command>";
 
-
 	const size_t length = 1000;
 	char *buffer = new char[length];
 	memset(buffer, 0, sizeof(char) * length);
@@ -203,8 +239,7 @@ std::string CRFIDReader::getBySocket()
 		WriteError("communicate err = %d", ret);
 		return std::string();
 	}
-	WriteInfo("readData return = [%s]", buffer);
-
+	
 	int id = 0;
 	char resultCode[100] = { 0 };
 	memset(resultCode, 0, sizeof(resultCode));
@@ -297,6 +332,8 @@ std::string CRFIDReader::getBySocket()
 
 	} while (0);
 
+	//WriteInfo("readData return = [%s]", buffer);
+
 	if (buffer != nullptr)
 	{
 		delete[]buffer;
@@ -305,8 +342,6 @@ std::string CRFIDReader::getBySocket()
 
 	if (strncmp(resultCode, "0000", strlen("0000")) != 0)
 	{
-		WriteError("resultCode = %s", resultCode);
-		WriteError("barcode = %s", barcodeChar);
 		return std::string();
 	}
 
@@ -314,6 +349,7 @@ std::string CRFIDReader::getBySocket()
 	{
 		return std::string();
 	}
+
 
 	char tmpValue[256] = { 0 };
 	memset(tmpValue, 0, sizeof(tmpValue));
@@ -347,288 +383,288 @@ std::string CRFIDReader::getBySocket()
 
 	return std::string();
 }
-
-CRFIDReader::ErrorType CRFIDReader::hostGreetings(SOCKET fd)
-{
-	char greedyXML[] = "<frame>	\
-		<cmd>							\
-		<id>%d</id>		\
-		<hostGreetings>			\
-		<readerType>%s</readerType>	\
-		<readerMode>%s</readerMode>	\
-		<supportedVersions>								\
-		<version>%s</version>			\
-		</supportedVersions>							\
-		</hostGreetings>								\
-		</cmd>				\
-		</frame>";
-
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-
-	sprintf_s(buffer, length, greedyXML, m_nSessionID, m_szReadType, m_szReadMode, m_szVersion);
-
-	ErrorType ret = __communicate(fd, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
-
-CRFIDReader::ErrorType CRFIDReader::hostGoodbye(SOCKET fd)
-{
-	char goodbye[] = "<frame>							\
-		<cmd>											\
-		<id>%d</id>										\
-		<hostGoodbye>									\
-		<readerMode>%s</readerMode>						\
-		</hostGoodbye>									\
-		</cmd>											\
-		</frame>";
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-	sprintf_s(buffer, length, goodbye, m_nSessionID, m_szReadMode);
-
-	ErrorType ret = __communicate(fd, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
-
-CRFIDReader::ErrorType CRFIDReader::startRead(SOCKET fd)
-{
-	char startXML[] = "<frame>		\
-		<cmd>						\
-		<id>%d</id>					\
-		<startReader/>				\
-		</cmd>						\
-		</frame>";
-
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-	sprintf_s(buffer, length, startXML, m_nSessionID);
-
-
-	ErrorType ret = __communicate(m_nSocket, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		WriteError("communite error %d", ret);
-		delete[]buffer;
-		buffer = nullptr;
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
-
-CRFIDReader::ErrorType CRFIDReader::stopRead(SOCKET fd)
-{
-	char stopXML[] = "<frame>			\
-		<cmd>							\
-		<id>%d</id>			\
-		<stopReader/>					\
-		</cmd>						\
-		</frame>";
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-	sprintf_s(buffer, length, stopXML, m_nSessionID);
-
-	ErrorType ret = __communicate(fd, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
-
-CRFIDReader::ErrorType CRFIDReader::heartBeat(SOCKET fd)
-{
-	char heartBeatXML[] = "<frame>			\
-		<cmd>							\
-		<id>%d</id>			\
-		<heartBeat/>					\
-		</cmd>						\
-		</frame>";
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-	sprintf_s(buffer, length, heartBeatXML, m_nSessionID);
-
-	ErrorType ret = __communicate(fd, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
-
-CRFIDReader::ErrorType CRFIDReader::setIPConfig(SOCKET fd, char * Ip, char * Netmask, char * Gateway, bool enableDHCP)
-{
-	char ipConfigXml[] = "<frame>						\
-		<cmd>											\
-		<id>%d</id>							\
-		<setIPConfig>									\
-		<iPAddress>%s</iPAddress>		\
-		<subNetMask>%s</subNetMask>	\
-		<dHCPEnable>%d</dHCPEnable>	\
-		<gateway>%s</gateway>			\
-		</setIPConfig>								\
-		</cmd>										\
-		</frame>";
-
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-
-	int dhcpValue = ((enableDHCP == true) ? 1 : 0);
-
-	sprintf_s(buffer, length, ipConfigXml, m_nSessionID, Ip, Netmask, dhcpValue, Gateway);
-
-
-	ErrorType ret = __communicate(fd, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
-
-CRFIDReader::ErrorType CRFIDReader::resetReader(SOCKET fd, char *resetType)
-{
-	char resetXml[] = "<frame>						\
-		<cmd>										\
-		<id>%d</id>						\
-		<resetReader>								\
-		<resetType>%s</resetType>	\
-		</resetReader>							\
-		</cmd>									\
-		</frame>";
-	const size_t length = 1000;
-	char *buffer = new char[length];
-	memset(buffer, 0, sizeof(char) * length);
-
-	sprintf_s(buffer, length, resetXml, m_nSessionID, resetType);
-
-	ErrorType ret = __communicate(fd, buffer, length);
-	if (ret != ErrorType::ERROR_OK)
-	{
-		delete[]buffer;
-		buffer = nullptr;
-		WriteError("communicate err = %d", ret);
-		return ret;
-	}
-
-	int reID = 0;
-	int reCode = -1;
-	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
-
-	delete[]buffer;
-	buffer = nullptr;
-
-	if ((reID == m_nSessionID) && (reCode == 0))
-	{
-		return ErrorType::ERROR_OK;
-	}
-	return ret;
-}
+//
+//CRFIDReader::ErrorType CRFIDReader::hostGreetings(SOCKET fd)
+//{
+//	char greedyXML[] = "<frame>	\
+//		<cmd>							\
+//		<id>%d</id>		\
+//		<hostGreetings>			\
+//		<readerType>%s</readerType>	\
+//		<readerMode>%s</readerMode>	\
+//		<supportedVersions>								\
+//		<version>%s</version>			\
+//		</supportedVersions>							\
+//		</hostGreetings>								\
+//		</cmd>				\
+//		</frame>";
+//
+//
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//
+//	sprintf_s(buffer, length, greedyXML, m_nSessionID, m_szReadType, m_szReadMode, m_szVersion);
+//
+//	ErrorType ret = __communicate(fd, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		delete[]buffer;
+//		buffer = nullptr;
+//		WriteError("communicate err = %d", ret);
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
+//
+//CRFIDReader::ErrorType CRFIDReader::hostGoodbye(SOCKET fd)
+//{
+//	char goodbye[] = "<frame>							\
+//		<cmd>											\
+//		<id>%d</id>										\
+//		<hostGoodbye>									\
+//		<readerMode>%s</readerMode>						\
+//		</hostGoodbye>									\
+//		</cmd>											\
+//		</frame>";
+//
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//	sprintf_s(buffer, length, goodbye, m_nSessionID, m_szReadMode);
+//
+//	ErrorType ret = __communicate(fd, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		delete[]buffer;
+//		buffer = nullptr;
+//		WriteError("communicate err = %d", ret);
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
+//
+//CRFIDReader::ErrorType CRFIDReader::startRead(SOCKET fd)
+//{
+//	char startXML[] = "<frame>		\
+//		<cmd>						\
+//		<id>%d</id>					\
+//		<startReader/>				\
+//		</cmd>						\
+//		</frame>";
+//
+//
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//	sprintf_s(buffer, length, startXML, m_nSessionID);
+//
+//
+//	ErrorType ret = __communicate(m_nSocket, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		WriteError("communite error %d", ret);
+//		delete[]buffer;
+//		buffer = nullptr;
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
+//
+//CRFIDReader::ErrorType CRFIDReader::stopRead(SOCKET fd)
+//{
+//	char stopXML[] = "<frame>			\
+//		<cmd>							\
+//		<id>%d</id>			\
+//		<stopReader/>					\
+//		</cmd>						\
+//		</frame>";
+//
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//	sprintf_s(buffer, length, stopXML, m_nSessionID);
+//
+//	ErrorType ret = __communicate(fd, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		delete[]buffer;
+//		buffer = nullptr;
+//		WriteError("communicate err = %d", ret);
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
+//
+//CRFIDReader::ErrorType CRFIDReader::heartBeat(SOCKET fd)
+//{
+//	char heartBeatXML[] = "<frame>			\
+//		<cmd>							\
+//		<id>%d</id>			\
+//		<heartBeat/>					\
+//		</cmd>						\
+//		</frame>";
+//
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//	sprintf_s(buffer, length, heartBeatXML, m_nSessionID);
+//
+//	ErrorType ret = __communicate(fd, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		delete[]buffer;
+//		buffer = nullptr;
+//		WriteError("communicate err = %d", ret);
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
+//
+//CRFIDReader::ErrorType CRFIDReader::setIPConfig(SOCKET fd, char * Ip, char * Netmask, char * Gateway, bool enableDHCP)
+//{
+//	char ipConfigXml[] = "<frame>						\
+//		<cmd>											\
+//		<id>%d</id>							\
+//		<setIPConfig>									\
+//		<iPAddress>%s</iPAddress>		\
+//		<subNetMask>%s</subNetMask>	\
+//		<dHCPEnable>%d</dHCPEnable>	\
+//		<gateway>%s</gateway>			\
+//		</setIPConfig>								\
+//		</cmd>										\
+//		</frame>";
+//
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//
+//	int dhcpValue = ((enableDHCP == true) ? 1 : 0);
+//
+//	sprintf_s(buffer, length, ipConfigXml, m_nSessionID, Ip, Netmask, dhcpValue, Gateway);
+//
+//
+//	ErrorType ret = __communicate(fd, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		delete[]buffer;
+//		buffer = nullptr;
+//		WriteError("communicate err = %d", ret);
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
+//
+//CRFIDReader::ErrorType CRFIDReader::resetReader(SOCKET fd, char *resetType)
+//{
+//	char resetXml[] = "<frame>						\
+//		<cmd>										\
+//		<id>%d</id>						\
+//		<resetReader>								\
+//		<resetType>%s</resetType>	\
+//		</resetReader>							\
+//		</cmd>									\
+//		</frame>";
+//	const size_t length = 1000;
+//	char *buffer = new char[length];
+//	memset(buffer, 0, sizeof(char) * length);
+//
+//	sprintf_s(buffer, length, resetXml, m_nSessionID, resetType);
+//
+//	ErrorType ret = __communicate(fd, buffer, length);
+//	if (ret != ErrorType::ERROR_OK)
+//	{
+//		delete[]buffer;
+//		buffer = nullptr;
+//		WriteError("communicate err = %d", ret);
+//		return ret;
+//	}
+//
+//	int reID = 0;
+//	int reCode = -1;
+//	ret = parseReplyPackage(buffer, strlen(buffer), reID, reCode);
+//
+//	delete[]buffer;
+//	buffer = nullptr;
+//
+//	if ((reID == m_nSessionID) && (reCode == 0))
+//	{
+//		return ErrorType::ERROR_OK;
+//	}
+//	return ret;
+//}
 
 CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, size_t length, int & id, int & resultCode)
 {
@@ -701,17 +737,19 @@ CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, size_t leng
 
 CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET &fd, char * buffer, int length)
 {
-	if (SOCKET_ERROR == send(fd, buffer, strlen(buffer), 0))
+	int sendLen = strlen(buffer);
+	if (SOCKET_ERROR == send(fd, buffer, sendLen, 0))
 	{
 		int ret = WSAGetLastError();
-		if (ret == WSAENOTCONN)
+		if ((ret == WSAENOTCONN) || (ret == WSAECONNABORTED))
 		{
 			WriteError("rfid server has closed");
 			closesocket(fd);
 			fd = INVALID_SOCKET;
 			return ErrorType::ERROR_SOCKET_CLOSED;
 		}
-		WriteError("socket = %d Error, %d", fd, WSAGetLastError());
+
+		WriteError("socket = %d Error, %d", fd, ret);
 		return ErrorType::ERROR_SOCKET_SEND;
 	}
 
@@ -729,7 +767,13 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET &fd, char * buffer, int
 	}
 	else if (nret == SOCKET_ERROR)
 	{
-		WriteError("rfid server SOCKET ERROR, socket = %u, error = %d", fd, WSAGetLastError());
+		int ret = WSAGetLastError();
+		if (ret == WSAECONNABORTED)
+		{
+			closesocket(fd);
+			fd = INVALID_SOCKET;
+		}
+		WriteError("rfid server SOCKET ERROR, socket = %u, error = %d", fd, ret);
 		return ErrorType::ERROR_SOCKET_RECV;
 	}
 	return ErrorType::ERROR_OK;

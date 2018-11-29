@@ -347,7 +347,7 @@ void CCarSeat_RecognizationDlg::run()
 	while (m_bThreadStatus)
 	{
 		//WriteInfo("thread begin");
-		heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+		//heartBloodServer(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
 
 		if (m_pLineCamera == nullptr)
 		{
@@ -409,7 +409,7 @@ void CCarSeat_RecognizationDlg::run()
 
 		// 读取条形码后需要延迟在取照片
 		std::string tmpBarcode = m_pRFIDReader->readBarcode(m_pLabelManager->GetObtainBarcodeFunction());
-		if (m_pParamManager->GetBarcodeTime() < 100)
+		/*if (m_pParamManager->GetBarcodeTime() < 100)
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
 			std::this_thread::sleep_for(a);
@@ -418,7 +418,7 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(m_pParamManager->GetBarcodeTime());
 			std::this_thread::sleep_for(a);
-		}
+		}*/
 		if (m_bThreadStatus == false)
 		{
 			break;
@@ -529,18 +529,18 @@ void CCarSeat_RecognizationDlg::run()
 					tmpPath = std::wstring(movedPath);
 					imagepath = utils::WStrToStr(tmpPath);
 				}
-					
+				
 				delete []tmpDateDirectory;
 				tmpDateDirectory = nullptr;
 				WriteInfo("imagePath = [%s],reType = [%s], barcode = [%s]", imagepath.c_str(), reType.c_str(), tmpBarcode.c_str());
 			}
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
+			//std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
+			//std::this_thread::sleep_for(a);
 		}
 		//WriteInfo("thread end");
 
-		//std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(50);
-		//std::this_thread::sleep_for(a);
-
+		
 	}
 }
 
@@ -861,41 +861,41 @@ void CCarSeat_RecognizationDlg::adjustControlLocate(int width, int height)
 	CWnd * pWnd = GetDlgItem(IDC_BARCODE);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(0, 21, xStep, yStep, TRUE);
+		pWnd->MoveWindow(0, 0, 2 * xStep, yStep, TRUE);
 	}
 
 	// 成功失败以及失败率等，静态框
 	pWnd = GetDlgItem(IDC_REG_RATIO);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(0, 50 + yStep, xStep, yStep, TRUE);
+		pWnd->MoveWindow(2 * xStep, 0, xStep, yStep, TRUE);
 	}
 
 	//开始按钮
 	pWnd = GetDlgItem(IDC_BUTTON_BEGIN_JOB);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(0, 4 * yStep, xStep, yStep, TRUE);
+		pWnd->MoveWindow(4 * xStep, 0, xStep, yStep, TRUE);
 	}
 
 	// 模板图像
 	pWnd = GetDlgItem(IDC_IMAGE_PATTERN);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(xStep, 20, 2 * xStep, 4 * yStep, TRUE);
+		pWnd->MoveWindow(0, yStep, 2.5f * xStep, 4 * yStep, TRUE);
 	}
 
 	//相机视频
 	pWnd = GetDlgItem(IDC_IMAGE_REC);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(3 * xStep, 20, 2 * xStep, 4 * yStep, TRUE);
+		pWnd->MoveWindow(2.5f * xStep, yStep, 2.5f * xStep, 4 * yStep, TRUE);
 	}
 
 	pWnd = GetDlgItem(IDC_STATIC_LINK_STATUS);
 	if (pWnd != nullptr)
 	{
-		pWnd->MoveWindow(0, 3 * yStep, xStep, yStep, TRUE);
+		pWnd->MoveWindow(3 * xStep, 0, xStep, yStep, TRUE);
 	}
 
 

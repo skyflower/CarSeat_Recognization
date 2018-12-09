@@ -1,9 +1,9 @@
-<?xml version=”1.0” encoding=”gbk”?>
+<?xml version="1.0" encoding="utf-8"?>
 <search>
-<ip=”1.1.1.1” usr=”abc” passwd”” time=”20180710”/>
-<timePolicy control=”0/1” startTime=”20171012.131430” endTime=” 20171212.131430”/>
-<linePolicy control=”0/1” startLine=”1” endLine=”4”/>
-<barcodePolicy control=”0/1” startBarcode=”202150” endBarcode=”222150”/>
-<typePolicy control=”0/1” type=” K215_black_pvc_leather”/>
-<methodPolicy control=”0/1” method=”auto/manual”
+<info ip="1.1.1.1" usr="abc" passwd="abc-123" time="20180710"/>
+<timePolicy control="1" startTime="20181009.192334" endTime="20181011.192334"/>
+<linePolicy control="1" startLine="1" endLine="4"/>
+<barcodePolicy control="1" startBarcode="N12345678911111" endBarcode="N12345678911132"/>
+<typePolicy control="1" type="d2_black_pvc_line_cloth"/>
+<methodPolicy control="1" method="auto"/>
 </search>

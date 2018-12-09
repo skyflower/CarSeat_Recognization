@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SeatInfo>
-    <barcode>abcdef111dd</barcode>
-    <user>zhangsan</user>
-    <time>2018-07-10-18:00:20</time>
-    <type>1</type>
-    <material>leather</material>
-    <color>black</color>
-    <correct>yes</correct>
-    <mode>auto</mode>
-    <cameraNum>3</cameraNum>
-    <line>L2</line>
-    <pictureName>L1T1M0C2N000001</pictureName>
-</SeatInfo>
+<identification>
+    <version>0.1</version>
+    <lineID>1</lineID>
+    <ip>192.168.1.4</ip>
+    <time>20181010.192334</time>
+    <barcode>N12345678911123</barcode>
+    <barcodeResult>567</barcodeResult>
+    <imageName>img_004.jpg</imageName>
+    <method>auto</method>
+    <usrName>zhangsan</usrName>
+    <typeByRecog>d2_black_pvc_line_cloth</typeByRecog>
+    <typeByBarcode>k216_black_pvc_hole_cloth</typeByBarcode>
+    <typeByInput>k215_ecru_pvc_hole_cloth</typeByInput>
+    <cameraName>canno eos13D</cameraName>
+    <correct>0</correct>
+</identification>

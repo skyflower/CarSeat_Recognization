@@ -67,7 +67,7 @@ def create_user_table(con):
     """
     sql = "create table user_table (user text PRIMARY KEY NOT NULL ,password text,priority integer NOT NULL )"
     create(con, sql, "user_table")
-    print("Create user_table succeed!")
+    #print("Create user_table succeed!")
 
 
 def create_carseat_table(con):
@@ -76,19 +76,22 @@ def create_carseat_table(con):
     :param con:
     :return:
     """
-    sql = """create table carseat_table(barcode text PRIMARY KEY NOT NULL ,
-                                      name text NOT NULL ,
+    sql = """create table carseat_table(version text,
+                                      lineID text,
+                                      ip text,
                                       time text,
-                                      type text,
-                                      material text,
-                                       color text ,
-                                       correct text ,
-                                       mode text ,
-                                       cameracode text,
-                                       line text ,
-                                       path text)"""
+                                      barcode text PRIMARY KEY NOT NULL ,
+                                      barcodeResult text,
+                                      imageName text,
+                                      method text,
+                                      usrName text,
+                                      typeByRecog text,
+                                      typeByBarcode text,
+                                      typeByInput text,
+                                      cameraName text,
+                                      correct text)"""
     create(con, sql, "carseat_table")
-    print("Create table carseat_table succeed!")
+    #print("Create table carseat_table succeed!")
 
 
 def insert(con, sql, data, table_name):
@@ -104,9 +107,9 @@ def insert(con, sql, data, table_name):
         con.execute(sql, data)
     except:
         if table_name == "carseat_table":
-            print 'the barcode = %s in %s is exist, insert refused' % (data[0], table_name)
+            print 'the barcode = %s in %s is exist, insert refused' % (data[4], table_name)
         else:
-            print 'the user = %s in %s is exist, insert refused' % (data[0], table_name)
+            print 'the user = %s in %s is exist, insert refused' % (data[4], table_name)
     else:
         con.commit()
 
@@ -123,7 +126,7 @@ def insert_carseat_table(con, data):
     :param data:
     :return:
     """
-    sql = "INSERT INTO %s VALUES(?,?,?,?,?,?,?,?,?,?,?)" % "carseat_table"
+    sql = "INSERT INTO %s VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)" % "carseat_table"
     insert(con, sql, data, "carseat_table")
 
 
@@ -153,26 +156,26 @@ def delete(con, sql):
     con.commit()
 
 
-def select(con, table_name):
+def select(con, table_name, condition):
     """
     :param con: connection对象
     :param sql: 查询语句
     :return: 符合条件的返回结果，包含元组的数组
     """
-    sql = "select * from %s" % table_name
+    sql = "select * from %s where %s" % (table_name, condition)
     cur = con.cursor()
     cur.execute(sql)
     result = cur.fetchall()
     return result
 
 
-def select_user_table(con):
-    data_user = select(con, "user_table")
+def select_user_table(con, condition):
+    data_user = select(con, "user_table", condition)
     return data_user
 
 
-def select_carseat_table(con):
-    data_carseat = select(con, "carseat_table")
+def select_carseat_table(con, condition):
+    data_carseat = select(con, "carseat_table", condition)
     return data_carseat
 
 

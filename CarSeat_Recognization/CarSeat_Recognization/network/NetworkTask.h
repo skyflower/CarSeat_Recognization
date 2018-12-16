@@ -40,7 +40,7 @@ public:
 	CNetworkTask();
 	~CNetworkTask();
 	static bool IsReachable(unsigned int clientIp, unsigned int serverIp);
-	bool heartBlood(unsigned int serverIp, unsigned int port);
+	//bool heartBlood(unsigned int serverIp, unsigned int port);
 
 	void SendMessageTo(message* msg);
 	
@@ -68,11 +68,18 @@ private:
 		MAX_MSG_SIZE = 20
 	};
 
-	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
+	struct fileHead
+	{
+		char name[128];
+		unsigned long long size;
+	};
+
+	bool __sendToServer(SOCKET &socket, const char *sendMsg, \
 		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
 
-	bool __sendRecogToServer(unsigned int serverIp, int textPort, int imagePort, RecogResultA *recog);
+	bool __sendRecogToServer(SOCKET &socket, RecogResultA *recog);
 
+	SOCKET CreateSocket(unsigned int serverIp, unsigned short int port);
 
 	bool initCacheFile();
 
@@ -119,7 +126,7 @@ private:
 
 	//缓存没有成功发送的历史识别记录
 	std::list<message> *m_pMsgList;
-
+	SOCKET m_nSocket;
 
 	char m_szCacheFile[MAX_CHAR_LENGTH];
 

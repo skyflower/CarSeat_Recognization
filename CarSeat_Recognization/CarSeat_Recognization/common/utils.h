@@ -42,6 +42,8 @@ namespace utils
 
 	bool mkdir(const char* dir);
 
+	char *getFileNameByAbsolutePath(char *filePath);
+
 
 	// XXX={"AAA", "BBBB", "CCC"}
 	bool parseVector(const char *content, const char*name, std::vector<std::string> *pVector);

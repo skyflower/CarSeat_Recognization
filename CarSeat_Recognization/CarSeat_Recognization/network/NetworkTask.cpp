@@ -51,6 +51,7 @@ CNetworkTask::CNetworkTask():
 			WriteError("init cache file failed");
 		}
 	}
+	m_nSocket = INVALID_SOCKET;
 }
 
 
@@ -84,79 +85,79 @@ bool CNetworkTask::IsReachable(unsigned int clientIp, unsigned int serverIp)
 	IcmpCloseHandle(IcmpHandle);
 	return true;
 }
-
-bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
-{
-	unsigned int localIp = m_pParamManager->GetLocalIP();
-	if ((localIp == 0) || (localIp == -1))
-	{
-		return false;
-	}
-
-	char *str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
-		\n<bloodheart ip=\"%s\"  status=\"%s\" pcName=\"%s\" time=\"%s\"></bloodheart>";
-
-	char ipLocalStr[20] = { 0 };
-	_snprintf_s(ipLocalStr, sizeof(ipLocalStr), "%d.%d.%d.%d", \
-		((localIp & 0xFF000000) >> 24), ((localIp & 0xFF0000) >> 16), \
-		((localIp & 0xFF00) >> 8), (localIp & 0xFF));
-
-	char bloodheart[200];
-	memset(bloodheart, 0, sizeof(bloodheart));
-
-	std::chrono::system_clock::time_point curPoint = std::chrono::system_clock::now();
-	
-	std::time_t t = std::time(nullptr);
-	std::tm time;
-	localtime_s(&time, &t);
-	char timeStr[20] = { 0 };
-	_snprintf_s(timeStr, sizeof(timeStr), "%04d%02d%02d-%02d%02d%02d", \
-		time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,		\
-		time.tm_hour, time.tm_min, time.tm_sec);
-
-	std::string tmpPCName = m_pParamManager->GetLocalName();
-	
-	_snprintf_s(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
-		"success", tmpPCName.c_str(), timeStr);
-
-	bool ret = false;
-	char recvBlood[200];
-	size_t recvMsgLen = sizeof(recvBlood);
-	memset(recvBlood, 0, sizeof(recvBlood));
-
-	// 发送心跳包数据
-	ret = __sendToServer(serverIp, port, bloodheart, strlen(bloodheart), recvBlood, recvMsgLen);
-	if ((ret == false) || (recvMsgLen == 0))
-	{
-		return false;
-	}
-	
-	// 解析服务器返回xml
-	TiXmlDocument lconfigXML;
-	//TiXmlParsingData data;
-	lconfigXML.Parse(recvBlood);
-	if (lconfigXML.Error())
-	{
-		TRACE0("xml Format is invalid\n");
-		WriteError("recvBlood = [%s]", recvBlood);
-		return false;
-	}
-	TiXmlElement *rootElement = lconfigXML.RootElement();
-
-	if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
-	{
-		WriteError("recvBlood get root element Failed, %s", recvBlood);
-		return false;
-	}
-	if (strncmp(rootElement->Attribute("package"), "bloodheart", strlen("bloodheart") != 0))
-	{
-		WriteError("replay package error");
-		return false;
-	}
-	rootElement->Clear();
-	lconfigXML.Clear();
-	return true;
-}
+//
+//bool CNetworkTask::heartBlood(unsigned int serverIp, unsigned int port)
+//{
+//	unsigned int localIp = m_pParamManager->GetLocalIP();
+//	if ((localIp == 0) || (localIp == -1))
+//	{
+//		return false;
+//	}
+//
+//	char *str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+//		\n<bloodheart ip=\"%s\"  status=\"%s\" pcName=\"%s\" time=\"%s\"></bloodheart>";
+//
+//	char ipLocalStr[20] = { 0 };
+//	_snprintf_s(ipLocalStr, sizeof(ipLocalStr), "%d.%d.%d.%d", \
+//		((localIp & 0xFF000000) >> 24), ((localIp & 0xFF0000) >> 16), \
+//		((localIp & 0xFF00) >> 8), (localIp & 0xFF));
+//
+//	char bloodheart[200];
+//	memset(bloodheart, 0, sizeof(bloodheart));
+//
+//	std::chrono::system_clock::time_point curPoint = std::chrono::system_clock::now();
+//	
+//	std::time_t t = std::time(nullptr);
+//	std::tm time;
+//	localtime_s(&time, &t);
+//	char timeStr[20] = { 0 };
+//	_snprintf_s(timeStr, sizeof(timeStr), "%04d%02d%02d-%02d%02d%02d", \
+//		time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,		\
+//		time.tm_hour, time.tm_min, time.tm_sec);
+//
+//	std::string tmpPCName = m_pParamManager->GetLocalName();
+//	
+//	_snprintf_s(bloodheart, sizeof(bloodheart), str, ipLocalStr, \
+//		"success", tmpPCName.c_str(), timeStr);
+//
+//	bool ret = false;
+//	char recvBlood[200];
+//	size_t recvMsgLen = sizeof(recvBlood);
+//	memset(recvBlood, 0, sizeof(recvBlood));
+//
+//	// 发送心跳包数据
+//	ret = __sendToServer(serverIp, port, bloodheart, strlen(bloodheart), recvBlood, recvMsgLen);
+//	if ((ret == false) || (recvMsgLen == 0))
+//	{
+//		return false;
+//	}
+//	
+//	// 解析服务器返回xml
+//	TiXmlDocument lconfigXML;
+//	//TiXmlParsingData data;
+//	lconfigXML.Parse(recvBlood);
+//	if (lconfigXML.Error())
+//	{
+//		TRACE0("xml Format is invalid\n");
+//		WriteError("recvBlood = [%s]", recvBlood);
+//		return false;
+//	}
+//	TiXmlElement *rootElement = lconfigXML.RootElement();
+//
+//	if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+//	{
+//		WriteError("recvBlood get root element Failed, %s", recvBlood);
+//		return false;
+//	}
+//	if (strncmp(rootElement->Attribute("package"), "bloodheart", strlen("bloodheart") != 0))
+//	{
+//		WriteError("replay package error");
+//		return false;
+//	}
+//	rootElement->Clear();
+//	lconfigXML.Clear();
+//	return true;
+//}
 
 
 
@@ -187,15 +188,15 @@ void CNetworkTask::run()
 	std::chrono::system_clock::time_point preBlood = std::chrono::system_clock::now();
 	message tmpMsg;
 	message recvMsg;
-	bool linkStatus = false;
+	bool linkStatus = true;
 	while (m_bThreadStatus)
 	{
-		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 10 * 1000)
+		//std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+		//if (std::chrono::duration_cast<std::chrono::milliseconds>(now - preBlood).count() >= 100 * 1000)
 		{
-			linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
-			preBlood = now;
-			if (linkStatus == true)
+			//linkStatus = heartBlood(m_pParamManager->GetServerIP(), m_pParamManager->GetServerPort());
+			//preBlood = now;
+			/*if (linkStatus == true)
 			{
 				WriteInfo("ping server success");
 			}
@@ -203,7 +204,7 @@ void CNetworkTask::run()
 			{
 				WriteInfo("ping server failed");
 				std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-			}
+			}*/
 		}
 		if ((m_pMsgList->size() > 0) && (linkStatus == true))
 		{
@@ -216,18 +217,23 @@ void CNetworkTask::run()
 				//memcpy(&tmpMsg, &m_pMsgQueue[m_nOut], sizeof(message));
 				//m_nOut = (m_nOut + 1) % MAX_MSG_SIZE;
 				//m_nMsgSize--;
-				unsigned int serverIp = m_pParamManager->GetServerIP();
-				unsigned int serverPort = m_pParamManager->GetServerPort();
-				unsigned int serverImagePort = m_pParamManager->GetServerImagePort();
+				if (m_nSocket == INVALID_SOCKET)
+				{
+					unsigned int serverIp = m_pParamManager->GetServerIP();
+					unsigned int serverPort = m_pParamManager->GetServerPort();
+					m_nSocket = CreateSocket(serverIp, serverPort);
+				}
+				
+				//unsigned int serverImagePort = m_pParamManager->GetServerImagePort();
 
-				if ((serverIp == -1) || (serverPort == -1) ||(serverImagePort == -1))
+				if (m_nSocket == -1)
 				{
 					lock.unlock();
-					break;
+					continue;
 				}
 				size_t recvLength = 0;
 				lock.unlock();
-				if (__sendRecogToServer(serverIp, serverPort, serverImagePort, &tmpMsg.mRecogResult) == false)
+				if (__sendRecogToServer(m_nSocket, &tmpMsg.mRecogResult) == false)
 				{
 					SendMessageTo(&tmpMsg);
 					std::this_thread::sleep_for(std::chrono::milliseconds(5000));
@@ -253,83 +259,87 @@ CNetworkTask * CNetworkTask::GetInstance()
 	return m_pInstance;
 }
 
-bool CNetworkTask::__sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
+bool CNetworkTask::__sendToServer(SOCKET &socket, const char *sendMsg, \
 	size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen)
 {
-	unsigned int localIp = m_pParamManager->GetLocalIP();
+	/*unsigned int localIp = m_pParamManager->GetLocalIP();
 	if ((localIp == 0) || (localIp == -1))
 	{
 		recvMsgLen = 0;
 		return false;
 	}
-
+*/
 	int err = 0;
-	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (socketFD == -1)
-	{
-		TRACE("create socket failed\n");
-		recvMsgLen = 0;
-		return false;
-	}
+	//SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	//if (socketFD == -1)
+	//{
+	//	TRACE("create socket failed\n");
+	//	recvMsgLen = 0;
+	//	return false;
+	//}
 
-	sockaddr_in addr;
+	//sockaddr_in addr;
 
-	//接收时限
-	int nNetTimeout = 1000;
-	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
-	setsockopt(socketFD, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int));
+	////接收时限
+	//int nNetTimeout = 1000;
+	//setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+	//setsockopt(socketFD, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int));
 
-	nNetTimeout = 1;
-	setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, (char *)&nNetTimeout, sizeof(int));
+	//nNetTimeout = 1;
+	//setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, (char *)&nNetTimeout, sizeof(int));
 
-	//unsigned long tmpBlock = 0;
-	//ioctlsocket(socketFD, FIONBIO, &tmpBlock);
+	////unsigned long tmpBlock = 0;
+	////ioctlsocket(socketFD, FIONBIO, &tmpBlock);
 
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(port);
-	addr.sin_addr.S_un.S_addr = htonl(serverIp);
+	//addr.sin_family = AF_INET;
+	//addr.sin_port = htons(port);
+	//addr.sin_addr.S_un.S_addr = htonl(serverIp);
 
-	if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
-	{
-		err = WSAGetLastError();
-		TRACE1("connect failed,err = %u\n", err);
-		WriteError("connect failed, err = %u", err);
-		closesocket(socketFD);
-		socketFD = INVALID_SOCKET;
-		//WSACleanup();
-		recvMsgLen = 0;
-		return false;
-	}
+	//if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
+	//{
+	//	err = WSAGetLastError();
+	//	TRACE1("connect failed,err = %u\n", err);
+	//	WriteError("connect failed, err = %u", err);
+	//	closesocket(socketFD);
+	//	socketFD = INVALID_SOCKET;
+	//	//WSACleanup();
+	//	recvMsgLen = 0;
+	//	return false;
+	//}
 
-	int tmpLen = send(socketFD, sendMsg, sendMsgLen, 0);// MSG_DONTROUTE);
+	int tmpLen = send(socket, sendMsg, sendMsgLen, 0);// MSG_DONTROUTE);
 	if (tmpLen == SOCKET_ERROR)
 	{
 		WriteError("send Failed, msg = %s, len = %u, Err:", sendMsg, sendMsgLen, WSAGetLastError());
-		closesocket(socketFD);
-		socketFD = INVALID_SOCKET;
+		closesocket(socket);
+		socket = INVALID_SOCKET;
 		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
-	tmpLen = recv(socketFD, recvMsg, recvMsgLen, 0);
+	tmpLen = recv(socket, recvMsg, recvMsgLen, MSG_WAITALL);
 	if (SOCKET_ERROR == tmpLen)
 	{
 		WriteError("recv Failed, Err: %u", GetLastError());
-		closesocket(socketFD);
-		socketFD = INVALID_SOCKET;
+		closesocket(socket);
+		socket = INVALID_SOCKET;
 		//WSACleanup();
 		recvMsgLen = 0;
 		return false;
 	}
-	recvMsgLen = tmpLen;
-	closesocket(socketFD);
-	socketFD = INVALID_SOCKET;
+	wchar_t *tmpMsg = utils::CharToWchar(recvMsg);
+	TRACE1("recvMsg = %s\n", tmpMsg);
+	delete tmpMsg;
+	tmpMsg = nullptr;
+	recvMsgLen = strlen(recvMsg);
+	//closesocket(socket);
+	//socketFD = INVALID_SOCKET;
 
 	//WSACleanup();
 
 	return true;
 }
-bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int imagePort, RecogResultA * recog)
+bool CNetworkTask::__sendRecogToServer(SOCKET &socket, RecogResultA * recog)
 {
 	////////根据通信标准格式化成xml
 	// MD5为图像数据的md5值
@@ -376,6 +386,48 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 	TiXmlElement *sendXmlRoot = new TiXmlElement("identification");
 	sendXmlRoot*/
 
+	std::function<bool(char *xml, char* packageName)> replayFunc = [](char *xml, char* packageName)	\
+		->bool
+	{
+		if ((xml == nullptr) || (packageName == nullptr)	\
+			|| (strlen(xml) == 0) || (strlen(packageName) == 0))
+		{
+			return false;
+		}
+		TiXmlDocument lconfigXML;
+		lconfigXML.Parse(xml);
+		TiXmlElement *rootElement = nullptr;
+		bool flag = false;
+		do
+		{
+			if (lconfigXML.Error())
+			{
+				break;
+			}
+			TiXmlElement *rootElement = lconfigXML.RootElement();
+			if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+			{
+				break;
+			}
+			if (strcmp(rootElement->Attribute("package"), packageName) != 0)
+			{
+				WriteInfo("package = %s", rootElement->Attribute("package"));
+				break;
+			}
+			if (strcmp(rootElement->Attribute("status"), "success") != 0)
+			{
+				break;
+			}
+			flag = true;;
+		} while (0);
+		if (rootElement != nullptr)
+		{
+			rootElement->Clear();
+		}
+		lconfigXML.Clear();
+		return flag;
+	};
+
 	const size_t length = 1000;
 	char sendXml[length];
 	memset(sendXml, 0, sizeof(char) * length);
@@ -383,20 +435,20 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 	RecogResultToXml(*recog, sendXml);
 	WriteInfo("sendXml = [%s]", sendXml);
 
-	struct in_addr inTmp;
+	/*struct in_addr inTmp;
 	char tmpIp[20];
 	inTmp.S_un.S_addr = htonl(m_pParamManager->GetLocalIP());
 	memset(tmpIp, 0, sizeof(tmpIp));
-	inet_ntop(AF_INET, &inTmp, tmpIp, sizeof(tmpIp));
+	inet_ntop(AF_INET, &inTmp, tmpIp, sizeof(tmpIp));*/
 	
 	char recvText[length];
 	memset(recvText, 0, sizeof(char) * length);
-	size_t recvMsgLen = 0;
+	size_t recvMsgLen = length;
 
 	bool flag = false;
 	do
 	{
-		if (false == __sendToServer(serverIp, textPort, sendXml, strlen(sendXml), recvText, recvMsgLen))
+		if (false == __sendToServer(socket, sendXml, strlen(sendXml), recvText, recvMsgLen))
 		{
 			WriteError("send recog text to server failed");
 			break;
@@ -407,26 +459,30 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 			break;
 		}
 
-		TiXmlDocument lconfigXML;
-		lconfigXML.Parse(recvText);
-		if (lconfigXML.Error())
+		if (false == replayFunc(recvText, "identification"))
 		{
-			WriteError("parse return text recvMsg = [%s]", recvText);
+			WriteInfo("recvText = %s", recvText);
 			break;
 		}
-		TiXmlElement *rootElement = lconfigXML.RootElement();
-		if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+		
+		struct stat imageStat;
+		stat(recog->m_szImagePath, &imageStat);
+		memset(sendXml, 0, sizeof(sendXml));
+		struct fileHead tmphead;
+		memset(&tmphead, 0, sizeof(fileHead));
+		sprintf_s(sendXml, sizeof(sendXml), "%s", utils::getFileNameByAbsolutePath(recog->m_szImagePath));
+		memcpy(tmphead.name, sendXml, strlen(sendXml));
+		tmphead.size = imageStat.st_size;
+
+		int sendXmlSize = sizeof(fileHead);
+
+		__sendToServer(socket, (const char*)&tmphead, sendXmlSize, recvText, recvMsgLen);
+
+		if (false == replayFunc(recvText, "imagesize"))
 		{
-			WriteError("recvBlood get root element Failed, %s", recvText);
+			WriteInfo("recvText = %s", recvText);
 			break;
 		}
-		if (strcmp(rootElement->Attribute("status"), "ok") != 0)
-		{
-			WriteError("return recvMsg error， %s", recvText);
-			break;
-		}
-		rootElement->Clear();
-		lconfigXML.Clear();
 
 		size_t imageSize = 0;
 		char *content = nullptr;
@@ -438,28 +494,10 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 			break;
 		}
 
-		__sendToServer(serverIp, imagePort, content, imageSize, recvText, recvMsgLen);
+		recvMsgLen = length;
+		__sendToServer(socket, content, imageSize, recvText, recvMsgLen);
 		
-		lconfigXML;
-		lconfigXML.Parse(recvText);
-		if (lconfigXML.Error())
-		{
-			WriteError("parse return text recvMsg = [%s]", recvText);
-			break;
-		}
-		rootElement = lconfigXML.RootElement();
-		if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
-		{
-			WriteError("recvBlood get root element Failed, %s", recvText);
-			break;
-		}
-		if (strcmp(rootElement->Attribute("statu"), "ok") != 0)
-		{
-			WriteError("return recvMsg error， %s", recvText);
-			break;
-		}
-		rootElement->Clear();
-		lconfigXML.Clear();
+		
 		flag = true;
 
 		delete[]content;
@@ -468,6 +506,42 @@ bool CNetworkTask::__sendRecogToServer(unsigned int serverIp, int textPort, int 
 	} while (0);
 
 	return flag;
+}
+
+SOCKET CNetworkTask::CreateSocket(unsigned int serverIp, unsigned short int port)
+{
+	int err = 0;
+	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (socketFD == -1)
+	{
+		TRACE("create socket failed\n");
+		return INVALID_SOCKET;
+	}
+
+	sockaddr_in addr;
+
+	//接收时限
+	int nNetTimeout = 1000;
+	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+	setsockopt(socketFD, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int));
+
+	nNetTimeout = 1;
+	setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, (char *)&nNetTimeout, sizeof(int));
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.S_un.S_addr = htonl(serverIp);
+
+	if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
+	{
+		err = WSAGetLastError();
+		TRACE1("connect failed,err = %u\n", err);
+		WriteError("connect failed, err = %u", err);
+		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
+		return INVALID_SOCKET;
+	}
+	return socketFD;
 }
 bool CNetworkTask::initCacheFile()
 {
@@ -525,6 +599,15 @@ bool CNetworkTask::initCacheFile()
 
 void CNetworkTask::serialize()
 {
+	{
+		FILE *fp = nullptr;
+		fopen_s(&fp, m_szCacheFile, "w+");
+		if (fp != nullptr)
+		{
+			fclose(fp);
+			fp = nullptr;
+		}
+	}
 	if (m_pMsgList->size() > 0)
 	{
 		size_t nSize = m_pMsgList->size();
@@ -663,7 +746,7 @@ bool CNetworkTask::RecogResultToXml(RecogResult<char>& a, char * xml)
 
 
 	TiXmlElement *ipEle = new TiXmlElement("ip");
-	unsigned int ipValue = m_pParamManager->GetLocalIP();
+	unsigned int ipValue = htonl( m_pParamManager->GetLocalIP());
 	struct in_addr addr1;
 	memcpy(&addr1, &ipValue, sizeof(unsigned int));
 	TiXmlText *ipContent = new TiXmlText(inet_ntop(AF_INET, &addr1, tmpBuf, sizeof(tmpBuf)));

@@ -343,7 +343,6 @@ void CCarSeat_RecognizationDlg::run()
 
 	//clock_t pingBeginTime = clock();
 
-
 	while (m_bThreadStatus)
 	{
 		//WriteInfo("thread begin");

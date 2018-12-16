@@ -77,9 +77,9 @@ def receive_msg(conn):
         dbCon = db.connect(dbName)
         db.insert_carseat_table(dbCon, tuple(value))
         dbCon.close()
-    #res = "receive info done \n"
+    res = "receive info done \n"
     #告诉客户端可以发送对应图片了
-    #conn.send(res)
+    conn.send(res)
     return 0
 
 def receive_pic(conn):
@@ -258,6 +258,7 @@ def recieve_info():
         conn,addr = server_info.accept()
         t=threading.Thread(target=process_info,args=(conn, addr))  #t为新创建的线程
         t.start()
+		t.join()
     #关闭链接
     server_msg.close()
     
@@ -266,6 +267,7 @@ def recieve_query():
         conn,addr = server_search.accept()
         t=threading.Thread(target=process_search,args=(conn, addr))  #t为新创建的线程
         t.start()
+		t.join()
     #关闭链接
     server_search.close()
 def fun_timer():

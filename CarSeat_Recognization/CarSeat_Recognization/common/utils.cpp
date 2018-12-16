@@ -589,6 +589,32 @@ namespace utils
 		return false;
 	}
 
+	char * getFileNameByAbsolutePath(char * filePath)
+	{
+		if (filePath == nullptr)
+		{
+			return nullptr;
+		}
+		char *end = strrchr(filePath, '/');
+		static char tmpBuf[1024] = { 0 };
+		
+		if (end != nullptr)
+		{
+			memset(tmpBuf, 0, sizeof(tmpBuf));
+			memcpy(tmpBuf, end + 1, strlen(end + 1));
+		}
+		else
+		{
+			end = strrchr(filePath, '\\');
+			if (end != nullptr)
+			{
+				memset(tmpBuf, 0, sizeof(tmpBuf));
+				memcpy(tmpBuf, end + 1, strlen(end + 1));
+			}
+		}
+		return tmpBuf;
+	}
+
 
 
 

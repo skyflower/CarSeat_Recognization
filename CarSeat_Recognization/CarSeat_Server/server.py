@@ -59,8 +59,11 @@ def receive_msg(conn):
     #Linux系统内可以判断是否为空。
     if not recvData:
         return ErrorEmpty
+    curTime = time.localtime(time.time())
+    timeStr = "%04d%02d%02d.%02d%02d%02d" %(curTime.tm_year, curTime.tm_mon, curTime.tm_mday, curTime.tm_hour, curTime.tm_min, curTime.tm_sec)
     if len(recvData) > 0:
         root = ""
+        print("recvData = %s" % str(recvData))
         try:
             root = ET.fromstring(recvData)
         except xml.etree.ElementTree.ParseError, e:
@@ -71,13 +74,20 @@ def receive_msg(conn):
             for child in root:
                 value.append(child.text)
         else:
+            res = "<?xml version=”1.0” encoding=”utf-8”?><reply package=identification status=fail time=%s/>" % timeStr
+            print("reply = %s" % res)
+            conn.send(res);
+            
             return ErrorFormat
         value[6] = get_todayPath() + '/' + value[6]
         dbName = db.setup()
         dbCon = db.connect(dbName)
         db.insert_carseat_table(dbCon, tuple(value))
         dbCon.close()
-    res = "receive info done \n"
+    #res = "receive info done \n"
+    res = "<?xml version=”1.0” encoding=”utf-8”?><reply package=identification status=success time=%s/>" % timeStr
+
+    print("reply = %s" % res)
     #告诉客户端可以发送对应图片了
     conn.send(res)
     return 0
@@ -88,7 +98,14 @@ def receive_pic(conn):
     if buf:
         filename, filesize = struct.unpack('128sl', buf)
         fn = filename.strip('\00')
+        print("filename = %s, filesize = %d" %(filename, filesize))
         new_filename = get_todayPath() + '/' + fn
+        
+        curTime = time.localtime(time.time())
+        timeStr = "%04d%02d%02d.%02d%02d%02d" %(curTime.tm_year, curTime.tm_mon, curTime.tm_mday, curTime.tm_hour, curTime.tm_min, curTime.tm_sec)        
+        
+        res = "<?xml version=”1.0” encoding=”utf-8”?><reply package=imagesize status=success time=%s/>" % timeStr
+        conn.send(res)
 
         recvd_size = 0  # 定义已接收文件的大小
         fp = open(new_filename, 'wb')
@@ -104,24 +121,27 @@ def receive_pic(conn):
 
 def process_info(conn, addr):
     # 先接收座椅信息
-    rc = receive_msg(conn)
-    if rc == 0:
-        res = "0"
-        conn.send(res)
-        receive_pic(conn)
-    elif rc == ErrorEmpty:
-        res = "1"
-        conn.send(res)
-    elif rc == ErrorFormat:
-        res = "2"
-        conn.send(res)
+    while True:
+        rc = receive_msg(conn)
+        if rc == 0:
+            #res = "0"
+            #conn.send(res)
+            receive_pic(conn)
+        elif rc == ErrorEmpty:
+            res = "1"
+            conn.send(res)
+            break
+        elif rc == ErrorFormat:
+            res = "2"
+            conn.send(res)
+            break
     conn.close()
 
 def create_xml(seat_data, user_flag):
     carseat_node = ("lineID", "ip", "time", "barcode", "barcodeResult", "imageName", "method", "usrName", "typeByRecog", "typeByBarcode", "typeByInput", "cameraName", "correct")
     picpath = []
     #创建根节点:q
-    root = ET.Element("Reply")
+    root = ET.Element("reply")
     root.set("package","search")
     if user_flag != 'none':
         root.set("status","fail")
@@ -258,7 +278,7 @@ def recieve_info():
         conn,addr = server_info.accept()
         t=threading.Thread(target=process_info,args=(conn, addr))  #t为新创建的线程
         t.start()
-		t.join()
+        t.join()
     #关闭链接
     server_msg.close()
     
@@ -267,7 +287,7 @@ def recieve_query():
         conn,addr = server_search.accept()
         t=threading.Thread(target=process_search,args=(conn, addr))  #t为新创建的线程
         t.start()
-		t.join()
+        t.join()
     #关闭链接
     server_search.close()
 def fun_timer():

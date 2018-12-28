@@ -90,50 +90,6 @@ namespace utils
 		return tmpStr;
 	}
 
-	bool delBlankSpace(char * text, size_t len)
-	{
-		if ((text == nullptr) || (len == 0))
-		{
-			return true;
-		}
-		size_t i = 0;
-		size_t j = 0;
-		for (; j < len; )
-		{
-			if (text[j] > 0x20)
-			{
-				text[i] = text[j];
-				++i;
-				++j;
-				continue;
-			}
-			else if (text[j] <= 0x20)
-			{
-				if ((j > 0) && (text[j - 1] <= 0x20))
-				{
-					++j;
-					continue;
-				}
-				else if (j == 0)
-				{
-					++j;
-					continue;
-				}
-				else if ((j > 0) && (text[j - 1] > 0x20))
-				{
-					text[i] = ' ';
-					++i;
-					++j;
-					continue;
-				}
-			}
-		}
-		if (j < len)
-		{
-			memset(text + j, 0, sizeof(char) * (len - j));
-		}
-		return true;
-	}
 
 	bool readFile(char * file, char * &content, size_t & FileSize)
 	{

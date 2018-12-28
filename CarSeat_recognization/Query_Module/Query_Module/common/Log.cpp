@@ -67,7 +67,7 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 
 void CLog::run()
 {
-	LogMessage buffer;
+	LogMessage *buffer = new LogMessage;
 	char currentTime[100];
 	SYSTEMTIME curTime;
 	
@@ -81,7 +81,7 @@ void CLog::run()
 		}
 		m_pCond.wait(lck, [&pLog] {return pLog->GetFlag(); });
 		//m_pMessage[m_nCurValid];
-		memcpy(&buffer, &m_pMessage[m_nCurValid], sizeof(LogMessage));
+		memcpy(buffer, &m_pMessage[m_nCurValid], sizeof(LogMessage));
 		memset(&m_pMessage[m_nCurValid], 0, sizeof(LogMessage));
 		m_nCurValid = (m_nCurValid + 1) % MAX_LOG_NUM;
 		if (m_nCurBlank == m_nCurValid)
@@ -91,19 +91,19 @@ void CLog::run()
 		lck.unlock();
 		if (m_pLog.good())
 		{
-			if (buffer.type == LogType::FATAL_ERROR)
+			if (buffer->type == LogType::FATAL_ERROR)
 			{
 				m_pLog << "Error\t";
 			}
-			else if (buffer.type == LogType::INFO)
+			else if (buffer->type == LogType::INFO)
 			{
 				m_pLog << "Info\t";
 			}
-			else if (buffer.type == LogType::WARNING)
+			else if (buffer->type == LogType::WARNING)
 			{
 				m_pLog << "Warning\t";
 			}
-			else if (buffer.type == LogType::EXIT)
+			else if (buffer->type == LogType::EXIT)
 			{
 				break;
 			}
@@ -120,11 +120,13 @@ void CLog::run()
 			m_pLog << currentTime << "\t";
 
 
-			m_pLog << "[" << buffer.pFunc << "," << buffer.mLine << "] " << buffer.data << "\n";
+			m_pLog << "[" << buffer->pFunc << "," << buffer->mLine << "] " << buffer->data << "\n";
 			m_pLog.flush();
 		}
 	}
 	m_pLog.close();
+	delete buffer;
+	buffer = nullptr;
 }
 
 CLog::CLog()

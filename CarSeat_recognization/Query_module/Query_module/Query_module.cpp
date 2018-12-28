@@ -22,6 +22,8 @@
 #include "ChildFrm.h"
 #include <time.h>
 #include <WinSock2.h>
+#include "./xml/tinystr.h"
+#include "./xml/tinyxml.h"
 
 
 #ifdef _DEBUG
@@ -290,8 +292,8 @@ void CQuery_ModuleApp::OnButtonChoose()
 	}
 	CConditionFilterA filter = mConditionDlg.GetFilterCondition();
 	TRACE1("ret = %d\n", ret);
-	WriteInfo("date = [begin = %s],[end = %s]", filter.mDateBeign, filter.mDateEnd);
-	WriteInfo("time = [begin = %s],[end = %s]", filter.mTimeBegin, filter.mTimeEnd);
+	WriteInfo("date = [begin = %s],[end = %s]", filter.mDateTimeBeign, filter.mDateTimeEnd);
+	//WriteInfo("time = [begin = %s],[end = %s]", filter.mTimeBegin, filter.mTimeEnd);
 	WriteInfo("line = [begin = %s],[end = %s]", filter.mLineBegin, filter.mLineEnd);
 	WriteInfo("barcode = [begin = %s],[end = %s]", filter.mBarcodeBegin, filter.mBarcodeEnd);
 	WriteInfo("seatType = [%s], methodType = [%s]", filter.mSeatType, filter.mMethodType);
@@ -309,11 +311,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 	/*
 	将查询条件以及用户名和密码发送到服务器端
 	*/
-	char queryXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>	\
-		<search>													\
-		<ip=\"%s\" usr=\"%s\" passwd=\"%s\" time=\"%s\"/>			\
-		%s													\
-		</search>";
+	char queryXml[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?><search><version>0.1</version><info ip=\"%s\" usr=\"%s\" passwd=\"%s\" time=\"%s\"/>%s</search>";
 
 	
 
@@ -354,7 +352,7 @@ void CQuery_ModuleApp::OnButtonChoose()
 	localtime_s(&nowTime, &tmpTime_t);
 
 
-	sprintf_s(tmpTime, "%04d%02d%02d-%02d%02d%02d", \
+	sprintf_s(tmpTime, "%04d%02d%02d.%02d%02d%02d", \
 		nowTime.tm_year + 1900, nowTime.tm_mon + 1, nowTime.tm_mday, \
 		nowTime.tm_hour, nowTime.tm_min, nowTime.tm_sec);
 
@@ -376,14 +374,13 @@ void CQuery_ModuleApp::OnButtonChoose()
 
 	memset(timePolicy, 0, sizeof(timePolicy));
 	int timePolicyControl = 1;
-	if ((strcmp(filter.mDateBeign, filter.mDateEnd) == 0)	\
-		&& (strcmp(filter.mTimeBegin, filter.mTimeEnd) == 0))
+	if (strcmp(filter.mDateTimeBeign, filter.mDateTimeEnd) == 0)
 	{
 		timePolicyControl = 0;
 	}
 
-	sprintf_s(timePolicy, policyLength, "<timePolicy control = \"%d\" startTime=\"%s\" endTime=\"%s\"/>",
-		timePolicyControl, filter.mTimeBegin, filter.mTimeEnd);
+	sprintf_s(timePolicy, policyLength, "<timePolicy control=\"%d\" startTime=\"%s\" endTime=\"%s\"/>",
+		timePolicyControl, filter.mDateTimeBeign, filter.mDateTimeEnd);
 
 
 	//产线选择策略
@@ -499,10 +496,25 @@ void CQuery_ModuleApp::OnButtonChoose()
 	/*
 	将过滤xml发送到服务器端
 	*/
+	delete[]tmpChar;
+	
+	const size_t resultLen = 1024 * 1024 * 3;
+	tmpChar = new char[resultLen];
+	memset(tmpChar, 0, sizeof(char) * resultLen);
 
+	//utils::delBlankSpace<char>(tmpXml, strlen(tmpXml), ' ');
+	//utils::delBlankSpace<char>(tmpXml, strlen(tmpXml), '\t');
+	//utils::delBlankSpace<char>(tmpXml, strlen(tmpXml), '\n');
 
+	if (true == QueryInfo(tmpXml, strlen(tmpXml), tmpChar, resultLen))
+	{
+		/*if (true == ParseQueryResult(tmpChar, strlen(tmpChar)))
+		{
 
+		}*/
+	}
 
+	
 
 	delete []tmpChar;
 	tmpChar = nullptr;
@@ -594,4 +606,134 @@ void CQuery_ModuleApp::OnUpdateButtonLogin(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 
+}
+
+bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int resultLen)
+{
+	if ((queryLen == 0) || (queryXml == nullptr) || (result == nullptr) || (resultLen == 0))
+	{
+		return false;
+	}
+	memset(result, 0, sizeof(char) * resultLen);
+	unsigned int localIp = m_pParamManager->GetLocalIP();
+	if ((localIp == 0) || (localIp == -1))
+	{
+		return false;
+	}
+
+	int err = 0;
+	SOCKET socketFD = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (socketFD == -1)
+	{
+		TRACE("create socket failed\n");
+		return false;
+	}
+
+	sockaddr_in addr;
+
+	//接收时限
+	int nNetTimeout = 1000;
+	setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (char *)&nNetTimeout, sizeof(int));
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(m_pParamManager->GetServerPort());
+	addr.sin_addr.S_un.S_addr = htonl(m_pParamManager->GetServerIP());
+
+	if (0 != connect(socketFD, (sockaddr*)&addr, sizeof(sockaddr)))
+	{
+		err = WSAGetLastError();
+		TRACE1("connect failed,err = %u\n", err);
+		WriteError("connect failed, err = %u", err);
+		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
+		return false;
+	}
+
+	size_t tmpLen = send(socketFD, queryXml, queryLen, 0);// MSG_DONTROUTE);
+	if (tmpLen == SOCKET_ERROR)
+	{
+		WriteError("send Failed, msg = %s, len = %u, Err:", queryXml, queryLen, WSAGetLastError());
+		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
+		return false;
+	}
+	tmpLen = recv(socketFD, result, resultLen, MSG_WAITALL);
+	if (SOCKET_ERROR == tmpLen)
+	{
+		WriteError("recv Failed, Err: %u", GetLastError());
+		closesocket(socketFD);
+		socketFD = INVALID_SOCKET;
+		return false;
+	}
+	WriteInfo("query Result = [%s]", result);
+	if (ParseQueryResult(result, strlen(result)) == true)
+	{
+
+	}
+
+	closesocket(socketFD);
+	socketFD = INVALID_SOCKET;
+
+	return true;
+	
+}
+
+bool CQuery_ModuleApp::ParseQueryResult(char *info, int length)
+{
+	TiXmlDocument lconfigXML;
+	lconfigXML.Parse(info);
+	TiXmlElement *rootElement = nullptr;
+	bool flag = false;
+	do
+	{
+		if (lconfigXML.Error())
+		{
+			break;
+		}
+		TiXmlElement *rootElement = lconfigXML.RootElement();
+		if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+		{
+			break;
+		}
+		if (strcmp(rootElement->Attribute("package"), "search") != 0)
+		{
+			WriteInfo("package = %s", rootElement->Attribute("package"));
+			break;
+		}
+		if (strcmp(rootElement->Attribute("status"), "success") != 0)
+		{
+			break;
+		}
+		if (strcmp(rootElement->Attribute("version"), "0.1") != 0)
+		{
+			break;
+		}
+		size_t seatCount = 0;
+		int i = 0;
+		for (TiXmlElement*child = rootElement->FirstChildElement(); child != nullptr; child = child->NextSiblingElement())
+		{
+			if (strcmp(child->Value(), "seatCount") == 0)
+			{
+				seatCount = atoi(child->GetText());
+			}
+			else
+			{
+				char label[20];
+				sprintf(label, "Seat%d", i + 1);
+				if (strcmp(child->Value(), label) == 0)
+				{
+
+				}
+			}
+		}
+
+
+		flag = true;;
+	} while (0);
+	if (rootElement != nullptr)
+	{
+		rootElement->Clear();
+	}
+	lconfigXML.Clear();
+	return flag;
 }

@@ -31,7 +31,7 @@ public:
 		LogType type;
 		char pFunc[100];
 		unsigned int mLine;
-		char data[2000];
+		char data[1024 * 1024];
 	};
 
 	static CLog *GetInstance();

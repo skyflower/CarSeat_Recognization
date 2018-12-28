@@ -22,7 +22,33 @@ namespace utils
 	std::wstring StrToWStr(const std::string str);
 	std::string WStrToStr(const std::wstring wstr);
 
-	bool delBlankSpace(char *text, size_t len);
+	template<typename type>
+	bool delBlankSpace(type *text, size_t textCount, type specialChar)
+	{
+		if ((text == nullptr) || (textCount == 0))
+		{
+			return false;
+		}
+		//type *buffer = new type[textCount + 1];
+		//memset(buffer, 0, sizeof(type) * (textCount + 1));
+		size_t j = 0;
+		size_t i = 0;
+		for (i = 0; i < textCount; )
+		{
+			if (text[i] == specialChar)
+			{
+				++i;
+			}
+			else
+			{
+				text[j] = text[i];
+				++i;
+				++j;
+			}
+		}
+		memset(&text[j], 0, sizeof(type) * (textCount - j));
+		return true;
+	}
 
 	bool readFile(char *file, char *&content, size_t &FileSize);
 

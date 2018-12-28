@@ -600,6 +600,7 @@ bool CNetworkTask::initCacheFile()
 void CNetworkTask::serialize()
 {
 	{
+		m_pLog.close();
 		FILE *fp = nullptr;
 		fopen_s(&fp, m_szCacheFile, "w+");
 		if (fp != nullptr)

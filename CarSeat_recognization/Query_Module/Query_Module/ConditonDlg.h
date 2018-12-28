@@ -8,10 +8,10 @@
 template<typename type>
 struct CConditionFilter
 {
-	type mDateBeign[20];
-	type mDateEnd[20];
-	type mTimeBegin[20];
-	type mTimeEnd[20];
+	type mDateTimeBeign[32];
+	type mDateTimeEnd[32];
+	//type mTimeBegin[20];
+	//type mTimeEnd[20];
 	type mLineBegin[20];
 	type mLineEnd[20];
 	type mBarcodeBegin[50];
@@ -67,17 +67,17 @@ private:
 	// //识别类型,auto or manual
 	CComboBox mMethodType;
 	// //日期起点
-	CDateTimeCtrl mDateBegin;
+	CDateTimeCtrl mDateTimeBegin;
 	// //时间起点
-	CDateTimeCtrl mTimeBegin;
+	//CDateTimeCtrl mTimeBegin;
 	// //日期结束
-	CDateTimeCtrl mDateEnd;
+	CDateTimeCtrl mDateTimeEnd;
 	// 时间结束
-	CDateTimeCtrl mTimeEnd;
+	//CDateTimeCtrl mTimeEnd;
 public:
 	afx_msg void OnDatetimechangeDateBegin(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult);
+	//afx_msg void OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult);
+	//afx_msg void OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult);
 	//afx_msg void OnSetfocusLineEnd();
 	//afx_msg void OnSetfocusLineBegin();

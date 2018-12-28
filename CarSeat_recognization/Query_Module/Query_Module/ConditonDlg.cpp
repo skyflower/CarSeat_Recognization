@@ -38,18 +38,16 @@ void CConditonDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BARCODE_END, mBarcodeEnd);
 	DDX_Control(pDX, IDC_SEAT_TYPE, mSeatType);
 	DDX_Control(pDX, IDC_METHOD_TYPE, mMethodType);
-	DDX_Control(pDX, IDC_DATE_BEGIN, mDateBegin);
-	DDX_Control(pDX, IDC_TIME_BEGIN, mTimeBegin);
-	DDX_Control(pDX, IDC_DATE_END, mDateEnd);
-	DDX_Control(pDX, IDC_TIME_END, mTimeEnd);
+	DDX_Control(pDX, IDC_DATE_BEGIN, mDateTimeBegin);
+	//DDX_Control(pDX, IDC_TIME_BEGIN, mTimeBegin);
+	DDX_Control(pDX, IDC_DATE_END, mDateTimeEnd);
+	//DDX_Control(pDX, IDC_TIME_END, mTimeEnd);
 }
 
 
 BEGIN_MESSAGE_MAP(CConditonDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CConditonDlg::OnBnClickedOk)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATE_BEGIN, &CConditonDlg::OnDatetimechangeDateBegin)
-	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TIME_BEGIN, &CConditonDlg::OnDatetimechangeTimeBegin)
-	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_TIME_END, &CConditonDlg::OnDatetimechangeTimeEnd)
 	ON_NOTIFY(DTN_DATETIMECHANGE, IDC_DATE_END, &CConditonDlg::OnDatetimechangeDateEnd)
 	ON_CBN_SELCHANGE(IDC_LINE_BEGIN, &CConditonDlg::OnSelchangeLineBegin)
 	ON_CBN_SELCHANGE(IDC_LINE_END, &CConditonDlg::OnSelchangeLineEnd)
@@ -66,33 +64,37 @@ void CConditonDlg::OnBnClickedOk()
 	memset(&mFilter, 0, sizeof(CConditionFilterA));
 
 	wchar_t text[256];
+	int tmpLength = 0;
 
 	//日期开始
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_BEGIN, text, sizeof(text));
-	int tmpLength = sizeof(mFilter.mDateBeign);
-	utils::WCharToChar(text, mFilter.mDateBeign, &tmpLength);
+	tmpLength = sizeof(mFilter.mDateTimeBeign);
+	utils::WCharToChar(text, mFilter.mDateTimeBeign, &tmpLength);
+	utils::delBlankSpace<char>(mFilter.mDateTimeBeign, strlen(mFilter.mDateTimeBeign), '/');
 	
 	//日期结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_END, text, sizeof(text));
-	tmpLength = sizeof(mFilter.mDateEnd);
-	utils::WCharToChar(text, mFilter.mDateEnd, &tmpLength);
-
+	tmpLength = sizeof(mFilter.mDateTimeEnd);
+	utils::WCharToChar(text, mFilter.mDateTimeEnd, &tmpLength);
+	utils::delBlankSpace<char>(mFilter.mDateTimeEnd, strlen(mFilter.mDateTimeEnd), '/');
 
 
 	//时间开始
-	memset(text, 0, sizeof(text));
+	/*memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_BEGIN, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mTimeBegin);
 	utils::WCharToChar(text, mFilter.mTimeBegin, &tmpLength);
+	utils::delBlankSpace<char>(mFilter.mTimeBegin, strlen(mFilter.mTimeBegin), ':');*/
 
 
 	//时间结束
-	memset(text, 0, sizeof(text));
+	/*memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_TIME_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mTimeEnd);
 	utils::WCharToChar(text, mFilter.mTimeEnd, &tmpLength);
+	utils::delBlankSpace<char>(mFilter.mTimeEnd, strlen(mFilter.mTimeEnd), ':');*/
 
 
 	//产线开始
@@ -186,6 +188,9 @@ BOOL CConditonDlg::OnInitDialog()
 			mLineEnd.AddString(tmpStr.c_str());
 		}
 	}
+
+	mDateTimeBegin.SetFormat(L"yyyy-MM-dd HH:mm:ss");
+	mDateTimeEnd.SetFormat(L"yyyy-MM-dd HH:mm:ss");
 	
 
 
@@ -206,82 +211,82 @@ void CConditonDlg::OnDatetimechangeDateBegin(NMHDR *pNMHDR, LRESULT *pResult)
 
 	SYSTEMTIME begin;
 	memset(&begin, 0, sizeof(begin));
-	mDateBegin.GetTime(&begin);
+	mDateTimeBegin.GetTime(&begin);
 
 	if (utils::SystemTimeCmp(curTime, begin) < 0)
 	{
-		mDateBegin.SetTime(&curTime);
+		mDateTimeBegin.SetTime(&curTime);
 		return;
 	}
 
 	SYSTEMTIME end;
 	memset(&end, 0, sizeof(end));
-	mDateEnd.GetTime(&end);
+	mDateTimeEnd.GetTime(&end);
 	if (utils::SystemTimeCmp(end, begin) < 0)
 	{
-		mDateEnd.SetTime(&begin);
+		mDateTimeEnd.SetTime(&begin);
 	}
 
 	*pResult = 0;
 }
 
+//
+//void CConditonDlg::OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult)
+//{
+//	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
+//	// TODO: 在此添加控件通知处理程序代码
+//	*pResult = 0;
+//
+//	SYSTEMTIME curTime;
+//	GetLocalTime(&curTime);
+//
+//	SYSTEMTIME begin;
+//	memset(&begin, 0, sizeof(begin));
+//	mTimeBegin.GetTime(&begin);
+//
+//	if (utils::SystemTimeCmp(curTime, begin) < 0)
+//	{
+//		mTimeBegin.SetTime(&curTime);
+//		return;
+//	}
+//
+//	SYSTEMTIME end;
+//	memset(&end, 0, sizeof(end));
+//	mTimeEnd.GetTime(&end);
+//	if (utils::SystemTimeCmp(end, begin) < 0)
+//	{
+//		mTimeEnd.SetTime(&begin);
+//	}
+//}
 
-void CConditonDlg::OnDatetimechangeTimeBegin(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-	// TODO: 在此添加控件通知处理程序代码
-	*pResult = 0;
-
-	SYSTEMTIME curTime;
-	GetLocalTime(&curTime);
-
-	SYSTEMTIME begin;
-	memset(&begin, 0, sizeof(begin));
-	mTimeBegin.GetTime(&begin);
-
-	if (utils::SystemTimeCmp(curTime, begin) < 0)
-	{
-		mTimeBegin.SetTime(&curTime);
-		return;
-	}
-
-	SYSTEMTIME end;
-	memset(&end, 0, sizeof(end));
-	mTimeEnd.GetTime(&end);
-	if (utils::SystemTimeCmp(end, begin) < 0)
-	{
-		mTimeEnd.SetTime(&begin);
-	}
-}
-
-
-void CConditonDlg::OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
-	// TODO: 在此添加控件通知处理程序代码
-	*pResult = 0;
-
-	SYSTEMTIME curTime;
-	GetLocalTime(&curTime);
-
-	SYSTEMTIME end;
-	memset(&end, 0, sizeof(end));
-	mTimeEnd.GetTime(&end);
-
-	if (utils::SystemTimeCmp(curTime, end) < 0)
-	{
-		mTimeBegin.SetTime(&curTime);
-		return;
-	}
-
-	SYSTEMTIME begin;
-	memset(&begin, 0, sizeof(begin));
-	mTimeBegin.GetTime(&begin);
-	if (utils::SystemTimeCmp(end, begin) < 0)
-	{
-		mTimeEnd.SetTime(&begin);
-	}
-}
+//
+//void CConditonDlg::OnDatetimechangeTimeEnd(NMHDR *pNMHDR, LRESULT *pResult)
+//{
+//	LPNMDATETIMECHANGE pDTChange = reinterpret_cast<LPNMDATETIMECHANGE>(pNMHDR);
+//	// TODO: 在此添加控件通知处理程序代码
+//	*pResult = 0;
+//
+//	SYSTEMTIME curTime;
+//	GetLocalTime(&curTime);
+//
+//	SYSTEMTIME end;
+//	memset(&end, 0, sizeof(end));
+//	mTimeEnd.GetTime(&end);
+//
+//	if (utils::SystemTimeCmp(curTime, end) < 0)
+//	{
+//		mTimeBegin.SetTime(&curTime);
+//		return;
+//	}
+//
+//	SYSTEMTIME begin;
+//	memset(&begin, 0, sizeof(begin));
+//	mTimeBegin.GetTime(&begin);
+//	if (utils::SystemTimeCmp(end, begin) < 0)
+//	{
+//		mTimeEnd.SetTime(&begin);
+//	}
+//}
 
 
 void CConditonDlg::OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult)
@@ -295,20 +300,20 @@ void CConditonDlg::OnDatetimechangeDateEnd(NMHDR *pNMHDR, LRESULT *pResult)
 
 	SYSTEMTIME end;
 	memset(&end, 0, sizeof(end));
-	mDateEnd.GetTime(&end);
+	mDateTimeEnd.GetTime(&end);
 
 	if (utils::SystemTimeCmp(curTime, end) < 0)
 	{
-		mDateBegin.SetTime(&curTime);
+		mDateTimeBegin.SetTime(&curTime);
 		return;
 	}
 
 	SYSTEMTIME begin;
 	memset(&begin, 0, sizeof(begin));
-	mDateBegin.GetTime(&begin);
+	mDateTimeBegin.GetTime(&begin);
 	if (utils::SystemTimeCmp(end, begin) < 0)
 	{
-		mDateEnd.SetTime(&begin);
+		mDateTimeEnd.SetTime(&begin);
 	}
 }
 

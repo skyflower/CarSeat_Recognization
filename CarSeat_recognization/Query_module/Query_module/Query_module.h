@@ -34,6 +34,12 @@ class CQuery_ModuleApp : public CWinAppEx
 public:
 	CQuery_ModuleApp();
 
+	struct imageHeader
+	{
+		char path[128];
+		UINT64 size;
+	};
+
 
 // 重写
 public:
@@ -52,6 +58,10 @@ private:
 
 	wchar_t mUsrName[MAX_CHAR_LENGTH];
 	wchar_t mPasswd[MAX_CHAR_LENGTH];
+
+	bool QueryInfo(char *queryXml, int queryLen, char *result, int resultLen);
+
+	bool ParseQueryResult(char *info, int length);
 
 
 public:

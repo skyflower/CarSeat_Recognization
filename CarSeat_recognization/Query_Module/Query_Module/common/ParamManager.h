@@ -24,7 +24,6 @@ public:
 	unsigned int GetServerIP();
 	unsigned int GetServerPort();
 	
-	const std::vector<std::string> *GetFtpParameter()const;
 	const std::vector<std::string> *GetMethodType()const;
 	const std::vector<std::string> *GetSeatType()const;
 	const std::vector<std::string> *GetLineNo()const;
@@ -38,6 +37,8 @@ public:
 
 	bool SetLoginUserName(std::string tmpUserName);
 	bool SetLoginPasswd(std::string tmpPasswd);
+
+	const char* GetCacheDirectory();
 
 
 private:
@@ -71,8 +72,10 @@ private:
 	std::string m_strUsrName;
 	std::string m_strPasswd;
 
+	char m_szCacheDirectory[MAX_CHAR_LENGTH];
+
 	//ftp用户名密码以及图像的存储路径
-	std::vector<std::string> *m_pFtp;
+	//std::vector<std::string> *m_pFtp;
 
 	//产线编号
 	std::vector<std::string> *m_pLineVec;
@@ -80,7 +83,17 @@ private:
 	//methodType
 	std::vector<std::string> *m_pMethodType;
 
-	//seatType
 	std::vector<std::string> *m_pSeatType;
+
+	/*
+	内部类型转换外部类型的条形码对照表,条形码位截取其中有效字段组成
+	*/
+	std::unordered_map<std::string, std::string> *m_pBarcode;
+
+
+	/*
+	识别模块的类型转化成内部类型的对照表
+	*/
+	std::unordered_map<std::string, std::string> *m_pClassifyType;
 };
 

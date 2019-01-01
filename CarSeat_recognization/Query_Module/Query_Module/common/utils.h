@@ -3,9 +3,11 @@
 #include <Windows.h>
 #include <vector>
 #include <unordered_map>
+#include "../RecogResult.h"
 
 
 #define MAX_CHAR_LENGTH 256
+
 
 
 namespace utils
@@ -21,6 +23,10 @@ namespace utils
 
 	std::wstring StrToWStr(const std::string str);
 	std::string WStrToStr(const std::wstring wstr);
+
+	bool RecogResultWToC(RecogResultW &a, RecogResultA &b);
+
+	bool RecogResultCToW(RecogResultA &a, RecogResultW &b);
 
 	template<typename type>
 	bool delBlankSpace(type *text, size_t textCount, type specialChar)

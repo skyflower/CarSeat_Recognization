@@ -78,6 +78,15 @@
     <ClInclude Include="QueryFrame.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="RecogResult.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RecogInfoCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DetailInfoDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Query_Module.cpp">
@@ -129,6 +138,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="QueryFrame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RecogInfoCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DetailInfoDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

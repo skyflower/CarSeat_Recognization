@@ -24,6 +24,9 @@
 #include "./common/utils.h"
 #include "./network/NetworkTask.h"
 #include "QueryFrame.h"
+#include "./xml/tinystr.h"
+#include "./xml/tinyxml.h"
+#include "RecogResult.h"
 
 // CQuery_ModuleApp:
 // 有关此类的实现，请参阅 Query_Module.cpp
@@ -56,12 +59,20 @@ private:
 	CLog *m_pLog;
 	CParamManager *m_pParamManager;
 
+	CQueryFrame *m_pQueryMDIFrame;
+
 	wchar_t mUsrName[MAX_CHAR_LENGTH];
 	wchar_t mPasswd[MAX_CHAR_LENGTH];
 
-	bool QueryInfo(char *queryXml, int queryLen, char *result, int resultLen);
+	std::vector<RecogResultW>* QueryInfo(char *queryXml, int queryLen, char *result, int resultLen);
 
-	bool ParseQueryResult(char *info, int length);
+	std::vector<RecogResultW>* ParseQueryResult(char *info, int length);
+
+	bool ParseRecogResult(TiXmlElement * elment, RecogResultA &recog);
+
+	bool saveCacheImage(char *buffer, size_t bufferLength, char *imagePath);
+
+	bool replyMessage(SOCKET &, char *rootName, char *packageName, char *status);
 
 
 public:

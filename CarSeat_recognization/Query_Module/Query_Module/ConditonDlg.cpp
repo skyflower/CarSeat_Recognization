@@ -71,14 +71,14 @@ void CConditonDlg::OnBnClickedOk()
 	GetDlgItemText(IDC_DATE_BEGIN, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mDateTimeBeign);
 	utils::WCharToChar(text, mFilter.mDateTimeBeign, &tmpLength);
-	utils::delBlankSpace<char>(mFilter.mDateTimeBeign, strlen(mFilter.mDateTimeBeign), '/');
+	//utils::delBlankSpace<char>(mFilter.mDateTimeBeign, strlen(mFilter.mDateTimeBeign), '/');
 	
 	//日期结束
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_DATE_END, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mDateTimeEnd);
 	utils::WCharToChar(text, mFilter.mDateTimeEnd, &tmpLength);
-	utils::delBlankSpace<char>(mFilter.mDateTimeEnd, strlen(mFilter.mDateTimeEnd), '/');
+	//utils::delBlankSpace<char>(mFilter.mDateTimeEnd, strlen(mFilter.mDateTimeEnd), '/');
 
 
 	//时间开始
@@ -125,7 +125,7 @@ void CConditonDlg::OnBnClickedOk()
 	utils::WCharToChar(text, mFilter.mBarcodeEnd, &tmpLength);
 
 	
-	//座椅类型
+	////座椅类型
 	memset(text, 0, sizeof(text));
 	GetDlgItemText(IDC_SEAT_TYPE, text, sizeof(text));
 	tmpLength = sizeof(mFilter.mSeatType);
@@ -191,9 +191,6 @@ BOOL CConditonDlg::OnInitDialog()
 
 	mDateTimeBegin.SetFormat(L"yyyy-MM-dd HH:mm:ss");
 	mDateTimeEnd.SetFormat(L"yyyy-MM-dd HH:mm:ss");
-	
-
-
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE

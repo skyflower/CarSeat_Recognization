@@ -1,5 +1,7 @@
 #pragma once
 #include "ChildView.h"
+#include "RecogResult.h"
+#include "RecogInfoCtrl.h"
 
 class CQueryFrame :
 	public CMDIChildWndEx
@@ -10,7 +12,7 @@ public:
 
 private:
 	//CStatic mQueryHead;
-	CListCtrl mQueryResult;
+	CRecogInfoCtrl mQueryResult;
 	
 	enum
 	{
@@ -23,11 +25,14 @@ public:
 
 	// 操作
 public:
+	bool InsertItem(std::vector<RecogResultW> *pRecog);
+
 
 	// 重写
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
+
 
 	// 实现
 public:

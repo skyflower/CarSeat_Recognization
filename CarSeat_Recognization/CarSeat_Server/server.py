@@ -146,7 +146,7 @@ def create_xml(seat_data, user_flag):
     if user_flag != 'none':
         root.set("status","fail")
     else:
-        root.set("status","sussess")
+        root.set("status","success")
     root.set("reason", user_flag)
     dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     root.set("time",dt)
@@ -161,6 +161,7 @@ def create_xml(seat_data, user_flag):
         sonName1 = "seatCount"
         sonNode1 = ET.SubElement(root, sonName1)
         sonNode1.text = str(num)
+        #print(seat_data)
         for data in seat_data:
             #创建root的子节点sub2，并添加属性
             sonName2 = "Seat" + str(i)
@@ -168,8 +169,11 @@ def create_xml(seat_data, user_flag):
             j = 0
             # 去掉version信息
             data = data[1:]
+            #print(data)
             for d in data:
                 # Unicode 转 str
+                if d is None:
+                    d = "NULL"
                 d = d.encode('utf-8')
                 Node = ET.SubElement(sonNode2, carseat_node[j])
                 if j == 5:
@@ -185,6 +189,7 @@ def create_xml(seat_data, user_flag):
 def send_pictures(conn, pic_path):
     # 等待客户端请求发送图片
     data = conn.recv(10240)
+    print("send_pictures = %s" % str(data))
     for filepath in pic_path:
         if os.path.isfile(filepath):
             # 定义定义文件信息。128s表示文件名为128bytes长，l表示一个int或log文件类型，在此为文件大小
@@ -193,13 +198,19 @@ def send_pictures(conn, pic_path):
             fhead = struct.pack('128sl', os.path.basename(filepath),
                                 os.stat(filepath).st_size)
             conn.send(fhead)
-
+            recvReply = conn.recv(1000)
+             
+            print("next send image data, recv = %s" % str(recvReply)) 
             fp = open(filepath, 'rb')
-            while 1:
-                data = fp.read(1024)
-                if not data:
-                    break
-                conn.send(data)
+            fileContent = fp.read(os.stat(filepath).st_size)
+            conn.send(fileContent)
+            #while 1:
+            #    data = fp.read(1024)
+            #    if not data:
+            #        break
+            #    conn.send(data)
+            recvReply = conn.recv(1000)
+            print("after send image data, recv = %s" % str(recvReply))
 
 def send_search_result(conn, seat_data, user_flag):
     num = len(seat_data)
@@ -208,6 +219,7 @@ def send_search_result(conn, seat_data, user_flag):
     conn.send(search_result)
     #查询结果小于10个，发送图片数据
     if num > 0 and num <= 10:
+        #replay = conn.recv(1000)
         send_pictures(conn, pic_path)
 
 def parse_search_info(data):
@@ -252,6 +264,7 @@ def process_search(conn, addr):
         conn.close()
         return
     err, user_info, carset_cond = parse_search_info(recvData)
+    print(recvData)
     if err:
         res = "the search.xml format error, please re-send"
         conn.send(res)

@@ -10,13 +10,14 @@
 CParamManager *CParamManager::m_pInstance = nullptr;
 
 CParamManager::CParamManager() :
-m_pFtp(nullptr),
+m_pBarcode(nullptr),
+m_pClassifyType(nullptr),
 m_pLineVec(nullptr),
+m_pSeatType(nullptr),
 m_nLocalIp(-1),
 m_nServerIp(-1),
 m_nServerPort(-1),
 m_pMethodType(nullptr),
-m_pSeatType(nullptr),
 mAutoSaveFlag(false)
 {
 	memset(m_szConfigFile, 0, sizeof(m_szConfigFile));
@@ -29,23 +30,29 @@ CParamManager::~CParamManager()
 {
 	serialization();
 
-	if (m_pFtp != nullptr)
-	{
-		m_pFtp->clear();
-		delete m_pFtp;
-		m_pFtp = nullptr;
-	}
 	if (m_pLineVec != nullptr)
 	{
 		m_pLineVec->clear();
 		delete m_pLineVec;
 		m_pLineVec = nullptr;
 	}
+	if (m_pBarcode != nullptr)
+	{
+		m_pBarcode->clear();
+		delete m_pBarcode;
+		m_pBarcode = nullptr;
+	}
 	if (m_pSeatType != nullptr)
 	{
 		m_pSeatType->clear();
 		delete m_pSeatType;
 		m_pSeatType = nullptr;
+	}
+	if (m_pClassifyType != nullptr)
+	{
+		m_pClassifyType->clear();
+		delete m_pClassifyType;
+		m_pClassifyType = nullptr;
 	}
 	if (m_pMethodType != nullptr)
 	{
@@ -83,13 +90,6 @@ unsigned int CParamManager::GetLocalIP()
 unsigned int CParamManager::__auxLocalIP()
 {
 	clock_t startTime = clock();
-	//WORD wVersionRequested = MAKEWORD(2, 2);
-
-	/*WSADATA wsaData;
-	if (WSAStartup(wVersionRequested, &wsaData) != 0)
-	{
-		return 0;
-	}*/
 
 	char               buf[100];
 	int                ret = 0;
@@ -156,12 +156,6 @@ unsigned int CParamManager::GetServerPort()
 	return m_nServerPort;
 }
 
-const std::vector<std::string>* CParamManager::GetFtpParameter() const
-{
-	return m_pFtp;
-	
-}
-
 const std::vector<std::string>* CParamManager::GetMethodType() const
 {
 	return m_pMethodType;
@@ -171,8 +165,12 @@ const std::vector<std::string>* CParamManager::GetMethodType() const
 const std::vector<std::string>* CParamManager::GetSeatType() const
 {
 	return m_pSeatType;
-	
 }
+
+//const std::vector<std::string>* CParamManager::GetSeatType() const
+//{
+//	return m_pSeatType;
+//}
 
 const std::vector<std::string>* CParamManager::GetLineNo() const
 {
@@ -204,6 +202,11 @@ bool CParamManager::SetLoginPasswd(std::string tmpPasswd)
 	return true;
 }
 
+const char* CParamManager::GetCacheDirectory()
+{
+	return m_szCacheDirectory;
+}
+
 
 void CParamManager::Init()
 {
@@ -219,15 +222,6 @@ void CParamManager::Init()
 		fseek(fp, 0, SEEK_SET);
 		fread_s(content, length, 1, length, fp);
 		
-		if (m_pFtp == nullptr)
-		{
-			m_pFtp = new std::vector<std::string>;
-		}
-		ret = utils::parseVector(content, "ftpLogin", m_pFtp);
-		if(ret == false)
-		{
-			WriteError("ftp Parameter init Failed");
-		}
 		if (m_pLineVec == nullptr)
 		{
 			m_pLineVec = new std::vector<std::string>;
@@ -244,17 +238,6 @@ void CParamManager::Init()
 		}
 		utils::parseVector(content, "methodType", m_pMethodType);
 		if ((m_pMethodType == nullptr) || (m_pMethodType->size() == 0))
-		{
-			WriteError("method type init Failed");
-		}
-
-
-		if (m_pSeatType == nullptr)
-		{
-			m_pSeatType = new std::vector<std::string>;
-		}
-		utils::parseVector(content, "seatType", m_pSeatType);
-		if ((m_pSeatType == nullptr) || (m_pSeatType->size() == 0))
 		{
 			WriteError("method type init Failed");
 		}
@@ -294,7 +277,63 @@ void CParamManager::Init()
 				m_strPasswd = tmp;
 			}
 		}
+		////m_strCacheDirectory
+		if (utils::getValueByName(content, "cacheImagePath", m_szCacheDirectory) == true)
+		{
+			
+		}
+
 		memset(tmpStr, 0, sizeof(tmpStr));
+
+		if (m_pBarcode == nullptr)
+		{
+			m_pBarcode = new std::unordered_map<std::string, std::string>;
+		}
+		if (m_pClassifyType == nullptr)
+		{
+			m_pClassifyType = new std::unordered_map<std::string, std::string>;
+		}
+
+		char *str[] = { "barcodeTable", "classifyType" };
+		std::unordered_map<std::string, std::string> *p[2];
+		p[0] = m_pBarcode;
+		p[1] = m_pClassifyType;
+
+		char *tmpChar = content;
+		for (size_t i = 0; i < 2; ++i)
+		{
+			do
+			{
+				char *begin = strstr(tmpChar, str[i]);
+				if (begin == NULL)
+				{
+					break;
+				}
+
+				char *end = strchr(begin + 1, '}');
+				if (end == NULL)
+				{
+					break;
+				}
+				if (end - begin > 1)
+				{
+					size_t tmpLength = end - begin + 10;
+					char *tmpContent = new char[tmpLength];
+					memset(tmpContent, 0, sizeof(char) * tmpLength);
+					memcpy(tmpContent, begin, end - begin + 1);
+
+					utils::parseMap(tmpContent, str[i], p[i]);
+					tmpChar = end + 1;
+
+					if (tmpContent != nullptr)
+					{
+						delete[]tmpContent;
+						tmpContent = nullptr;
+					}
+				}
+
+			} while (0);
+		}
 
 		if (content != nullptr)
 		{
@@ -309,6 +348,17 @@ void CParamManager::Init()
 	}
 	fclose(fp);
 	fp = nullptr;
+
+	if (m_pSeatType == nullptr)
+	{
+		m_pSeatType = new std::vector<std::string>;
+	}
+	//std::unordered_map<std::string, std::string> *m_pClassifyType;
+	for (auto &k : (*m_pClassifyType))
+	{
+		m_pSeatType->emplace_back(k.first);
+	}
+
 }
 
 void CParamManager::serialization()
@@ -343,16 +393,21 @@ void CParamManager::serialization()
 	memset(tmpStr, 0, sizeof(char) * Length);
 
 
-	if ((m_pSeatType != nullptr) && (m_pSeatType->size() > 0))
+	if ((m_pBarcode != nullptr) && (m_pBarcode->size() > 0))
 	{
-		strcat_s(tmpStr, Length, "seatType={");
-		size_t tmpLength = m_pSeatType->size();
-		for (size_t i = 0; i < tmpLength - 1; ++i)
+		strcat_s(tmpStr, Length, "barcodeTable={");
+		//strcat_s(tmpStr, Length, "")
+		size_t tmpSize = m_pBarcode->size();
+		int i = 0;
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pBarcode->begin();
+		for (; i < tmpSize - 1; ++i)
 		{
-			sprintf_s(tmpStr, Length, "%s\"%s\",\n", tmpStr, m_pSeatType->at(i).c_str());
-			//StrCatW(tmpStr, m_pLineVec->at(i).c_str());
+			sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
+				iter->second.c_str());
+			++iter;
 		}
-		sprintf_s(tmpStr, Length, "%s\"%s\"}\n", tmpStr, m_pSeatType->at(tmpLength - 1).c_str());
+		sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
+			iter->second.c_str());
 	}
 	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
 	memset(tmpStr, 0, sizeof(char) * Length);
@@ -364,20 +419,6 @@ void CParamManager::serialization()
 	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
 	memset(tmpStr, 0, sizeof(char) * Length);
 
-
-	if ((m_pFtp != nullptr) && (m_pFtp->size() > 0))
-	{
-		strcat_s(tmpStr, Length, "ftpLogin={");
-		size_t tmpLength = m_pFtp->size();
-		for (size_t i = 0; i < tmpLength - 1; ++i)
-		{
-			sprintf_s(tmpStr, Length, "%s\"%s\",", tmpStr, m_pFtp->at(i).c_str());
-			//StrCatW(tmpStr, m_pLineVec->at(i).c_str());
-		}
-		sprintf_s(tmpStr, Length, "%s\"%s\"}\n", tmpStr, m_pFtp->at(tmpLength - 1).c_str());
-	}
-	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
-	memset(tmpStr, 0, sizeof(char) * Length);
 
 	if ((m_pMethodType != nullptr) && (m_pMethodType->size() > 0))
 	{
@@ -393,12 +434,13 @@ void CParamManager::serialization()
 	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
 	memset(tmpStr, 0, sizeof(char) * Length);
 
-
-
-
-
 	sprintf_s(tmpStr, Length, "username=\"%s\"\npasswd=\"%s\"\n", m_strUsrName.c_str(),
 		m_strPasswd.c_str());
+
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
+
+	sprintf_s(tmpStr, Length, "cacheImagePath=\"%s\"\n", m_szCacheDirectory);
 
 	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
 	memset(tmpStr, 0, sizeof(char) * Length);

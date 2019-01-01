@@ -16,6 +16,7 @@
 #include "Query_Module.h"
 
 #include "QueryFrame.h"
+#include "RecogResult.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -91,27 +92,11 @@ int CQueryFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	//mQueryResult.Create();		LVS_REPORT  LVS_LIST
 	mQueryResult.Create(WS_BORDER | WS_DLGFRAME | WS_VISIBLE | LVS_EX_CHECKBOXES|LVS_REPORT/*|LVS_NOLABELWRAP*/ | LVS_SHOWSELALWAYS, \
-		CRect(0, 0, 780, 580), this, QUERY_LIST_CTRL_ID);
-
+		CRect(0, 0, 1020, 880), this, QUERY_LIST_CTRL_ID);
 
 	mQueryResult.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES);
 
-
-	mQueryResult.InsertColumn(0, _T("姓名"), LVCFMT_LEFT, 255);
-	mQueryResult.InsertColumn(1, _T("性别"), LVCFMT_LEFT, 255);
-	mQueryResult.InsertColumn(2, _T("出生日期"), LVCFMT_LEFT, 270);
-
-
-	mQueryResult.InsertItem(0, L"王二小", 0);	
-	mQueryResult.SetItemText(0, 1, L"男");	
-	mQueryResult.SetItemText(0, 2, L"1992");	
-	mQueryResult.InsertItem(1, L"张三", 1);	
-	mQueryResult.SetItemText(1, 1, L"男");	
-	mQueryResult.SetItemText(1, 2, L"1987");	
-	mQueryResult.InsertItem(2, L"李四", 2);	
-	mQueryResult.SetItemText(2, 1, L"男");
-	mQueryResult.SetItemText(2, 2, L"1980");
-
+	mQueryResult.initColumn();
 
 	return 0;
 }
@@ -133,7 +118,8 @@ BOOL CQueryFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO
 	// mQueryResult控件消息
 	if (nID == QUERY_LIST_CTRL_ID)
 	{
-		//TRACE1("nID = %d, nCode = %d\n", nID, nCode);
+		TRACE2("nID = %d, nCode = %d\n", nID, nCode);
+		TRACE1("NM_FIRST = %d\n", NM_FIRST);
 		queryCtrlMsg(nCode);
 		return TRUE;
 	}
@@ -149,7 +135,7 @@ void CQueryFrame::queryCtrlMsg(int nCode)
 	int hi = HIWORD(nCode);
 	int lo = LOWORD(nCode);
 	//TRACE2("hi = %d, lo = %d\n", hi, lo);
-	NM_CLICK;
+	//NM_CLICK;
 	switch (nCode)
 	{
 	case NM_DBLCLK:
@@ -164,4 +150,21 @@ void CQueryFrame::queryCtrlMsg(int nCode)
 	default:
 		break;
 	}
+}
+
+
+
+bool CQueryFrame::InsertItem(std::vector<RecogResultW> *pRecog)
+{
+	mQueryResult.InsertItem(pRecog);
+	/*mQueryResult.InsertColumn(0, _T("时间"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(1, _T("条形码"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(2, _T("对照码"), LVCFMT_CENTER, 50);
+	mQueryResult.InsertColumn(3, _T("对照码"), LVCFMT_CENTER, 50);
+	mQueryResult.InsertColumn(4, _T("识别类型"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(5, _T("输入类型"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(6, _T("管理员用户名"), LVCFMT_CENTER, 100);
+	mQueryResult.InsertColumn(7, _T("产线编号"), LVCFMT_CENTER, 100);*/
+	
+	return true;
 }

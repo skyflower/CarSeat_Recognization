@@ -26,6 +26,9 @@ public:
 // ²Ù×÷
 public:
 
+	// only for debug and test
+	void test();
+
 // ÖØÐ´
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);

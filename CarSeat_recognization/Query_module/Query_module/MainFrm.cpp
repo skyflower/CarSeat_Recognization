@@ -143,3 +143,16 @@ void CMainFrame::OnWindowManager()
 	ShowWindowsDialog();
 }
 
+void CMainFrame::test()
+{
+	CMDIChildWnd *pWnd = NULL;
+	CFrameWnd * pFrameWnd = GetActiveFrame();
+	WINDOWINFO pInfo;
+	if (pFrameWnd != nullptr)
+	{
+		pFrameWnd->GetWindowInfo(&pInfo);
+
+		//TRACE1("%s\n", pInfo.)
+	}
+}
+

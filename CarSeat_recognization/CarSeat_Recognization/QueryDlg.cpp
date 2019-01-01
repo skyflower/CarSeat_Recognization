@@ -136,11 +136,11 @@ void CQueryDlg::displayImage(CImage * pImage, CStatic * pStatic)
 		RECT rect;
 		pStatic->GetWindowRect(&rect);
 		ScreenToClient(&rect);
+		
+		pStatic->SetBitmap((HBITMAP)(*pImage));
 
 		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left, \
 			rect.bottom - rect.top, TRUE);
-
-		pStatic->SetBitmap((HBITMAP)(*pImage));
 		
 		Invalidate();
 	}

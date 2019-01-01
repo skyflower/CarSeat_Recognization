@@ -164,6 +164,7 @@ def select(con, table_name, condition):
     """
     sql = "select * from %s where %s" % (table_name, condition)
     cur = con.cursor()
+    print(sql)
     cur.execute(sql)
     result = cur.fetchall()
     return result

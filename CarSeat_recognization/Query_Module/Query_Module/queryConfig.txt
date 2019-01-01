@@ -1,16 +1,36 @@
 line={"L1","L2","L3","L4","L5"}
-seatType={"k216 black pvc diamond cloth",
-"k216 ecru pvc diamond cloth",
-"k215 ecru pvc leather",
-"k215 black pvc leather",
-"d2 black pvc leather",
-"d2 black pvc hole cloth",
-"d2 black pvc line cloth",
-"k215 ecru pvc buckskin",
-"k216 black pvc leather"}
+barcodeTable={"314":"k216_black_pvc_line_cloth",
+"130":"k216_black_pvc_line_cloth",
+"417":"k215_black_pvc_leather",
+"307":"k216_ecru_pvc_diamond_cloth",
+"185":"k216_black_pvc_line_cloth",
+"310":"k216_black_pvc_line_cloth",
+"313":"k216_ecru_pvc_diamond_cloth",
+"511":"d2_black_pvc_line_cloth",
+"304":"k216_black_pvc_line_cloth",
+"229":"d2_black_pvc_leather",
+"315":"k216_black_pvc_line_cloth",
+"316":"k216_black_pvc_line_cloth",
+"418":"k215_ecru_pvc_buckskin",
+"308":"k216_black_pvc_leather",
+"318":"k216_black_pvc_leather",
+"422":"k215_ecru_pvc_buckskin",
+"309":"k216_yellow_pvc_leather",
+"319":"k216_yellow_pvc_leather",
+"306":"k216_black_pvc_diamond_cloth",
+"513":"d2_black_pvc_line_cloth",
+"312":"k216_black_pvc_diamond_cloth",
+"421":"k215_black_pvc_leather",
+"411":"k215_ecru_pvc_leather",
+"413":"k215_ecru_pvc_leather",
+"532":"k215_yellow_pvc_leather",
+"238":"k215_yellow_pvc_leather",
+"517":"d2_black_pvc_hole_cloth",
+"519":"d2_black_pvc_hole_cloth",
+"515":"d2_black_pvc_leather"}
 serverip="192.168.1.5"
 serverport="47002"
-ftpLogin={"siyuanxu","yuan","/home/ftpImage/files"}
 methodType={"auto","manual"}
 username="abc"
 passwd="abc-123"
+cacheImagePath="D:\Cache\GithubCache\CarSeatImage\Cache"

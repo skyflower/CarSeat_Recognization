@@ -64,6 +64,7 @@ CQuery_ModuleApp::CQuery_ModuleApp()
 
 	m_pLog = CLog::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
+	m_pQueryMDIFrame = nullptr;
 
 
 	// TODO: 在此处添加构造代码，
@@ -161,12 +162,6 @@ BOOL CQuery_ModuleApp::InitInstance()
 	m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
 	m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_Query_ModuleTYPE));
 
-
-	
-	
-
-
-
 	// 主窗口已初始化，因此显示它并对其进行更新
 	pFrame->ShowWindow(m_nCmdShow);
 	pFrame->UpdateWindow();
@@ -175,9 +170,11 @@ BOOL CQuery_ModuleApp::InitInstance()
 	pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
 	pFrame->LockWindowUpdate();
 	// 创建新的 MDI 子窗口
-	pFrame->CreateNewChild(
+	m_pQueryMDIFrame = (CQueryFrame*)pFrame->CreateNewChild(
 		RUNTIME_CLASS(CQueryFrame), IDR_Query_ModuleTYPE, m_hMDIMenu, m_hMDIAccel);
 	pFrame->UnlockWindowUpdate();
+
+	
 
 	return TRUE;
 }
@@ -306,8 +303,6 @@ void CQuery_ModuleApp::OnButtonChoose()
 	tm tmp_now_tm;
 	localtime_s(&tmp_now_tm, &now_time);
 
-	
-
 	/*
 	将查询条件以及用户名和密码发送到服务器端
 	*/
@@ -364,9 +359,6 @@ void CQuery_ModuleApp::OnButtonChoose()
 	in.S_un.S_addr = ip;
 	
 	inet_ntop(AF_INET, (void *)&in, ipStr, sizeof(ipStr));
-	
-	//sprintf_s(ipStr, "%s", inet_ntoa(in));
-
 
 	// 时间选择策略
 	const int policyLength = 200;
@@ -506,12 +498,29 @@ void CQuery_ModuleApp::OnButtonChoose()
 	//utils::delBlankSpace<char>(tmpXml, strlen(tmpXml), '\t');
 	//utils::delBlankSpace<char>(tmpXml, strlen(tmpXml), '\n');
 
-	if (true == QueryInfo(tmpXml, strlen(tmpXml), tmpChar, resultLen))
+	std::vector<RecogResultW>* selectedRecog = QueryInfo(tmpXml, strlen(tmpXml), tmpChar, resultLen);
+	if ((selectedRecog != nullptr) && ( selectedRecog->size() > 0))
 	{
 		/*if (true == ParseQueryResult(tmpChar, strlen(tmpChar)))
 		{
 
 		}*/
+		//m_pMainWnd
+		//m_pMainWnd->ChildWindowFromPoint()
+		//AfxGetMainWnd()->FindWindowW();
+		//AfxGetMainWnd()->FromHandle();
+		//CWnd *pWnd = AfxGetMainWnd()->GetActiveWindow();
+		//wchar_t tmpBuffer[200];
+		//pWnd->GetWindowTextW(tmpBuffer, 200);
+		//TRACE1("window text = %s\n", tmpBuffer);
+		//CRuntimeClass *ptr = RUNTIME_CLASS(CQueryFrame);
+		//pWnd = AfxGetMainWnd()->GetNextWindow();
+		m_pQueryMDIFrame->InsertItem(selectedRecog);
+
+		//pWnd->GetWindowTextW(tmpBuffer, 200);
+		//TRACE1("window text = %s\n", tmpBuffer);
+		//CWnd *pWnd = AfxGetMainWnd()->FindWindowW((LPCTSTR)ptr->m_lpszClassName, NULL);
+		//GetWindow(GW_CHILD, );
 	}
 
 	
@@ -521,6 +530,9 @@ void CQuery_ModuleApp::OnButtonChoose()
 
 	delete[]tmpXml;
 	tmpXml = nullptr;
+
+	delete selectedRecog;
+	selectedRecog = nullptr;
 }
 
 
@@ -608,8 +620,50 @@ void CQuery_ModuleApp::OnUpdateButtonLogin(CCmdUI *pCmdUI)
 
 }
 
-bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int resultLen)
+std::vector<RecogResultW>* CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int resultLen)
 {
+	std::function<bool(char *xml, char* packageName)> replayFunc = [](char *xml, char* packageName)	\
+		->bool
+	{
+		if ((xml == nullptr) || (packageName == nullptr)	\
+			|| (strlen(xml) == 0) || (strlen(packageName) == 0))
+		{
+			return false;
+		}
+		TiXmlDocument lconfigXML;
+		lconfigXML.Parse(xml);
+		TiXmlElement *rootElement = nullptr;
+		bool flag = false;
+		do
+		{
+			if (lconfigXML.Error())
+			{
+				break;
+			}
+			TiXmlElement *rootElement = lconfigXML.RootElement();
+			if ((rootElement == nullptr) || (strncmp(rootElement->Value(), "reply", strlen("reply")) != 0))
+			{
+				break;
+			}
+			if (strcmp(rootElement->Attribute("package"), packageName) != 0)
+			{
+				WriteInfo("package = %s", rootElement->Attribute("package"));
+				break;
+			}
+			if (strcmp(rootElement->Attribute("status"), "success") != 0)
+			{
+				break;
+			}
+			flag = true;;
+		} while (0);
+		if (rootElement != nullptr)
+		{
+			rootElement->Clear();
+		}
+		lconfigXML.Clear();
+		return flag;
+	};
+
 	if ((queryLen == 0) || (queryXml == nullptr) || (result == nullptr) || (resultLen == 0))
 	{
 		return false;
@@ -618,7 +672,7 @@ bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int
 	unsigned int localIp = m_pParamManager->GetLocalIP();
 	if ((localIp == 0) || (localIp == -1))
 	{
-		return false;
+		return nullptr;
 	}
 
 	int err = 0;
@@ -626,7 +680,7 @@ bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int
 	if (socketFD == -1)
 	{
 		TRACE("create socket failed\n");
-		return false;
+		return nullptr;
 	}
 
 	sockaddr_in addr;
@@ -646,7 +700,7 @@ bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int
 		WriteError("connect failed, err = %u", err);
 		closesocket(socketFD);
 		socketFD = INVALID_SOCKET;
-		return false;
+		return nullptr;
 	}
 
 	size_t tmpLen = send(socketFD, queryXml, queryLen, 0);// MSG_DONTROUTE);
@@ -655,7 +709,7 @@ bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int
 		WriteError("send Failed, msg = %s, len = %u, Err:", queryXml, queryLen, WSAGetLastError());
 		closesocket(socketFD);
 		socketFD = INVALID_SOCKET;
-		return false;
+		return nullptr;
 	}
 	tmpLen = recv(socketFD, result, resultLen, MSG_WAITALL);
 	if (SOCKET_ERROR == tmpLen)
@@ -663,27 +717,68 @@ bool CQuery_ModuleApp::QueryInfo(char *queryXml, int queryLen, char *result, int
 		WriteError("recv Failed, Err: %u", GetLastError());
 		closesocket(socketFD);
 		socketFD = INVALID_SOCKET;
-		return false;
+		return nullptr;
 	}
 	WriteInfo("query Result = [%s]", result);
-	if (ParseQueryResult(result, strlen(result)) == true)
-	{
+	std::vector<RecogResultW> *value = ParseQueryResult(result, strlen(result));
 
+	replyMessage(socketFD, "reply", "reply", "success");
+
+	const size_t bufferSize = 10 * 1024 * 1024;
+	char *buffer = new char[bufferSize];
+	memset(buffer, 0, sizeof(char) * bufferSize);
+	if ((value != nullptr) && (value->size() > 0))
+	{
+		imageHeader tmpHeader;
+		char tmpImagePath[MAX_CHAR_LENGTH];
+		for (size_t i = 0; i < value->size(); ++i)
+		{
+			tmpLen = recv(socketFD, (char*)&tmpHeader, sizeof(imageHeader), MSG_WAITALL);
+			if (SOCKET_ERROR == tmpLen)
+			{
+				WriteError("recv ImageHeader, Err: %u", GetLastError());
+				closesocket(socketFD);
+				socketFD = INVALID_SOCKET;
+				return value;
+			}
+			replyMessage(socketFD, "reply", "imageHeader", "success");
+
+			recv(socketFD, buffer, bufferSize, MSG_WAITALL);
+			
+			replyMessage(socketFD, "reply", "imageData", "success");
+
+			memset(tmpImagePath, 0, sizeof(tmpImagePath));
+			sprintf_s(tmpImagePath, sizeof(tmpImagePath), "%s\\%s", m_pParamManager->GetCacheDirectory(), tmpHeader.path);
+
+			if (true == saveCacheImage(buffer, tmpHeader.size, tmpImagePath))
+			{
+				wchar_t *tmpWImagePath = utils::CharToWChar(tmpImagePath);
+				if (tmpWImagePath != nullptr)
+				{
+					memcpy(value->at(i).m_szImagePath, tmpWImagePath, sizeof(wchar_t) * wcslen(tmpWImagePath));
+					delete[] tmpWImagePath;
+					tmpWImagePath = nullptr;
+				}
+			}
+		}
 	}
+	delete[]buffer;
+	buffer = nullptr;
 
 	closesocket(socketFD);
 	socketFD = INVALID_SOCKET;
 
-	return true;
+	return value;
 	
 }
 
-bool CQuery_ModuleApp::ParseQueryResult(char *info, int length)
+std::vector<RecogResultW>* CQuery_ModuleApp::ParseQueryResult(char *info, int length)
 {
 	TiXmlDocument lconfigXML;
 	lconfigXML.Parse(info);
 	TiXmlElement *rootElement = nullptr;
 	bool flag = false;
+	std::vector<RecogResultW> *result = new std::vector<RecogResultW>();
 	do
 	{
 		if (lconfigXML.Error())
@@ -710,6 +805,7 @@ bool CQuery_ModuleApp::ParseQueryResult(char *info, int length)
 		}
 		size_t seatCount = 0;
 		int i = 0;
+		RecogResultA tmpResult;
 		for (TiXmlElement*child = rootElement->FirstChildElement(); child != nullptr; child = child->NextSiblingElement())
 		{
 			if (strcmp(child->Value(), "seatCount") == 0)
@@ -719,11 +815,16 @@ bool CQuery_ModuleApp::ParseQueryResult(char *info, int length)
 			else
 			{
 				char label[20];
-				sprintf(label, "Seat%d", i + 1);
+				sprintf_s(label, sizeof(label), "Seat%d", i + 1);
 				if (strcmp(child->Value(), label) == 0)
 				{
-
+					memset(&tmpResult, 0, sizeof(RecogResultA));
+					ParseRecogResult(child, tmpResult);
 				}
+				RecogResultW tmpResultW;
+				utils::RecogResultCToW(tmpResult, tmpResultW);
+				result->emplace_back(tmpResultW);
+				i = i + 1;
 			}
 		}
 
@@ -735,5 +836,128 @@ bool CQuery_ModuleApp::ParseQueryResult(char *info, int length)
 		rootElement->Clear();
 	}
 	lconfigXML.Clear();
-	return flag;
+	return result;
+}
+
+bool CQuery_ModuleApp::ParseRecogResult(TiXmlElement * elment, RecogResultA &recog)
+{
+	if (elment == nullptr)
+	{
+		return false;
+	}
+	TiXmlElement *child = elment->FirstChildElement();
+	for (; child != nullptr; child = child->NextSiblingElement())
+	{
+		if (strcmp(child->Value(), "lineID") == 0)
+		{
+			memcpy(recog.m_szLineName, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "ip") == 0)
+		{
+			TRACE1("ip = %s\n", child->GetText());
+			//memcpy(recog.m_szLineName, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "time") == 0)
+		{
+			memcpy(recog.m_szTime, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "barcode") == 0)
+		{
+			memcpy(recog.m_szBarcode, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "barcodeResult") == 0)
+		{
+			memcpy(recog.m_szInternalType, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "imageName") == 0)
+		{
+			memcpy(recog.m_szImagePath, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "method") == 0)
+		{
+			memcpy(recog.m_szRecogMethod, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "usrName") == 0)
+		{
+			memcpy(recog.m_szUsrName, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "typeByRecog") == 0)
+		{
+			memcpy(recog.m_szTypeByRecog, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "typeByBarcode") == 0)
+		{
+			memcpy(recog.m_szTypeByBarcode, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "typeByInput") == 0)
+		{
+			memcpy(recog.m_szTypeByUsrInput, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "cameraName") == 0)
+		{
+			memcpy(recog.m_szCameraName, child->GetText(), strlen(child->GetText()));
+		}
+		else if (strcmp(child->Value(), "correct") == 0)
+		{
+			int flag = atoi(child->GetText());
+			recog.m_bIsCorrect = (flag == 0 ? false : true);
+		}
+
+	}
+	return true;
+}
+
+bool CQuery_ModuleApp::saveCacheImage(char *buffer, size_t bufferLength, char *imagePath)
+{
+	FILE *fp = nullptr;
+	fopen_s(&fp, imagePath, "wb+");
+	if (fp == nullptr)
+	{
+		return false;
+	}
+	fwrite(buffer, 1, bufferLength, fp);
+	fclose(fp);
+	fp = nullptr;
+
+	return true;
+}
+
+bool CQuery_ModuleApp::replyMessage(SOCKET & socketFD, char *rootName, char *packageName, char* status)
+{
+	TiXmlDocument *xdoc = new TiXmlDocument();
+
+	TiXmlDeclaration* xdec = new TiXmlDeclaration("1.0", "utf-8", "");
+	xdoc->LinkEndChild(xdec);
+
+	TiXmlElement *root = new TiXmlElement(rootName);
+	xdoc->LinkEndChild(root);
+
+	char tmpBuf[100];
+	memset(tmpBuf, 0, sizeof(tmpBuf));
+	sprintf_s(tmpBuf, "%d.%d", 0, 1);
+
+	root->SetAttribute("version", tmpBuf);
+	root->SetAttribute("package", packageName);
+	root->SetAttribute("status", status);
+
+	TiXmlPrinter printer;
+	std::string xmlstr;
+	xdoc->Accept(&printer);
+	xmlstr = printer.CStr();
+
+	size_t nSize = 2000;
+	char *xml = new char[nSize];
+	memset(xml, 0, sizeof(char) * nSize);
+	memcpy(xml, xmlstr.c_str(), xmlstr.size() * sizeof(char));
+	xml[xmlstr.size()] = '\0';
+
+	send(socketFD, xml, strlen(xml), 0);
+
+	delete[] xml;
+	xml = nullptr;
+
+	delete xdoc;
+	xdoc = nullptr;
+
+	return true;
 }

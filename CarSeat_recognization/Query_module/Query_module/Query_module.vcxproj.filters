@@ -87,6 +87,15 @@
     <ClInclude Include="DetailInfoDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ConditionFilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BarcodeCheck.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckListDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Query_Module.cpp">
@@ -144,6 +153,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DetailInfoDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BarcodeCheck.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckListDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

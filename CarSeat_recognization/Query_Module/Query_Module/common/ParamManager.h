@@ -40,6 +40,11 @@ public:
 
 	const char* GetCacheDirectory();
 
+	std::unordered_map<std::string, std::string> *GetBarcodeType();
+	std::unordered_map<std::string, std::string> *GetClassifyType();
+
+	void SetReviseStatus(bool flag);
+
 
 private:
 

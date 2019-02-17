@@ -4,25 +4,8 @@
 #include <vector>
 #include "afxwin.h"
 #include "afxdtctl.h"
-
-template<typename type>
-struct CConditionFilter
-{
-	type mDateTimeBeign[32];
-	type mDateTimeEnd[32];
-	//type mTimeBegin[20];
-	//type mTimeEnd[20];
-	type mLineBegin[20];
-	type mLineEnd[20];
-	type mBarcodeBegin[50];
-	type mBarcodeEnd[50];
-	type mSeatType[50];
-	type mMethodType[20];
-};
-
-
-typedef CConditionFilter<char> CConditionFilterA;
-typedef CConditionFilter<wchar_t> CConditionFilterW;
+#include "./common/Log.h"
+#include "ConditionFilter.h"
 
 // CConditonDlg 对话框
 
@@ -35,8 +18,6 @@ public:
 	virtual ~CConditonDlg();
 private:
 	CConditionFilterA mFilter;
-	//void SetLine(std::vector<std::string> &line);
-	//CParamManager *m_pParamManager;
 
 public:
 	CConditionFilterA GetFilterCondition();
@@ -53,6 +34,8 @@ public:
 	
 	afx_msg void OnBnClickedOk();
 	virtual BOOL OnInitDialog();
+
+	
 private:
 	// //产线开始选择
 	CComboBox mLineBegin;

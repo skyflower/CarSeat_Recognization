@@ -661,5 +661,20 @@ namespace utils
 		return flag;
 	}
 
+	bool saveFile(char *buffer, size_t bufferLength, char *filePath)
+	{
+		FILE *fp = nullptr;
+		fopen_s(&fp, filePath, "wb+");
+		if (fp == nullptr)
+		{
+			return false;
+		}
+		fwrite(buffer, 1, bufferLength, fp);
+		fclose(fp);
+		fp = nullptr;
+
+		return true;
+	}
+
 
 }

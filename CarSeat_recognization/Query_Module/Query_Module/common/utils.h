@@ -76,5 +76,7 @@ namespace utils
 
 	int SystemTimeCmp(SYSTEMTIME a, SYSTEMTIME b);
 
+	bool saveFile(char *buffer, size_t bufferLength, char *filePath);
+
 };
 

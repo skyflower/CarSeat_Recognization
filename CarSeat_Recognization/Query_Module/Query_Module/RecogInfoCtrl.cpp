@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "RecogInfoCtrl.h"
+//#include "ConditonDlg.h"
+#include "ConditionFilter.h"
+#include "Query_Module.h"
+#include "./common/ParamManager.h"
 
 
 IMPLEMENT_DYNCREATE(CRecogInfoCtrl, CListCtrl)
@@ -73,9 +77,6 @@ bool CRecogInfoCtrl::ClearAllItem()
 }
 
 
-
-
-
 void CRecogInfoCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
@@ -86,6 +87,41 @@ void CRecogInfoCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 
 		RecogResultW &tmp = m_pData->at(dbClickIndex);
+		if (_waccess_s(tmp.m_szImagePath, 0x0) != 0)
+		{
+			RecogResultA tmpRecogResultA;
+			utils::RecogResultWToC(tmp, tmpRecogResultA);
+			CConditionFilterA filter;
+			memset(&filter, 0, sizeof(CConditionFilterA));
+			memcpy(filter.mBarcodeBegin, tmpRecogResultA.m_szBarcode, strlen(tmpRecogResultA.m_szBarcode));
+			memcpy(filter.mBarcodeEnd, tmpRecogResultA.m_szBarcode, strlen(tmpRecogResultA.m_szBarcode));
+			CParamManager *pParamManager = CParamManager::GetInstance();
+			unsigned int ip = pParamManager->GetLocalIP();
+			const std::string &userName = pParamManager->GetLoginUserName();
+			const std::string &passwd = pParamManager->GetLoginPasswd();
+
+			/*char *searchXml = generateSearchXml(filter, ip, userName, passwd);
+			if (searchXml == nullptr)
+			{
+				AfxMessageBox(L"生成查询XML失败");
+				return;
+			}
+
+			delete[]searchXml;
+			searchXml = nullptr;*/
+			CNetworkTask *queryTask = new CNetworkTask(pParamManager->GetServerIP(), pParamManager->GetServerPort());
+
+			std::vector<RecogResultW> *selectedRecog = queryTask->QueryRecogInfo(filter, ip, userName, passwd);
+			if ((selectedRecog != nullptr) && (selectedRecog->size() == 1))
+			{
+				memcpy(tmp.m_szImagePath, selectedRecog->at(0).m_szImagePath, sizeof(wchar_t) * wcslen(selectedRecog->at(0).m_szImagePath));
+			}
+			delete selectedRecog;
+			selectedRecog = nullptr;
+
+			delete queryTask;
+			queryTask = nullptr;
+		}
 		wchar_t detailInfo[300];
 		memset(detailInfo, 0, sizeof(detailInfo));
 		swprintf_s(detailInfo, sizeof(detailInfo) / sizeof(wchar_t), L"时间:%s\t产线:%s\n条形码:%s\t条形码类型:%s\n识别类型:%s\t管理员:%s",

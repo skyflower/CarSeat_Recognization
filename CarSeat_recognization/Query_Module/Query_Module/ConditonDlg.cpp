@@ -353,3 +353,4 @@ void CConditonDlg::OnSelchangeLineEnd()
 		mLineBegin.SetCurSel(sel);
 	}
 }
+

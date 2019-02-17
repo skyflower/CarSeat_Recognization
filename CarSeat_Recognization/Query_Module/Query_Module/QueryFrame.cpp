@@ -118,8 +118,8 @@ BOOL CQueryFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO
 	// mQueryResult¿Ø¼þÏûÏ¢
 	if (nID == QUERY_LIST_CTRL_ID)
 	{
-		TRACE2("nID = %d, nCode = %d\n", nID, nCode);
-		TRACE1("NM_FIRST = %d\n", NM_FIRST);
+		//TRACE2("nID = %d, nCode = %d\n", nID, nCode);
+		//TRACE1("NM_FIRST = %d\n", NM_FIRST);
 		queryCtrlMsg(nCode);
 		return TRUE;
 	}

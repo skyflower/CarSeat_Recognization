@@ -175,7 +175,6 @@ const std::vector<std::string>* CParamManager::GetSeatType() const
 const std::vector<std::string>* CParamManager::GetLineNo() const
 {
 	return m_pLineVec;
-	
 }
 
 bool CParamManager::GetAutoSaveFlag()
@@ -207,11 +206,26 @@ const char* CParamManager::GetCacheDirectory()
 	return m_szCacheDirectory;
 }
 
+std::unordered_map<std::string, std::string>* CParamManager::GetBarcodeType()
+{
+	return m_pBarcode;
+}
+
+std::unordered_map<std::string, std::string>* CParamManager::GetClassifyType()
+{
+	return m_pClassifyType;
+}
+
+void CParamManager::SetReviseStatus(bool flag)
+{
+	mAutoSaveFlag = flag;
+}
+
 
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
-	fopen_s(&fp, m_szConfigFile, "rb");
+	fopen_s(&fp, m_szConfigFile, "r");
 	bool ret = true;
 	if (fp != nullptr)
 	{
@@ -356,7 +370,7 @@ void CParamManager::Init()
 	//std::unordered_map<std::string, std::string> *m_pClassifyType;
 	for (auto &k : (*m_pClassifyType))
 	{
-		m_pSeatType->emplace_back(k.first);
+		m_pSeatType->emplace_back(k.second);
 	}
 
 }
@@ -400,6 +414,24 @@ void CParamManager::serialization()
 		size_t tmpSize = m_pBarcode->size();
 		int i = 0;
 		std::unordered_map<std::string, std::string>::const_iterator iter = m_pBarcode->begin();
+		for (; i < tmpSize - 1; ++i)
+		{
+			sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \
+				iter->second.c_str());
+			++iter;
+		}
+		sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\"}\n", tmpStr, iter->first.c_str(), \
+			iter->second.c_str());
+	}
+	fwrite(tmpStr, sizeof(char), strlen(tmpStr), fp);
+	memset(tmpStr, 0, sizeof(char) * Length);
+
+	if ((m_pClassifyType != nullptr) && (m_pClassifyType->size() > 0))
+	{
+		strcat_s(tmpStr, Length, "classifyType={");
+		size_t tmpSize = m_pClassifyType->size();
+		int i = 0;
+		std::unordered_map<std::string, std::string>::const_iterator iter = m_pClassifyType->begin();
 		for (; i < tmpSize - 1; ++i)
 		{
 			sprintf_s(tmpStr, Length, "%s\"%s\":\"%s\",\n", tmpStr, iter->first.c_str(), \

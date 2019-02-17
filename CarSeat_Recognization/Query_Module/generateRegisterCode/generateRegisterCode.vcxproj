@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BFDBDBD6-9E4B-4D27-BA87-C3D71B787E6A}</ProjectGuid>
-    <RootNamespace>Query_Module</RootNamespace>
+    <ProjectGuid>{55B26281-72A3-4D76-9DA2-C17E5E7F0A19}</ProjectGuid>
+    <RootNamespace>generateRegisterCode</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
@@ -75,6 +75,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>../Debug</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -87,15 +88,17 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../SoftwareRegisterDll/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Debug/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SoftwareRegisterDll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -110,7 +113,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -118,7 +121,6 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -134,7 +136,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -145,7 +147,6 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -161,7 +162,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -172,7 +173,6 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -189,82 +189,37 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BarcodeCheck.h" />
-    <ClInclude Include="CheckListDlg.h" />
-    <ClInclude Include="ChildFrm.h" />
-    <ClInclude Include="ChildView.h" />
-    <ClInclude Include="common\Log.h" />
-    <ClInclude Include="common\md5.h" />
-    <ClInclude Include="common\ParamManager.h" />
-    <ClInclude Include="common\utils.h" />
-    <ClInclude Include="ConditionFilter.h" />
-    <ClInclude Include="ConditonDlg.h" />
-    <ClInclude Include="DetailInfoDlg.h" />
-    <ClInclude Include="LoginDlg.h" />
-    <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="network\NetworkTask.h" />
-    <ClInclude Include="QueryFrame.h" />
-    <ClInclude Include="Query_Module.h" />
-    <ClInclude Include="RecogInfoCtrl.h" />
-    <ClInclude Include="RecogResult.h" />
+    <ClInclude Include="generateRegisterCode.h" />
+    <ClInclude Include="generateRegisterCodeDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="xml\tinystr.h" />
-    <ClInclude Include="xml\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BarcodeCheck.cpp" />
-    <ClCompile Include="CheckListDlg.cpp" />
-    <ClCompile Include="ChildFrm.cpp" />
-    <ClCompile Include="ChildView.cpp" />
-    <ClCompile Include="common\Log.cpp" />
-    <ClCompile Include="common\md5.cpp" />
-    <ClCompile Include="common\ParamManager.cpp" />
-    <ClCompile Include="common\utils.cpp" />
-    <ClCompile Include="ConditonDlg.cpp" />
-    <ClCompile Include="DetailInfoDlg.cpp" />
-    <ClCompile Include="LoginDlg.cpp" />
-    <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="network\NetworkTask.cpp" />
-    <ClCompile Include="QueryFrame.cpp" />
-    <ClCompile Include="Query_Module.cpp" />
-    <ClCompile Include="RecogInfoCtrl.cpp" />
+    <ClCompile Include="generateRegisterCode.cpp" />
+    <ClCompile Include="generateRegisterCodeDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="xml\tinystr.cpp" />
-    <ClCompile Include="xml\tinyxml.cpp" />
-    <ClCompile Include="xml\tinyxmlerror.cpp" />
-    <ClCompile Include="xml\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Query_Module.rc" />
+    <ResourceCompile Include="generateRegisterCode.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\buttons.bmp" />
-    <Image Include="res\filelarge.bmp" />
-    <Image Include="res\filesmall.bmp" />
-    <Image Include="res\main.bmp" />
-    <Image Include="res\Query_Module.ico" />
-    <Image Include="res\Toolbar.bmp" />
-    <Image Include="res\Toolbar256.bmp" />
-    <Image Include="res\writelarge.bmp" />
-    <Image Include="res\writesmall.bmp" />
+    <None Include="res\generateRegisterCode.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Query_Module.rc2" />
-    <None Include="res\ribbon.mfcribbon-ms" />
+    <Image Include="res\generateRegisterCode.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties RESOURCE_FILE="Query_Module.rc" />
+      <UserProperties RESOURCE_FILE="generateRegisterCode.rc" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -4,63 +4,47 @@
 #include <Windows.h>
 #include <winsock.h>
 #include "../common/ParamManager.h"
-#include <mutex>
-#include <thread>
+#include "../ConditionFilter.h"
+#include "../xml/tinystr.h"
+#include "../xml/tinyxml.h"
 
 class CNetworkTask
 {
 public:
-	enum class MessageType
-	{
-		NETWORK,
-		THREAD
-	};
-	struct message
-	{
-		unsigned int serverIp;
-		unsigned int serverPort;
-		unsigned int mLine;
-		char data[2000];
-	};
 
-	CNetworkTask();
+	CNetworkTask(unsigned int serverIp, unsigned short port);
 	~CNetworkTask();
+	
 	static bool IsReachable(unsigned int clientIp, unsigned int serverIp);
+
 	bool heartBlood(unsigned int serverIp, unsigned int port);
 
-	void SendMessageTo(message* msg);
+	std::vector<RecogResultW> *QueryRecogInfo(CConditionFilterA & filter, unsigned int ip, const std::string &userName, const std::string &passwd);
 
-	bool GetThreadStatus();
-	void SetThreadStatus(bool status);
 
-	std::wstring GetCurrentImagePath();
-
-	void run();
-	static CNetworkTask* GetInstance();
-	bool ftpUpload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
-	bool ftpDownload(unsigned int serverIp, const wchar_t *name, const wchar_t *passwd, const wchar_t *ftpDir, const wchar_t *fileName);
-
+	bool UpdateBarcodeCheckList(std::unordered_map<std::string, std::string> *pBarcode, \
+		std::unordered_map<std::string, std::string> *pClassify);
+	
 private:
-	enum msg
-	{
-		MAX_MSG_SIZE = 20
-	};
+	
 
-	bool __sendToServer(unsigned int serverIp, int port, const char *sendMsg, \
+	bool __sendToServer(SOCKET & socketFD, const char *sendMsg, \
 		size_t sendMsgLen, char *recvMsg, size_t &recvMsgLen);
 
-	std::mutex m_MutexMsg;
-	message *m_pMsgQueue;
+	std::vector<RecogResultW>* ParseQueryResult(char *info, int length);
 
-	size_t m_nMsgSize;
-	int m_nIn;
-	int m_nOut;
+	bool ParseRecogResult(TiXmlElement * elment, RecogResultA &recog);
 
-	std::wstring m_szImagePath;
+	bool replyMessage(SOCKET & socketFD, char *rootName, char *packageName, char* status);
 
-	static CNetworkTask *m_pInstance;
-	bool m_bThreadStatus;
+	bool replayFunc(char *xml, char* packageName);
 
-	CParamManager *m_pParamManager;
+	bool _aux_connect();
+
+	SOCKET m_nSocket;
+
+	unsigned int m_nIp;
+	unsigned short m_nPort;
+
 };
 

@@ -26,14 +26,14 @@ CRecogInfoCtrl::~CRecogInfoCtrl()
 
 void CRecogInfoCtrl::initColumn()
 {
-	InsertColumn(0, _T("Ê±¼ä"), LVCFMT_CENTER, 150);
-	InsertColumn(1, _T("ÌõĞÎÂë"), LVCFMT_CENTER, 150);
-	InsertColumn(2, _T("¶ÔÕÕÂë"), LVCFMT_CENTER, 50);
-	InsertColumn(3, _T("ÌõĞÎÂëÀàĞÍ"), LVCFMT_CENTER, 150);
-	InsertColumn(4, _T("Ê¶±ğÀàĞÍ"), LVCFMT_CENTER, 150);
-	InsertColumn(5, _T("ÊäÈëÀàĞÍ"), LVCFMT_CENTER, 150);
-	InsertColumn(6, _T("¹ÜÀíÔ±ÓÃ»§Ãû"), LVCFMT_CENTER, 100);
-	InsertColumn(7, _T("²úÏß±àºÅ"), LVCFMT_CENTER, 100);
+	InsertColumn(0, _T("æ—¶é—´"), LVCFMT_CENTER, 150);
+	InsertColumn(1, _T("æ¡å½¢ç "), LVCFMT_CENTER, 150);
+	InsertColumn(2, _T("å¯¹ç…§ç "), LVCFMT_CENTER, 50);
+	InsertColumn(3, _T("æ¡å½¢ç ç±»å‹"), LVCFMT_CENTER, 150);
+	InsertColumn(4, _T("è¯†åˆ«ç±»å‹"), LVCFMT_CENTER, 150);
+	InsertColumn(5, _T("è¾“å…¥ç±»å‹"), LVCFMT_CENTER, 150);
+	InsertColumn(6, _T("ç®¡ç†å‘˜ç”¨æˆ·å"), LVCFMT_CENTER, 100);
+	InsertColumn(7, _T("äº§çº¿ç¼–å·"), LVCFMT_CENTER, 100);
 }
 
 
@@ -80,7 +80,7 @@ bool CRecogInfoCtrl::ClearAllItem()
 void CRecogInfoCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 	int dbClickIndex = pNMItemActivate->iItem;
 	TRACE1("dbClickIndex = %d\n", dbClickIndex);
 	if ((m_pData != nullptr) && (m_pData->size() > dbClickIndex))
@@ -103,7 +103,7 @@ void CRecogInfoCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 			/*char *searchXml = generateSearchXml(filter, ip, userName, passwd);
 			if (searchXml == nullptr)
 			{
-				AfxMessageBox(L"Éú³É²éÑ¯XMLÊ§°Ü");
+				AfxMessageBox(L"ç”ŸæˆæŸ¥è¯¢XMLå¤±è´¥");
 				return;
 			}
 
@@ -124,7 +124,7 @@ void CRecogInfoCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		}
 		wchar_t detailInfo[300];
 		memset(detailInfo, 0, sizeof(detailInfo));
-		swprintf_s(detailInfo, sizeof(detailInfo) / sizeof(wchar_t), L"Ê±¼ä:%s\t²úÏß:%s\nÌõĞÎÂë:%s\tÌõĞÎÂëÀàĞÍ:%s\nÊ¶±ğÀàĞÍ:%s\t¹ÜÀíÔ±:%s",
+		swprintf_s(detailInfo, sizeof(detailInfo) / sizeof(wchar_t), L"æ—¶é—´:%s\täº§çº¿:%s\næ¡å½¢ç :%s\tæ¡å½¢ç ç±»å‹:%s\nè¯†åˆ«ç±»å‹:%s\tç®¡ç†å‘˜:%s",
 			tmp.m_szTime, tmp.m_szLineName, tmp.m_szBarcode, tmp.m_szTypeByBarcode, tmp.m_szTypeByRecog, tmp.m_szUsrName);
 		
 		CDetailInfoDlg dlg;
@@ -143,7 +143,7 @@ int CRecogInfoCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CListCtrl::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// TODO:  ÔÚ´ËÌí¼ÓÄú×¨ÓÃµÄ´´½¨´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ‚¨ä¸“ç”¨çš„åˆ›å»ºä»£ç 
 
 
 	return 0;

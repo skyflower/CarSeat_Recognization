@@ -37,6 +37,11 @@ class CQuery_ModuleApp : public CWinAppEx
 public:
 	CQuery_ModuleApp();
 
+	struct imageHeader
+	{
+		char path[128];
+		UINT64 size;
+	};
 
 // 重写
 public:
@@ -57,6 +62,16 @@ private:
 
 	wchar_t mUsrName[MAX_CHAR_LENGTH];
 	wchar_t mPasswd[MAX_CHAR_LENGTH];
+
+	std::vector<RecogResultW>* QueryInfo(char *queryXml, int queryLen, char *result, int resultLen);
+
+	std::vector<RecogResultW>* ParseQueryResult(char *info, int length);
+
+	bool ParseRecogResult(TiXmlElement * elment, RecogResultA &recog);
+
+	bool saveCacheImage(char *buffer, size_t bufferLength, char *imagePath);
+
+	bool replyMessage(SOCKET &, char *rootName, char *packageName, char *status);
 
 
 public:

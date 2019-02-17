@@ -7,27 +7,30 @@
 #include "./common/Log.h"
 #include "ConditionFilter.h"
 
-// CConditonDlg ¶Ô»°¿ò
+typedef CConditionFilter<char> CConditionFilterA;
+typedef CConditionFilter<wchar_t> CConditionFilterW;
+
+// CConditonDlg å¯¹è¯æ¡†
 
 class CConditonDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CConditonDlg)
 
 public:
-	CConditonDlg(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	CConditonDlg(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~CConditonDlg();
 private:
 	CConditionFilterA mFilter;
 
 public:
 	CConditionFilterA GetFilterCondition();
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_CONDITION };
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -37,25 +40,25 @@ public:
 
 	
 private:
-	// //²úÏß¿ªÊ¼Ñ¡Ôñ
+	// //äº§çº¿å¼€å§‹é€‰æ‹©
 	CComboBox mLineBegin;
-	// //²úÏß½áÊø
+	// //äº§çº¿ç»“æŸ
 	CComboBox mLineEnd;
-	// //ÌõĞÎÂë¿ªÊ¼
+	// //æ¡å½¢ç å¼€å§‹
 	CComboBox mBarcodeBegin;
-	// //ÌõĞÎÂë½áÊø
+	// //æ¡å½¢ç ç»“æŸ
 	CComboBox mBarcodeEnd;
-	// //×ùÒÎÀàĞÍ
+	// //åº§æ¤…ç±»å‹
 	CComboBox mSeatType;
-	// //Ê¶±ğÀàĞÍ,auto or manual
+	// //è¯†åˆ«ç±»å‹,auto or manual
 	CComboBox mMethodType;
-	// //ÈÕÆÚÆğµã
+	// //æ—¥æœŸèµ·ç‚¹
 	CDateTimeCtrl mDateTimeBegin;
-	// //Ê±¼äÆğµã
+	// //æ—¶é—´èµ·ç‚¹
 	//CDateTimeCtrl mTimeBegin;
-	// //ÈÕÆÚ½áÊø
+	// //æ—¥æœŸç»“æŸ
 	CDateTimeCtrl mDateTimeEnd;
-	// Ê±¼ä½áÊø
+	// æ—¶é—´ç»“æŸ
 	//CDateTimeCtrl mTimeEnd;
 public:
 	afx_msg void OnDatetimechangeDateBegin(NMHDR *pNMHDR, LRESULT *pResult);

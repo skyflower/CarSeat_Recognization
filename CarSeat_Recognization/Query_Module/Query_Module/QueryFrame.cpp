@@ -1,15 +1,15 @@
-// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ 
-// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
-// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ 
-// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£  
-// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£  
-// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ 
-// http://go.microsoft.com/fwlink/?LinkId=238214¡£
+// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢ 
+// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
+// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ 
+// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚  
+// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚  
+// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—® 
+// http://go.microsoft.com/fwlink/?LinkId=238214ã€‚
 //
-// °æÈ¨ËùÓĞ(C) Microsoft Corporation
-// ±£ÁôËùÓĞÈ¨Àû¡£
+// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
+// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
 
-// ChildFrm.cpp : CChildFrame ÀàµÄÊµÏÖ
+// ChildFrm.cpp : CChildFrame ç±»çš„å®ç°
 //
 
 #include "stdafx.h"
@@ -32,11 +32,11 @@ BEGIN_MESSAGE_MAP(CQueryFrame, CMDIChildWndEx)
 	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
-// CChildFrame ¹¹Ôì/Îö¹¹
+// CChildFrame æ„é€ /ææ„
 
 CQueryFrame::CQueryFrame()
 {
-	// TODO: ÔÚ´ËÌí¼Ó³ÉÔ±³õÊ¼»¯´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æˆå‘˜åˆå§‹åŒ–ä»£ç 
 }
 
 CQueryFrame::~CQueryFrame()
@@ -46,7 +46,7 @@ CQueryFrame::~CQueryFrame()
 
 BOOL CQueryFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: ÔÚ´Ë´¦Í¨¹ıĞŞ¸Ä CREATESTRUCT cs À´ĞŞ¸Ä´°¿ÚÀà»òÑùÊ½
+	// TODO: åœ¨æ­¤å¤„é€šè¿‡ä¿®æ”¹ CREATESTRUCT cs æ¥ä¿®æ”¹çª—å£ç±»æˆ–æ ·å¼
 	if (!CMDIChildWndEx::PreCreateWindow(cs))
 		return FALSE;
 
@@ -55,7 +55,7 @@ BOOL CQueryFrame::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
-// CChildFrame Õï¶Ï
+// CChildFrame è¯Šæ–­
 
 #ifdef _DEBUG
 void CQueryFrame::AssertValid() const
@@ -69,11 +69,11 @@ void CQueryFrame::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-// CChildFrame ÏûÏ¢´¦Àí³ÌĞò
+// CChildFrame æ¶ˆæ¯å¤„ç†ç¨‹åº
 void CQueryFrame::OnFileClose()
 {
-	// ÈôÒª¹Ø±Õ¿ò¼Ü£¬Ö»Ğè·¢ËÍ WM_CLOSE£¬
-	// ÕâÏàµ±ÓÚ´ÓÏµÍ³²Ëµ¥ÖĞÑ¡Ôñ¹Ø±Õ¡£
+	// è‹¥è¦å…³é—­æ¡†æ¶ï¼Œåªéœ€å‘é€ WM_CLOSEï¼Œ
+	// è¿™ç›¸å½“äºä»ç³»ç»Ÿèœå•ä¸­é€‰æ‹©å…³é—­ã€‚
 	SendMessage(WM_CLOSE);
 }
 
@@ -82,11 +82,11 @@ int CQueryFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CMDIChildWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// ´´½¨Ò»¸öÊÓÍ¼ÒÔÕ¼ÓÃ¿ò¼ÜµÄ¹¤×÷Çø
+	// åˆ›å»ºä¸€ä¸ªè§†å›¾ä»¥å ç”¨æ¡†æ¶çš„å·¥ä½œåŒº
 	if (!m_wndView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
 		CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL))
 	{
-		TRACE0("Î´ÄÜ´´½¨ÊÓÍ¼´°¿Ú\n");
+		TRACE0("æœªèƒ½åˆ›å»ºè§†å›¾çª—å£\n");
 		return -1;
 	}
 
@@ -110,12 +110,12 @@ void CQueryFrame::OnSetFocus(CWnd* pOldWnd)
 
 BOOL CQueryFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
-	// ÈÃÊÓÍ¼µÚÒ»´Î³¢ÊÔ¸ÃÃüÁî
+	// è®©è§†å›¾ç¬¬ä¸€æ¬¡å°è¯•è¯¥å‘½ä»¤
 	if (m_wndView.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
 
 	//NM_CLICK;
-	// mQueryResult¿Ø¼şÏûÏ¢
+	// mQueryResultæ§ä»¶æ¶ˆæ¯
 	if (nID == QUERY_LIST_CTRL_ID)
 	{
 		//TRACE2("nID = %d, nCode = %d\n", nID, nCode);
@@ -124,7 +124,7 @@ BOOL CQueryFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO
 		return TRUE;
 	}
 
-	// ·ñÔò£¬Ö´ĞĞÄ¬ÈÏ´¦Àí
+	// å¦åˆ™ï¼Œæ‰§è¡Œé»˜è®¤å¤„ç†
 	return CMDIChildWndEx::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
@@ -157,14 +157,14 @@ void CQueryFrame::queryCtrlMsg(int nCode)
 bool CQueryFrame::InsertItem(std::vector<RecogResultW> *pRecog)
 {
 	mQueryResult.InsertItem(pRecog);
-	/*mQueryResult.InsertColumn(0, _T("Ê±¼ä"), LVCFMT_CENTER, 150);
-	mQueryResult.InsertColumn(1, _T("ÌõĞÎÂë"), LVCFMT_CENTER, 150);
-	mQueryResult.InsertColumn(2, _T("¶ÔÕÕÂë"), LVCFMT_CENTER, 50);
-	mQueryResult.InsertColumn(3, _T("¶ÔÕÕÂë"), LVCFMT_CENTER, 50);
-	mQueryResult.InsertColumn(4, _T("Ê¶±ğÀàĞÍ"), LVCFMT_CENTER, 150);
-	mQueryResult.InsertColumn(5, _T("ÊäÈëÀàĞÍ"), LVCFMT_CENTER, 150);
-	mQueryResult.InsertColumn(6, _T("¹ÜÀíÔ±ÓÃ»§Ãû"), LVCFMT_CENTER, 100);
-	mQueryResult.InsertColumn(7, _T("²úÏß±àºÅ"), LVCFMT_CENTER, 100);*/
+	/*mQueryResult.InsertColumn(0, _T("æ—¶é—´"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(1, _T("æ¡å½¢ç "), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(2, _T("å¯¹ç…§ç "), LVCFMT_CENTER, 50);
+	mQueryResult.InsertColumn(3, _T("å¯¹ç…§ç "), LVCFMT_CENTER, 50);
+	mQueryResult.InsertColumn(4, _T("è¯†åˆ«ç±»å‹"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(5, _T("è¾“å…¥ç±»å‹"), LVCFMT_CENTER, 150);
+	mQueryResult.InsertColumn(6, _T("ç®¡ç†å‘˜ç”¨æˆ·å"), LVCFMT_CENTER, 100);
+	mQueryResult.InsertColumn(7, _T("äº§çº¿ç¼–å·"), LVCFMT_CENTER, 100);*/
 	
 	return true;
 }

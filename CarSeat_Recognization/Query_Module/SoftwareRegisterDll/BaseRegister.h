@@ -6,6 +6,12 @@
 #define REDISTER_DLL_API __declspec(dllimport)
 #endif
 
+enum registerType
+{
+	SINGLE_DEVICE,
+	MULTI_DEVICE
+};
+
 struct registerNode
 {
 	unsigned int m_nVersion;
@@ -13,6 +19,7 @@ struct registerNode
 	unsigned int m_nBeginTime;
 	unsigned int m_szEndTime;
 	char m_szRandomKey[20];
+	registerType m_type;
 	unsigned long long m_nRegisterLimit;
 };
 

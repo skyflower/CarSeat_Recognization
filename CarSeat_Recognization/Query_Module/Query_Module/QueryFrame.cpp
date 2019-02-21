@@ -1,4 +1,4 @@
-// 这段 MFC 示例源代码演示如何使用 MFC Microsoft Office Fluent 用户界面 
+﻿// 这段 MFC 示例源代码演示如何使用 MFC Microsoft Office Fluent 用户界面 
 // (“Fluent UI”)。该示例仅供参考，
 // 用以补充《Microsoft 基础类参考》和 
 // MFC C++ 库软件随附的相关电子文档。  

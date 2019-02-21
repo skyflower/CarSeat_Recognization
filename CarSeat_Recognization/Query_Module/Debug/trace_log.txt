@@ -1,2 +1,0 @@
-Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xFFFFFFFF
-Error	[CNetworkTask::IsReachable,48]icmpSendEcho failed clientIp = 0xC0A80104, ServerIp = 0xFFFFFFFF

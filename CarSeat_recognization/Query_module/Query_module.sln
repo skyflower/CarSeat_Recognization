@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoftwareRegisterDll", "Soft
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "generateRegisterCode", "generateRegisterCode\generateRegisterCode.vcxproj", "{55B26281-72A3-4D76-9DA2-C17E5E7F0A19}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_library", "common_library\common_library.vcxproj", "{3AF6756E-952E-4E03-9F96-10DC7E9896B4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinyxml", "xml\tinyxml_lib.vcxproj", "{C406DAEC-0886-4771-8DEA-9D7329B46CC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -49,6 +53,26 @@ Global
 		{55B26281-72A3-4D76-9DA2-C17E5E7F0A19}.Release|x64.Build.0 = Release|x64
 		{55B26281-72A3-4D76-9DA2-C17E5E7F0A19}.Release|x86.ActiveCfg = Release|Win32
 		{55B26281-72A3-4D76-9DA2-C17E5E7F0A19}.Release|x86.Build.0 = Release|Win32
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Debug|ARM.ActiveCfg = Debug|ARM
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Debug|ARM.Build.0 = Debug|ARM
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Debug|x64.ActiveCfg = Debug|x64
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Debug|x64.Build.0 = Debug|x64
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Debug|x86.ActiveCfg = Debug|Win32
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Debug|x86.Build.0 = Debug|Win32
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Release|ARM.ActiveCfg = Release|ARM
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Release|ARM.Build.0 = Release|ARM
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Release|x64.ActiveCfg = Release|x64
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Release|x64.Build.0 = Release|x64
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Release|x86.ActiveCfg = Release|Win32
+		{3AF6756E-952E-4E03-9F96-10DC7E9896B4}.Release|x86.Build.0 = Release|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Debug|ARM.ActiveCfg = Debug|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Debug|x64.ActiveCfg = Debug|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Debug|x86.ActiveCfg = Debug|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Debug|x86.Build.0 = Debug|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Release|ARM.ActiveCfg = Release|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Release|x64.ActiveCfg = Release|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Release|x86.ActiveCfg = Release|Win32
+		{C406DAEC-0886-4771-8DEA-9D7329B46CC1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

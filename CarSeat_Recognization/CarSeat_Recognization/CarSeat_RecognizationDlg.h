@@ -178,4 +178,6 @@ public:
 	afx_msg void OnEnableUsrInput();
 	afx_msg void OnEnableObtainBarcode();
 	afx_msg void OnEnableAlarm();
+	afx_msg void OnAbout();
+	afx_msg void OnRegisterSoftware();
 };

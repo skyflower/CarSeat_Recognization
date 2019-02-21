@@ -676,5 +676,47 @@ namespace utils
 		return true;
 	}
 
+	std::string randomStr(int length)
+	{
+		std::function<int()> LogisticRandChar = []()->int
+		{
+			static double x = 0.1499999;
+			const size_t L = 20;
+			double tmpValue = (clock() & 0xFFFFFFFF) / static_cast<double>(0xFFFFFFFF);
+			x = x + tmpValue;
+			if (x > 1)
+			{
+				x = x - 1;
+			}
+			for (size_t i = 0; i < L; ++i)
+			{
+				x = 3.999999 * x * (1 - x);
+			}
+			int result = x * 10000000;
+			result = result % 26;
+			return result;
+		};
+		if (length <= 0)
+		{
+			return std::string();
+		}
+		char *buffer = new char[length + 1];
+		if (buffer == NULL)
+		{
+			return std::string();
+		}
+		memset(buffer, 0, sizeof(char) * (length + 1));
+		for (int i = 0; i < length; ++i)
+		{
+			buffer[i] = LogisticRandChar() + 'A';
+		}
+		std::string result(buffer);
+		
+		delete buffer;
+		buffer = NULL;
+
+		return result;
+	}
+
 
 }

@@ -15,6 +15,7 @@
 #include "QueryDlg.h"
 #include "./common/RecogResultManager.h"
 #include "./Camera/Camera/CameraEventListener.h"
+#include "RegisterDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -137,6 +138,8 @@ BEGIN_MESSAGE_MAP(CCarSeat_RecognizationDlg, CDHtmlDialog)
 	ON_COMMAND(ID_ENABLE_USR_INPUT, &CCarSeat_RecognizationDlg::OnEnableUsrInput)
 	ON_COMMAND(ID_ENABLE_OBTAIN_BARCODE, &CCarSeat_RecognizationDlg::OnEnableObtainBarcode)
 	ON_COMMAND(ID_ENABLE_ALARM, &CCarSeat_RecognizationDlg::OnEnableAlarm)
+	ON_COMMAND(ID_ABOUT, &CCarSeat_RecognizationDlg::OnAbout)
+	ON_COMMAND(ID_REGISTER_SOFTWARE, &CCarSeat_RecognizationDlg::OnRegisterSoftware)
 END_MESSAGE_MAP()
 
 
@@ -1202,6 +1205,9 @@ void CCarSeat_RecognizationDlg::OnClose()
 {
 	_pictureBox.stopUpdate();
 
+	//WSACancelBlockingCall();
+
+	
 	WriteInfo("closing");
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	//WriteInfo("next set ui thread status");
@@ -1226,7 +1232,7 @@ void CCarSeat_RecognizationDlg::OnClose()
 	{
 		m_pLineCamera->close();
 	}
-	//WriteInfo("thread status false");
+	WriteInfo("thread status false");
 
 	if (_model != nullptr)
 	{
@@ -1770,4 +1776,21 @@ void CCarSeat_RecognizationDlg::OnEnableAlarm()
 	AfxGetMainWnd()->Invalidate();
 	flag = !flag;
 	m_pLabelManager->SetAlarmFunction(flag);
+}
+
+
+void CCarSeat_RecognizationDlg::OnAbout()
+{
+	// TODO: 在此添加命令处理程序代码
+	CAboutDlg dlg;
+	dlg.DoModal();
+}
+
+
+void CCarSeat_RecognizationDlg::OnRegisterSoftware()
+{
+	// TODO: 在此添加命令处理程序代码
+	CRegisterDlg dlg;
+
+
 }

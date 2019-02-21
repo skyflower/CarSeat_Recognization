@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "RecogInfoCtrl.h"
 //#include "ConditonDlg.h"
 #include "ConditionFilter.h"
@@ -26,14 +26,14 @@ CRecogInfoCtrl::~CRecogInfoCtrl()
 
 void CRecogInfoCtrl::initColumn()
 {
-	InsertColumn(0, _T("时间"), LVCFMT_CENTER, 150);
-	InsertColumn(1, _T("条形码"), LVCFMT_CENTER, 150);
-	InsertColumn(2, _T("对照码"), LVCFMT_CENTER, 50);
-	InsertColumn(3, _T("条形码类型"), LVCFMT_CENTER, 150);
-	InsertColumn(4, _T("识别类型"), LVCFMT_CENTER, 150);
-	InsertColumn(5, _T("输入类型"), LVCFMT_CENTER, 150);
-	InsertColumn(6, _T("管理员用户名"), LVCFMT_CENTER, 100);
-	InsertColumn(7, _T("产线编号"), LVCFMT_CENTER, 100);
+	InsertColumn(0, L"时间", LVCFMT_CENTER, 150);
+	InsertColumn(1, L"条形码", LVCFMT_CENTER, 150);
+	InsertColumn(2, L"对照码", LVCFMT_CENTER, 50);
+	InsertColumn(3, L"条形码类型", LVCFMT_CENTER, 150);
+	InsertColumn(4, L"识别类型", LVCFMT_CENTER, 150);
+	InsertColumn(5, L"输入类型", LVCFMT_CENTER, 150);
+	InsertColumn(6, L"管理员用户名", LVCFMT_CENTER, 100);
+	InsertColumn(7, L"产线编号", LVCFMT_CENTER, 100);
 }
 
 

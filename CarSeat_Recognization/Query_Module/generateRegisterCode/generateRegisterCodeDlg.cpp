@@ -6,6 +6,7 @@
 #include "generateRegisterCode.h"
 #include "generateRegisterCodeDlg.h"
 #include "afxdialogex.h"
+#include "utils.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -106,6 +107,34 @@ BOOL CgenerateRegisterCodeDlg::OnInitDialog()
 	//int ret = pRegister->CheckRegisterCode(nullptr, 0);
 	//TRACE1("ret = %d\n", ret);
 
+	char *szCpuID = getCPU_ID();
+	char *szDiskID = getDiskID();
+	char tmpCode[1024];
+	memset(tmpCode, 0, sizeof(tmpCode));
+	sprintf_s(tmpCode, sizeof(tmpCode) / sizeof(tmpCode[0]), "%s%s", szCpuID, szDiskID);
+
+	wchar_t *pSzWCode = utils::CharToWChar(tmpCode);
+	if (pSzWCode != nullptr)
+	{
+		GetDlgItem(IDC_EDIT_MACHINE_CODE)->SetWindowTextW(pSzWCode);
+		delete pSzWCode;
+		pSzWCode = nullptr;
+	}
+
+	std::string tmpRandomStr = utils::randomStr(16);
+	std::wstring tmpWRandomStr = utils::StrToWStr(tmpRandomStr);
+	GetDlgItem(IDC_EDIT_RANDOM_KEYS)->SetWindowTextW(tmpWRandomStr.c_str());
+
+
+	//registerNode node;
+	//memset(&node, 0, sizeof(node));
+	//node.m_nVersion = 1;
+	//sprintf(node.m_szMachineCode, "%s%s", szCpuID, szDiskID);
+
+
+
+
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -162,13 +191,163 @@ HCURSOR CgenerateRegisterCodeDlg::OnQueryDragIcon()
 
 registerNode CgenerateRegisterCodeDlg::getRegisterInfo()
 {
+	//char *szCpuID = getCPU_ID();
+	//char *szDiskID = getDiskID();
+	registerNode node;
+	memset(&node, 0, sizeof(node));
+	node.m_nVersion = 1;
+	//sprintf(node.m_szMachineCode, "%s%s", szCpuID, szDiskID);
+	SYSTEMTIME curTime;
+	GetSystemTime(&curTime);
+	((CDateTimeCtrl*)GetDlgItem(IDC_DATETIMEPICKER_BEGIN_TIME))->GetTime(&curTime);
+	
+	int durationDay = GetDlgItemInt(IDC_EDIT_TIME_DURATION, NULL);
+	int registerLimit = GetDlgItemInt(IDC_EDIT_REGISTER_LIMIT, NULL);
+	wchar_t randomKey[100];
+	memset(randomKey, 0, sizeof(randomKey));
+	((CEdit*)GetDlgItem(IDC_EDIT_RANDOM_KEYS))->GetWindowText(randomKey, sizeof(randomKey)/sizeof(randomKey[0]));
 
-	return registerNode();
+	if (wcslen(randomKey) != 0)
+	{
+		char *tmp = utils::WCharToChar(randomKey);
+		if (tmp != nullptr)
+		{
+			memcpy(node.m_szRandomKey, tmp, strlen(tmp));
+		}
+		delete[]tmp;
+		tmp = nullptr;
+	}
+
+	wchar_t machineCode[1024];
+	GetDlgItemText(IDC_EDIT_MACHINE_CODE, machineCode, sizeof(machineCode) / sizeof(machineCode[0]));
+
+	node.m_nRegisterLimit = registerLimit;
+	
+	if (wcslen(machineCode) != 0)
+	{
+		char *tmp = utils::WCharToChar(machineCode);
+		if (tmp != nullptr)
+		{
+			memcpy(node.m_szMachineCode, tmp, strlen(tmp));
+		}
+		delete[]tmp;
+		tmp = nullptr;
+	}
+	time_t tmpSecTime;
+	struct tm tmpTime;
+	tmpTime.tm_year = curTime.wYear - 1900;
+	tmpTime.tm_mon = curTime.wMonth - 1;
+	tmpTime.tm_mday = curTime.wDay;
+	tmpTime.tm_hour = curTime.wHour;
+	tmpTime.tm_sec = curTime.wSecond;
+	tmpTime.tm_min = curTime.wMinute;
+	tmpTime.tm_wday = curTime.wDayOfWeek;
+	
+	tmpSecTime = mktime(&tmpTime);
+	
+	node.m_nBeginTime = tmpSecTime;
+	node.m_szEndTime = durationDay * 86400 + tmpSecTime;
+
+	return node;
 }
 
 void CgenerateRegisterCodeDlg::OnBnClickedButtonDecipher()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	//registerNode node;
+	registerNode node = getRegisterInfo();
 	
+	CBaseRegister *pRegister = createRegisterManager();
+	if (pRegister != nullptr)
+	{
+		int len = sizeof(node);
+		char *code = pRegister->GenerateRegisterCode(&node, &len);
+		if (code == nullptr)
+		{
+			destroyRegisterManager(pRegister);
+			pRegister = nullptr;
+			return;
+		}
+
+		char *buffer = new char[2 * len + 2];
+		memset(buffer, 0, sizeof(char) * (2 * len + 2));
+		unsigned char *pUchar = (unsigned char*)code;
+		for (int i = 0; i < len; ++i)
+		{
+			int tmp = pUchar[i];
+			sprintf_s(buffer + 2 * i, 2 * len - 2 * i+2, "%02X", tmp);
+		}
+
+
+		wchar_t *wCode = utils::CharToWChar(buffer);
+		GetDlgItem(IDC_EDIT_REGISTER_CODE)->SetWindowTextW(wCode);
+		
+		delete[]wCode;
+		wCode = nullptr;
+		
+		delete[]code;
+		code = nullptr;
+
+		delete[]buffer;
+		buffer = nullptr;
+
+		destroyRegisterManager(pRegister);
+
+		pRegister = nullptr;
+	}
+
 }
+
+
+
+char *CgenerateRegisterCodeDlg::getCPU_ID()
+{
+	int s1, s2;
+	static char CPUID_1[1024];
+	char CPUID_2[1024];
+	__asm
+	{
+		mov eax, 01h
+		xor edx, edx
+		cpuid
+		mov s1, edx
+		mov s2, eax
+	}
+	sprintf_s(CPUID_1, "%08X%08X", s1, s2);
+	__asm
+	{
+		mov eax, 03h
+		xor ecx, ecx
+		xor edx, edx
+		cpuid
+		mov s1, edx
+		mov s2, ecx
+	}
+	sprintf_s(CPUID_2, "%08X%08X", s1, s2);
+	strcat_s(CPUID_1, CPUID_2);
+	return CPUID_1;
+}
+
+char *CgenerateRegisterCodeDlg::getDiskID()
+{
+	try
+	{
+		static char id[1024];
+		wchar_t Name[MAX_PATH];
+		DWORD serno;
+		DWORD length;
+		DWORD FileFlag;
+		wchar_t FileName[MAX_PATH];
+		BOOL Ret;
+		Ret = GetVolumeInformation(L"C:\\", Name, MAX_PATH, &serno, &length, &FileFlag, FileName, MAX_PATH);
+		if (Ret)
+		{
+			sprintf_s(id, "%08X", serno);
+		}
+		return id;
+	}
+	catch (...)
+	{
+		return "";
+	}
+}
+

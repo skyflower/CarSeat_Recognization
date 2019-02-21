@@ -54,9 +54,6 @@
     <ClInclude Include="common\Log.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="common\md5.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="common\ParamManager.h">
       <Filter>common</Filter>
     </ClInclude>
@@ -117,9 +114,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="common\Log.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="common\md5.cpp">
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="common\ParamManager.cpp">

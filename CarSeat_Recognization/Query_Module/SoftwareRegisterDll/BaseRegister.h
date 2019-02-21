@@ -8,9 +8,10 @@
 
 struct registerNode
 {
+	unsigned int m_nVersion;
 	char m_szMachineCode[200];
-	char m_szBeginTime[20];
-	char m_szEndTime[20];
+	unsigned int m_nBeginTime;
+	unsigned int m_szEndTime;
 	char m_szRandomKey[20];
 	unsigned long long m_nRegisterLimit;
 };
@@ -28,5 +29,6 @@ public:
 extern "C"
 {
 	REDISTER_DLL_API  CBaseRegister *createRegisterManager();
+
 	REDISTER_DLL_API void destroyRegisterManager(CBaseRegister* pRegister);
 }

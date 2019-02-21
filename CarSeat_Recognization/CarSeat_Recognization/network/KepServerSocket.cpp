@@ -185,7 +185,7 @@ SOCKET CKepServerSocket::initSocket(unsigned int ip, unsigned int port)
 	nNetTimeout = 1;
 	setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&nNetTimeout, sizeof(int));
 
-
+	
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.S_un.S_addr = htonl(ip);

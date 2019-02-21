@@ -78,5 +78,7 @@ namespace utils
 
 	bool saveFile(char *buffer, size_t bufferLength, char *filePath);
 
+	std::string randomStr(int length);
+
 };
 

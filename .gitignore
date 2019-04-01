@@ -446,3 +446,7 @@ CarSeat_Recognization/CarSeat_Recognization/Log/Log_20181003_122716.txt
 CarSeat_Recognization/Query_Module/Debug/Log/Log_20190108_075930.txt
 CarSeat_Recognization/Query_Module/Query_module.VC.db
 CarSeat_Recognization/Query_Module/Query_module.VC.db
+*.tlog
+CarSeat_Recognization/x64/Release/工控机端.zip
+CarSeat_Recognization/服务器端程序.zip
+*.obj

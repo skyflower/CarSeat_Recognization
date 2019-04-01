@@ -123,8 +123,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;shlwapi.lib;EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Python_v3.5.2_x64/amd64/Debug;./Camera/Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;shlwapi.lib;EDSDK.lib;libcommon.lib;SoftwareRegisterDll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Python_v3.5.2_x64/amd64/Debug;./Camera/Library;../x64/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -181,8 +181,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3.lib;python35.lib;EDSDK.lib;label_image_command_line_two.cp35-win_amd64.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Python_v3.5.2_x64/amd64/Release;./Camera/Library;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Ws2_32.lib;Iphlpapi.lib;%(AdditionalDependencies);python3.lib;python35.lib;EDSDK.lib;label_image_command_line_two.cp35-win_amd64.lib;libcommon.lib;SoftwareRegisterDll.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Python_v3.5.2_x64/amd64/Release;./Camera/Library;../x64/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

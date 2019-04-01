@@ -39,10 +39,6 @@ protected:
 private:
 	registerNode getRegisterInfo();
 
-
-	char *getDiskID();
-	char *getCPU_ID();
-
 public:
 	afx_msg void OnBnClickedButtonDecipher();
 };

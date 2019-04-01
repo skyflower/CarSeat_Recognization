@@ -88,6 +88,7 @@ std::string CLineCamera::saveJpg()
 {
 	_btnTakePicture.OnClicked();
 	WriteInfo("saveJpg Camera, m_nStatus = %d", m_nStatus);
+	memset(m_szCurImagePath, 0, sizeof(m_szCurImagePath));
 	return std::string();
 }
 

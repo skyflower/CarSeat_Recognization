@@ -320,6 +320,7 @@ void CQuery_ModuleApp::OnButtonBarcode()
 	条形码对照表
 	*/
 	//TRACE0("edit barcode\n");
+	WriteInfo("edit barcode");
 	CBarcodeCheck dlg;
 	dlg.SetTypePointer(m_pParamManager->GetBarcodeType(), m_pParamManager->GetClassifyType());
 	INT_PTR ret = dlg.DoModal();

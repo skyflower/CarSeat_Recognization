@@ -107,12 +107,8 @@ BOOL CgenerateRegisterCodeDlg::OnInitDialog()
 	//int ret = pRegister->CheckRegisterCode(nullptr, 0);
 	//TRACE1("ret = %d\n", ret);
 
-	char *szCpuID = getCPU_ID();
-	char *szDiskID = getDiskID();
-	char tmpCode[1024];
-	memset(tmpCode, 0, sizeof(tmpCode));
-	sprintf_s(tmpCode, sizeof(tmpCode) / sizeof(tmpCode[0]), "%s%s", szCpuID, szDiskID);
-
+	char *tmpCode = getDeviceMachineCode();
+	
 	wchar_t *pSzWCode = utils::CharToWChar(tmpCode);
 	if (pSzWCode != nullptr)
 	{
@@ -124,16 +120,6 @@ BOOL CgenerateRegisterCodeDlg::OnInitDialog()
 	std::string tmpRandomStr = utils::randomStr(16);
 	std::wstring tmpWRandomStr = utils::StrToWStr(tmpRandomStr);
 	GetDlgItem(IDC_EDIT_RANDOM_KEYS)->SetWindowTextW(tmpWRandomStr.c_str());
-
-
-	//registerNode node;
-	//memset(&node, 0, sizeof(node));
-	//node.m_nVersion = 1;
-	//sprintf(node.m_szMachineCode, "%s%s", szCpuID, szDiskID);
-
-
-
-
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -222,6 +208,15 @@ registerNode CgenerateRegisterCodeDlg::getRegisterInfo()
 	GetDlgItemText(IDC_EDIT_MACHINE_CODE, machineCode, sizeof(machineCode) / sizeof(machineCode[0]));
 
 	node.m_nRegisterLimit = registerLimit;
+
+	if (node.m_nRegisterLimit > 1)
+	{
+		node.m_type = registerType::MULTI_DEVICE;
+	}
+	else
+	{
+		node.m_type = registerType::SINGLE_DEVICE;
+	}
 	
 	if (wcslen(machineCode) != 0)
 	{
@@ -296,58 +291,3 @@ void CgenerateRegisterCodeDlg::OnBnClickedButtonDecipher()
 	}
 
 }
-
-
-
-char *CgenerateRegisterCodeDlg::getCPU_ID()
-{
-	int s1, s2;
-	static char CPUID_1[1024];
-	char CPUID_2[1024];
-	__asm
-	{
-		mov eax, 01h
-		xor edx, edx
-		cpuid
-		mov s1, edx
-		mov s2, eax
-	}
-	sprintf_s(CPUID_1, "%08X%08X", s1, s2);
-	__asm
-	{
-		mov eax, 03h
-		xor ecx, ecx
-		xor edx, edx
-		cpuid
-		mov s1, edx
-		mov s2, ecx
-	}
-	sprintf_s(CPUID_2, "%08X%08X", s1, s2);
-	strcat_s(CPUID_1, CPUID_2);
-	return CPUID_1;
-}
-
-char *CgenerateRegisterCodeDlg::getDiskID()
-{
-	try
-	{
-		static char id[1024];
-		wchar_t Name[MAX_PATH];
-		DWORD serno;
-		DWORD length;
-		DWORD FileFlag;
-		wchar_t FileName[MAX_PATH];
-		BOOL Ret;
-		Ret = GetVolumeInformation(L"C:\\", Name, MAX_PATH, &serno, &length, &FileFlag, FileName, MAX_PATH);
-		if (Ret)
-		{
-			sprintf_s(id, "%08X", serno);
-		}
-		return id;
-	}
-	catch (...)
-	{
-		return "";
-	}
-}
-

@@ -184,6 +184,7 @@ std::string CImageClassify::compute(const char *filePath)
 		WriteError("m_szCacheImagePath = %s", m_szCacheImagePath);
 		return std::string();
 	}
+	
 	PyObject *presult = PyEval_CallFunction(m_pPyFunc, "ssss", filePath, m_szLabel, m_szGraph, m_szCacheImagePath);
 
 	Py_ssize_t len = 0;
@@ -193,7 +194,14 @@ std::string CImageClassify::compute(const char *filePath)
 	}
 	else
 	{
-		WriteError("presult is null");
+		if (_access_s(filePath, 6) == 0)
+		{
+			WriteError("classify compute failed, image is exits, filePath: = %s", filePath);
+		}
+		else
+		{
+			WriteError("classify compute failed, image is not exits, filePath = %s", filePath);
+		}
 	}
 
 	

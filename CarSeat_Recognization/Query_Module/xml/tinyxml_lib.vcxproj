@@ -86,7 +86,7 @@
     </ResourceCompile>
     <Lib>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>../Release/tinyxml.lib</OutputFile>
+      <OutputFile>../../Release/tinyxml.lib</OutputFile>
     </Lib>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -110,7 +110,7 @@
     </ResourceCompile>
     <Lib>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>../../x64/Debug/tinyxml.lib</OutputFile>
+      <OutputFile>../../Debug/tinyxml.lib</OutputFile>
     </Lib>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -120,6 +120,14 @@
     <Link>
       <OutputFile>$(OutDir)/libtinyxml.lib</OutputFile>
     </Link>
+    <Lib>
+      <OutputFile>../../x64/Debug/</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Lib>
+      <OutputFile>../../x64/Release/</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="tinystr.cpp">

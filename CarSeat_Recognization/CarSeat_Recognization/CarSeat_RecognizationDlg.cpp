@@ -16,6 +16,8 @@
 #include "./common/RecogResultManager.h"
 #include "./Camera/Camera/CameraEventListener.h"
 #include "RegisterDlg.h"
+#include "../Query_Module/SoftwareRegisterDll/BaseRegister.h"
+#include "../Query_Module/SoftwareRegisterDll/TimeRegister.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -460,7 +462,6 @@ void CCarSeat_RecognizationDlg::run()
 						break;
 					}
 				}
-
 			}
 		}
 		else
@@ -523,8 +524,10 @@ void CCarSeat_RecognizationDlg::run()
 					_wmkdir(movedPath);
 				}
 				memset(movedPath, 0, sizeof(movedPath));
-				wsprintf(movedPath, L"%s\\%s\\%s\\%s_%s_%s.jpg", \
-					tmpDateDirectory, tmpCurDate, tmpWCode.c_str(), tmpCurDate, tmpCurTime, tmpWReType.c_str());
+
+				std::wstring tmpWBarcode = utils::StrToWStr(tmpBarcode);
+				wsprintf(movedPath, L"%s\\%s\\%s\\%s_%s_%s_%s.jpg", \
+					tmpDateDirectory, tmpCurDate, tmpWCode.c_str(), tmpCurDate, tmpCurTime, tmpWReType.c_str(), tmpWBarcode.c_str());
 				
 				if (TRUE == MoveFile(tmpPath.c_str(), movedPath))
 				{
@@ -1791,6 +1794,9 @@ void CCarSeat_RecognizationDlg::OnRegisterSoftware()
 {
 	// TODO: 在此添加命令处理程序代码
 	CRegisterDlg dlg;
-
+	//char *szMachineCode = getdeviceMachine
+	char *szMachineCode = getDeviceMachineCode();
+	dlg.SetMachineCode(szMachineCode, strlen(szMachineCode));
+	dlg.DoModal();
 
 }

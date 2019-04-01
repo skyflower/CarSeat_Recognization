@@ -1,10 +1,19 @@
-#pragma once
+﻿#pragma once
 
-#ifdef REDISTER_DLL_EXPORTS
-#define REDISTER_DLL_API __declspec(dllexport)
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <Windows.h>
+#include <IPHlpApi.h>
+
+#ifdef REGISTER_DLL_EXPORTS
+#define REGISTER_DLL_API __declspec(dllexport)
 #else
-#define REDISTER_DLL_API __declspec(dllimport)
+#define REGISTER_DLL_API __declspec(dllimport)
 #endif
+
+#pragma comment(lib, "Iphlpapi.lib")
+
 
 enum registerType
 {
@@ -23,6 +32,9 @@ struct registerNode
 	unsigned long long m_nRegisterLimit;
 };
 
+char *getDiskID();
+bool GetMACaddress(char *macAddress, int len);
+
 
 class CBaseRegister
 {
@@ -35,7 +47,9 @@ public:
 
 extern "C"
 {
-	REDISTER_DLL_API  CBaseRegister *createRegisterManager();
+	REGISTER_DLL_API char *getDeviceMachineCode();
 
-	REDISTER_DLL_API void destroyRegisterManager(CBaseRegister* pRegister);
+	REGISTER_DLL_API  CBaseRegister *createRegisterManager();
+
+	REGISTER_DLL_API void destroyRegisterManager(CBaseRegister* pRegister);
 }

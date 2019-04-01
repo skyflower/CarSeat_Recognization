@@ -136,6 +136,8 @@ void CBarcodeCheck::OnNMDblclkBarcodeChecklist(NMHDR *pNMHDR, LRESULT *pResult)
 	
 	CCheckListDlg dlg;
 
+	WriteInfo("index = %d", index);
+
 	dlg.SetCheckListData(data);
 	
 	if (IDOK == dlg.DoModal())

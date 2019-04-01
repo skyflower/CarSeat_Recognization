@@ -129,11 +129,14 @@ def get_image_path(image_lists, label_name, index, image_dir, category):
       File system path string to an image that meets the requested parameters.
 
     """
+    #print(image_lists)
+    
     if label_name not in image_lists:
         tf.logging.fatal('Label does not exist %s.', label_name)
     label_lists = image_lists[label_name]
     if category not in label_lists:
         tf.logging.fatal('Category does not exist %s.', category)
+    print(label_lists)
     category_list = label_lists[category]
     if not category_list:
         tf.logging.fatal('Label %s has no images in the category %s.',
@@ -1261,7 +1264,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--train_batch_size',
         type=int,
-        default=10,
+        default=5,
         help='How many images to train on at a time.'
     )
     parser.add_argument(
@@ -1278,7 +1281,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--validation_batch_size',
         type=int,
-        default=10,
+        default=5,
         help="""\
       How many images to use in an evaluation batch. This validation set is
       used much more often than the test set, and is an early indicator of how

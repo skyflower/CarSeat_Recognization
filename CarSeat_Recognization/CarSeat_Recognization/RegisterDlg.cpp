@@ -48,12 +48,23 @@ BOOL CRegisterDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 
-	wchar_t info[] = L"请按照以下步骤注册软件："
-		"1.请将%s，以及软件注册类型（单台设备注册、10台设备以上批量注册）通过邮件发送给软件服务部门。"
-		"2.将需要注册的设备连接到互联网"
-		"3.将软件服务部门发送的软件注册码输入到右边的编辑框中，然后点击确定。（确保这个过程设备一直处于网络连接状态）";
+	wchar_t info[] = L"请按照以下步骤注册软件：\n"
+		"1.请将%s，以及软件注册类型（单台设备注册、10台设备以上批量注册）通过邮件发送给软件服务部门。\n"
+		"2.将需要注册的设备连接到互联网\n"
+		"3.将软件服务部门发送的软件注册码输入到右边的编辑框中，然后点击确定。（确保这个过程设备一直处于网络连接状态）\n";
 
-	GetDlgItem(IDC_STATIC_REGISTER_INFO)->SetWindowTextW(info);
+	wchar_t tmpInfo[1000];
+	wchar_t *wCode = utils::CharToWchar(m_szMachineCode);
+	if (wCode != nullptr)
+	{
+		wsprintfW(tmpInfo, info, wCode);
+
+		GetDlgItem(IDC_STATIC_REGISTER_INFO)->SetWindowTextW(tmpInfo);
+
+		delete[]wCode;
+		wCode = nullptr;
+	}
+	
 
 
 

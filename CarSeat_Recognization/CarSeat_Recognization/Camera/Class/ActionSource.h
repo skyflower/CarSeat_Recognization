@@ -6,7 +6,6 @@
 #include "ActionEvent.h"
 #include "ActionListener.h" 
 #include "../../common/utils.h"
-//#include "../../CarSeat_RecognizationDlg.h"
 #include "CameraModel.h"
 
 
@@ -15,7 +14,6 @@ private:
 	std::vector<ActionListener*> _listeners;
 	std::string _command;
 	
-	//CCarSeat_RecognizationDlg *m_pHwnd;
 protected:
 
 	CameraModel *getCameraModel()

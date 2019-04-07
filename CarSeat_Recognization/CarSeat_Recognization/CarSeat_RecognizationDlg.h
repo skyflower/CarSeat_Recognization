@@ -130,6 +130,8 @@ private:
 
 	void setupObserver(Observable* ob);
 
+	void main_loop();
+
 
 public:
 	afx_msg void OnUsrinput();
@@ -145,6 +147,7 @@ public:
 	bool SetLabelManager(CLabelManager *pLabelManager);
 
 	virtual void update(Observable* from, CameraEvent *e);
+
 	void setCameraController(CameraController* controller) { _controller = controller; }
 
 

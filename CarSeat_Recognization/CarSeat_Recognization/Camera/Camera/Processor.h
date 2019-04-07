@@ -110,16 +110,7 @@ public:
 			Command* command = take();
 			if(command != NULL)
 			{
-				//std::string commandName(typeid(*command).raw_name());
-				//if ((strstr(commandName.c_str(), "AVGetPropertyCommand") == NULL)	\
-				//	&& (strstr(commandName.c_str(), "AVDownloadEvfCommand") == NULL)	\
-				//	&& (strstr(commandName.c_str(), "AVGetPropertyDescCommand") == NULL))
-				{
-					//WriteInfo("command type = %s\n", commandName.c_str());
-				}
-				//WriteInfo("before command type = %s", typeid(*command).raw_name());
 				bool complete = command->execute();
-				//WriteInfo("after command type = %s", typeid(*command).raw_name());
 				if((complete == false) && (command->getFailedCount() < 5))
 				{
 					//If commands that were issued fail ( because of DeviceBusy or other reasons )
@@ -127,14 +118,8 @@ public:
 					// commands are issued in succession without an intervening interval.
 					//Thus, leave an interval of about 500 ms before commands are reissued.
 					Sleep(500);
-					std::string commandName(typeid(*command).raw_name());
-					//if ((strstr(commandName.c_str(), "AVGetPropertyCommand") == NULL)	\
-					//	&& (strstr(commandName.c_str(), "AVDownloadEvfCommand") == NULL)	\
-					//	&& (strstr(commandName.c_str(), "AVGetPropertyDescCommand") == NULL))
-					{
-						//WriteInfo("execute failed, command type = %s\n", commandName.c_str());
-					}
-					//if (command->getFailedCount() < 5)
+					//std::string commandName(typeid(*command).raw_name());
+					
 					{
 						enqueue(command);
 					}
@@ -142,13 +127,7 @@ public:
 				}
 				else
 				{
-					//std::string commandName(typeid(*command).raw_name());
-					//if ((strstr(commandName.c_str(), "AVGetPropertyCommand") == NULL)	\
-					//	&& (strstr(commandName.c_str(), "AVDownloadEvfCommand") == NULL)	\
-					//	&& (strstr(commandName.c_str(), "AVGetPropertyDescCommand") == NULL))
-					{
-						//WriteInfo("execute success, command type = %s\n", commandName.c_str());
-					}
+					
 					delete command;
 					command = nullptr;
 				}

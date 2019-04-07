@@ -36,7 +36,10 @@ public:
 	/*
 	读取条形码接口，其他暂时没有实现
 	*/
-	std::string readBarcode(bool flag);
+	///  -1  read error
+	///   0  read correct, but the same with the previous one
+	///   1  read correct, a new one
+	int readBarcode(bool flag, std::string &reCode);
 
 	ErrorType initRFID(unsigned int rfidIp, int port);
 

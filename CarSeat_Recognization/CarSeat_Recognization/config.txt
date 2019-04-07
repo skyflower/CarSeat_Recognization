@@ -21,7 +21,7 @@ barcodeResetParam="0025000000010001"
 ##这个值不建议小于100，也不建议大于1500
 barcodeTimeout="500"
 AlarmFunction="0"
-EdsImageQuality="0x0013ff0f"
+EdsImageQuality="0x0113ff0f"
 
 ##产线对应的相机名称mac地址
 lineCamera={"Line01":"001", "Line02":"002", "Line03":"003"}

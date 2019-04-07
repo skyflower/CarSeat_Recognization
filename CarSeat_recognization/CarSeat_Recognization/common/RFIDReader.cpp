@@ -36,22 +36,37 @@ CRFIDReader::~CRFIDReader()
 	}
 }
 
-std::string CRFIDReader::readBarcode(bool flag)
+int CRFIDReader::readBarcode(bool flag, std::string &reCode)
 {
 	//N160310118880001   6-8位有效
 	if (flag == false)
 	{
-		return getByRandomGenerate();
+		reCode = getByRandomGenerate();
+		return 1;
 	}
 	else
 	{
 		std::string tmpStr = getBySocket();
 		if (tmpStr.size() == 0)
 		{
-			Sleep(400);
+			//// reset()
+			return -1;
 		}
-		return tmpStr;
+		else
+		{
+			if (strncmp(tmpStr.c_str(), m_szCurrentValue, tmpStr.size()) == 0)
+			{
+				return 0;
+			}
+			memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
+			memcpy(m_szCurrentValue, tmpStr.c_str(), tmpStr.size());
+
+			reCode = std::string(m_szCurrentValue);
+
+			return 1;
+		}
 	}
+	return -1;
 }
 
 bool CRFIDReader::init()
@@ -359,24 +374,11 @@ std::string CRFIDReader::getBySocket()
 	if (parseBarcode(barcodeChar, tmpValue) == true)
 	{
 
-		/*for (int i = 0; i < strlen(tmpValue); ++i)
-		{
-			int k = (rand() % 256 + 256) % 256;
-			k = k % 26;
-			tmpValue[i] = 'A' + k;
-		}*/
-
 		/*
 		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
 		// 如果不一样，则表示读取新数据成功
 		*/
-		if (strncmp(tmpValue, m_szCurrentValue, strlen(tmpValue)) == 0)
-		{
-			return std::string();
-		}
-		memset(m_szCurrentValue, 0, sizeof(m_szCurrentValue));
-		memcpy(m_szCurrentValue, tmpValue, strlen(tmpValue));
-
+		
 		std::string barcodeStr(tmpValue);
 		return barcodeStr;
 	}

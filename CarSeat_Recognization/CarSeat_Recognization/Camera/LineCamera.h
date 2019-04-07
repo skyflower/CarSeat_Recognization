@@ -47,11 +47,11 @@ public:
 	void setCurrentImage(const char*file);
 	const char* getCurrentImage();
 
-	unsigned int getImageWidth();
-	unsigned int getImageHeight();
+	//unsigned int getImageWidth();
+	//unsigned int getImageHeight();
 
-	unsigned int setImageWidth(unsigned int width);
-	unsigned int setImageHeight(unsigned int height);
+	//unsigned int setImageWidth(unsigned int width);
+	//unsigned int setImageHeight(unsigned int height);
 
 
 private:

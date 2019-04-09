@@ -124,15 +124,13 @@ bool CLabelManager::init()
 
 	if (true == utils::getValueByName(content, "LoginUsrName", m_strLoginName))
 	{
-		
-		//memcpy(m_strLoginName, tmpValue, strlen(tmpValue));
-		
+		WriteInfo("LoginUsrName = %s", m_strLoginName);
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "LoginPasswd", m_strLoginPasswd))
 	{
-		
+		WriteInfo("LoginPasswd = %s", m_strLoginPasswd);
 		//memcpy(m_strLoginPasswd, tmpValue, strlen(tmpValue));
 		
 	}
@@ -149,6 +147,7 @@ bool CLabelManager::init()
 		{
 			m_bLoginAutoSave = false;
 		}
+		WriteInfo("LoginInfoAutoSave = %s", tmpValue);
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
@@ -163,6 +162,7 @@ bool CLabelManager::init()
 		{
 			m_bUsrInputFunction = false;
 		}
+		WriteInfo("UsrInputFunction = %s", tmpValue);
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
@@ -177,6 +177,7 @@ bool CLabelManager::init()
 		{
 			m_bObtainBarcodeFunction = false;
 		}
+		WriteInfo("ObtainBarcodeFunction = %s", tmpValue);
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
@@ -191,19 +192,20 @@ bool CLabelManager::init()
 		{
 			m_bAlarmFunction = false;
 		}
+		WriteInfo("AlarmFunction = %s", tmpValue);
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "ExposureTimeMax", tmpValue))
 	{
 		m_nExposureTimeMax = atoi(tmpValue);
-		
+		WriteInfo("ExposureTimeMax = %s", tmpValue);
 	}
 
 	memset(tmpValue, 0, sizeof(tmpValue));
 	if (true == utils::getValueByName(content, "ExposureTimeMin", tmpValue))
 	{
-		
+		WriteInfo("ExposureTimeMin = %s", tmpValue);
 		m_nExposureTimeMin = atoi(tmpValue);
 	}
 

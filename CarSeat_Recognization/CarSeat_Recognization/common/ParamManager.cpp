@@ -328,14 +328,18 @@ void CParamManager::Init()
 		if (tmpLocal == 0)
 		{
 			TRACE0("get ServerIp Failed\n");
+			
 		}
+		WriteInfo("serverip = %u", tmpLocal);
 		m_nServerIp = tmpLocal;
 
 		tmpLocal = utils::parseIp(content, "barcodeIp");
 		if (tmpLocal == 0)
 		{
 			TRACE0("get barcodeIp Failed\n");
+			
 		}
+		WriteInfo("barcodeIp = %u", tmpLocal);
 		m_nBarcodeIp = tmpLocal;
 
 		tmpLocal = utils::parseIp(content, "kepServerIp");
@@ -344,6 +348,7 @@ void CParamManager::Init()
 			TRACE0("get kepServerIp Failed\n");
 		}
 		m_nKepServerIp = tmpLocal;
+		WriteInfo("kepServerIp = %u", tmpLocal);
 
 
 		char tmpStr[MAX_CHAR_LENGTH] = { 0 };
@@ -351,24 +356,31 @@ void CParamManager::Init()
 		{
 			m_nServerPort = atoi(tmpStr);
 		}
+		WriteInfo("serverport = %u", m_nServerPort);
+
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "serverImagePort", tmpStr) == true)
 		{
 			m_nServerImagePort = atoi(tmpStr);
 		}
+		WriteInfo("serverport = %d", m_nServerPort);
+
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "kepServerPort", tmpStr) == true)
 		{
 			m_nKepServerPort = atoi(tmpStr);
 		}
+		WriteInfo("kepServerPort = %s", tmpStr);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "EdsImageQuality", tmpStr) == true)
 		{
 			sscanf_s(tmpStr, "%x", &m_nEdsImageQuality);
 		}
+		WriteInfo("EdsImageQuality = %s", tmpStr);
+
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 
@@ -376,30 +388,36 @@ void CParamManager::Init()
 		{
 			m_nTestClientPort = atoi(tmpStr);
 		}
+		WriteInfo("testClientPort = %s", tmpStr);
+
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "barcodePort", tmpStr) == true)
 		{
 			m_nBarcodePort = atoi(tmpStr);
 		}
+		WriteInfo("barcodePort = %s", tmpStr);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "barcodeTimeout", tmpStr) == true)
 		{
 			m_nBarcodeTime = atoi(tmpStr);
 		}
+		WriteInfo("barcodeTimeout = %s", tmpStr);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "testServerPort", tmpStr) == true)
 		{
 			m_nTestServerPort = atoi(tmpStr);
 		}
+		WriteInfo("barcodeTimeout = %s", tmpStr);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "graphFile", tmpStr) == true)
 		{
 			m_szGraphFile = std::string(tmpStr);
 		}
+		WriteInfo("graphFile = %s", tmpStr);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "sendFailedRecog", m_szSendFailedCache) != true)
@@ -407,11 +425,13 @@ void CParamManager::Init()
 			//m_szGraphFile = std::string(tmpStr);
 			WriteError("init config.txt sendFailedRecog Failed");
 		}
+		WriteInfo("m_szSendFailedCache = %s", m_szSendFailedCache);
 
 		if (utils::getValueByName(content, "labelFile", tmpStr) == true)
 		{
 			m_szLabelFile = std::string(tmpStr);
 		}
+		WriteInfo("labelFile = %s", tmpStr);
 		memset(tmpStr, 0, sizeof(tmpStr));
 
 		if (utils::getValueByName(content, "imagePath", m_szImagePath) != true)
@@ -419,29 +439,37 @@ void CParamManager::Init()
 			//////
 			WriteError("init config.txt imagePath error");
 		}
+		WriteInfo("imagePath = %s", m_szImagePath);
+
 		//m_szCacheImagePath
 		if (utils::getValueByName(content, "cacheImagePath", m_szCacheImagePath) != true)
 		{
 			//////
 			WriteError("init config.txt cacheImagePath error");
 		}
+		WriteInfo("cacheImagePath = %s", m_szCacheImagePath);
 
 		if (utils::getValueByName(content, "lineName", m_szLineName) == false)
 		{
 			//////
 			WriteError("init config.txt lineName error");
 		}
+		WriteInfo("lineName = %s", m_szLineName);
+
 		if (utils::getValueByName(content, "cameraName", m_szCameraName) == false)
 		{
 			//////
 			WriteError("init config.txt cameraName error");
 		}
+		WriteInfo("cameraName = %s", m_szCameraName);
+
 		//m_szPatternImagePath
 		if (utils::getValueByName(content, "patternImagePath", m_szPatternImagePath) == false)
 		{
 			//////
 			WriteError("init config.txt patternImagePath error");
 		}
+		WriteInfo("patternImagePath = %s", m_szPatternImagePath);
 
 		//m_szPatternImagePath
 		if (utils::getValueByName(content, "barcodeResetParam", m_szBarcodeResetParam) == false)
@@ -449,6 +477,7 @@ void CParamManager::Init()
 			//////
 			WriteError("init config.txt barcodeResetParam error");
 		}
+		WriteInfo("barcodeResetParam = %s", m_szBarcodeResetParam);
 
 		//WriteInfo("cameraName = %s", m_szCameraName);
 		//memset(tmpStr, 0, sizeof(tmpStr));

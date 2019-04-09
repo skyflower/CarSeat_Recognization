@@ -709,6 +709,7 @@ void CCarSeat_RecognizationDlg::run()
 				WriteInfo("imagePath = [%s],reType = [%s], barcode = [%s]", imagepath.c_str(), reType.c_str(), tmpBarcode.c_str());
 			}
 			CheckAndUpdate(tmpBarcode, reType, imagepath);
+			imagepath = std::string();
 		}
 	}
 }
@@ -834,7 +835,8 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		m_barCode.SetWindowTextW(result);
 	}
 
-	if (barInternalType != typeInternalType)	// 识别类型不匹配
+	if ((barInternalType != typeInternalType)	// 识别类型不匹配
+		||((barInternalType.size() == 0) && (typeInternalType.size() == 0)))
 	{
 		/*
 		添加报警系统，以及人工输入代码

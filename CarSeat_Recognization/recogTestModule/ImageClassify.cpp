@@ -1,5 +1,5 @@
 ﻿#include "ImageClassify.h"
-#include "../common/Log.h"
+#include "Log.h"
 
 CImageClassify::CImageClassify(const char * graphFile, const char * labelFile):
 #ifdef PYTHON_TENSORFLOW
@@ -196,9 +196,7 @@ std::string CImageClassify::compute(const char *filePath)
 	{
 		if (_access_s(filePath, 6) == 0)
 		{
-			struct _stat32 fileStat;
-			_stat32(filePath, &fileStat);
-			WriteError("classify compute failed, imageSize : %lu, filePath: = %s", fileStat.st_size, filePath);
+			WriteError("classify compute failed, image is exits, filePath: = %s", filePath);
 		}
 		else
 		{

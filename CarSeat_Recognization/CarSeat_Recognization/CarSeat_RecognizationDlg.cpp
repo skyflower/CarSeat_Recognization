@@ -533,7 +533,7 @@ void CCarSeat_RecognizationDlg::run()
 		ret = m_pRFIDReader->readBarcode(m_pLabelManager->GetObtainBarcodeFunction(), tmpBarcode);
 		if (ret == -1)
 		{
-			WriteError("rfid error, should reconnect and reset");
+			//WriteError("rfid error, should reconnect and reset");
 			if ((m_pLabelManager->GetObtainBarcodeFunction() == true)	\
 				&& (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK))
 			{

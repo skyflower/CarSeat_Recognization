@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinyxml", "Query_Module\xml
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KepServerCom", "KepServerCom\KepServerCom\KepServerCom.vcxproj", "{1E60C76D-D4A9-4549-914A-ED1F81E7940E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recogTestModule", "recogTestModule\recogTestModule.vcxproj", "{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -99,6 +101,16 @@ Global
 		{1E60C76D-D4A9-4549-914A-ED1F81E7940E}.Release|x64.Build.0 = Release|x64
 		{1E60C76D-D4A9-4549-914A-ED1F81E7940E}.Release|x86.ActiveCfg = Release|Win32
 		{1E60C76D-D4A9-4549-914A-ED1F81E7940E}.Release|x86.Build.0 = Release|Win32
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Debug|ARM.ActiveCfg = Debug|Win32
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Debug|x64.ActiveCfg = Debug|x64
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Debug|x64.Build.0 = Debug|x64
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Debug|x86.ActiveCfg = Debug|Win32
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Debug|x86.Build.0 = Debug|Win32
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Release|ARM.ActiveCfg = Release|Win32
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Release|x64.ActiveCfg = Release|x64
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Release|x64.Build.0 = Release|x64
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Release|x86.ActiveCfg = Release|Win32
+		{B9EA3DCB-75D0-4552-B5F8-3C4CD6D1DB6C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

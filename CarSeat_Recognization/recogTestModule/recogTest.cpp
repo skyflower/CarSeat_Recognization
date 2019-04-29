@@ -50,7 +50,7 @@ void scanDirectory(char *lpPath, char *filePart, std::vector<std::string> &fileL
 	char szFile[MAX_PATH];
 	WIN32_FIND_DATA FindFileData;
 	strcpy_s(szFind, lpPath);
-	strcat_s(szFind, "//*.*");
+	strcat_s(szFind, "\\*.*");
 	HANDLE hFind = ::FindFirstFile(szFind, &FindFileData);
 	if (INVALID_HANDLE_VALUE == hFind)    return;
 	while (TRUE)
@@ -60,7 +60,7 @@ void scanDirectory(char *lpPath, char *filePart, std::vector<std::string> &fileL
 			if (FindFileData.cFileName[0] != '.')
 			{
 				strcpy_s(szFile, lpPath);
-				strcat_s(szFile, "//");
+				strcat_s(szFile, "\\");
 				strcat_s(szFile, FindFileData.cFileName);
 				scanDirectory(szFile, filePart, fileList);
 			}
@@ -73,6 +73,7 @@ void scanDirectory(char *lpPath, char *filePart, std::vector<std::string> &fileL
 			sprintf_s(tmpAbsPath, sizeof(tmpAbsPath), "%s\\%s", lpPath, FindFileData.cFileName);
 			fileList.push_back(std::string(tmpAbsPath));
 		}
+		WriteInfo("find file: %s", FindFileData.cFileName);
 		if (!FindNextFile(hFind, &FindFileData))
 		{
 			break;
@@ -101,6 +102,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < fileList.size(); ++i)
 	{
 		struct stat tmpStat;
+		clock_t beginTime = clock();
 		stat(fileList[i].c_str(), &tmpStat);
 		if (tmpStat.st_size == 0)
 		{
@@ -108,8 +110,12 @@ int main(int argc, char *argv[])
 		}
 		std::string reType  = m_pClassify->compute(fileList[i].c_str());
 		std::string externalType = m_pLabelManager->GetExternalTypeByClassifyType(reType);
+		clock_t endTime = clock();
 		//std::wstring wExternalType = utils::StrToWStr(externalType);
-		std::cout << i + 1 << "\t" << fileList[i].c_str() << "\t" << reType.c_str() << "\t" << externalType.c_str() << std::endl;
+		std::cout << i + 1 << "  " << fileList[i].c_str() << "  " << reType.c_str()
+			<< "  " << externalType.c_str() << "  " 
+			<< static_cast<float>(endTime - beginTime)/CLOCKS_PER_SEC << "s" 
+			<< std::endl;
 		if ((reType.size() > 0) && (externalType.size() > 0))
 		{
 			reValueCount++;

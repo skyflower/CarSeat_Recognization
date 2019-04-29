@@ -33,8 +33,8 @@ lineName="Line01"
 cameraName="Canon#EOS#1300D"
 
 ##识别模块的模型文件以及标签类型文件
-graphFile="J:\output_graph.pb"
-labelFile="J:\output_labels.txt"
+graphFile="D:\Download\output_graph.pb"
+labelFile="D:\Download\output_labels.txt"
 
 
 ##座椅图像存储路径

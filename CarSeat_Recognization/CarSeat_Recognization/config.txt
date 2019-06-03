@@ -26,6 +26,9 @@ EdsImageQuality="0x0113ff0f"
 ##产线对应的相机名称mac地址
 lineCamera={"Line01":"001", "Line02":"002", "Line03":"003"}
 
+##图像区域裁剪大小
+imageROI={"left" : "1600", "right" : "3200", "top" : "400", "bottom" : "3300"}
+
 ## 产线文件
 lineName="Line01"
 

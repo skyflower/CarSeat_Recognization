@@ -130,6 +130,9 @@ private:
 
 	void setupObserver(Observable* ob);
 
+
+	std::wstring GetImageRoi(const std::wstring &orgImagePath);
+
 	void main_loop();
 
 

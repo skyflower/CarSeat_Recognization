@@ -34,6 +34,8 @@ m_nEdsImageQuality(-1)
 	//m_szBarcodeResetParam
 	memset(m_szBarcodeResetParam, 0, sizeof(m_szBarcodeResetParam));
 	memset(m_szSendFailedCache, 0, sizeof(m_szSendFailedCache));
+
+	m_pImageROI = new std::unordered_map<std::string, int>;
 	
 	Init();
 
@@ -75,13 +77,11 @@ CParamManager::~CParamManager()
 		delete m_pFtp;
 		m_pFtp = nullptr;
 	}*/
-	//if (m_pLineCamera != nullptr)
-	//{
-	//	//m_pLineCamera->clear();
-	//	delete m_pLineCamera;
-	//	m_pLineCamera = nullptr;
-	//}
-
+	if (m_pImageROI != nullptr)
+	{
+		delete m_pImageROI;
+		m_pImageROI = nullptr;
+	}
 }
 
 
@@ -291,6 +291,16 @@ int CParamManager::GetServerImagePort() const
 	return m_nServerImagePort;
 }
 
+RECT CParamManager::GetImageROI()
+{
+	RECT rect;
+	rect.left = m_pImageROI->at("left");
+	rect.right = m_pImageROI->at("right");
+	rect.top = m_pImageROI->at("top");
+	rect.bottom = m_pImageROI->at("bottom");
+	return rect;
+}
+
 void CParamManager::Init()
 {
 	FILE *fp = nullptr;
@@ -314,15 +324,21 @@ void CParamManager::Init()
 		{
 			WriteError("ftp Parameter init Failed");
 		}*/
-		/*if (m_pLineCamera == nullptr)
-		{
-			m_pLineCamera = new std::unordered_map<std::string, std::string>;
-		}*/
-		/*utils::parseMap(content, "lineCamera", m_pLineCamera);
-		if ((m_pLineCamera == nullptr) || (m_pLineCamera->size() == 0))
+		
+		std::unordered_map<std::string, std::string> *tmpHashMap = new std::unordered_map<std::string, std::string>;
+		
+		utils::parseMap(content, "imageROI", tmpHashMap);
+		if ((tmpHashMap == nullptr) || (tmpHashMap->size() == 0))
 		{
 			WriteError("line Camera init Failed");
-		}*/
+			for (auto &k : *tmpHashMap)
+			{
+				int tmpInt = atoi(k.second.c_str());
+				m_pImageROI->insert(std::make_pair(k.first, tmpInt));
+			}
+		}
+		delete tmpHashMap;
+		tmpHashMap = nullptr;
 
 		unsigned int tmpLocal = utils::parseIp(content, "serverip");
 		if (tmpLocal == 0)

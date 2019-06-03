@@ -571,6 +571,7 @@ void CCarSeat_RecognizationDlg::run()
 		//WriteInfo("thread get barcode");
 		if (tmpBarcode.size() != 0)
 		{
+			WriteInfo("read rfid = %s", tmpBarcode.c_str());
 			if (m_pLineCamera != nullptr)
 			{
 				m_pLineCamera->saveJpg();
@@ -645,12 +646,16 @@ void CCarSeat_RecognizationDlg::run()
 			std::wstring tmpPath = utils::StrToWStr(imagepath);
 
 			//m_pParamManager->GetImageDirectory();
+			std::wstring testCutImageW = GetImageRoi(tmpPath);
+			std::string testCutImageA = utils::WStrToStr(testCutImageW);
 			//std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
-			reType = m_pClassify->compute(imagepath.c_str());
+			reType = m_pClassify->compute(testCutImageA.c_str());
 			if (m_bThreadStatus == false)
 			{
 				break;
 			}
+			remove(testCutImageA.c_str());
+
 			// 按照条形码，三字码分开目录
 
 			SYSTEMTIME curTime;
@@ -835,8 +840,11 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 		m_barCode.SetWindowTextW(result);
 	}
 
-	if ((barInternalType != typeInternalType)	// 识别类型不匹配
-		||((barInternalType.size() == 0) && (typeInternalType.size() == 0)))
+	//(barInternalType != typeInternalType)	// 识别类型不匹配
+
+
+	if (((barInternalType.size() == 0) && (typeInternalType.size() == 0)) 
+		|| (_stricmp(barInternalType.c_str(), typeInternalType.c_str()) == 0))
 	{
 		/*
 		添加报警系统，以及人工输入代码
@@ -1735,31 +1743,33 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 
 	//WriteInfo("ImageDirectory = [%s]", m_pParamManager->GetImageDirectory());
 
-	wchar_t *tmpDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
+	//wchar_t *tmpDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
 
-	wchar_t tmpDateDirectory[MAX_CHAR_LENGTH] = { 0 };
+	/*wchar_t tmpDateDirectory[MAX_CHAR_LENGTH] = { 0 };
 	wsprintf(tmpDateDirectory, L"%s\\%04d%02d%02d", tmpDirectory, curTime.wYear, curTime.wMonth, curTime.wDay);
 	
 
 	if (_waccess_s(tmpDateDirectory, 0) != 0)
 	{
 		_wmkdir(tmpDateDirectory);
-	}
+	}*/
 
-	wsprintf(imagePath, L"%s\\%04d%02d%02d_%02d%02d%02d.jpg", \
-		tmpDateDirectory, curTime.wYear, curTime.wMonth, curTime.wDay, \
+	wsprintf(imagePath, L".\\%04d%02d%02d%02d%02d%02d.jpg", \
+		curTime.wYear, curTime.wMonth, curTime.wDay, \
 		curTime.wHour, curTime.wMinute, curTime.wSecond);
 
 	if (_waccess(imageName, 0) == 0)
 	{
-		MoveFile(imageName, imagePath);
+		//MoveFile(imageName, imagePath);
+		_wrename(imageName, imagePath);
+		//rename();
 	}
 
-	if (tmpDirectory != nullptr)
+	/*if (tmpDirectory != nullptr)
 	{
 		delete[]tmpDirectory;
 		tmpDirectory = nullptr;
-	}
+	}*/
 
 	char *tmp = utils::WcharToChar(imagePath);
 
@@ -1946,4 +1956,64 @@ void CCarSeat_RecognizationDlg::OnRegisterSoftware()
 	dlg.SetMachineCode(szMachineCode, strlen(szMachineCode));
 	dlg.DoModal();
 
+}
+
+std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImagePath)
+{
+	RECT rect = m_pParamManager->GetImageROI();
+
+	CImage tmpImage;
+	tmpImage.Load(orgImagePath.c_str());
+
+	CImage dstImage;
+	dstImage.Create(rect.right - rect.left, rect.bottom - rect.top, tmpImage.GetBPP());
+	int tmpWidth = tmpImage.GetWidth();
+	int tmpHeight = tmpImage.GetHeight();
+
+	byte * pSrcPointer = (byte *)tmpImage.GetBits();
+	byte * pDstPointer = (byte *)dstImage.GetBits();
+
+	int bitCount = tmpImage.GetBPP() / 8;
+	int dstPit = tmpImage.GetPitch();
+
+	for (int i = rect.top; i < rect.bottom; ++i)
+	{
+		byte * tmpDst = (byte *)dstImage.GetPixelAddress(0, i - rect.top);
+		byte * tmpSrc = (byte *)tmpImage.GetPixelAddress(rect.left, i);
+		memcpy(tmpDst, tmpSrc, (rect.right - rect.left) * bitCount);
+	}
+
+	int lineLength = 50;
+	int lineWidth = 10;
+
+	for (int i = rect.top; i < rect.top + lineWidth; ++i)
+	{
+		void *tmpPointer = tmpImage.GetPixelAddress(rect.left, i);
+		memset(tmpPointer, 0xFF, (rect.right - rect.left) * bitCount);
+	}
+
+	for (int i = rect.bottom; i < rect.bottom + lineWidth; ++i)
+	{
+		void *tmpPointer = tmpImage.GetPixelAddress(rect.left, i);
+		memset(tmpPointer, 0xFF, (rect.right - rect.left) * bitCount);
+	}
+
+	tmpImage.Save(orgImagePath.c_str());
+
+	///保存裁剪后的图像，文件名不改，存储到临时目录，并压缩
+	wchar_t *tmpFileName = PathFindFileName(orgImagePath.c_str());
+
+	wchar_t buffer[MAX_CHAR_LENGTH];
+	memset(buffer, 0, sizeof(buffer));
+
+	const char * tmpCacheDirA = m_pParamManager->GetCacheImagePath();
+	wchar_t *tmpCacheDirW = utils::CharToWchar(const_cast<char*>(tmpCacheDirA));
+	wsprintf(buffer, L"%s\\%s", tmpCacheDirW, tmpFileName);
+
+	dstImage.Save(buffer, Gdiplus::ImageFormatJPEG);
+
+	delete []tmpCacheDirA;
+	tmpCacheDirA = NULL;
+
+	return buffer;
 }

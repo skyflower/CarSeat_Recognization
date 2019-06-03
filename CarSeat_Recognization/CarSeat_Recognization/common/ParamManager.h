@@ -57,6 +57,8 @@ public:
 
 	std::string GetLocalName() { return m_strLocalName; }
 
+	RECT GetImageROI();
+
 
 private:
 
@@ -138,5 +140,8 @@ private:
 
 	//产线和相机的对应关系
 	//std::unordered_map<std::string, std::string> *m_pLineCamera;
+
+	///图像ROI区域
+	std::unordered_map<std::string, int> *m_pImageROI;
 };
 

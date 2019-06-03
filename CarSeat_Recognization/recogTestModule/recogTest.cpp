@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "ParamManager.h"
 
+
 CParamManager *m_pParamManager = nullptr;
 CLog *m_pLog = nullptr;
 CImageClassify *m_pClassify = nullptr;

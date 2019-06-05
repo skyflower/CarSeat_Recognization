@@ -41,6 +41,8 @@ public:
 protected:
 	HICON m_hIcon;
 
+	void scanDirectory(wchar_t *lpPath, wchar_t *filePart, std::vector<std::wstring> &fileList);
+
 
 protected:
 	CameraController* _controller;
@@ -133,7 +135,7 @@ private:
 
 	std::wstring GetImageRoi(const std::wstring &orgImagePath);
 
-	void main_loop();
+	
 
 
 public:
@@ -143,6 +145,11 @@ public:
 	ui界面刷新线程
 	*/
 	void run();
+
+	// only for debug and test, has no rfid , no kepserver ,
+	void main_loop();
+
+
 
 	void SetImageClassify(CImageClassify*pClassify);
 

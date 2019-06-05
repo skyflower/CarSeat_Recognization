@@ -26,6 +26,8 @@
 #define WM_USER_DOWNLOAD_COMPLETE		WM_APP+1
 #define WM_USER_PROGRESS_REPORT			WM_APP+2
 
+#define NO_RFID_CAMERA_DEBUG
+
 
 
 class CAboutDlg : public CDialogEx
@@ -315,9 +317,10 @@ HCURSOR CCarSeat_RecognizationDlg::OnQueryDragIcon()
 void CCarSeat_RecognizationDlg::main_loop()
 {
 	std::unique_lock<std::mutex> lineCameraLock(m_LineCameraMutex);
-	
+
+	m_pNetworkTask = CNetworkTask::GetInstance();
 	m_pParamManager = CParamManager::GetInstance();
-	if (m_pParamManager == nullptr)
+	if ((m_pNetworkTask == nullptr) || (m_pParamManager == nullptr))
 	{
 		return;
 	}
@@ -334,29 +337,6 @@ void CCarSeat_RecognizationDlg::main_loop()
 
 	while (m_bThreadStatus)
 	{
-		if (m_pLineCamera == nullptr)
-		{
-			m_pLineCamera = new CLineCamera();
-			unsigned int tmp = m_pParamManager->GetEdsImageQuality();
-			if ((tmp == 0) || (tmp == -1))
-			{
-				m_pLineCamera->setImageQuality(EdsImageQuality_MJF);
-			}
-			else
-			{
-				m_pLineCamera->setImageQuality(tmp);
-			}
-		}
-
-		if (_model == nullptr)
-		{
-			initCameraModule();
-		}
-		if (m_pLineCamera->getCameraStatus() != CLineCamera::CameraStatus::CAMERA_GRAB)
-		{
-			OnStartCamera();
-		}
-
 
 		// 是否开始识别标志
 		if (m_bBeginJob == false)
@@ -365,6 +345,7 @@ void CCarSeat_RecognizationDlg::main_loop()
 			std::this_thread::sleep_for(a);
 			continue;
 		}
+
 
 		// 检测rfid的连接状态
 		if ((m_pLabelManager->GetObtainBarcodeFunction() == true)	\
@@ -389,46 +370,120 @@ void CCarSeat_RecognizationDlg::main_loop()
 
 		// 读取条形码后需要延迟在取照片
 		std::string tmpBarcode;
-		ret = m_pRFIDReader->readBarcode(m_pLabelManager->GetObtainBarcodeFunction(), tmpBarcode);
-		if (ret == -1)
-		{
-			if ((m_pLabelManager->GetObtainBarcodeFunction() == true)	\
-				&& (m_pRFIDReader->isConnect() != CRFIDReader::ErrorType::ERROR_OK))
-			{
-				unsigned int rfidIP = m_pParamManager->GetBarcodeIp();
-				unsigned int rfidPort = m_pParamManager->GetBarcodePort();
-				m_pRFIDReader->initRFID(rfidIP, rfidPort);
-				if (CRFIDReader::ErrorType::ERROR_SOCKET_INVALID == m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam()))
-				{
-					m_pRFIDReader->initRFID(rfidIP, rfidPort);
-					m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
-				}
+		//ret = m_pRFIDReader->readBarcode(m_pLabelManager->GetObtainBarcodeFunction(), tmpBarcode);
+		ret = m_pRFIDReader->readBarcode(false, tmpBarcode);
 
-				std::chrono::duration<int, std::milli> b = std::chrono::milliseconds(100);
-				std::this_thread::sleep_for(b);
-			}
+		if (m_pParamManager->GetBarcodeTime() < 100)
+		{
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
+			std::this_thread::sleep_for(a);
 		}
-		
+		else
+		{
+			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(m_pParamManager->GetBarcodeTime());
+			std::this_thread::sleep_for(a);
+		}
+
 		if (m_bThreadStatus == false)
 		{
 			break;
 		}
 
-		//WriteInfo("thread get barcode");
 		if (tmpBarcode.size() != 0)
 		{
-			////////
-			//////// take_photo
-			////////
-			if (m_pLineCamera != nullptr)
-			{
-				m_pLineCamera->saveJpg();
-			}
+			WriteInfo("read rfid = %s", tmpBarcode.c_str());
+			///获取图像路径
+			//void scanDirectory(wchar_t *lpPath, wchar_t *filePart, std::vector<std::wstring> &fileList);
+			std::vector<std::wstring> fileList;
+			scanDirectory(L"D:\\ImageForTrainTest\\D2_black_pvc_leather", L".jpg", fileList);
+			int fileCount = fileList.size();
+			int randInt = (rand() % fileCount + fileCount) % fileCount;
+			imagepath = utils::WStrToStr(fileList[randInt]);
 		}
-		
+		else
+		{
+			//m_pRFIDReader->reset(m_pParamManager->GetBarcodeResetParam());
+		}
 		if (m_bThreadStatus == false)
 		{
 			break;
+		}
+
+		WriteInfo("imagePath = %s", imagepath.c_str());
+		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
+		{
+			std::wstring tmpPath = utils::StrToWStr(imagepath);
+
+			//m_pParamManager->GetImageDirectory();
+			std::wstring testCutImageW = GetImageRoi(tmpPath);
+			std::string testCutImageA = utils::WStrToStr(testCutImageW);
+			//std::string tmpImageAbsolutePath = tmpImageDir + "\\" + imagepath;
+			reType = m_pClassify->compute(testCutImageA.c_str());
+			if (m_bThreadStatus == false)
+			{
+				break;
+			}
+			remove(testCutImageA.c_str());
+
+			// 按照条形码，三字码分开目录
+
+			SYSTEMTIME curTime;
+			memset(&curTime, 0, sizeof(SYSTEMTIME));
+			GetLocalTime(&curTime);
+			wchar_t movedPath[512];
+			memset(movedPath, 0, sizeof(movedPath));
+			const wchar_t *tmpDateDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
+
+			std::string typecode = m_pLabelManager->GetTypeCodeByBarcode(tmpBarcode);
+
+
+			if (tmpDateDirectory != nullptr)
+			{
+				std::wstring tmpWCode = utils::StrToWStr(typecode);
+				wchar_t tmpCurDate[20];
+				wsprintf(tmpCurDate, L"%04d%02d%02d", curTime.wYear, curTime.wMonth, curTime.wDay);
+
+				wchar_t tmpCurTime[20];
+				wsprintf(tmpCurTime, L"%02d%02d%02d", curTime.wHour, curTime.wMinute, curTime.wSecond);
+
+				std::wstring tmpWReType = utils::StrToWStr(reType);
+
+				memset(movedPath, 0, sizeof(movedPath));
+
+				wsprintf(movedPath, L"%s\\%s\\", \
+					tmpDateDirectory, tmpCurDate);
+
+				if (_waccess_s(movedPath, 6) != 0)
+				{
+					_wmkdir(movedPath);
+				}
+
+				memset(movedPath, 0, sizeof(movedPath));
+				wsprintf(movedPath, L"%s\\%s\\%s\\", \
+					tmpDateDirectory, tmpCurDate, tmpWCode.c_str());
+
+				if (_waccess_s(movedPath, 6) != 0)
+				{
+					_wmkdir(movedPath);
+				}
+				memset(movedPath, 0, sizeof(movedPath));
+
+				std::wstring tmpWBarcode = utils::StrToWStr(tmpBarcode);
+				wsprintf(movedPath, L"%s\\%s\\%s\\%s_%s_%s_%s.jpg", \
+					tmpDateDirectory, tmpCurDate, tmpWCode.c_str(), tmpCurDate, tmpCurTime, tmpWReType.c_str(), tmpWBarcode.c_str());
+
+				if (TRUE == MoveFile(tmpPath.c_str(), movedPath))
+				{
+					tmpPath = std::wstring(movedPath);
+					imagepath = utils::WStrToStr(tmpPath);
+				}
+
+				delete[]tmpDateDirectory;
+				tmpDateDirectory = nullptr;
+				WriteInfo("imagePath = [%s],reType = [%s], barcode = [%s]", imagepath.c_str(), reType.c_str(), tmpBarcode.c_str());
+			}
+			CheckAndUpdate(tmpBarcode, reType, imagepath);
+			imagepath = std::string();
 		}
 	}
 }
@@ -640,7 +695,7 @@ void CCarSeat_RecognizationDlg::run()
 			break;
 		}
 		
-
+		WriteInfo("imagePath = %s", imagepath.c_str());
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
 			std::wstring tmpPath = utils::StrToWStr(imagepath);
@@ -843,7 +898,7 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 	//(barInternalType != typeInternalType)	// 识别类型不匹配
 
 
-	if (((barInternalType.size() == 0) && (typeInternalType.size() == 0)) 
+	if (((barInternalType.size() == 0) || (typeInternalType.size() == 0)) 
 		|| (_stricmp(barInternalType.c_str(), typeInternalType.c_str()) == 0))
 	{
 		/*
@@ -1662,7 +1717,8 @@ void CCarSeat_RecognizationDlg::displayImage(CImage * pImage, CStatic * pStatic)
 		pStatic->MoveWindow(rect.left, rect.top, rect.right - rect.left, \
 			rect.bottom - rect.top, TRUE);
 		//pStatic->ShowWindow(TRUE);
-		Invalidate();
+		//Invalidate();
+		InvalidateRect(&rect);
 	}
 }
 
@@ -2012,8 +2068,52 @@ std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImage
 
 	dstImage.Save(buffer, Gdiplus::ImageFormatJPEG);
 
-	delete []tmpCacheDirA;
-	tmpCacheDirA = NULL;
+	delete []tmpCacheDirW;
+	tmpCacheDirW = NULL;
+
+	dstImage.Destroy();
+	tmpImage.Destroy();
 
 	return buffer;
+}
+
+
+void CCarSeat_RecognizationDlg::scanDirectory(wchar_t *lpPath, wchar_t *filePart, std::vector<std::wstring> &fileList)
+{
+	wchar_t szFind[MAX_PATH];
+	wchar_t szFile[MAX_PATH];
+	WIN32_FIND_DATA FindFileData;
+	wcscpy_s(szFind, lpPath);
+	
+	wcscat_s(szFind, L"\\*.*");
+	HANDLE hFind = ::FindFirstFile(szFind, &FindFileData);
+	if (INVALID_HANDLE_VALUE == hFind)    return;
+	while (TRUE)
+	{
+		if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+		{
+			if (FindFileData.cFileName[0] != '.')
+			{
+				wcscpy_s(szFile, lpPath);
+				wcscat_s(szFile, L"\\");
+				wcscat_s(szFile, FindFileData.cFileName);
+				scanDirectory(szFile, filePart, fileList);
+			}
+		}
+
+		if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) && (wcsstr(FindFileData.cFileName, filePart) != NULL))
+		{
+			//std::cout << FindFileData.cFileName << std::endl;
+			wchar_t tmpAbsPath[500];
+			
+			wsprintf(tmpAbsPath, L"%s\\%s", lpPath, FindFileData.cFileName);
+			fileList.push_back(std::wstring(tmpAbsPath));
+		}
+		//WriteInfo("find file: %s", FindFileData.cFileName);
+		if (!FindNextFile(hFind, &FindFileData))
+		{
+			break;
+		}
+	}
+	FindClose(hFind);
 }

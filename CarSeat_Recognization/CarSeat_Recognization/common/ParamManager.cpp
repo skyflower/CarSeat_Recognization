@@ -328,14 +328,24 @@ void CParamManager::Init()
 		std::unordered_map<std::string, std::string> *tmpHashMap = new std::unordered_map<std::string, std::string>;
 		
 		utils::parseMap(content, "imageROI", tmpHashMap);
-		if ((tmpHashMap == nullptr) || (tmpHashMap->size() == 0))
+		if ((tmpHashMap != nullptr) && (tmpHashMap->size() > 0))
 		{
-			WriteError("line Camera init Failed");
+			WriteInfo("parse image ROI success");
 			for (auto &k : *tmpHashMap)
 			{
 				int tmpInt = atoi(k.second.c_str());
 				m_pImageROI->insert(std::make_pair(k.first, tmpInt));
+				WriteInfo("%s\t%s", k.first.c_str(), k.second.c_str());
 			}
+		}
+		else
+		{
+			WriteError("parse image ROI error, use default value, left:1600, right:3200, top:400, bottom:3300");
+			//imageROI={"left" : "1600", "right" : "3200", "top" : "400", "bottom" : "3300"}
+			m_pImageROI->insert(std::make_pair("left", 1600));
+			m_pImageROI->insert(std::make_pair("right", 3200));
+			m_pImageROI->insert(std::make_pair("top", 400));
+			m_pImageROI->insert(std::make_pair("bottom", 3300));
 		}
 		delete tmpHashMap;
 		tmpHashMap = nullptr;

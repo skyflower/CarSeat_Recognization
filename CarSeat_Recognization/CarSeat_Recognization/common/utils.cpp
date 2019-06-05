@@ -351,7 +351,7 @@ namespace utils
 		FILE *fp = nullptr;
 		content = nullptr;
 		FileSize = 0;
-		fopen_s(&fp, file, "rb");
+		fopen_s(&fp, file, "r");
 		if (fp == nullptr)
 		{
 			return false;

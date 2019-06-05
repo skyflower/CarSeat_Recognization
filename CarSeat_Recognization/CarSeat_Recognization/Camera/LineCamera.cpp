@@ -151,7 +151,6 @@ void CLineCamera::setCurrentImage(const char * file)
 	{
 		memset(m_szCurImagePath, 0, sizeof(m_szCurImagePath));
 		strcpy_s(m_szCurImagePath, file);
-		
 	}
 }
 

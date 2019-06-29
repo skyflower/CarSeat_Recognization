@@ -394,11 +394,28 @@ void CCarSeat_RecognizationDlg::main_loop()
 			WriteInfo("read rfid = %s", tmpBarcode.c_str());
 			///获取图像路径
 			//void scanDirectory(wchar_t *lpPath, wchar_t *filePart, std::vector<std::wstring> &fileList);
+#if 0
 			std::vector<std::wstring> fileList;
 			scanDirectory(L"D:\\ImageForTrainTest\\D2_black_pvc_leather", L".jpg", fileList);
 			int fileCount = fileList.size();
 			int randInt = (rand() % fileCount + fileCount) % fileCount;
 			imagepath = utils::WStrToStr(fileList[randInt]);
+
+#else
+			std::vector<std::wstring> fileList;
+			scanDirectory(L".", L".jpg", fileList);
+			int fileCount = fileList.size();
+			if (fileCount == 0)
+			{
+				imagepath = std::string();
+			}
+			else
+			{
+				int randInt = (rand() % fileCount + fileCount) % fileCount;
+				imagepath = utils::WStrToStr(fileList[randInt]);
+			}
+
+#endif
 		}
 		else
 		{
@@ -409,10 +426,10 @@ void CCarSeat_RecognizationDlg::main_loop()
 			break;
 		}
 
-		WriteInfo("imagePath = %s", imagepath.c_str());
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
 			std::wstring tmpPath = utils::StrToWStr(imagepath);
+			WriteInfo("imagePath = %s", imagepath.c_str());
 
 			//m_pParamManager->GetImageDirectory();
 			std::wstring testCutImageW = GetImageRoi(tmpPath);
@@ -455,6 +472,7 @@ void CCarSeat_RecognizationDlg::main_loop()
 
 				if (_waccess_s(movedPath, 6) != 0)
 				{
+					//WriteInfo("movePath can not access, create directory = %s", movedPath);
 					_wmkdir(movedPath);
 				}
 
@@ -695,11 +713,11 @@ void CCarSeat_RecognizationDlg::run()
 			break;
 		}
 		
-		WriteInfo("imagePath = %s", imagepath.c_str());
+		
 		if ((imagepath.size() != 0) && (tmpBarcode.size() != 0))
 		{
 			std::wstring tmpPath = utils::StrToWStr(imagepath);
-
+			WriteInfo("imagePath = %s", imagepath.c_str());
 			//m_pParamManager->GetImageDirectory();
 			std::wstring testCutImageW = GetImageRoi(tmpPath);
 			std::string testCutImageA = utils::WStrToStr(testCutImageW);
@@ -721,10 +739,10 @@ void CCarSeat_RecognizationDlg::run()
 			const wchar_t *tmpDateDirectory = utils::CharToWchar(const_cast<char*>(m_pParamManager->GetImageDirectory()));
 
 			std::string typecode = m_pLabelManager->GetTypeCodeByBarcode(tmpBarcode);
-			
 
 			if (tmpDateDirectory != nullptr)
 			{
+				WriteInfo("typecode = %s", typecode.c_str());
 				std::wstring tmpWCode = utils::StrToWStr(typecode);
 				wchar_t tmpCurDate[20];
 				wsprintf(tmpCurDate, L"%04d%02d%02d", curTime.wYear, curTime.wMonth, curTime.wDay);
@@ -747,7 +765,6 @@ void CCarSeat_RecognizationDlg::run()
 				memset(movedPath, 0, sizeof(movedPath));
 				wsprintf(movedPath, L"%s\\%s\\%s\\", \
 					tmpDateDirectory, tmpCurDate, tmpWCode.c_str());
-
 				if (_waccess_s(movedPath, 6) != 0)
 				{
 					_wmkdir(movedPath);
@@ -897,9 +914,9 @@ void CCarSeat_RecognizationDlg::CheckAndUpdate(std::string barcode, std::string 
 
 	//(barInternalType != typeInternalType)	// 识别类型不匹配
 
-
+	WriteInfo("barInternalType= %s, typeInternalType = %s", barInternalType.c_str(), typeInternalType.c_str());
 	if (((barInternalType.size() == 0) || (typeInternalType.size() == 0)) 
-		|| (_stricmp(barInternalType.c_str(), typeInternalType.c_str()) == 0))
+		|| (_stricmp(barInternalType.c_str(), typeInternalType.c_str()) != 0))
 	{
 		/*
 		添加报警系统，以及人工输入代码
@@ -1786,7 +1803,7 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 
 	wchar_t imagePath[MAX_CHAR_LENGTH];
 	memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
-	GetCurrentDirectory(MAX_CHAR_LENGTH, imagePath);
+	//GetCurrentDirectory(MAX_CHAR_LENGTH, imagePath);
 
 	wsprintf(imageName, L".\\IMG_%04d.JPG", i);
 
@@ -1795,7 +1812,7 @@ LRESULT CCarSeat_RecognizationDlg::OnDownloadComplete(WPARAM wParam, LPARAM lPar
 	memset(&curTime, 0, sizeof(curTime));
 	GetLocalTime(&curTime);
 
-	memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
+	//memset(imagePath, 0, sizeof(wchar_t) * MAX_CHAR_LENGTH);
 
 	//WriteInfo("ImageDirectory = [%s]", m_pParamManager->GetImageDirectory());
 
@@ -2017,7 +2034,7 @@ void CCarSeat_RecognizationDlg::OnRegisterSoftware()
 std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImagePath)
 {
 	RECT rect = m_pParamManager->GetImageROI();
-
+	//WriteInfo("begin to cacl iamge roi");
 	CImage tmpImage;
 	tmpImage.Load(orgImagePath.c_str());
 
@@ -2026,11 +2043,17 @@ std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImage
 	int tmpWidth = tmpImage.GetWidth();
 	int tmpHeight = tmpImage.GetHeight();
 
+	//WriteInfo("111111l iamge roi");
+
 	byte * pSrcPointer = (byte *)tmpImage.GetBits();
 	byte * pDstPointer = (byte *)dstImage.GetBits();
 
 	int bitCount = tmpImage.GetBPP() / 8;
 	int dstPit = tmpImage.GetPitch();
+
+	//WriteInfo("bitCount = %d, dstPit = %d", bitCount, dstPit);
+	//WriteInfo("rect.top = %d, rect.bottom = %d", rect.top, rect.bottom);
+	//WriteInfo("image width = %d, height = %d", tmpWidth, tmpHeight);
 
 	for (int i = rect.top; i < rect.bottom; ++i)
 	{
@@ -2038,6 +2061,8 @@ std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImage
 		byte * tmpSrc = (byte *)tmpImage.GetPixelAddress(rect.left, i);
 		memcpy(tmpDst, tmpSrc, (rect.right - rect.left) * bitCount);
 	}
+
+	//WriteInfo("22222222 iamge roi");
 
 	int lineLength = 50;
 	int lineWidth = 10;
@@ -2054,7 +2079,10 @@ std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImage
 		memset(tmpPointer, 0xFF, (rect.right - rect.left) * bitCount);
 	}
 
+	//WriteInfo("33333333333 iamge roi");
+
 	tmpImage.Save(orgImagePath.c_str());
+
 
 	///保存裁剪后的图像，文件名不改，存储到临时目录，并压缩
 	wchar_t *tmpFileName = PathFindFileName(orgImagePath.c_str());
@@ -2073,6 +2101,7 @@ std::wstring CCarSeat_RecognizationDlg::GetImageRoi(const std::wstring &orgImage
 
 	dstImage.Destroy();
 	tmpImage.Destroy();
+
 
 	return buffer;
 }

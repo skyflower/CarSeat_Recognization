@@ -354,7 +354,6 @@ void CParamManager::Init()
 		if (tmpLocal == 0)
 		{
 			TRACE0("get ServerIp Failed\n");
-			
 		}
 		WriteInfo("serverip = %u", tmpLocal);
 		m_nServerIp = tmpLocal;

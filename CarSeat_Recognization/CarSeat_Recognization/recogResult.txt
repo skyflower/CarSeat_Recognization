@@ -1,81 +1,113 @@
-1,N7478115511859461,2019-06-05:07-17-02,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\115\20190605_071702_d2_black_pvc_leather_N7478115511859461.jpg
-1,N1939989926155213,2019-06-05:07-16-56,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\989\20190605_071656_d2_black_pvc_leather_N1939989926155213.jpg
-1,N4127215567041106,2019-06-05:07-06-36,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\215\20190605_070636_d2_black_pvc_leather_N4127215567041106.jpg
-1,N4030770087516573,2019-06-05:07-06-30,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\770\20190605_070610_d2_black_pvc_leather_N4030770087516573.jpg
-1,N0857291374780723,2019-06-05:07-05-48,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\291\20190605_070548_d2_black_pvc_leather_N085729137478072.jpgg
-1,N9981635395967449,2019-06-05:07-05-27,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\635\20190605_070527_d2_black_pvc_leather_N9981635395967449.jpg
-1,N7478115511839678,2019-06-05:07-05-06,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\115\20190605_070506_d2_black_pvc_leather_N7478115511839678.jpg
-1,N1939989926155213,2019-06-05:07-05-00,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\989\20190605_070500_d2_black_pvc_leather_N1939989926155213.jpg
-1,N0857248740045323,2019-06-04:22-48-39,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\248\20190604_224839_d2_black_pvc_leather_N085724874004532.jpgg
-1,N9981635393986363,2019-06-04:22-48-18,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\635\20190604_224818_d2_black_pvc_leather_N9981635393986363.jpg
-1,N7478115511859461,2019-06-04:22-48-05,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\115\20190604_224757_d2_black_pvc_leather_N7478115511859461.jpg
-1,N1939989926155213,2019-06-04:22-47-37,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\989\20190604_224720_d2_black_pvc_leather_N1939989926155213.jpg
-1,N0857259792185673,2019-06-04:22-36-58,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\259\20190604_223658_d2_black_pvc_leather_N085725979218567.jpgg
-1,N9981635394499921,2019-06-04:22-36-36,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\635\20190604_223636_d2_black_pvc_leather_N9981635394499921.jpg
-1,N7478115511854331,2019-06-04:22-36-15,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\115\20190604_223615_d2_black_pvc_leather_N7478115511854331.jpg
-1,N1939989926155213,2019-06-04:22-36-10,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\989\20190604_223610_d2_black_pvc_leather_N1939989926155213.jpg
-1,UNVIBUZKRNLOUALO3,2018-11-04:17-09-51,UZK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170949.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,QYCDYLWFYXOORZFU3,2018-11-04:17-09-46,LWF,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170945.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XXDNGQGYKYFZLVFQ3,2018-11-04:17-09-42,QGY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170940.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,UIVDHINBTCBAMKTU3,2018-11-04:17-09-37,INB,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170935.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XIGLGEYTONATLWSL3,2018-11-04:17-09-32,EYT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170930.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,FQLZAIAILMSNRKQW3,2018-11-04:17-09-28,IAI,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170925.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,JMLUIIBJVEAHNGKW3,2018-11-04:17-09-22,IBJ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170920.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PUFXBOTTPXSMSCIM3,2018-11-04:17-09-17,OTT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170916.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,FOTEOFEGDVMDLNHC3,2018-11-04:17-09-13,FEG,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170911.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,KPFKUQUSAJFKLHQH3,2018-11-04:17-09-08,QUS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170906.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XEQSHNARSOQMVVMP3,2018-11-04:17-09-03,NAR,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170901.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,QARWAUJJDSJSMZYT3,2018-11-04:17-08-57,UJJ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170855.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,GJYXJJBHOEOBJEFY3,2018-11-04:17-08-52,JBH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170850.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,VDYTLZRKWZMYLEMZ3,2018-11-04:17-08-47,ZRK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170845.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,VHCJROLKGNLFVKVH3,2018-11-04:17-08-42,OLK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170841.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,OTAMTXAEVCRLITMU3,2018-11-04:17-08-37,XAE,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170835.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,KRDIOYLLPSLJVNIL3,2018-11-04:17-08-32,YLL,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170830.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,QWFRRSKGRUELLPVI3,2018-11-04:17-08-28,SKG,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170826.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,ULOJWVZAENWWAJAO3,2018-11-04:17-08-23,VZA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170821.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,YIQKWGYVDKBVOSCE3,2018-11-04:17-08-18,GYV,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170816.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,ORCAETLITFVHHZAF3,2018-11-04:17-08-13,TLI,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170811.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,UDNNWJDQVKNRQZFQ3,2018-11-04:17-08-08,JDQ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170806.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,EDEILWBZYIKWZDOT3,2018-11-04:17-08-03,WBZ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170802.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,CHYFSFVTSEZMCMKF3,2018-11-04:17-07-59,FVT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170757.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,TXBEBAWKKWDGCBWP3,2018-11-04:17-07-54,AWK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170752.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,JUGWTMMYBFJVTVBN3,2018-11-04:17-07-49,MMY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170747.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,SYWPXFZYWATWFJZG3,2018-11-04:17-07-44,FZY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170743.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,MIPBRJFKUUXCDKBV3,2018-11-04:17-07-40,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170738.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,RBUIQMYADOWBYHFI3,2018-11-04:17-07-35,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170734.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,GYCEMQCTSVYMCVVM3,2018-11-04:17-07-30,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170728.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PEVSULRHTNHKCLSY3,2018-11-04:17-07-25,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170723.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XSZSPFJKFDMVJELF3,2018-11-04:17-07-19,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170717.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XKLIFMKXKQNCGBTO3,2018-11-04:17-07-15,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170713.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PJICREGSEOVHHFZB3,2018-11-04:17-07-10,EGS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170708.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,MIPBRJFKUUXCDKBV3,2018-11-04:16-43-51,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164349.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,RBUIQMYADOWBYHFI3,2018-11-04:16-43-46,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164345.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,GYCEMQCTSVYMCVVM3,2018-11-04:16-43-42,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164340.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PEVSULRHTNHKCLSY3,2018-11-04:16-43-37,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164335.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XSZSPFJKFDMVJELF3,2018-11-04:16-43-32,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164330.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XKLIFMKXKQNCGBTO3,2018-11-04:16-43-27,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164325.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PJICREGSEOVHHFZB3,2018-11-04:16-43-22,EGS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164320.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,SYWPXFZYWATWFJZG3,2018-11-04:16-36-25,FZY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163624.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,MIPBRJFKUUXCDKBV3,2018-11-04:16-36-20,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163618.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,RBUIQMYADOWBYHFI3,2018-11-04:16-36-15,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163613.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,GYCEMQCTSVYMCVVM3,2018-11-04:16-36-11,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163609.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PEVSULRHTNHKCLSY3,2018-11-04:16-36-06,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163604.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XSZSPFJKFDMVJELF3,2018-11-04:16-36-01,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163559.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XKLIFMKXKQNCGBTO3,2018-11-04:16-35-56,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163554.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PJICREGSEOVHHFZB3,2018-11-04:16-35-51,EGS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163549.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,QWFRRSKGRUELLPVI3,2018-11-04:16-26-50,SKG,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162648.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,ULOJWVZAENWWAJAO3,2018-11-04:16-26-44,VZA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162643.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,YIQKWGYVDKBVOSCE3,2018-11-04:16-26-39,GYV,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162637.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,ORCAETLITFVHHZAF3,2018-11-04:16-26-34,TLI,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162633.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,UDNNWJDQVKNRQZFQ3,2018-11-04:16-26-30,JDQ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162628.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,EDEILWBZYIKWZDOT3,2018-11-04:16-26-25,WBZ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162623.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,CHYFSFVTSEZMCMKF3,2018-11-04:16-26-20,FVT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162618.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,TXBEBAWKKWDGCBWP3,2018-11-04:16-26-16,AWK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162614.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,JUGWTMMYBFJVTVBN3,2018-11-04:16-26-10,MMY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162609.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,SYWPXFZYWATWFJZG3,2018-11-04:16-26-06,FZY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162604.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,MIPBRJFKUUXCDKBV3,2018-11-04:16-26-00,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162558.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,RBUIQMYADOWBYHFI3,2018-11-04:16-25-55,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162554.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,GYCEMQCTSVYMCVVM3,2018-11-04:16-25-51,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162549.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,PEVSULRHTNHKCLSY3,2018-11-04:16-25-46,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162544.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XSZSPFJKFDMVJELF3,2018-11-04:16-25-41,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162540.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
-1,XKLIFMKXKQNCGBTO3,2018-11-04:16-25-35,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162534.jpg0_d2_black_pvc_leather_N1939989926155213.jpg
+1,N9393324723559950,2019-06-23:11-04-23,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\324\20190623_110423_k216_black_pvc_line_cloth_N9393324723559950.jpg
+1,N2467022793834703,2019-06-23:11-04-19,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\022\20190623_110419_k216_black_pvc_line_cloth_N2467022793834703.jpg
+1,N1871692645538698,2019-06-23:11-04-15,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\692\20190623_110415_k216_black_pvc_line_cloth_N1871692645538698.jpg
+1,N8602442055966295,2019-06-23:11-04-11,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\442\20190623_110411_k216_black_pvc_line_cloth_N8602442055966295.jpg
+1,N9998925733680570,2019-06-23:11-04-07,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\925\20190623_110407_k216_black_pvc_line_cloth_N9998925733680570.jpg
+1,N4802101799276620,2019-06-23:11-04-03,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\101\20190623_110403_k216_black_pvc_line_cloth_N4802101799276620.jpg
+1,N6706205100550324,2019-06-23:11-03-59,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\205\20190623_110359_k216_black_pvc_line_cloth_N6706205100550324.jpg
+1,N9813135910212481,2019-06-23:11-03-56,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\135\20190623_110356_k216_black_pvc_line_cloth_N9813135910212481.jpg
+1,N9788702928867778,2019-06-23:11-03-52,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\702\20190623_110352_k216_black_pvc_line_cloth_N9788702928867778.jpg
+1,N1284248094779902,2019-06-23:11-03-46,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\248\20190623_110346_k216_black_pvc_line_cloth_N1284248094779902.jpg
+1,N9981865094991883,2019-06-23:11-03-42,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\865\20190623_110342_k216_black_pvc_line_cloth_N9981865094991883.jpg
+1,N7478113212171690,2019-06-23:11-03-39,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\113\20190623_110339_k216_black_pvc_line_cloth_N7478113212171690.jpg
+1,N1939989928201548,2019-06-23:11-03-34,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\989\20190623_110334_k216_black_pvc_line_cloth_N1939989928201548.jpg
+1,N1694673813486353,2019-06-23:10-49-26,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\673\20190623_104926_k216_black_pvc_line_cloth_N1694673813486353.jpg
+1,N4975755701304414,2019-06-23:10-49-21,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\755\20190623_104921_k216_black_pvc_line_cloth_N4975755701304414.jpg
+1,N3322791311899209,2019-06-23:10-49-16,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\791\20190623_104915_k216_black_pvc_line_cloth_N3322791311899209.jpg
+1,N1962018859129339,2019-06-23:10-49-07,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\018\20190623_104907_k216_black_pvc_line_cloth_N196201885912933.jpgg
+1,N6203255100495069,2019-06-23:10-49-02,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\255\20190623_104902_k216_black_pvc_line_cloth_N620325510049506.jpgg
+1,N4680557279256999,2019-06-23:10-48-59,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\557\20190623_104859_k216_black_pvc_line_cloth_N468055727925699.jpgg
+1,N8333567810443137,2019-06-23:10-48-55,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\567\20190623_104855_k216_black_pvc_line_cloth_N8333567810443137.jpg
+1,N9845387322308078,2019-06-23:10-48-51,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\387\20190623_104851_k216_black_pvc_line_cloth_N9845387322308078.jpg
+1,N7199301275983398,2019-06-23:10-48-48,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\301\20190623_104848_k216_black_pvc_line_cloth_N719930127598339.jpgg
+1,N9986256556054046,2019-06-23:10-48-44,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\256\20190623_104844_k216_black_pvc_line_cloth_N9986256556054046.jpg
+1,N1911454183097392,2019-06-23:10-48-40,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\454\20190623_104840_k216_black_pvc_line_cloth_N1911454183097392.jpg
+1,N5615943293843621,2019-06-23:10-48-37,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\943\20190623_104837_k216_black_pvc_line_cloth_N5615943293843621.jpg
+1,N8965487226694536,2019-06-23:10-48-33,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\487\20190623_104833_k216_black_pvc_line_cloth_N8965487226694536.jpg
+1,N4127215391192878,2019-06-23:10-48-29,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\215\20190623_104829_k216_black_pvc_line_cloth_N4127215391192878.jpg
+1,N4030770087323965,2019-06-23:10-48-26,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\770\20190623_104826_k216_black_pvc_line_cloth_N4030770087323965.jpg
+1,N0857291374780725,2019-06-23:10-48-22,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\291\20190623_104822_k216_black_pvc_line_cloth_N085729137478072.jpgg
+1,N9981635395967449,2019-06-23:10-48-18,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\635\20190623_104818_k216_black_pvc_line_cloth_N9981635395967449.jpg
+1,N7478115511839678,2019-06-23:10-48-14,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\115\20190623_104814_k216_black_pvc_line_cloth_N7478115511839678.jpg
+1,N1939989926155213,2019-06-23:10-48-07,,K216黑色-织物,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190623\989\20190623_104807_k216_black_pvc_line_cloth_N1939989926155213.jpg
+1,N7478115511859461,2019-06-05:07-17-02,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\115\20190605_071702_d2_black_pvc_leather_N7478115511859461.jpg3.jpg
+1,N1939989926155213,2019-06-05:07-16-56,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\989\20190605_071656_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,N4127215567041106,2019-06-05:07-06-36,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\215\20190605_070636_d2_black_pvc_leather_N4127215567041106.jpg3.jpg
+1,N4030770087516573,2019-06-05:07-06-30,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\770\20190605_070610_d2_black_pvc_leather_N4030770087516573.jpg3.jpg
+1,N0857291374780723,2019-06-05:07-05-48,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\291\20190605_070548_d2_black_pvc_leather_N085729137478072.jpgg3.jpg
+1,N9981635395967449,2019-06-05:07-05-27,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\635\20190605_070527_d2_black_pvc_leather_N9981635395967449.jpg3.jpg
+1,N7478115511839678,2019-06-05:07-05-06,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\115\20190605_070506_d2_black_pvc_leather_N7478115511839678.jpg3.jpg
+1,N1939989926155213,2019-06-05:07-05-00,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190605\989\20190605_070500_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,N0857248740045323,2019-06-04:22-48-39,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\248\20190604_224839_d2_black_pvc_leather_N085724874004532.jpgg3.jpg
+1,N9981635393986363,2019-06-04:22-48-18,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\635\20190604_224818_d2_black_pvc_leather_N9981635393986363.jpg3.jpg
+1,N7478115511859461,2019-06-04:22-48-05,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\115\20190604_224757_d2_black_pvc_leather_N7478115511859461.jpg3.jpg
+1,N1939989926155213,2019-06-04:22-47-37,,D2UC黑色-PVC+真皮,,,0,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\989\20190604_224720_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,N0857259792185673,2019-06-04:22-36-58,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\259\20190604_223658_d2_black_pvc_leather_N085725979218567.jpgg3.jpg
+1,N9981635394499921,2019-06-04:22-36-36,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\635\20190604_223636_d2_black_pvc_leather_N9981635394499921.jpg3.jpg
+1,N7478115511854331,2019-06-04:22-36-15,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\115\20190604_223615_d2_black_pvc_leather_N7478115511854331.jpg3.jpg
+1,N1939989926155213,2019-06-04:22-36-10,,D2UC黑色-PVC+真皮,,,1,auto,,Line01,root,D:\Cache\GithubCache\CarSeatImage\20190604\989\20190604_223610_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,UNVIBUZKRNLOUALO3,2018-11-04:17-09-51,UZK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170949.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,QYCDYLWFYXOORZFU3,2018-11-04:17-09-46,LWF,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170945.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XXDNGQGYKYFZLVFQ3,2018-11-04:17-09-42,QGY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170940.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,UIVDHINBTCBAMKTU3,2018-11-04:17-09-37,INB,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170935.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XIGLGEYTONATLWSL3,2018-11-04:17-09-32,EYT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170930.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,FQLZAIAILMSNRKQW3,2018-11-04:17-09-28,IAI,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170925.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,JMLUIIBJVEAHNGKW3,2018-11-04:17-09-22,IBJ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170920.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PUFXBOTTPXSMSCIM3,2018-11-04:17-09-17,OTT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170916.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,FOTEOFEGDVMDLNHC3,2018-11-04:17-09-13,FEG,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170911.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,KPFKUQUSAJFKLHQH3,2018-11-04:17-09-08,QUS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170906.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XEQSHNARSOQMVVMP3,2018-11-04:17-09-03,NAR,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170901.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,QARWAUJJDSJSMZYT3,2018-11-04:17-08-57,UJJ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170855.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,GJYXJJBHOEOBJEFY3,2018-11-04:17-08-52,JBH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170850.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,VDYTLZRKWZMYLEMZ3,2018-11-04:17-08-47,ZRK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170845.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,VHCJROLKGNLFVKVH3,2018-11-04:17-08-42,OLK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170841.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,OTAMTXAEVCRLITMU3,2018-11-04:17-08-37,XAE,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170835.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,KRDIOYLLPSLJVNIL3,2018-11-04:17-08-32,YLL,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170830.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,QWFRRSKGRUELLPVI3,2018-11-04:17-08-28,SKG,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170826.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,ULOJWVZAENWWAJAO3,2018-11-04:17-08-23,VZA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170821.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,YIQKWGYVDKBVOSCE3,2018-11-04:17-08-18,GYV,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170816.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,ORCAETLITFVHHZAF3,2018-11-04:17-08-13,TLI,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170811.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,UDNNWJDQVKNRQZFQ3,2018-11-04:17-08-08,JDQ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170806.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,EDEILWBZYIKWZDOT3,2018-11-04:17-08-03,WBZ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170802.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,CHYFSFVTSEZMCMKF3,2018-11-04:17-07-59,FVT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170757.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,TXBEBAWKKWDGCBWP3,2018-11-04:17-07-54,AWK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170752.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,JUGWTMMYBFJVTVBN3,2018-11-04:17-07-49,MMY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170747.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,SYWPXFZYWATWFJZG3,2018-11-04:17-07-44,FZY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170743.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,MIPBRJFKUUXCDKBV3,2018-11-04:17-07-40,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170738.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,RBUIQMYADOWBYHFI3,2018-11-04:17-07-35,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170734.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,GYCEMQCTSVYMCVVM3,2018-11-04:17-07-30,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170728.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PEVSULRHTNHKCLSY3,2018-11-04:17-07-25,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170723.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XSZSPFJKFDMVJELF3,2018-11-04:17-07-19,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170717.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XKLIFMKXKQNCGBTO3,2018-11-04:17-07-15,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170713.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PJICREGSEOVHHFZB3,2018-11-04:17-07-10,EGS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_170708.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,MIPBRJFKUUXCDKBV3,2018-11-04:16-43-51,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164349.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,RBUIQMYADOWBYHFI3,2018-11-04:16-43-46,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164345.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,GYCEMQCTSVYMCVVM3,2018-11-04:16-43-42,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164340.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PEVSULRHTNHKCLSY3,2018-11-04:16-43-37,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164335.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XSZSPFJKFDMVJELF3,2018-11-04:16-43-32,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164330.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XKLIFMKXKQNCGBTO3,2018-11-04:16-43-27,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164325.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PJICREGSEOVHHFZB3,2018-11-04:16-43-22,EGS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_164320.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,SYWPXFZYWATWFJZG3,2018-11-04:16-36-25,FZY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163624.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,MIPBRJFKUUXCDKBV3,2018-11-04:16-36-20,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163618.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,RBUIQMYADOWBYHFI3,2018-11-04:16-36-15,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163613.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,GYCEMQCTSVYMCVVM3,2018-11-04:16-36-11,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163609.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PEVSULRHTNHKCLSY3,2018-11-04:16-36-06,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163604.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XSZSPFJKFDMVJELF3,2018-11-04:16-36-01,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163559.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XKLIFMKXKQNCGBTO3,2018-11-04:16-35-56,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163554.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PJICREGSEOVHHFZB3,2018-11-04:16-35-51,EGS,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_163549.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,QWFRRSKGRUELLPVI3,2018-11-04:16-26-50,SKG,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162648.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,ULOJWVZAENWWAJAO3,2018-11-04:16-26-44,VZA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162643.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,YIQKWGYVDKBVOSCE3,2018-11-04:16-26-39,GYV,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162637.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,ORCAETLITFVHHZAF3,2018-11-04:16-26-34,TLI,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162633.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,UDNNWJDQVKNRQZFQ3,2018-11-04:16-26-30,JDQ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162628.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,EDEILWBZYIKWZDOT3,2018-11-04:16-26-25,WBZ,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162623.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,CHYFSFVTSEZMCMKF3,2018-11-04:16-26-20,FVT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162618.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,TXBEBAWKKWDGCBWP3,2018-11-04:16-26-16,AWK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162614.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,JUGWTMMYBFJVTVBN3,2018-11-04:16-26-10,MMY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162609.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,SYWPXFZYWATWFJZG3,2018-11-04:16-26-06,FZY,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162604.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,MIPBRJFKUUXCDKBV3,2018-11-04:16-26-00,JFK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162558.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,RBUIQMYADOWBYHFI3,2018-11-04:16-25-55,MYA,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162554.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,GYCEMQCTSVYMCVVM3,2018-11-04:16-25-51,QCT,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162549.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,PEVSULRHTNHKCLSY3,2018-11-04:16-25-46,LRH,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162544.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XSZSPFJKFDMVJELF3,2018-11-04:16-25-41,FJK,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162540.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg
+1,XKLIFMKXKQNCGBTO3,2018-11-04:16-25-35,MKX,-d2-黑色-PVC+真皮,,,0,auto,Canon EOS 1300D_1,Line01,root,C:\CarSeatRecognize\CarSeatImage\20181104\20181104_162534.jpg0_d2_black_pvc_leather_N1939989926155213.jpg3.jpg

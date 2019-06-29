@@ -8,6 +8,7 @@
 #include <condition_variable>
 #include <atomic>
 #include <sstream>
+#include <list>
  
 
 // 添加日志类,记录此系统的所有日志。
@@ -44,7 +45,7 @@ public:
 private:
 	enum
 	{
-		MAX_LOG_NUM = 20
+		MAX_LOG_NUM = 10
 	};
 
 	CLog();
@@ -53,11 +54,12 @@ private:
 
 	static CLog *m_pInstance;
 
-	LogMessage *m_pMessage;
+	//LogMessage *m_pMessage;
+	std::list<LogMessage> *m_pListMessage;
 	std::mutex m_pMutex;
-	size_t m_nCurBlank;
-	size_t m_nCurValid;
-	std::atomic<bool> m_bFlag;
+	//size_t m_nCurBlank;
+	//size_t m_nCurValid;
+	std::atomic<int> m_nMsgCount;
 	std::condition_variable m_pCond;
 	std::fstream m_pLog;
 	

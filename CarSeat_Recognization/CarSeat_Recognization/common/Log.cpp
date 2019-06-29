@@ -36,30 +36,29 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 	}
 	if (pLog == nullptr)
 	{
-		return 0;
+		return -1;
 	}
 	std::unique_lock<std::mutex> lck(pLog->m_pMutex , std::defer_lock);
 	int cnt = 0;
 	if (lck.try_lock())
 	{
-		size_t tmp = pLog->m_nCurBlank;
-		LogMessage *pMesg = &pLog->m_pMessage[tmp];
-		memset(pMesg, 0, sizeof(LogMessage));
-		pMesg->type = a;
-		memcpy(pMesg->pFunc, func, strnlen_s(func, sizeof(pMesg->pFunc)));
-		pMesg->mLine = line;
+		//size_t tmp = pLog->m_nCurBlank;
+		LogMessage pMesg;// = &pLog->m_pMessage[tmp];
+		memset(&pMesg, 0, sizeof(LogMessage));
+		pMesg.type = a;
+		memcpy(pMesg.pFunc, func, strnlen_s(func, sizeof(pMesg.pFunc)));
+		pMesg.mLine = line;
 		va_list argptr;
-		
+
 		__crt_va_start(argptr, fmt);
-		cnt = vsprintf_s(pMesg->data, fmt, argptr);
+		cnt = vsprintf_s(pMesg.data, fmt, argptr);
 		__crt_va_end(argptr);
-		pLog->m_nCurBlank = (tmp + 1) % MAX_LOG_NUM;
-		pLog->SetFlag(true);
-		pLog->m_pCond.notify_one();
-
-
+		//pLog->m_nCurBlank = (tmp + 1) % MAX_LOG_NUM;
+		//pLog->SetFlag(true);
+		pLog->m_pListMessage->push_back(pMesg);
+		pLog->m_nMsgCount++;
+		pLog->m_pCond.notify_all();
 	}
-	
 	
 	return cnt;
 }
@@ -79,15 +78,23 @@ void CLog::run()
 		{
 			continue;
 		}
-		m_pCond.wait(lck, [&pLog] {return pLog->GetFlag(); });
+		
+		m_pCond.wait(lck, [&pLog] {return pLog->m_nMsgCount > 0; });
+
 		//m_pMessage[m_nCurValid];
-		memcpy(&buffer, &m_pMessage[m_nCurValid], sizeof(LogMessage));
+		
+		/*memcpy(&buffer, &m_pMessage[m_nCurValid], sizeof(LogMessage));
 		memset(&m_pMessage[m_nCurValid], 0, sizeof(LogMessage));
 		m_nCurValid = (m_nCurValid + 1) % MAX_LOG_NUM;
 		if (m_nCurBlank == m_nCurValid)
 		{
 			pLog->SetFlag(false);
-		}
+		}*/
+		memset(&buffer, 0, sizeof(LogMessage));
+		std::list<LogMessage>::iterator iter = pLog->m_pListMessage->begin();
+		memcpy(&buffer, &*iter, sizeof(LogMessage));
+		pLog->m_pListMessage->pop_front();
+		--m_nMsgCount;
 		lck.unlock();
 		if (m_pLog.good())
 		{
@@ -134,11 +141,8 @@ CLog::CLog()
 
 void CLog::init()
 {
-	m_pMessage = new LogMessage[MAX_LOG_NUM];
-	memset(m_pMessage, 0, sizeof(LogMessage) * MAX_LOG_NUM);
-	m_nCurBlank = 0;
-	m_nCurValid = 0;
-	m_bFlag = false;
+	m_pListMessage = new std::list<LogMessage>;
+	m_nMsgCount = 0;
 
 	
 	time_t  time1 = time(NULL);//获取系统时间，单位为秒;
@@ -169,16 +173,6 @@ void CLog::init()
 	m_pLog.open(logFileName, std::ios::trunc | std::ios::in | std::ios::out | std::ios::binary);
 }
 
-void CLog::SetFlag(bool flag)
-{
-	m_bFlag = flag;
-}
-
-bool CLog::GetFlag()
-{
-	return m_bFlag;
-}
-
 
 CLog::~CLog()
 {
@@ -190,9 +184,14 @@ CLog::~CLog()
 	//std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(100);
 	//std::this_thread::sleep_for(a);
 	//m_pLog.close();
-	if (m_pMessage != nullptr)
+	if (m_pListMessage != NULL)
+	{
+		delete m_pListMessage;
+		m_pListMessage = NULL;
+	}
+	/*if (m_pMessage != nullptr)
 	{
 		delete[]m_pMessage;
 		m_pMessage = nullptr;
-	}
+	}*/
 }

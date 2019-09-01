@@ -150,7 +150,7 @@ void CEVFPictureBox::reverseRotateZ()
 LRESULT CEVFPictureBox::OnEvfDataChanged(WPARAM wParam, LPARAM lParam)
 {
 	EVF_DATASET data = *(EVF_DATASET *)wParam;
-	EdsUInt64 size;
+	EdsUInt64 size = 0;
 
 	unsigned char* pbyteImage = NULL; 
 
@@ -174,6 +174,15 @@ LRESULT CEVFPictureBox::OnEvfDataChanged(WPARAM wParam, LPARAM lParam)
 
 		ReleaseDC(pDC);
 	}
+	else 
+	{
+		static time_t preLogTime = time(NULL);
+		if (time(NULL) - preLogTime >= 1)
+		{
+			WriteInfo("pbyteimage is null");
+			preLogTime = time(NULL);
+		}
+	}
 
 	return 0;
 }
@@ -196,36 +205,27 @@ void CEVFPictureBox::OnDrawImage(CDC *pDC, unsigned char* pbyteImage, int size)
 	CreateStreamOnHGlobal(hMem, TRUE, &stream);
 
 	image.Load(stream);
-	//WriteInfo("image width = %d, height = %d, bpp = %d", image.GetWidth(),	\
-	//	image.GetHeight(), image.GetBPP());
 
 	auxRotateZ(image, rotateZ);
 
 	int tmpImageHeight = image.GetHeight();
 	int tmpImageWidth = image.GetWidth();
-	//WriteInfo("degeree = %d", rotateZ);
-	//WriteInfo("image width = %d, height = %d, bpp = %d", image.GetWidth(),	\
-	//	image.GetHeight(), image.GetBPP());
 	if ((tmpImageHeight != m_nImageHeight) || (tmpImageWidth != m_nImageWidth))
 	{
-		/*if ((m_nImageHeight != 0) && (m_nImageWidth != 0))
-		{
-			RECT tmpRect;
-			GetWindowRect(&tmpRect);
-			int tmpWidth = tmpRect.right - tmpRect.left;
-			int tmpHeight = tmpWidth * tmpImageHeight / (float)tmpImageWidth;
-			this->MoveWindow(tmpRect.left, tmpRect.top, tmpWidth, tmpHeight, TRUE);
-		}*/
-		
 		m_nImageHeight = tmpImageHeight;
 		m_nImageWidth = tmpImageWidth;
 		m_nBpp = image.GetBPP();
+		WriteInfo("size = %d, width = %d, height = %d, bpp = %d", size, tmpImageWidth,
+			tmpImageHeight, m_nBpp);
 	}
 	
 	CRect rect;
 	GetWindowRect(&rect);
 	// Drawing
 	SetStretchBltMode(pDC->GetSafeHdc() , COLORONCOLOR);
+
+	//WriteInfo("rect width = %d, height = %d", rect.Width(), rect.Height());
+	//WriteInfo("image width = %d, hegith = %d", image.GetWidth(), image.GetHeight());
 	
 	image.StretchBlt(pDC->GetSafeHdc(), 0, 0, rect.Width(),rect.Height(),0,0,image.GetWidth(), image.GetHeight(),SRCCOPY);
 	

@@ -117,6 +117,7 @@ public:
 					// and retry is required , note that some cameras may become unstable if multiple 
 					// commands are issued in succession without an intervening interval.
 					//Thus, leave an interval of about 500 ms before commands are reissued.
+					//Sleep(500);
 					Sleep(500);
 					//std::string commandName(typeid(*command).raw_name());
 					

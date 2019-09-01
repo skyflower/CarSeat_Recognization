@@ -1,13 +1,16 @@
-﻿#include "../stdafx.h"
+﻿
+//#include <WinSock2.h>
 #include "RFIDReader.h"
 #include <cstdlib>
 #include <cstdio>
-//#include <Windows.h>
+#include <Windows.h>
 #include "utils.h"
 #include "Log.h"
-#include "../xml/tinyxml.h"
+#include "xml\tinyxml.h"
+#include <Iphlpapi.h>
 #include <IcmpAPI.h>
 #include <stack>
+//#include <winsock.h>
 
 
 CRFIDReader::CRFIDReader():
@@ -94,14 +97,7 @@ bool CRFIDReader::init()
 
 CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 {
-	//WSADATA wsaData;
-	/*int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (err != 0)
-	{
-		err = WSAGetLastError();
-		WriteError("err = %u", err);
-		return ErrorType::ERROR_SOCKET_INIT;
-	}*/
+	
 	int err = 0;
 	m_nSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_nSocket == INVALID_SOCKET)
@@ -131,7 +127,6 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 	if (0 != connect(m_nSocket, (sockaddr*)&addr, sizeof(sockaddr)))
 	{
 		err = WSAGetLastError();
-		TRACE1("connect failed,err = %u\n", err);
 		WriteError("connect failed, ip = 0x%X, port = %u, err = %u", serverIp, port, err);
 		closesocket(m_nSocket);
 		m_nSocket = INVALID_SOCKET;
@@ -139,6 +134,7 @@ CRFIDReader::ErrorType CRFIDReader::initRFID(unsigned int serverIp, int port)
 		return ErrorType::ERROR_SOCKET_CONNECT;
 	}
 	//WriteInfo("rfid socket connect success");
+
 	m_nIp = serverIp;
 	m_nPort = port;
 	return ErrorType::ERROR_OK;
@@ -183,14 +179,16 @@ CRFIDReader::ErrorType CRFIDReader::isConnect()
 {
 	if ((m_nSocket == 0) || (m_nSocket == INVALID_SOCKET) || (m_nSocket == -1))
 	{
+		std::cout << "m_nSocket is invalid socket" << std::endl;
 		return ErrorType::ERROR_SOCKET_CLOSED;
 	}
 	if (IsReachable(m_nIp) == false)
 	{
 		WriteError("rfid server no rearchable = 0x%X", m_nIp);
+		std::cout << "rfid server no rearchable" << std::endl;
 		return ErrorType::ERROR_SOCKET_CONNECT;
 	}
-	
+	std::cout << "rfid status is ok" << std::endl;
 	return ErrorType::ERROR_OK;
 }
 
@@ -206,9 +204,10 @@ bool CRFIDReader::IsReachable(unsigned int serverIp)
 		WriteError("icmpSendEcho failed ServerIp = 0x%X", serverIp);
 		IcmpCloseHandle(IcmpHandle);
 		IcmpHandle = INVALID_HANDLE_VALUE;
+		std::cout << "rfid is unreachable" << std::endl;
 		return false;
 	}
-
+	std::cout << "rfid is reachable" << std::endl;
 	IcmpCloseHandle(IcmpHandle);
 	return true;
 }
@@ -252,6 +251,7 @@ std::string CRFIDReader::getBySocket()
 		delete[]buffer;
 		buffer = nullptr;
 		WriteError("communicate err = %d", ret);
+		printf("communicate err = %d\n", ret);
 		return std::string();
 	}
 	
@@ -347,7 +347,7 @@ std::string CRFIDReader::getBySocket()
 
 	} while (0);
 
-	//WriteInfo("readData return = [%s]", buffer);
+	printf("readData return = [%s]\n", buffer);
 
 	if (buffer != nullptr)
 	{
@@ -680,7 +680,6 @@ CRFIDReader::ErrorType CRFIDReader::parseReplyPackage(char * buffer, size_t leng
 	lconfigXML.Parse(buffer);
 	if (lconfigXML.Error())
 	{
-		TRACE0("xml Format is invalid\n");
 		WriteError("recvBlood = [%s]", buffer);
 		return ErrorType::ERROR_XML_PARSE;
 	}
@@ -752,17 +751,19 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET &fd, char * buffer, int
 		}
 
 		WriteError("socket = %d Error, %d", fd, ret);
+		std::cout <<"socket =  " << fd << " Error :  " << ret << std::endl;
 		return ErrorType::ERROR_SOCKET_SEND;
 	}
 
 	memset(buffer, 0, sizeof(char) * length);
-	Sleep(50);
+	Sleep(100);
 
 	int recvLen = length;
 	int nret = recv(fd, buffer, recvLen, 0);
 	if (nret == 0)
 	{
 		WriteError("rfid server has closed");
+		std::cout << "rfid server has closed" << std::endl;
 		closesocket(fd);
 		fd = INVALID_SOCKET;
 		return ErrorType::ERROR_SOCKET_CLOSED;
@@ -776,8 +777,10 @@ CRFIDReader::ErrorType CRFIDReader::__communicate(SOCKET &fd, char * buffer, int
 			fd = INVALID_SOCKET;
 		}
 		WriteError("rfid server SOCKET ERROR, socket = %u, error = %d", fd, ret);
+		printf("rfid server SOCKET ERROR, socket = %llu, error = %d\n", fd, ret);
 		return ErrorType::ERROR_SOCKET_RECV;
 	}
+	printf("rfid server communicate success");
 	return ErrorType::ERROR_OK;
 }
 

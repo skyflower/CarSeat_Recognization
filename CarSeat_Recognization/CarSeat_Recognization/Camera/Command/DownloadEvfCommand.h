@@ -19,6 +19,8 @@
 #include "CameraEvent.h"
 #include "EDSDK.h"
 
+#include "../../common/Log.h"
+
 
 typedef struct _EVF_DATASET 
 {
@@ -50,6 +52,7 @@ public:
 		// Exit unless during live view.
 		if ((_model->getEvfOutputDevice() & kEdsEvfOutputDevice_PC) == 0)
 		{
+			WriteInfo("_model->getEvfOutputDevice()= %d", _model->getEvfOutputDevice());
 			return true;
 		}
 
@@ -70,6 +73,15 @@ public:
 		if (err == EDS_ERR_OK)
 		{
 			err = EdsDownloadEvfImage(_model->getCameraObject(), evfImage);
+			if (err != EDS_ERR_OK)
+			{
+				static time_t preLogTime = time(NULL);
+				if (time(NULL) - preLogTime >= 5)
+				{
+					WriteInfo("eds down load evf image failed");
+					preLogTime = time(NULL);
+				}
+			}
 		}
 
 		// Get meta data for live view image data.
@@ -107,6 +119,14 @@ public:
 				CameraEvent e("EvfDataChanged", &dataSet);
 				_model->notifyObservers(&e);		
 			}
+			else
+			{
+				WriteInfo("err not equal eds_err_ok, not notify observers evf data changed");
+			}
+		}
+		else
+		{
+			WriteInfo("get meta data fialed for live view, err = %u", err);
 		}
 
 
@@ -130,6 +150,7 @@ public:
 			// when the image data is not ready yet.
 			if(err == EDS_ERR_OBJECT_NOTREADY)
 			{
+				WriteInfo("eds error object not ready");
 				return false;
 			}
 
@@ -137,11 +158,13 @@ public:
 			if(err == EDS_ERR_DEVICE_BUSY)
 			{
 				CameraEvent e("DeviceBusy");
+				WriteInfo("devicebusy");
 				_model->notifyObservers(&e);
 				return false;
 			}
 
 			CameraEvent e("error", &err);
+			WriteInfo("cameraevent error");
 			_model->notifyObservers(&e);
 			return false;
 		}

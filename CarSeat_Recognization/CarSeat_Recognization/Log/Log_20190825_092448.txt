@@ -1,0 +1,77 @@
+Info	20190825:092448:222	[CCarSeat_RecognizationApp::InitInstance,75] enter init system
+Info	20190825:092448:242	[CParamManager::Init,333] parse image ROI success
+Info	20190825:092448:242	[CParamManager::Init,338] left	1600
+Info	20190825:092448:242	[CParamManager::Init,338] right	3200
+Info	20190825:092448:242	[CParamManager::Init,338] top	400
+Info	20190825:092448:242	[CParamManager::Init,338] bottom	3300
+Info	20190825:092448:242	[CParamManager::Init,358] serverip = 3232235781
+Info	20190825:092448:242	[CParamManager::Init,367] barcodeIp = 174935571
+Info	20190825:092448:242	[CParamManager::Init,384] serverport = 47001
+Info	20190825:092448:242	[CParamManager::Init,392] serverport = 47001
+Info	20190825:092448:242	[CParamManager::Init,400] kepServerPort = 47005
+Info	20190825:092448:242	[CParamManager::Init,407] EdsImageQuality = 0x0113ff0f
+Info	20190825:092448:243	[CParamManager::Init,416] testClientPort = 10909
+Info	20190825:092448:243	[CParamManager::Init,431] barcodeTimeout = 500
+Info	20190825:092448:243	[CParamManager::Init,438] barcodeTimeout = 10909
+Info	20190825:092448:243	[CParamManager::Init,445] graphFile = D:\tmp\output_graph.pb
+Info	20190825:092448:243	[CParamManager::Init,459] labelFile = D:\tmp\output_labels.txt
+Info	20190825:092448:243	[CParamManager::Init,467] imagePath = D:\Cache\GithubCache\CarSeatImage
+Info	20190825:092448:243	[CParamManager::Init,475] cacheImagePath = D:\Cache\GithubCache\CarSeatImage\Cache
+Info	20190825:092448:243	[CParamManager::Init,482] lineName = Line01
+Info	20190825:092448:243	[CParamManager::Init,497] patternImagePath = D:\Cache\GithubCache\CarSeat_Recognization\patternImage
+Info	20190825:092448:243	[CParamManager::Init,505] barcodeResetParam = 0025000000010001
+Info	20190825:092448:342	[CParamManager::__auxLocalIP,151] IP = 0x1C9A8C0
+Error	20190825:092448:360	[CNetworkTask::IsReachable,79] icmpSendEcho failed clientIp = 0xC0A8C901, ServerIp = 0xC0A80105
+Error	20190825:092448:360	[CParamManager::__auxLocalIP,161] ip reach failed
+Info	20190825:092448:360	[CParamManager::__auxLocalIP,151] IP = 0x150A8C0
+Error	20190825:092448:361	[CNetworkTask::IsReachable,79] icmpSendEcho failed clientIp = 0xC0A85001, ServerIp = 0xC0A80105
+Error	20190825:092448:361	[CParamManager::__auxLocalIP,161] ip reach failed
+Info	20190825:092448:361	[CParamManager::__auxLocalIP,151] IP = 0x1100A8C0
+Error	20190825:092448:647	[CNetworkTask::IsReachable,79] icmpSendEcho failed clientIp = 0xC0A80011, ServerIp = 0xC0A80105
+Error	20190825:092448:647	[CParamManager::__auxLocalIP,161] ip reach failed
+Info	20190825:092448:648	[CParamManager::__auxLocalIP,167] get localIp cost Time = 404
+Info	20190825:092448:648	[CCarSeat_RecognizationApp::initSystem,210] get CParamManager success
+Info	20190825:092448:652	[CCarSeat_RecognizationApp::initSystem,218] Get plog success
+Info	20190825:092448:652	[CCarSeat_RecognizationApp::initSystem,220] Get m_pClassify success
+Info	20190825:092512:126	[CCarSeat_RecognizationApp::initSystem,223] Get initPython success
+Info	20190825:092512:135	[CLabelManager::init,127] LoginUsrName = root
+Info	20190825:092512:135	[CLabelManager::init,133] LoginPasswd = 12345678
+Info	20190825:092512:135	[CLabelManager::init,150] LoginInfoAutoSave = 0
+Info	20190825:092512:135	[CLabelManager::init,165] UsrInputFunction = 0
+Info	20190825:092512:135	[CLabelManager::init,180] ObtainBarcodeFunction = 0
+Info	20190825:092512:135	[CLabelManager::init,195] AlarmFunction = 0
+Info	20190825:092512:135	[CLabelManager::init,202] ExposureTimeMax = 1500000
+Info	20190825:092512:135	[CLabelManager::init,208] ExposureTimeMin = 500000
+Info	20190825:092512:135	[CCarSeat_RecognizationApp::initSystem,230] Get m_pLabelManager success
+Info	20190825:092513:489	[CCarSeat_RecognizationApp::InitInstance,77] exit init system, success
+Info	20190825:092513:501	[CCarSeat_RecognizationApp::InitInstance,100] new CameraController success
+Info	20190825:092513:879	[CCarSeat_RecognizationApp::InitInstance,108] set Camera Controller success
+Info	20190825:092513:879	[CCarSeat_RecognizationApp::LoginSystem,161] begin login system
+Info	20190825:092521:262	[CCarSeat_RecognizationApp::LoginSystem,166] login ok
+Info	20190825:092521:262	[CCarSeat_RecognizationApp::LoginSystem,180] set login username success
+Info	20190825:092521:262	[CCarSeat_RecognizationApp::LoginSystem,195] set login passwd success
+Info	20190825:092521:263	[CCarSeat_RecognizationApp::LoginSystem,201] set login auto save flag success
+Info	20190825:092521:263	[CCarSeat_RecognizationApp::InitInstance,113] login system success
+Info	20190825:092521:723	[CLineCamera::setupListener,21] set up listener
+Error	20190825:092542:290	[CKepServerSocket::initSocket,196] connect failed, err = 10060
+Info	20190825:092930:47	[CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob,1765] begin job
+Info	20190825:092930:581	[CCarSeat_RecognizationDlg::run,651] read rfid = N1939989928201548
+Info	20190825:092930:583	[CLineCamera::saveJpg,90] saveJpg Camera, m_nStatus = 0
+Error	20190825:092938:283	[CCarSeat_RecognizationDlg::run,705] get camera image failed
+Info	20190825:092938:788	[CCarSeat_RecognizationDlg::run,651] read rfid = N7478113212171690
+Info	20190825:092938:789	[CLineCamera::saveJpg,90] saveJpg Camera, m_nStatus = 0
+Error	20190825:092946:486	[CCarSeat_RecognizationDlg::run,705] get camera image failed
+Info	20190825:092946:993	[CCarSeat_RecognizationDlg::run,651] read rfid = N9981865094991883
+Info	20190825:092946:993	[CLineCamera::saveJpg,90] saveJpg Camera, m_nStatus = 0
+Info	20190825:092953:610	[CCarSeat_RecognizationDlg::OnBnClickedButtonBeginJob,1761] end job
+Info	20190825:092954:575	[CCarSeat_RecognizationDlg::OnClose,1471] closing
+Info	20190825:092954:627	[CLineCamera::stopCamera,113] start Camera status not match, m_nStatus = 0 not CAMERA_GRAB
+Info	20190825:092954:627	[CCarSeat_RecognizationDlg::OnClose,1495] thread status false
+Info	20190825:092954:635	[Processor::run,137] _running false
+Info	20190825:092954:635	[Processor::run,150] CoUninitialize
+Info	20190825:092954:636	[CCarSeat_RecognizationDlg::OnClose,1517] free controller, model, lineCamera
+Info	20190825:092954:636	[CCarSeat_RecognizationDlg::OnClose,1540] free RecogManager KepServer ImagePattern
+Info	20190825:092954:743	[CCarSeat_RecognizationApp::DeInitSystem,242] enter DeInitSystem
+Info	20190825:092954:915	[CCarSeat_RecognizationApp::DeInitSystem,249] close network task
+Info	20190825:092954:935	[CCarSeat_RecognizationApp::DeInitSystem,260] close ui thread;
+Info	20190825:092955:387	[CCarSeat_RecognizationApp::DeInitSystem,290] free classify model controller cameramanager lableManager ParamMangaeer

@@ -110,8 +110,9 @@ private:
 										&data );
 
 				//Acquired property value is set
-				if(err == EDS_ERR_OK)
+				if((err == EDS_ERR_OK))// && (propertyID != 0x500))
 				{
+					//WriteInfo("propertyID = %d, data = %u", propertyID, data);
 					_model->setPropertyUInt32(propertyID, data);
 				}
 			}

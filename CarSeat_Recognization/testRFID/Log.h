@@ -30,7 +30,6 @@ public:
 	struct LogMessage
 	{
 		LogType type;
-		char ascTime[100];
 		char pFunc[100];
 		unsigned int mLine;
 		char data[2000];

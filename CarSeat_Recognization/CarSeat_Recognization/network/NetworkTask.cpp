@@ -709,19 +709,19 @@ bool CNetworkTask::RecogResultToXml(RecogResult<char>& a, char * xml)
 	<identification>		\
 	<version>%s</version>	\
 	<lineID>%s</lineID>	\
-	<ip>%s< / ip>				\
-	<time>%s20181010.192334< / time>
-	<barcode>%sN123456789123456< / barcode>
-	< barcodeResult>%s567 </barcodeResult>
+	<ip>%s</ip>				\
+	<time>%s20181010.192334</time>
+	<barcode>%sN123456789123456</barcode>
+	<barcodeResult>%s567 </barcodeResult>
 	<imageName>img_001.jpg</imageName>
-	<method>auto< / method>
-	<usrName>zhangsan< / usrName>
-	<typeByRecog>d2_black_pvc_line_cloth< / typeByRecog>
-	<typeByBarcode>k216_black_pvc_hole_cloth< / typeByBarcode>
-	<typeByInput>k215_ecru_pvc_hole_cloth< / typeByInput>
-	<cameraName>canno eos13D< / cameraName>
-	< correct>0 < / correct >
-	< / identification>\";*/
+	<method>auto</method>
+	<usrName>zhangsan</usrName>
+	<typeByRecog>d2_black_pvc_line_cloth</typeByRecog>
+	<typeByBarcode>k216_black_pvc_hole_cloth</typeByBarcode>
+	<typeByInput>k215_ecru_pvc_hole_cloth</typeByInput>
+	<cameraName>canno eos13D</cameraName>
+	<correct>0 </correct>
+	</identification>\";*/
 	TiXmlDocument *xdoc = new TiXmlDocument();
 
 	TiXmlDeclaration* xdec = new TiXmlDeclaration("1.0", "utf-8", "");

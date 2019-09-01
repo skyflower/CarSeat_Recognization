@@ -1,8 +1,9 @@
-﻿#include "../stdafx.h"
+﻿
 #include "Log.h"
 #include "utils.h"
 #include <cstdlib>
 #include <io.h>
+#include <Windows.h>
 
 CLog *CLog::m_pInstance = nullptr;
 
@@ -48,14 +49,6 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 		pMesg.type = a;
 		memcpy(pMesg.pFunc, func, strnlen_s(func, sizeof(pMesg.pFunc)));
 		pMesg.mLine = line;
-
-		SYSTEMTIME curTime;
-		memset(&curTime, 0, sizeof(curTime));
-		GetLocalTime(&curTime);
-		sprintf_s(pMesg.ascTime, "%04d%02d%02d:%02d%02d%02d:%d", \
-			curTime.wYear, curTime.wMonth, curTime.wDay, \
-			curTime.wHour, curTime.wMinute, curTime.wSecond, curTime.wMilliseconds);
-
 		va_list argptr;
 
 		__crt_va_start(argptr, fmt);
@@ -75,8 +68,8 @@ int CLog::Write(CLog::LogType a, char* func, int line, char *fmt, ...)
 void CLog::run()
 {
 	LogMessage buffer;
-	//char currentTime[100];
-	//SYSTEMTIME curTime;
+	char currentTime[100];
+	SYSTEMTIME curTime;
 	
 	while (1)
 	{
@@ -123,16 +116,16 @@ void CLog::run()
 				break;
 			}
 			
-			//memset(&curTime, 0, sizeof(curTime));
-			//GetLocalTime(&curTime);
+			memset(&curTime, 0, sizeof(curTime));
+			GetLocalTime(&curTime);
 
-			//memset(currentTime, 0, sizeof(currentTime));
+			memset(currentTime, 0, sizeof(currentTime));
 
-			//sprintf_s(currentTime, "%04d%02d%02d:%02d%02d%02d:%d", \
-			//	curTime.wYear, curTime.wMonth, curTime.wDay, \
-			//	curTime.wHour, curTime.wMinute, curTime.wSecond, curTime.wMilliseconds);
+			sprintf_s(currentTime, "%04d%02d%02d:%02d%02d%02d:%d", \
+				curTime.wYear, curTime.wMonth, curTime.wDay, \
+				curTime.wHour, curTime.wMinute, curTime.wSecond, curTime.wMilliseconds);
 
-			m_pLog << buffer.ascTime << "\t";
+			m_pLog << currentTime << "\t";
 
 
 			m_pLog << "[" << buffer.pFunc << "," << buffer.mLine << "] " << buffer.data << "\n";
@@ -174,7 +167,7 @@ void CLog::init()
 		}
 	}
 
-	sprintf_s(logFileName, "%sLog_%04d%02d%02d_%02d%02d%02d.txt", \
+	sprintf_s(logFileName, "%stestRFID_%04d%02d%02d_%02d%02d%02d.txt", \
 		LogDir, tmpTime.tm_year + 1900, tmpTime.tm_mon + 1, tmpTime.tm_mday, \
 		tmpTime.tm_hour, tmpTime.tm_min, tmpTime.tm_sec);
 

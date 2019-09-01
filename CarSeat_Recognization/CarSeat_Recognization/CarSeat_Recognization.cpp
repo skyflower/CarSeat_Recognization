@@ -97,15 +97,20 @@ BOOL CCarSeat_RecognizationApp::InitInstance()
 	//Create CameraController
 	_controller = new CameraController();
 
+	WriteInfo("new CameraController success");
+
 	//Create View Dialog
 	CCarSeat_RecognizationDlg dlg;
 
 	// Send Model Event to view	
 	dlg.setCameraController(_controller);
+
+	WriteInfo("set Camera Controller success");
 	
 	INT_PTR nResponse = IDOK;
 	if ((_controller != nullptr) && (LoginSystem() == true))
 	{
+		WriteInfo("login system success");
 		m_pMainWnd = &dlg;
 
 		dlg.SetImageClassify(m_pClassify);
@@ -153,9 +158,12 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 	CLoginDlg loginDlg;
 	loginDlg.SetLabelManager(m_pLabelManager);
 
+	WriteInfo("begin login system");
+
 	INT_PTR nResponse = loginDlg.DoModal();
 	if (nResponse == IDOK)
 	{
+		WriteInfo("login ok");
 		CString UsrName = loginDlg.GetLoginUsrName();
 		wchar_t *tmpPointer = UsrName.GetBuffer();
 		if (tmpPointer != nullptr)
@@ -169,6 +177,7 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 			}
 		}
 		UsrName.ReleaseBuffer();
+		WriteInfo("set login username success");
 
 		CString Passwd = loginDlg.GetLoginPasswd();
 		tmpPointer = Passwd.GetBuffer();
@@ -183,12 +192,13 @@ bool CCarSeat_RecognizationApp::LoginSystem()
 			}
 		}
 		Passwd.ReleaseBuffer();
+		WriteInfo("set login passwd success");
 
 		BOOL tmpAutoSave = loginDlg.GetAutoSaveFlag();
 		bool autoSave = (tmpAutoSave == TRUE) ? true : false;
 		
 		m_pLabelManager->SetLoginAutoSave(autoSave);
-
+		WriteInfo("set login auto save flag success");
 		return true;
 	}
 	return false;

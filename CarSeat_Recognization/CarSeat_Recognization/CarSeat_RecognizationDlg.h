@@ -146,6 +146,8 @@ public:
 	*/
 	void run();
 
+	void async_run();
+
 	// only for debug and test, has no rfid , no kepserver ,
 	void main_loop();
 
@@ -193,4 +195,5 @@ public:
 	afx_msg void OnEnableAlarm();
 	afx_msg void OnAbout();
 	afx_msg void OnRegisterSoftware();
+	afx_msg void OnCameraTest();
 };

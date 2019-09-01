@@ -84,6 +84,10 @@ void CLoginDlg::OnBnClickedOk()
 	{
 		return;
 	}
+	if (m_pLabelManager == NULL)
+	{
+		return;
+	}
 
 	wchar_t *tmpPointer = m_strPasswd.GetBuffer();
 

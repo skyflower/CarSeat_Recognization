@@ -28,6 +28,9 @@ public:
 	SetCapacityCommand(CameraModel *model) : Command(model){}
 	SetCapacityCommand(CameraModel *model, EdsCapacity capacity) : Command(model), _capacity(capacity) {}
 
+
+	virtual std::string getCommandName() { return "SetCapacityCommand"; }
+
 	void setCapacity(EdsCapacity capacity)
 	{
 		_capacity = capacity;

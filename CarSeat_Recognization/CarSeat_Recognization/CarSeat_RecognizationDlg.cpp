@@ -630,7 +630,7 @@ void CCarSeat_RecognizationDlg::run()
 		}
 
 
-		if (m_pParamManager->GetBarcodeTime() < 20)
+		/*if (m_pParamManager->GetBarcodeTime() < 20)
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(20);
 			std::this_thread::sleep_for(a);
@@ -639,7 +639,7 @@ void CCarSeat_RecognizationDlg::run()
 		{
 			std::chrono::duration<int, std::milli> a = std::chrono::milliseconds(m_pParamManager->GetBarcodeTime());
 			std::this_thread::sleep_for(a);
-		}
+		}*/
 
 		if (m_bThreadStatus == false)
 		{
@@ -1875,7 +1875,7 @@ LRESULT CCarSeat_RecognizationDlg::OnProgressReport(WPARAM wParam, LPARAM lParam
 {
 	//_progress.SetPos((int)wParam);
 	//static bool flag = true;
-	WriteInfo("wparam = %llu, lparam = %llu", wParam, lParam);
+	//WriteInfo("wparam = %llu, lparam = %llu", wParam, lParam);
 
 	return 0;
 }

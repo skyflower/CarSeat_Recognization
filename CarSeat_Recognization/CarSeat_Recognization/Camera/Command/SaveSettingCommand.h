@@ -28,6 +28,8 @@ public:
 	SaveSettingCommand(CameraModel *model, EdsSaveTo saveTo) :_saveTo(saveTo), Command(model){}
 
 
+	virtual std::string getCommandName() { return "SaveSettingCommand"; }
+
 	// Execute command	
 	virtual bool execute()
 	{

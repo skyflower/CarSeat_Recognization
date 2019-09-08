@@ -29,6 +29,9 @@ public:
 			: _directoryItem(dirItem), Command(model){}
 
 
+	virtual std::string getCommandName() { return "DownloadCommand"; }
+
+
 	virtual ~DownloadCommand()
 	{
 		//Release item
@@ -49,6 +52,8 @@ public:
 		//Acquisition of the downloaded image information
 		EdsDirectoryItemInfo	dirItemInfo;
 		err = EdsGetDirectoryItemInfo( _directoryItem, &dirItemInfo);
+
+		//WriteInfo("EdsGetDirectoryItemInfo, err = %d", err);
 	
 		// Forwarding beginning notification	
 		if(err == EDS_ERR_OK)
@@ -57,11 +62,15 @@ public:
 			_model->notifyObservers(&e);
 		}
 
+		//WriteInfo("notifyObservers, err = %d", err);
+
 		//Make the file stream at the forwarding destination
 		if(err == EDS_ERR_OK)
 		{	
 			err = EdsCreateFileStream(dirItemInfo.szFileName, kEdsFileCreateDisposition_CreateAlways, kEdsAccess_ReadWrite, &stream);
 		}	
+
+		//WriteInfo("EdsCreateFileStream, err = %d", err);
 
 		//Set Progress
 		if(err == EDS_ERR_OK)
@@ -69,6 +78,7 @@ public:
 			err = EdsSetProgressCallback(stream, ProgressFunc, kEdsProgressOption_Periodically, this);
 		}
 
+		//WriteInfo("EdsSetProgressCallback, err = %d", err);
 
 		//Download image
 		if(err == EDS_ERR_OK)
@@ -76,11 +86,15 @@ public:
 			err = EdsDownload( _directoryItem, dirItemInfo.size, stream);
 		}
 
+		//WriteInfo("EdsDownload, err = %d", err);
+
 		//Forwarding completion
 		if(err == EDS_ERR_OK)
 		{
 			err = EdsDownloadComplete( _directoryItem);
 		}
+
+		//WriteInfo("EdsDownloadComplete, err = %d", err);
 
 		//Release Item
 		if(_directoryItem != NULL)
@@ -89,6 +103,8 @@ public:
 			_directoryItem = NULL;
 		}
 
+		//WriteInfo("EdsRelease, err = %d", err);
+
 		//Release stream
 		if(stream != NULL)
 		{
@@ -96,12 +112,16 @@ public:
 			stream = NULL;
 		}		
 		
+
+		//WriteInfo("EdsRelease, err = %d", err);
 		// Forwarding completion notification
 		if( err == EDS_ERR_OK)
 		{
 			CameraEvent e("DownloadComplete", &err);
 			_model->notifyObservers(&e);
 		}
+
+		//WriteInfo("notifyObservers, err = %d", err);
 
 		//Notification of error
 		if( err != EDS_ERR_OK)
@@ -111,6 +131,8 @@ public:
 			incFail();
 			return false;
 		}
+
+		//WriteInfo("notifyObservers, err = %d", err);
 
 		return true;
 	}

@@ -30,6 +30,9 @@ public:
 		:_parameter(parameter), Command(model){}
 
 
+	virtual std::string getCommandName() { return "DriveLensCommand"; }
+
+
 	// Execute command	
 	virtual bool execute()
 	{

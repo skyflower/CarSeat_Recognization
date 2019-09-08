@@ -34,6 +34,8 @@ public:
 
 	int getFailedCount() { return failedCount; }
 
+	virtual std::string getCommandName() { return "baseCommand"; }
+
 	// Execute command	
 	virtual bool execute() = 0;
 };

@@ -26,6 +26,9 @@ class CloseSessionCommand : public Command
 public:
 	CloseSessionCommand(CameraModel *model) : Command(model){}
 
+	virtual std::string getCommandName() { return "CloseSessionCommand"; }
+
+
 
 	//Execute command	
 	virtual bool execute()

@@ -28,6 +28,8 @@ public:
 	PressShutterButtonCommand(CameraModel *model, EdsUInt32 status) : _status(status), Command(model){}
 
 
+	virtual std::string getCommandName() { return "PressShutterButtonCommand"; }
+
 	// Execute command	
 	virtual bool execute()
 	{

@@ -32,6 +32,8 @@ public:
 		:_propertyID(propertyID), _data(data), Command(model){}
 
 
+	virtual std::string getCommandName() { return "SetPropertyCommand"; }
+
 	// Execute command	
 	virtual bool execute()
 	{

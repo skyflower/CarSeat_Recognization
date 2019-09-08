@@ -26,6 +26,8 @@ public:
 	TakePictureCommand(CameraModel *model) : Command(model){}
 
 
+	virtual std::string getCommandName() { return "TakePictureCommand"; }
+
 	// Execute command	
 	virtual bool execute()
 	{

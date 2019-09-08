@@ -22,6 +22,7 @@
 #include "Synchronized.h"
 #include "Command.h"
 #include "../../common/Log.h"
+#include <RTInfo.h>
 
 class Processor : public Thread 
 {
@@ -102,6 +103,8 @@ public:
 		// you must initialize the COM library by calling CoInitialize 
 		CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
+		uint32_t failCommandCount = 0;
+
 		_running = true;
 		while (_running)
 		{
@@ -110,8 +113,10 @@ public:
 			Command* command = take();
 			if(command != NULL)
 			{
+				//WriteInfo("after execute command name = %s,command queue size = %d", 
+				//	command->getCommandName().c_str(), _queue.size());
 				bool complete = command->execute();
-				if((complete == false) && (command->getFailedCount() < 5))
+				if((complete == false) && (command->getFailedCount() < 2))
 				{
 					//If commands that were issued fail ( because of DeviceBusy or other reasons )
 					// and retry is required , note that some cameras may become unstable if multiple 
@@ -120,7 +125,9 @@ public:
 					//Sleep(500);
 					Sleep(500);
 					//std::string commandName(typeid(*command).raw_name());
-					
+					failCommandCount++;
+					//WriteInfo("failCommandCount = %u, command name = %s", 
+					//	failCommandCount, command->getCommandName().c_str());
 					{
 						enqueue(command);
 					}
@@ -132,6 +139,7 @@ public:
 					delete command;
 					command = nullptr;
 				}
+				//WriteInfo("after execute command");
 			}
 		}
 

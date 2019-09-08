@@ -373,12 +373,6 @@ std::string CRFIDReader::getBySocket()
 	*/
 	if (parseBarcode(barcodeChar, tmpValue) == true)
 	{
-
-		/*
-		将条形码的编码格式转换成ascii，然后和之前的对比，如果一样，则表示读取新数据失败
-		// 如果不一样，则表示读取新数据成功
-		*/
-		
 		std::string barcodeStr(tmpValue);
 		return barcodeStr;
 	}

@@ -27,6 +27,7 @@ private:
 public:
 	DoEvfAFCommand(CameraModel *model, EdsUInt32 status) : _status(status), Command(model){}
 
+	virtual std::string getCommandName() { return "DoEvfAFCommand"; }
 
 	// Execute command	
 	virtual bool execute()

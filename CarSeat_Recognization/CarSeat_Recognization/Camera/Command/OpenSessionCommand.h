@@ -29,6 +29,9 @@ public:
 	OpenSessionCommand(CameraModel *model) : Command(model){}
 
 
+	virtual std::string getCommandName() { return "OpenSessionCommand"; }
+
+
 	// Execute command	
 	virtual bool execute()
 	{

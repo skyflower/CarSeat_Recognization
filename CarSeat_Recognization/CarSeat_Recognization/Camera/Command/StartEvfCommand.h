@@ -27,6 +27,9 @@ class StartEvfCommand : public Command
 public:
 	StartEvfCommand(CameraModel *model) : Command(model){}
 
+
+	virtual std::string getCommandName() { return "StartEvfCommand"; }
+
     // Execute command	
 	virtual bool execute()
 	{

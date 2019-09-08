@@ -39,6 +39,9 @@ class DownloadEvfCommand : public Command
 public:
 	DownloadEvfCommand(CameraModel *model) : Command(model){}
 
+
+	virtual std::string getCommandName() { return "DownloadEvfCommand"; }
+
     // Execute command	
 	virtual bool execute()
 	{
@@ -52,12 +55,12 @@ public:
 		// Exit unless during live view.
 		if ((_model->getEvfOutputDevice() & kEdsEvfOutputDevice_PC) == 0)
 		{
-			WriteInfo("_model->getEvfOutputDevice()= %d", _model->getEvfOutputDevice());
 			return true;
 		}
 
 		// Create memory stream.
 		err = EdsCreateMemoryStream(bufferSize, &stream);
+
 
 		// When creating to a file.
 		// err = EdsCreateFileStream("C:\\test.jpg", kEdsFileCreateDisposition_CreateAlways, kEdsAccess_ReadWrite, &stream);
@@ -73,26 +76,19 @@ public:
 		if (err == EDS_ERR_OK)
 		{
 			err = EdsDownloadEvfImage(_model->getCameraObject(), evfImage);
-			if (err != EDS_ERR_OK)
-			{
-				static time_t preLogTime = time(NULL);
-				if (time(NULL) - preLogTime >= 5)
-				{
-					WriteInfo("eds down load evf image failed");
-					preLogTime = time(NULL);
-				}
-			}
 		}
+
+
 
 		// Get meta data for live view image data.
 		if (err == EDS_ERR_OK)
 		{
-			EVF_DATASET dataSet = {0};
+			EVF_DATASET dataSet = { 0 };
 
 			dataSet.stream = stream;
 
 			// Get magnification ratio (x1, x5, or x10).
-			EdsGetPropertyData(evfImage, kEdsPropID_Evf_Zoom, 0, sizeof(dataSet.zoom),  &dataSet.zoom);
+			EdsGetPropertyData(evfImage, kEdsPropID_Evf_Zoom, 0, sizeof(dataSet.zoom), &dataSet.zoom);
 
 
 			// Get position of image data. (when enlarging)
@@ -113,22 +109,15 @@ public:
 			_model->setEvfZoomPosition(dataSet.zoomRect.point);
 			_model->setEvfZoomRect(dataSet.zoomRect);
 
+
 			// Live view image transfer complete notification.
 			if (err == EDS_ERR_OK)
 			{
 				CameraEvent e("EvfDataChanged", &dataSet);
-				_model->notifyObservers(&e);		
+				_model->notifyObservers(&e);
 			}
-			else
-			{
-				WriteInfo("err not equal eds_err_ok, not notify observers evf data changed");
-			}
-		}
-		else
-		{
-			WriteInfo("get meta data fialed for live view, err = %u", err);
-		}
 
+		}
 
 		if(stream != NULL)
 		{

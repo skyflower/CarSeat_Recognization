@@ -29,6 +29,9 @@ public:
 	NotifyCommand(CameraModel *model, std::string notifyString)
 		: Command(model) , _notifyString(notifyString){}
 
+
+	virtual std::string getCommandName() { return "NotifyCommand"; }
+
     // Execute command	
 	virtual bool execute()
 	{
